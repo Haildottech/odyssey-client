@@ -1,0 +1,17 @@
+.side-menu-styles{
+      ul > li::before{
+        background-color: #1b1c1e!important;
+        border-radius: 25px;
+      }
+      ul > li::after{
+        background-color: #1b1c1e!important;
+        border-radius: 25px;
+      }
+      ul{
+        padding-top: 0px;
+        background-color: #1b1c1e!important;
+      }
+      li.ant-menu-item.ant-menu-item-selected{
+        background-color: #323335!important;
+      }
+}

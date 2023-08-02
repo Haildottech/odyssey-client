@@ -1,0 +1,139 @@
+import axios from "axios";
+import { delay } from '/functions/delay';
+import openNotification from "/Components/Shared/Notification";
+
+function recordsReducer(state, action){
+    switch (action.type) {
+
+      case 'toggle': {
+        return { ...state, [action.fieldName]: action.payload } 
+      }
+      case 'set': {
+        return { ...state, ...action.payload }
+      }
+      default: return state 
+    }
+};
+
+const initialState = {
+  load:false,
+  visible:false,
+  to:'',
+  from:'',
+  client:'',
+  records:[],
+  subType:'',
+  company:'1',
+  operation:'',
+  shipStatus:'',
+  overseasagent:'',
+  jobType:'Sea Export',
+  salesrepresentative:'',
+
+  totalRevenue:0.00,
+  totalCost:0.00,
+  totalPnl:0.00,
+  totalActual:0.00,
+  totalgainLoss:0.00,
+  totalAfter:0.00
+};
+
+const companies = [
+    {
+      value: '1',
+      label: 'Seanet Shipping',
+    },
+    {
+      value: '2',
+      label: 'Cargo Linkers',
+    },
+    {
+      value: '3',
+      label: 'Air Cargo Services',
+    }
+  ]
+
+  const handleSubmit = async(set, state) => {
+    set({load:true});
+    let invoices = [];
+    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_MISC_GET_JOB_PROFIT_LOSS,{
+      headers:{ ...state }
+    }).then(async(x) => {
+      let result = x.data.result, totalRevenue=0.00, totalCost=0.00, totalPnl=0.00, totalActual=0.0, totalgainLoss=0.0, totalAfter=0.0;
+
+      if(x.data.status!="success" || x.data.result.length<1){
+        openNotification("Error", "No record found with current criteria", "orange");
+      } else {
+        await result.forEach((y) => {
+          y.revenue = 0.0;
+          y.cost = 0.0;
+          y.actual = 0.0;
+          y.load = true;
+          y.gainLoss = 0.00;
+          y.after = 0.00;
+          y.Invoices.forEach((z)=>{
+            if(z.payType=="Recievable"){
+              y.revenue = y.revenue + parseFloat(z.total);  //total will not be multiplied by Ex.Rate
+              y.actual = y.actual + parseFloat(z.recieved) * parseFloat(z.ex_rate); //This will be multiplied by Ex.Rate
+              if(z.Invoice_Losses?.length>0){
+                z.Invoice_Losses.forEach((i)=>{
+                  y.gainLoss = y.gainLoss + parseFloat(i.gainLoss)
+                })
+              }
+            } else {
+              y.cost = y.cost + parseFloat(z.total);  //total will not be multiplied by Ex.Rate
+              y.actual = y.actual - parseFloat(z.paid) * parseFloat(z.ex_rate); //This will be multiplied by Ex.Rate
+              if(z.Invoice_Losses?.length>0){
+                z.Invoice_Losses.forEach((i)=>{
+                  y.gainLoss = y.gainLoss + parseFloat(i.gainLoss)
+                })
+              }
+            }
+          })
+          y.gainLoss = y.gainLoss*-1;
+          y.pnl = y.revenue-y.cost
+          totalRevenue  = totalRevenue + y.revenue;
+          totalCost     = totalCost + y.cost;
+          totalPnl      = totalPnl + y.pnl;
+          totalActual   = totalActual + y.actual;
+          totalgainLoss = totalgainLoss + y.gainLoss;
+          y.after = y.actual + y.gainLoss;
+          totalAfter = totalAfter + y.after
+        })
+      }
+      await set({
+        visible:x.data.status=="success"?
+          x.data.result.length>0?
+            true:false:
+          false,
+        load:false,
+        records:result,
+        totalRevenue,
+        totalCost,   
+        totalPnl,    
+        totalActual,
+        totalgainLoss,
+        totalAfter
+      });
+      await findGainLoss(result, set);
+    })
+  }
+
+  const findGainLoss = async(data, set) => {
+    let count = 0;
+    while(count<data.length){
+      await delay(300);
+      let tempState = [...data];
+      tempState[count].load = false;
+      let invoices = [];
+      invoices = tempState[count].Invoices.map((x)=>{
+        return x.id
+      });
+      set({records:tempState});
+      count++
+    }
+  }
+
+  const plainOptions = ['Sea Export', 'Sea Import', 'Air Export', 'Air Import'];
+
+export { recordsReducer, initialState, companies, handleSubmit, plainOptions }
