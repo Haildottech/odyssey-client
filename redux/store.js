@@ -3,6 +3,7 @@ import counterReducer from './counter/counterSlice';
 import tabsReducer from './tabs/tabSlice';
 import companyReducer from './company/companySlice';
 import seJobValuesReducer from './seJobValues/seJobValuesSlice';
+import blCreationReducer from './BlCreation/blCreationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     company: companyReducer,
     tabs: tabsReducer,
     seJobValues: seJobValuesReducer,
+    blCreationValues: blCreationReducer,
   },
 })

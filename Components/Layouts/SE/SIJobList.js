@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from 'next/router';
 
-const SEJobList = ({jobsData, fieldsData, type}) => {
+const SIJobList = ({jobsData, fieldsData}) => {
   const companyId = useSelector((state) => state.company.value);
   const tabs = useSelector((state) => state.tabs.value);
   const [records, setRecords] = useState([]);
@@ -14,23 +14,18 @@ const SEJobList = ({jobsData, fieldsData, type}) => {
     if(jobsData.status=="success"){
       setRecords(jobsData.result);
     }
-    console.log(jobsData)
   }, [])
   return (
   <>
     {companyId!='' &&
     <div className='base-page-layout'>
       <Row>
-        <Col><h5>Sea {type=="SE"?"Export":"Import"} Job List</h5></Col>
+        <Col><h5>Sea Import Job List</h5></Col>
         <Col>
           <button className='btn-custom right'
             onClick={()=>{
-              dispatch(incrementTab({
-                "label":type=="SE"?"SE JOB":"SI JOB",
-                "key":type=="SE"?"4-3":"4-6",
-                "id":"new"
-              }))
-              Router.push(type=="SE"?`/seJob/new`:`/seJob/import/new`)
+              dispatch(incrementTab({"label":"SI JOB","key":"4-6","id":"new"}))
+              Router.push(`/seJob/import/new`)
             }}
           >Create</button>
         </Col>
@@ -46,11 +41,11 @@ const SEJobList = ({jobsData, fieldsData, type}) => {
         <tr key={index} className='f row-hov'
           onClick={() => {
             dispatch(incrementTab({
-              "label": type=="SE"?"SE JOB":"SI JOB",
-              "key":type=="SE"?"4-3":"4-6",
+              "label": "SI JOB",
+              "key": "4-6",
               "id":x.id
             }))
-            Router.push(type=="SE"?`/seJob/${x.id}`:`/seJob/import/${x.id}`)
+            Router.push(`/seJob/import/${x.id}`)
           }}
         >
           <td>{index + 1}</td>
@@ -92,4 +87,4 @@ const SEJobList = ({jobsData, fieldsData, type}) => {
   )
 }
 
-export default SEJobList;
+export default SIJobList;

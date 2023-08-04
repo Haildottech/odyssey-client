@@ -155,15 +155,10 @@ const initialState = {
   selectedRecord:{}
 };
 
-const fetchJobsData = async(set, dispatch) => {
-  // set('jobLoad', true);
-  // set('partyVisible', true);
-  dispatch({type:"set",payload:{
-    jobLoad:true,
-    partyVisible:true
-  }})
-  await delay(300);
-  const jobsData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SEA_JOBS_WITHOUT_BL)
+const fetchJobsData = async(set, dispatch, id) => {
+  const jobsData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SEA_JOBS_WITHOUT_BL,{
+    headers:{id:id}
+  })
   .then((x)=>{
     let data = [];
     if(x.data.status=="success"){
@@ -173,12 +168,7 @@ const fetchJobsData = async(set, dispatch) => {
     }
     return data
   });
-  dispatch({type:"set",payload:{
-    jobsData:jobsData,
-    jobLoad:false
-  }})
-  // set('jobsData', jobsData);
-  // set('jobLoad', false);
+  return jobsData
 }
 
 const convetAsHtml = (values) => {
@@ -199,18 +189,7 @@ const convetAsHtml = (values) => {
 }
 
 const setJob = (set, x, state, reset, allValues, dispatch) => {
-  let temp = [];
-  if(!x.check){
-    temp = [...state.jobsData];
-    temp.forEach((y, i2) => {
-      if(y.jobNo==x.jobNo) {
-        temp[i2].check=true
-      } else {
-        temp[i2].check=false 
-      }
-    })
-    //set('jobData', temp);
-  } else {
+
     allValues.SEJobId =      x.id;                 
     allValues.jobNo =        x.jobNo;                        
     allValues.consignee =    x.consignee?.name;     
@@ -226,7 +205,6 @@ const setJob = (set, x, state, reset, allValues, dispatch) => {
     allValues.freightType =  x.freightType;      
     allValues.delivery =  x.delivery;      
     dispatch({type:"set",payload:{
-      jobData:temp,
       deliveryContent:convetAsHtml(x.overseas_agent),
       consigneeContent:convetAsHtml(x.consignee),
       shipperContent:convetAsHtml(x.Client),
@@ -234,13 +212,6 @@ const setJob = (set, x, state, reset, allValues, dispatch) => {
       updateContent:!state.updateContent
     }})
     reset(allValues)
-    // set('deliveryContent',convetAsHtml(x.overseas_agent));
-    // set('consigneeContent',convetAsHtml(x.consignee));
-    // set('shipperContent',convetAsHtml(x.Client));
-    // //set('values', allValues);
-    // set('partyVisible', false);
-    // set('updateContent', !state.updateContent);
-  }
 }
 
 const calculateContainerInfos=(state, set, reset, allValues)=>{
@@ -320,10 +291,6 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
     measurementContent   :result.measurementContent
   }})
   reset(result);
-  // await dispatch({type:"setContent", payload:result});
-  // await reset(result);
-  // await set('updateContent', true);
-  // set("load", false);
 } 
 
 export {

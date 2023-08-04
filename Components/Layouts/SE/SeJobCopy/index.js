@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { appendValue } from '/redux/seJobValues/seJobValuesSlice';
 import Cookies from "js-cookie";
 
-const SeJob = ({fieldsData, jobData, id}) => {
+const SeJob = ({fieldsData, jobData, id, type}) => {
   const companyId = useSelector((state) => state.company.value);
   const seJobValues = useSelector((state) => state.seJobValues.values);
   const tabs = useSelector((state) => state.tabs.value);
@@ -42,7 +42,7 @@ const SeJob = ({fieldsData, jobData, id}) => {
     <div className='base-page-layout'>
      {state.fetched && 
       <>
-      <CreateOrEdit state={state} dispatch={dispatch} baseValues={baseValues} companyId={companyId} jobData={jobData} id={id} />
+      <CreateOrEdit state={state} dispatch={dispatch} baseValues={baseValues} companyId={companyId} jobData={jobData} id={id} type={type} />
       </>
      }
     </div>

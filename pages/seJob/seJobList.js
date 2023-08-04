@@ -4,7 +4,7 @@ import SEJobList from '/Components/Layouts/SE/SEJobList';
 
 const seJobList = ({sessionData, jobsData}) => {
   return (
-    <SEJobList sessionData={sessionData} jobsData={jobsData} />
+    <SEJobList sessionData={sessionData} jobsData={jobsData} type={"SE"} />
   )
 }
 export default seJobList
@@ -16,7 +16,7 @@ export async function getServerSideProps({req,res}){
   }).then((x)=>x.json());
 
   const jobsData = await fetch(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_SEAJOB, {
-    headers:{ companyid: `${cookies.get('companyId')}`}
+    headers:{ companyid: `${cookies.get('companyId')}`, operation:"SE"}
   }).then((x)=>x.json());
 
   return {

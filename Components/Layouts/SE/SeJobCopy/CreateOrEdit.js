@@ -19,7 +19,7 @@ import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from "next/router";
 import {createNotification} from '../../../../functions/notifications'
 
-const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id}) => {
+const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type}) => {
   
   const {register, control, handleSubmit, reset, formState:{errors}, watch } = useForm({
     resolver:yupResolver(SignupSchema), defaultValues:state.values
@@ -61,7 +61,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id}) => 
       let tempEquipments = []
       if(tempState.SE_Equipments.length>0){
         let tempEquips = tempState.SE_Equipments;
-        tempEquips.push({id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''})
+        //tempEquips.push({id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''})
         tempEquipments = tempState.SE_Equipments
       }else{
         tempEquipments = [{id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''}]
@@ -94,12 +94,11 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id}) => 
     data.shippingLineId = data.shippingLineId!=""?data.shippingLineId:null;
     data.approved = data.approved[0]=="1"?true:false;
     data.companyId = companyId;
-
+    data.operation = type
     let loginId = Cookies.get('loginId');
     data.createdById = loginId;
     dispatch({type:'toggle', fieldName:'load', payload:true});
     
-    console.log(data.approved)
     setTimeout(async() => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_SEAJOB,{
           data
@@ -107,11 +106,11 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id}) => 
           if(x.data.status=='success'){
               openNotification('Success', `Job Created!`, 'green');
               dispatchNew(incrementTab({
-                "label": "SE JOB",
-                "key": "4-3",
+                "label": type=="SE"?"SE JOB":"SI JOB",
+                "key": type=="SE"?"4-3":"4-6",
                 "id":x.data.result.id
               }))
-              Router.push(`/seJob/${x.data.result.id}`)
+              Router.push(type=="SE"?`/seJob/${x.data.result.id}`:`/seJob/import/${x.data.result.id}`)
           }else{
               openNotification('Error', `An Error occured Please Try Again!`, 'red')
           }
@@ -140,9 +139,10 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id}) => 
     data.companyId = companyId;
   
     dispatch({type:'toggle', fieldName:'load', payload:true});
+
     const notification = {
       creatorId: state.selectedRecord.createdById ,
-      type: "SE JOB", 
+      type: `${type} JOB`, 
       subType : data.jobNo, 
       opened: 0,
       companyId, 
@@ -150,6 +150,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id}) => 
       createdById: Cookies.get("loginId"),
       notification: approved[0] == '1' ?  `Job No ${data.jobNo} Approved`: `Job No ${data.jobNo} Dispproved`
     }
+
     setTimeout(async() => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_SEAJOB,{data}).then((x)=>{
           if(x.data.status=='success'){
@@ -168,45 +169,44 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id}) => 
 
   return(
   <div className='client-styles' style={{overflowY:'auto', overflowX:'hidden'}}>
-      <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
+    <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
       <Tabs defaultActiveKey={state.tabState} activeKey={state.tabState}
-      onChange={(e)=> dispatch({type:'toggle', fieldName:'tabState', payload:e}) }>
+        onChange={(e)=> dispatch({type:'toggle', fieldName:'tabState', payload:e}) }>
       <Tabs.TabPane tab="Booking Info" key="1"> 
-      <BookingInfo handleSubmit={handleSubmit} onEdit={onEdit} companyId={companyId} control={control} register={register} errors={errors} state={state} 
-        useWatch={useWatch} dispatch={dispatch} reset={reset} id={id}
-      />
-  
+        <BookingInfo handleSubmit={handleSubmit} onEdit={onEdit} companyId={companyId} control={control} register={register} errors={errors} state={state} 
+          useWatch={useWatch} dispatch={dispatch} reset={reset} id={id}
+        />
       </Tabs.TabPane>
       {subType=="FCL" &&
-      <Tabs.TabPane tab="Equipment" key="2">
-      <EquipmentInfo control={control} register={register} errors={errors} state={state} dispatch={dispatch} useWatch={useWatch}/>
-      </Tabs.TabPane>
+        <Tabs.TabPane tab="Equipment" key="2">
+          <EquipmentInfo control={control} register={register} errors={errors} state={state} dispatch={dispatch} useWatch={useWatch}/>
+        </Tabs.TabPane>
       }
-      <Tabs.TabPane tab="Routing" key="3">
-      <Routing control={control} register={register} errors={errors} state={state} useWatch={useWatch} />
-      </Tabs.TabPane >
+        <Tabs.TabPane tab="Routing" key="3">
+          <Routing control={control} register={register} errors={errors} state={state} useWatch={useWatch} />
+        </Tabs.TabPane>
       {state.edit &&
-      <Tabs.TabPane tab="Charges" key="4">
-      <ChargesComp state={state} dispatch={dispatch} />
-      </Tabs.TabPane>
+        <Tabs.TabPane tab="Charges" key="4">
+          <ChargesComp state={state} dispatch={dispatch} type={type} />
+        </Tabs.TabPane>
       }
       {(state.selectedInvoice!='') &&
-      <Tabs.TabPane tab="Invoice / Bills" key="5">
-      <Invoice state={state} dispatch={dispatch} companyId={companyId} />
-      </Tabs.TabPane>
+        <Tabs.TabPane tab="Invoice / Bills" key="5">
+          <Invoice state={state} dispatch={dispatch} companyId={companyId} />
+        </Tabs.TabPane>
       }
       {(state.loadingProgram!='') &&
-      <Tabs.TabPane tab="Loading Program" key="6">
-      <LoadingProgram state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
-      </Tabs.TabPane>
+        <Tabs.TabPane tab="Loading Program" key="6">
+          <LoadingProgram state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
+        </Tabs.TabPane>
       }
       </Tabs>
       {(state.tabState!="4" && state.tabState!="5" && state.tabState!="6") &&
-      <>
-      <button type="submit" disabled={state.load?true:false} className='btn-custom mt-3'>
-      {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Save Job'}
-      </button>
-      </>
+        <>
+        <button type="submit" disabled={state.load?true:false} className='btn-custom mt-3'>
+          {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Save Job'}
+        </button>
+        </>
       }
     </form>
   </div>

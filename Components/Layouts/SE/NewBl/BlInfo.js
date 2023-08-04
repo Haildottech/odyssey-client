@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import InputComp from '/Components/Shared/Form/InputComp';
 import TextAreaComp from '/Components/Shared/Form/TextAreaComp';
-import DateComp from '../../../Shared/Form/DateComp';
-import SelectComp from '../../../Shared/Form/SelectComp';
-import SelectSearchComp from '../../../Shared/Form/SelectSearchComp';
+import DateComp from '/Components/Shared/Form/DateComp';
+import SelectComp from '/Components/Shared/Form/SelectComp';
+import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
 import { Row, Col } from 'react-bootstrap';
 import { Modal, Select } from 'antd';
+import { useDispatch, useSelector } from "react-redux";
 import JobSearch from './JobSearch';
-import { fetchJobsData, convetAsHtml } from './states';
+import { fetchJobsData, convetAsHtml, setJob } from './states';
 import moment from 'moment';
 
 const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
@@ -15,6 +16,21 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
   const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b})
   const setAll = (obj) => dispatch({type:'set', payload:obj});
   const allValues = useWatch({control});
+
+    //dispatchNew(addBlCreationId(currentJobValue+1))
+    const currentJobValue = useSelector((state) => state.blCreationValues.value);
+
+    useEffect(()=>{
+        const retrieveData = async() => {
+            if(id=='new'){
+                console.log(currentJobValue);
+                let jobValue = await fetchJobsData(set, dispatch, currentJobValue);
+                console.log(jobValue[0])
+                setJob(set, jobValue[0], state, reset, allValues, dispatch)
+            }
+        }
+        retrieveData();
+    },[])
 
     const findNotifyParty = (id,content) => {
         state.partiesData.forEach((x)=>{
@@ -36,7 +52,7 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
         })
         return tempVal
     }
-
+    
   return (
     <div style={{height:600, overflowY:'auto', overflowX:'hidden'}}>
     <Row>
@@ -44,7 +60,9 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
             <Row>
                 <Col md={10}>
                 <div className="" style={{lineHeight:1.35}}>Job No. *</div>
-                <div className='dummy-input' onClick={()=>{id=="new"?fetchJobsData(set, dispatch):null}}>
+                <div className='dummy-input' 
+                    //onClick={()=>{id=="new"?fetchJobsData(set, dispatch):null}}
+                >
                     {allValues.jobNo}
                 </div>
                 </Col>
@@ -123,7 +141,7 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
             </Row>
         </Col>
         <Col md={12}><hr/></Col>
-        <Col md={3} className=''>
+        <Col md={4} className=''>
             <Row className='pt-1'>
                 <Col md={12}>
                 <div className="" style={{lineHeight:1.35}}>Shipper *</div>

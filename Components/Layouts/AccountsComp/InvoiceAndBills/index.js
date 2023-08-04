@@ -78,6 +78,7 @@ const InvoiceAndBills = ({invoiceData}) => {
             width={"80%"}
             footer={false}
             centered={false}
+            maskClosable={false}
           >
               <InvoiceCharges data={invoice} companyId={companyId} />
           </Modal>

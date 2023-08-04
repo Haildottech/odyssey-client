@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -6,8 +6,9 @@ import { Row, Col } from 'react-bootstrap';
 import InputComp from '/Components/Shared/Form/InputComp';
 import InputNumComp from '/Components/Shared/Form/InputNumComp';
 import DateComp from '/Components/Shared/Form/DateComp';
+import { calculateContainerInfos } from './states';
 
-const BlDetail = ({control, register, state, useWatch, dispatch}) => {
+const BlDetail = ({control, register, state, useWatch, dispatch, reset}) => {
   const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b});
 
   const Editor = (variable) => useEditor({
@@ -35,6 +36,12 @@ const BlDetail = ({control, register, state, useWatch, dispatch}) => {
     padding:0
   }
   const allValues = useWatch({control})
+
+  useEffect(()=>{
+    if(state.tabState==3){
+      calculateContainerInfos(state, set, reset, allValues)
+    }
+  },[state.tabState])
 
 return(
 <div style={{height:600, overflowY:'auto', overflowX:'hidden'}}>

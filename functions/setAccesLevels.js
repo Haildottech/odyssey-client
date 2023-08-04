@@ -121,15 +121,20 @@ function setAccesLevels(dispatch, collapsed){
       }),
     ]
     )
-    const se = getParentItem('Sea Export', '4', <span className=''><RiShipLine /><IoMdArrowDropleft className='flip' /></span>,
+    const se = getParentItem('Sea Jobs', '4', <span className=''><RiShipLine /><IoMdArrowDropleft className='flip' /></span>,
     [
-      getItem('SE Job List', '4-1',<></>, null, {
-        label: `SE Job List`,
+      getItem('Export Job List', '4-1',<></>, null, {
+        label: `Export Jobs`,
         key: '4-1',
         children: `Content of Tab Pane 2`,
       }),
-      getItem('SE BL List', '4-2',<></>, null, {
-        label: `SE BL List`,
+      getItem('Import Job List', '4-5',<></>, null, {
+        label: `Import Jobs`,
+        key: '4-5',
+        children: `Content of Tab Pane 2`,
+      }),
+      getItem('BL List', '4-2',<></>, null, {
+        label: `SE BLs`,
         key: '4-2',
         children: `Content of Tab Pane 2`,
       }),

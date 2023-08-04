@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
 
-const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId}) => {
+const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType}) => {
 
     const { permissions } = state;
     
@@ -49,11 +49,12 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     }
 
     const permissionAssign = (permissions, x) => {
+        console.log(permissions)
         return  permissions.admin? //if is admin
             x.Invoice?.approved=="1"?true:false:  // <-- Check if Invoice is approved or not
             x.InvoiceId!=null? true : false  //If not admin
     }
-
+    
   return(
     <>
     <Row>
@@ -88,7 +89,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             onClick={async()=>{
                 if(!state.chargeLoad){
                     dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-                    let status = await makeInvoice(chargeList, companyId, reset);
+                    let status = await makeInvoice(chargeList, companyId, reset, operationType);
                     if(status=="success"){
                         getHeadsNew(state.selectedRecord.id, dispatch);
                     }else{
@@ -142,7 +143,9 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <td className='text-center'>
             <CloseCircleOutlined className='cross-icon' style={{ position: 'relative', bottom: 3 }}
                 onClick={() => {
-                if((x.Invoice==null || x.Invoice?.status==null || x.Invoice?.approved=="0") && (permissions.admin || x.new )){
+                if((x.Invoice==null || x.Invoice?.status==null || x.Invoice?.approved=="0") 
+                        //&& (permissions.admin || x.new)
+                ){
                     PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
                     () => {
                         let tempState = [...chargeList];

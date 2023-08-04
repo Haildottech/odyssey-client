@@ -8,7 +8,7 @@ import ContainerInfo from "./ContainerInfo";
 import BlDetail from "./BlDetail";
 import Stamps from "./Stamps";
 import Router from "next/router";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { incrementTab } from "/redux/tabs/tabSlice";
 import { stamps as stamp } from "./groupData";
 import { validationSchema } from "./validion";
@@ -17,6 +17,7 @@ import { setAndFetchBlData, recordsReducer, initialState, baseValues } from "./s
 import axios from 'axios';
 
 const NewBl = ({ id, blData, partiesData }) => {
+
   const [state, dispatch] = useReducer(recordsReducer, initialState);
   const set = (a, b) => dispatch({ type: "toggle", fieldName: a, payload: b });
   const [deleteArr, setDeleteArr] = useState([]);
@@ -102,8 +103,6 @@ const NewBl = ({ id, blData, partiesData }) => {
       ...x,
       stamps: stamp[Number(x.code) - 1]?.label,
     }));
-    console.log(state.marksContentTwo)
-    console.log(state.descOfGoodsContentTwo)
     let tempData = {
       ...data,
       id: id,
@@ -132,18 +131,16 @@ const NewBl = ({ id, blData, partiesData }) => {
     );
     emp
       ? openNotification("Error", "Fields Can't Be Empty", "red")
-      : await axios
-          .post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_BL, tempData)
-          .then((x) => {
-            if (x.data.status == "error") {
-              openNotification("Error", "Something went wrong", "red");
-              set("load", false);
-            } else {
-              openNotification("Success", "Bl Eidted Successfully", "green");
-              set("load", false);
-            }
-          })
-          .catch((err) => console.log(err));
+      : await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_BL, tempData)
+        .then((x) => {
+          if (x.data.status == "error") {
+            openNotification("Error", "Something went wrong", "red");
+            set("load", false);
+          } else {
+            openNotification("Success", "Bl Eidted Successfully", "green");
+            set("load", false);
+          }
+        })
 
     getStamps();
   };
@@ -152,9 +149,6 @@ const NewBl = ({ id, blData, partiesData }) => {
     if (state.tabState != "5") {
       dispatch({ type: "toggle", fieldName: "selectedInvoice", payload: "" });
     }
-  }, [state.tabState]);
-
-  useEffect(() => {
     if (state.tabState == 4) {
       getStamps();
     }
@@ -167,7 +161,7 @@ const NewBl = ({ id, blData, partiesData }) => {
       <div className="client-styles" style={{ overflowY: "auto", overflowX: "hidden" }}>
         <h6>{id != "new" ? "Edit" : "Create"}</h6>
         <form onSubmit={handleSubmit(id != "new" ? onEdit : onSubmit, onError)}>
-          <Tabs  defaultActiveKey={state.tabState} activeKey={state.tabState} onChange={(e)=>dispatch({ type:"toggle", fieldName:"tabState", payload:e })}>
+          <Tabs defaultActiveKey={state.tabState} activeKey={state.tabState} onChange={(e)=>dispatch({ type:"toggle", fieldName:"tabState", payload:e })}>
             <Tabs.TabPane tab="BL Info." key="1">
               <BlInfo control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} />
             </Tabs.TabPane>
@@ -175,7 +169,7 @@ const NewBl = ({ id, blData, partiesData }) => {
               <ContainerInfo control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="BL Detail" key="3">
-              <BlDetail control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} />
+              <BlDetail control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Ref No's / Stamps" key="4">
               {allValues.jobNo && <Stamps state={state} id={id} control={control} register={register} useWatch={useWatch} handleSubmit={handleSubmit} 

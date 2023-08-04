@@ -5,8 +5,8 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import { calculateContainerInfos } from './states';
 
 const ContainerInfo = ({control, register, state, useWatch, dispatch, reset}) => {
+  
   const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b});
-
   const allValues = useWatch({control})
 
   const onChange = (e, i, variable, type) => {
@@ -114,7 +114,6 @@ const ContainerInfo = ({control, register, state, useWatch, dispatch, reset}) =>
     {label:'DG', value:'DG'},
     {label:'non-DG', value:'non-DG'}
   ]
-  useEffect(()=>{ set('saveContainers',true); },[state.Container_Infos])
 
 return (
 <div style={{height:600}}>
@@ -155,11 +154,11 @@ return (
         }}
     >Add Row</div>
 </Col>
-<Col md={2}>
+{/* <Col md={2}>
     {state.saveContainers &&<div className='div-btn-custom-green text-center py-1' 
         onClick={()=>calculateContainerInfos(state, set, reset, allValues)}
     >Save</div>}
-</Col>
+</Col> */}
 <Col md={12}>
 <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto'}}>
 <Table className='tableFixHead' bordered>

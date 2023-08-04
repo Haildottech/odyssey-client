@@ -121,7 +121,6 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
                 <Col md={7}>
                     <div style={heading}>Invoice No</div>
                     <div style={paraStyles}>{invoice.invoice_No}</div>
-                    
                 </Col>
                 <Col md={5}>
                     <div style={heading}>Invoice Date</div>

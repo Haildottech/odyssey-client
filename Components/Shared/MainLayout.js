@@ -53,9 +53,13 @@ const MainLayout = ({children}) => {
     if(
       newRouter.pathname.includes("seJob/") &&  
       !newRouter.pathname.includes("seJob/seJobList") && 
+      !newRouter.pathname.includes("seJob/siJobList") && 
       !newRouter.pathname.includes("seJob/seBlList")
     ){
       setToggleState('4-3');
+    }
+    if(newRouter.pathname.includes("seJob/import/")){
+      setToggleState('4-6');
     }
     if(newRouter.pathname.includes("seJob/bl/")){
       setToggleState('4-4');
@@ -96,7 +100,9 @@ const MainLayout = ({children}) => {
     commodity:false,
     voyage:false,
     seJobList:false,
+    siJobList:false,
     seJob:false,
+    siJob:false,
     seBl:false,
     charges:false,
     invoiceBills:false,
@@ -151,6 +157,8 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='4-2'){ tempTabActive.seBl=true }
         else if(tabs.key=='4-3'){ tempTabActive.seJob=true }
         else if(tabs.key=='4-4'){ tempTabActive.seBl=true }
+        else if(tabs.key=='4-5'){ tempTabActive.siJobList=true }
+        else if(tabs.key=='4-6'){ tempTabActive.siJob=true }
         else if(tabs.key=='5-1'){ tempTabActive.jobBalancing=true }
         else if(tabs.key=='5-2'){ tempTabActive.accountActivity=true }
         else if(tabs.key=='5-3'){ tempTabActive.balanceSheet=true }
@@ -211,7 +219,9 @@ const MainLayout = ({children}) => {
     else if(x.key=='3-8'){ Router.push(`/accounts/officeVouchers/${setKey(x)}`) }
     else if(x.key=='4-1'){ Router.push('/seJob/seJobList') }
     else if(x.key=='4-2'){ Router.push('/seJob/seBlList') }
+    else if(x.key=='4-5'){ Router.push('/seJob/siJobList') }
     else if(x.key=='4-3'){ Router.push(`/seJob/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='4-6'){ Router.push(`/seJob/import/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='4-4'){ Router.push(`/seJob/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='5-1'){ Router.push('/reports/jobBalancing') }
     else if(x.key=='5-2'){ Router.push('/reports/accountActivity') }

@@ -321,12 +321,12 @@ const calculateChargeHeadsTotal = (chageHeads, type) => {
   return obj
 }
 
-const makeInvoice = async(list, companyId, reset) => {
+const makeInvoice = async(list, companyId, reset, type) => {
   let status = "";
   let tempList = list.filter((x)=>x.check);
   if(tempList.length>0){
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_INVOICE_NEW,{
-      chargeList:tempList, companyId
+      chargeList:tempList, companyId, type:type
     }).then((x)=>{
       reset({chargeList:[]})
       status = x.data.status

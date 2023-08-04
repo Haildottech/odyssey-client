@@ -18,9 +18,11 @@ import Router from 'next/router';
 import InputComp from '/Components/Shared/Form/InputComp';
 import {createNotification} from '../../../../functions/notifications'
 import Cookies from 'js-cookie';
+import { addBlCreationId } from '/redux/BlCreation/blCreationSlice';
 
 const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors, state, useWatch, dispatch, reset, id}) => {
 
+  const currentJobValue = useSelector((state) => state.blCreationValues.value);
   const dispatchNew = useDispatch();
   const transportCheck = useWatch({control, name:"transportCheck"});
   const transporterId = useWatch({control, name:"transporterId"});
@@ -37,9 +39,6 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
   const localVendorId = useWatch({control, name:"localVendorId"});
   const approved = useWatch({control, name:"approved"});
   let allValues = useWatch({control})
-
-
-
    
   const handleOk = () => {
     allValues.approved = approved
@@ -53,6 +52,8 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     dispatch({type:"set",payload:{
       isModalOpen : false,
     }})
+    console.log(approved==[])
+    reset({...allValues, approved:approved[0]!=1?['1']:[]})
   };
  
   const filterVessels = (list) => {
@@ -111,8 +112,6 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     Router.push(route);
   }
 
-
-  
   return (
   <>
     <Row>
@@ -324,19 +323,20 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
         <div className='px-2 pb-2' style={{border:'1px solid silver'}}>
           <Row>
             <Col md={6} className='mt-2'>
-            <div>Weight</div><InputNumber value={getWeight().weight} disabled style={{ color:'black'}} width={"100%"} />
+            {/* <div>Weight</div><InputNumber value={getWeight().weight} disabled style={{ color:'black'}} width={"100%"} /> */}
+            <InputNumComp register={register} name='weight' control={control} width={"100%"} label='Weight' step={'0.01'} disabled={getStatus(approved)} />
             </Col>
             <Col md={6} className='mt-2'>
               <InputNumComp register={register} name='bkg' control={control} width={"100%"} label='BKG Weight' step={'0.01'} disabled={getStatus(approved)} />
             </Col>
             <Col md={6} className='mt-2'>
-            <div>Container</div><InputNumber value={getWeight().qty} disabled width={"100%"} />
+            <div>Container</div><InputNumber value={getWeight().qty} disabled style={{width:"100%"}} />
             </Col>
             <Col md={6} className='mt-2'>
               <InputNumComp register={register} name='shpVol' control={control} label='Shp Vol' width={"100%"} step={'0.01'} disabled={getStatus(approved)} />
             </Col>
             <Col md={6} className='mt-2'>
-              <div>TEU</div><InputNumber value={getWeight().teu} disabled style={{ color:'black'}} width={"100%"} />
+              <div>TEU</div><InputNumber value={getWeight().teu} disabled style={{width:"100%", color:'black'}} />
             </Col>
             <Col md={6} className='mt-2'>
               <InputNumComp register={register} name='vol' control={control} label='Vol' width={"100%"} step={'0.00001'} disabled={getStatus(approved)}/>
@@ -360,23 +360,27 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
       </Col>
       <Col md={3}>
       {state.edit &&<Notes state={state} dispatch={dispatch} />}
-        {console.log("approved", approved  )}
         {approved=="1" && <img src={'/approve.png'} height={100} />}
-        <div
-          onClick={()=>    dispatch({type:"set",payload:{isModalOpen : true,}}) }>
-        <CheckGroupComp register={register} name='approved'
-        control={control} label='_____________________' options={[{ label:"Approve Job", value:"1" }]} />
+        <div onClick={()=> dispatch({type:"set",payload:{isModalOpen : true,}}) }>
+          <CheckGroupComp register={register} name='approved' control={control} label='_____________________' 
+            options={[{ label:"Approve Job", value:"1" }]} 
+          />
         </div>
         <hr/>
         <div style={{display:"flex", flexWrap:"wrap", gap:"0.8rem"}}>
         <button className='btn-custom px-4' type="button"
           onClick={()=>{
-             dispatchNew(incrementTab({
-              "label":"SE BL",
-              "key":"4-4",
-              "id":state.selectedRecord.Bl!=null?`${state.selectedRecord.Bl.id}`:"new"
-            }));
-            Router.push(`/seJob/bl/${state.selectedRecord.Bl!=null?state.selectedRecord.Bl.id:"new"}`);
+            if(id!="new"){
+              dispatchNew(addBlCreationId(id));
+              
+              dispatchNew(incrementTab({
+                "label":"SE BL",
+                "key":"4-4",
+                "id":state.selectedRecord.Bl!=null?`${state.selectedRecord.Bl.id}`:"new"
+              }));
+
+              Router.push(`/seJob/bl/${state.selectedRecord.Bl!=null?state.selectedRecord.Bl.id:"new"}`);
+            }
           }}
         >BL
         </button>
@@ -408,10 +412,9 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     {(state.voyageVisible && approved[0]!="1") && 
       <CustomBoxSelect reset={reset} useWatch={useWatch} control={control} state={state} dispatch={dispatch}/>
     }
-     <Modal open={state.isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+     <Modal open={state.isModalOpen} onOk={handleOk} onCancel={handleCancel} maskClosable={false}>
         {approved=="1" ? "Are You Sure You Want To Approve This Job? " : "Are You Sure You Want To Disapprove This Job?"}
       </Modal>
-    
   </>
 )}
 export default BookingInfo

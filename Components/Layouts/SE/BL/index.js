@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
-import { Modal } from 'antd';
-import { recordsReducer, initialState, baseValues } from './states';
+import { recordsReducer, initialState } from './states';
 import { useSelector, useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import moment from 'moment';
@@ -13,7 +12,6 @@ const SeJob = ({partiesData, BlsData}) => {
   const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b});
   const companyId = useSelector((state) => state.company.value);
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
-  const { visible } = state;
 
   useEffect(() => {
     set('partiesData',partiesData)
@@ -25,13 +23,12 @@ const SeJob = ({partiesData, BlsData}) => {
     {companyId!='' &&
     <div className='base-page-layout'>
       <Row>
-        <Col><h5>SE Bill of Lading List</h5></Col>
+        <Col><h5>Sea Job BL List</h5></Col>
         <Col>
-          <button className='btn-custom right' 
-            //onClick={()=>dispatch({type:'create'})}
+          <button className='btn-custom right'
             onClick={()=>{
-              dispatchNew(incrementTab({"label":"SE BL","key":"4-4","id":"new"}))
-              Router.push(`/seJob/bl/new`)
+              // dispatchNew(incrementTab({"label":"SE BL","key":"4-4","id":"new"}))
+              // Router.push(`/seJob/bl/new`)
             }}
           >
             Create
@@ -72,12 +69,6 @@ const SeJob = ({partiesData, BlsData}) => {
         </tbody>
         </Table>
       </div>
-      {/* <Modal open={visible} maskClosable={false}
-        onOk={()=>dispatch({ type: 'modalOff' })} onCancel={()=>dispatch({ type: 'modalOff' })}
-        width={1000} footer={false} centered={true}
-      >
-        <CreateOrEdit state={state} dispatch={dispatch} baseValues={baseValues} companyId={companyId} />
-      </Modal> */}
     </div>
     }
   </>

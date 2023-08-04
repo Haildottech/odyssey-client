@@ -161,7 +161,9 @@ return (
         )
         })}
         </Row>
-        <Modal open={visible} onOk={() => dispatch({ type: 'modalOff' })} onCancel={() => dispatch({ type: 'modalOff' })}
+        <Modal open={visible} 
+            onOk={() => dispatch({ type: 'modalOff' })} 
+            onCancel={() => dispatch({ type: 'modalOff' })}
             width={600}
             footer={false}
             centered={false}

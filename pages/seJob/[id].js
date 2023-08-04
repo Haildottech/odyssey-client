@@ -5,7 +5,7 @@ import SeJobCopy from '../../Components/Layouts/SE/SeJobCopy';
 
 const seJob = ({jobData, id, fieldsData}) => {
   return (
-    <SeJobCopy jobData={jobData} id={id} fieldsData={fieldsData} />
+    <SeJobCopy jobData={jobData} id={id} fieldsData={fieldsData} type={"SE"} />
   )
 }
 export default seJob
