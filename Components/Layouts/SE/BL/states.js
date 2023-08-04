@@ -25,5 +25,5 @@ const initialState = {
 
 export { 
   initialState,
-  baseValues
+  recordsReducer
 };
