@@ -21,8 +21,16 @@ const SEJobList = ({jobsData, fieldsData}) => {
     {companyId!='' &&
     <div className='base-page-layout'>
       <Row>
-        <Col><h5>Sea Export Job List</h5></Col>
-        <Col>
+        <Col md={10}><h5>Sea Export Job List</h5></Col>
+        <Col md={1}>
+          <button className='btn-custom right'
+            onClick={()=>{
+              // dispatch(incrementTab({"label":"SE JOB","key":"4-3","id":"new"}))
+              Router.push(`/seJob/jobList`)
+            }}
+          >List</button>
+        </Col>
+        <Col md={1}>
           <button className='btn-custom right'
             onClick={()=>{
               dispatch(incrementTab({"label":"SE JOB","key":"4-3","id":"new"}))

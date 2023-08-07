@@ -124,13 +124,13 @@ const NewPrintVoucehr = ({state, companyId}) => {
 
         {state.descriptive && (state.list.length > 1 && state.list.map((x, i) => {
             return (
-            <Row style={{minHeight:"23px"}}>
+            <Row style={{minHeight:"23px"}} key={i}>
             <Col md="12" className='border-bottom border-dark m-0 p-0'>{state.list[i + 1]?.item}</Col>
             </Row>)
         }))  }
 
-        {state.descriptive  && [...Array(7 - state.list.length )].map((x) =>{
-        return ( <Row md="12" style={{minHeight:"23px"}}>
+        {state.descriptive  && [...Array(7 - state.list.length )].map((x, i) =>{
+        return ( <Row md="12" style={{minHeight:"23px"}} key={i}>
          <Col md="12" className='border-bottom border-dark m-0 p-0'> </Col></Row>)})}
 
         {state.descriptive &&  <Row > 
@@ -173,7 +173,7 @@ const NewPrintVoucehr = ({state, companyId}) => {
 
             {state.list.length > 1 && state.list.map((x, i) => {
                 return (
-                    <Row className='p-0 m-0'  style={{minHeight:"23px", maxHeight:"23px",  }}>
+                    <Row className='p-0 m-0'  style={{minHeight:"23px", maxHeight:"23px",  }} key={i}>
                     <Col className='text-center'  md="9" style={{borderLeft: border1}}>
                     <span >{state.descriptive && state.list[i + 1]?.amount}</span>
                     </Col>
@@ -183,9 +183,9 @@ const NewPrintVoucehr = ({state, companyId}) => {
                 </Row>
                 )
             })}
-            { state.descriptive && [...Array(7 - state.list.length )].map((x) =>{
+            { state.descriptive && [...Array(7 - state.list.length )].map((x, i) =>{
                return (
-                <Row className='p-0 m-0'  style={{minHeight:"23px", maxHeight:"23px",  }}>
+                <Row key={i} className='p-0 m-0'  style={{minHeight:"23px", maxHeight:"23px",  }}>
                 <Col className='text-center'  md="9" style={{borderLeft: border1}}>
                 <span >{}</span>
                 </Col>
