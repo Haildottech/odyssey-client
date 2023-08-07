@@ -11,7 +11,6 @@ import InputNumComp from '/Components/Shared/Form/InputNumComp';
 import CustomBoxSelect from '/Components/Shared/Form/CustomBoxSelect';
 import Notes from "./Notes";
 import ports from "/jsonData/ports";
-import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from 'next/router';
@@ -20,6 +19,7 @@ import { createNotification } from '/functions/notifications'
 import Cookies from 'js-cookie';
 import { addBlCreationId } from '/redux/BlCreation/blCreationSlice';
 import Weights from './WeightComp';
+import BLInfo from './BLInfo';
 
 const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors, state, useWatch, dispatch, reset, id, type}) => {
 
@@ -148,14 +148,6 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
           <DateComp register={register} name='shipDate' control={control} label='Ship Date' disabled={getStatus(approved)} width={"100%"} />
           {errors.registerDate && <div className='error-line'>Required*</div>}
       </Col>
-      
-      <Col md={2} className='py-1'>
-        <SelectComp register={register} name='costCenter' control={control} label='Cost Center' width={"100%"} disabled={getStatus(approved)}
-          options={[  
-            {id:'FSD', name:'FSD'},
-            {id:'KHI', name:'KHI'}
-          ]} />
-      </Col>
       <Col md={2} className='py-1'>
         <SelectComp register={register} name='shipStatus' control={control} label='Ship Status:' width={"100%"} disabled={getStatus(approved)}
           options={[  
@@ -166,7 +158,14 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
             {id:'Closed', name:'Closed'}
           ]} />
       </Col>
-      <Col md={2} className='py-1'>
+      <Col md={1} className='py-1'>
+        <SelectComp register={register} name='costCenter' control={control} label='Cost Center' width={"100%"} disabled={getStatus(approved)}
+          options={[  
+            {id:'FSD', name:'FSD'},
+            {id:'KHI', name:'KHI'}
+          ]} />
+      </Col>
+      <Col md={1} className='py-1'>
         <SelectComp register={register} name='subType' control={control} disabled={getStatus(approved) || state.selectedRecord.id!=null} 
         label='Sub Type' width={"100%"}
           options={[  
@@ -174,7 +173,7 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
             {id:'LCL', name:'LCL'},
         ]} />
       </Col>
-      <Col md={2} className='py-1'>
+      <Col md={1} className='py-1'>
         <SelectComp register={register} name='dg' control={control} label='DG Type' width={"100%"} disabled={getStatus(approved)}
           options={[  
             {id:'DG', name:'DG'},
@@ -182,8 +181,8 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
             {id:'Mix', name:'Mix'},
         ]} />
       </Col>
-      <Col md={2} className='py-1'>
-        <SelectComp register={register} name='freightType' control={control} label='Freight Type' width={"100%"} disabled={getStatus(approved)}
+      <Col md={1} className='py-1'>
+        <SelectComp register={register} name='freightType' control={control} label='Fr. Type' width={"100%"} disabled={getStatus(approved)}
           options={[  
             {id:'Prepaid', name:'Prepaid'},
             {id:'Collect', name:'Collect'},
@@ -228,8 +227,11 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
       <Col md={2} className='py-1'>
         <InputComp register={register} name='fileNo' control={control} label='File #' width={"100%"} disabled={getStatus(approved)} />
       </Col>
+      <Col >
+        <BLInfo blValues={state.selectedRecord.Bl} />
+      </Col>
     </Row>
-    <hr className='my-1' />
+    <hr className='my-3' />
     <Row>
       <Col md={3} className=''>
         <div className='custom-link mt-2' onClick={()=>pageLinking("client", ClientId)} >Client *</div>
