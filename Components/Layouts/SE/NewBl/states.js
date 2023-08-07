@@ -67,6 +67,7 @@ function recordsReducer(state, action){
 const baseValues = {
   //Basic Info
   id:'',
+  operation:'',
   hbl:'',
   hblDate:'',
   hblIssue:'',
@@ -189,7 +190,6 @@ const convetAsHtml = (values) => {
 }
 
 const setJob = (set, x, state, reset, allValues, dispatch) => {
-
     allValues.SEJobId =      x.id;                 
     allValues.jobNo =        x.jobNo;                        
     allValues.consignee =    x.consignee?.name;     
@@ -203,7 +203,8 @@ const setJob = (set, x, state, reset, allValues, dispatch) => {
     allValues.commodity =    x.commodity?.name; 
     allValues.equip =        x.SE_Equipments;      
     allValues.freightType =  x.freightType;      
-    allValues.delivery =  x.delivery;      
+    allValues.delivery   =   x.delivery;      
+    allValues.operation =    x.operation;      
     dispatch({type:"set",payload:{
       deliveryContent:convetAsHtml(x.overseas_agent),
       consigneeContent:convetAsHtml(x.consignee),
@@ -238,15 +239,15 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
   allValues.SEJobId =        fetchedResult[0].id;
   allValues.jobNo =          fetchedResult[0].jobNo;
   allValues.consignee =      fetchedResult[0].consignee?.name;
-  allValues.shipper =        fetchedResult[0].shipper.name;
-  allValues.overseas_agent = fetchedResult[0].overseas_agent.name;
+  allValues.shipper =        fetchedResult[0].shipper?.name;
+  allValues.overseas_agent = fetchedResult[0].overseas_agent?.name;
   allValues.pol =            fetchedResult[0].pol;
   allValues.pofd =           fetchedResult[0].pod;
   allValues.fd =             fetchedResult[0].fd;
-  allValues.vessel =         fetchedResult[0].vessel.name;
+  allValues.vessel =         fetchedResult[0].vessel?.name;
   allValues.voyage =         fetchedResult[0].Voyage?.voyage;
   allValues.shipDate =       fetchedResult[0].shipDate;
-  allValues.commodity =      fetchedResult[0].commodity.name;
+  allValues.commodity =      fetchedResult[0].commodity?.name;
   allValues.equip =          fetchedResult[0].SE_Equipments;
   allValues.freightType =    fetchedResult[0].freightType;
   allValues.freightPaybleAt =fetchedResult[0].freightPaybleAt;

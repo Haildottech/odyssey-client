@@ -38,6 +38,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
         customCheck: tempState.customCheck!==""?tempState.customCheck.split(", "):"",
         transportCheck:tempState.transportCheck!==""?tempState.transportCheck.split(", "):"",// tempState.transportCheck.split(", "),
         eta: tempState.eta==""?"":moment(tempState.eta),
+        etd: tempState.etd==""?"":moment(tempState.etd),
         approved: tempState.approved=="true"?["1"]:[],
         //val.length==0?false:val[0]=="1"?false:true 
         polDate: tempState.polDate==""?"":moment(tempState.polDate),
@@ -173,8 +174,8 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
       <Tabs defaultActiveKey={state.tabState} activeKey={state.tabState}
         onChange={(e)=> dispatch({type:'toggle', fieldName:'tabState', payload:e}) }>
       <Tabs.TabPane tab="Booking Info" key="1"> 
-        <BookingInfo handleSubmit={handleSubmit} onEdit={onEdit} companyId={companyId} control={control} register={register} errors={errors} state={state} 
-          useWatch={useWatch} dispatch={dispatch} reset={reset} id={id}
+        <BookingInfo handleSubmit={handleSubmit} onEdit={onEdit} companyId={companyId} control={control} register={register} 
+          errors={errors} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} id={id} type={type}
         />
       </Tabs.TabPane>
       {subType=="FCL" &&

@@ -1,26 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Popover, InputNumber, Tag, Checkbox, Modal } from "antd";
 import SelectComp from '/Components/Shared/Form/SelectComp';
 import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
+import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 import DateComp from '/Components/Shared/Form/DateComp';
 import TimeComp from '/Components/Shared/Form/TimeComp';
-import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 import { Row, Col } from 'react-bootstrap';
 import Dates from './Dates';
 import InputNumComp from '/Components/Shared/Form/InputNumComp';
+import CustomBoxSelect from '/Components/Shared/Form/CustomBoxSelect';
 import Notes from "./Notes";
 import ports from "/jsonData/ports";
 import moment from 'moment';
-import CustomBoxSelect from '/Components/Shared/Form/CustomBoxSelect';
 import { useSelector, useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from 'next/router';
 import InputComp from '/Components/Shared/Form/InputComp';
-import {createNotification} from '../../../../functions/notifications'
+import { createNotification } from '/functions/notifications'
 import Cookies from 'js-cookie';
 import { addBlCreationId } from '/redux/BlCreation/blCreationSlice';
+import Weights from './WeightComp';
 
-const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors, state, useWatch, dispatch, reset, id}) => {
+const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors, state, useWatch, dispatch, reset, id, type}) => {
 
   const currentJobValue = useSelector((state) => state.blCreationValues.value);
   const dispatchNew = useDispatch();
@@ -63,6 +64,7 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     })
     return result
   }
+
   const getStatus = (val) => {
     return val[0]=="1"?true:false
   };
@@ -90,20 +92,21 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     }
     return result
   }
+
   const Space = () => <div className='mt-2'/>
 
-  const pageLinking = (type, value) => {
+  const pageLinking = (pageType, value) => {
     let route= "";
     let obj = {}
-    if(type=="client"){
+    if(pageType=="client"){
       route=`/setup/client/${(value!="" && value!==null)?value:"new"}`
       obj={"label":"Client", "key":"2-7", "id":(value!="" && value!==null)?value:"new"}
 
-    }else if(type=="vendor"){
+    }else if(pageType=="vendor"){
       route=`/setup/vendor/${(value!="" && value!==null)?value:"new"}`
       obj={"label":"Vendor", "key":"2-8", "id":(value!="" && value!==null)?value:"new"}
       
-    }else if(type="vessel"){
+    }else if(pageType="vessel"){
       route=`/setup/voyage/`
       obj={"label":"Voyages", "key":"2-4"}
     }
@@ -274,19 +277,41 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
             }
           }}
           >{getVoyageNumber(VoyageId)}</div>
-        <div className='my-2'></div>
-        <DateComp register={register} name='eta' control={control} label='ETA' disabled={getStatus(approved)} />
-        <div className='my-2'></div>
-        <DateComp register={register} name='cutOffDate' control={control} label='Cut Off'  disabled={getStatus(approved)} />
-        <div className='mt-1'></div>
-        <TimeComp register={register} name='cutOffTime' control={control} label=''  width={100} disabled={getStatus(approved)} />
-        <Popover content={
-            <div className='p-2 m-0' style={{border:'1px solid silver'}}>
-              <Dates register={register} control={control} disabled={getStatus(approved)} />
-            </div>
-          } trigger="click">
-          <span className='ex-btn py-1 px-3'>Dates</span>
-        </Popover>
+          <Row>
+            <Col md={6}>
+              <div className='my-2'></div>
+              <DateComp register={register} name='etd' control={control} label='ETD' disabled={getStatus(approved)} />
+            </Col>
+            <Col md={6}>
+              <div className='my-2'></div>
+              <DateComp register={register} name='eta' control={control} label='ETA' disabled={getStatus(approved)} />
+            </Col>
+            {type=="SI" &&<>
+              <Col md={12}>
+                <div className='my-2'></div>
+                <InputComp register={register} name='cbkg' control={control} label='C.BKG/ED'  disabled={getStatus(approved)} />
+              </Col>
+            </>}
+            {type=="SE" &&<>
+            <Col md={6}>
+              <div className='my-2'></div>
+              <DateComp register={register} name='cutOffDate' control={control} label='Cut Off'  disabled={getStatus(approved)} />
+            </Col>
+            <Col md={6}>
+              <div className='my-2'></div>
+              <TimeComp register={register} name='cutOffTime' control={control} label='Time'  width={100} disabled={getStatus(approved)} />
+            </Col>
+            </>}
+          </Row>
+            <div className='mt-3'></div>
+            <Popover content={
+              <div style={{border:'1px solid silver', paddingLeft:10, paddingTop:20, paddingBottom:20}}>
+                  <Dates register={register} control={control} disabled={getStatus(approved)} />
+                </div>
+              } trigger="click">
+              <span className='ex-btn py-2 px-3'>Dates</span>
+            </Popover>
+            <div className='mt-2'></div>
         </div> 
       </Col>
       <Col md={3}><Space/>
@@ -318,45 +343,12 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
           <Col>.</Col>
         </Row>
         <SelectSearchComp register={register} name='customAgentId' control={control} label='' width={"100%"}
-          options={state.fields.vendor.chaChb} disabled={getStatus(approved) || customCheck[0]!='Custom Clearance'} />
+          options={state.fields.vendor.chaChb} disabled={getStatus(approved) || customCheck[0]!='Custom Clearance'} 
+        />
         <div style={{marginTop:20}}></div>
-        <div className='px-2 pb-2' style={{border:'1px solid silver'}}>
-          <Row>
-            <Col md={6} className='mt-2'>
-            {/* <div>Weight</div><InputNumber value={getWeight().weight} disabled style={{ color:'black'}} width={"100%"} /> */}
-            <InputNumComp register={register} name='weight' control={control} width={"100%"} label='Weight' step={'0.01'} disabled={getStatus(approved)} />
-            </Col>
-            <Col md={6} className='mt-2'>
-              <InputNumComp register={register} name='bkg' control={control} width={"100%"} label='BKG Weight' step={'0.01'} disabled={getStatus(approved)} />
-            </Col>
-            <Col md={6} className='mt-2'>
-            <div>Container</div><InputNumber value={getWeight().qty} disabled style={{width:"100%"}} />
-            </Col>
-            <Col md={6} className='mt-2'>
-              <InputNumComp register={register} name='shpVol' control={control} label='Shp Vol' width={"100%"} step={'0.01'} disabled={getStatus(approved)} />
-            </Col>
-            <Col md={6} className='mt-2'>
-              <div>TEU</div><InputNumber value={getWeight().teu} disabled style={{width:"100%", color:'black'}} />
-            </Col>
-            <Col md={6} className='mt-2'>
-              <InputNumComp register={register} name='vol' control={control} label='Vol' width={"100%"} step={'0.00001'} disabled={getStatus(approved)}/>
-            </Col>
-            <Col md={6} className='mt-2'>
-              <InputNumComp register={register} name='pcs' control={control}  label='PCS' width={"100%"} disabled={getStatus(approved)} />
-            </Col>
-            <Col md={6} className='mt-2'>
-              <SelectComp register={register} name='pkgUnit' control={control} label='.' width={"100%"} disabled={getStatus(approved)}
-                options={[  
-                {"id":"BAGS"   , "name":"BAGS"},
-                {"id":"BALES"  , "name":"BALES"},
-                {"id":"BARRELS", "name":"BARRELS"},
-                {"id":"CARTONS", "name":"CARTONS"},
-                {"id":"BLOCKS" , "name":"BLOCKS"},
-                {"id":"BOATS"  , "name":"BOATS"}
-              ]} />
-            </Col>
-          </Row>
-        </div>
+        <Weights register={register} control={control} getStatus={getStatus} allValues={allValues} 
+          type={type} approved={approved} getWeight={getWeight}
+        />
       </Col>
       <Col md={3}>
       {state.edit &&<Notes state={state} dispatch={dispatch} />}

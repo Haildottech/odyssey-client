@@ -12,16 +12,13 @@ function recordsReducer(state, action){
     }
 };
 
-
 const initialState = {
   records: [{
     SE_Job:{jobNo:""}
   }],
   load:false,
-  visible:false,
-  
+  visible:false
 };
-
 
 export { 
   initialState,

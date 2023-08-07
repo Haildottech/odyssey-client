@@ -68,7 +68,9 @@ const baseValues = {
   cutOffDate:'',
   cutOffTime:'',
   eta:'',
-  
+  etd:'',
+  cbkg:'',
+
   aesDate:'',
   aesTime:'',
   siCutOffDate:'',
@@ -82,6 +84,7 @@ const baseValues = {
   vgmCutOffTime:'',
 
   weight:'',
+  weightUnit:'',
   bkg:'',
   container:'',
   shpVol:'',

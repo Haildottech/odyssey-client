@@ -3,29 +3,25 @@ import InputComp from '/Components/Shared/Form/InputComp';
 import TextAreaComp from '/Components/Shared/Form/TextAreaComp';
 import DateComp from '/Components/Shared/Form/DateComp';
 import SelectComp from '/Components/Shared/Form/SelectComp';
-import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
 import { Row, Col } from 'react-bootstrap';
 import { Modal, Select } from 'antd';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import JobSearch from './JobSearch';
 import { fetchJobsData, convetAsHtml, setJob } from './states';
 import moment from 'moment';
 
 const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
 
-  const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b})
-  const setAll = (obj) => dispatch({type:'set', payload:obj});
-  const allValues = useWatch({control});
-
-    //dispatchNew(addBlCreationId(currentJobValue+1))
+    const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b})
+    const allValues = useWatch({control});
     const currentJobValue = useSelector((state) => state.blCreationValues.value);
 
     useEffect(()=>{
         const retrieveData = async() => {
             if(id=='new'){
-                console.log(currentJobValue);
+                //console.log(currentJobValue);
                 let jobValue = await fetchJobsData(set, dispatch, currentJobValue);
-                console.log(jobValue[0])
+                //console.log(jobValue)
                 setJob(set, jobValue[0], state, reset, allValues, dispatch)
             }
         }
@@ -68,7 +64,9 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
                 </Col>
                 <Col md={12}>
                     <div className='mt-2'></div>
-                    <InputComp register={register} name='hbl' control={control} label='HBL # *' width={150} disabled={true} />
+                    <InputComp register={register} name='hbl' control={control} label='HBL # *' width={150} 
+                        disabled={allValues.operation=="SI"?false:true} 
+                    />
                 </Col>
                 <Col md={12}>
                     <div className='mt-2'></div>
@@ -152,12 +150,6 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
                 <div className='dummy-input'>{allValues.consignee}</div>
                 </Col>
                 <Col md={12}>
-                    {/* <SelectSearchComp register={register} name='notifyPartyOneId' control={control} label='Notify Party #1z' width={'100%'}
-                        options={state.partiesData} onChange={()=>console.log("Hello")}
-                    /> */}
-                    {/* <SelectSearchComp register={register} name='notifyPartyTwoId' control={control} label='Notify Party #2' width={'100%'}
-                        options={state.partiesData}
-                    /> */}
                     <div className='mt-2'>Notify Party #1 *</div>
                     <Select style={{minWidth:'100%'}}
                         onChange={(e)=>{
