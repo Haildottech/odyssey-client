@@ -59,7 +59,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     <>
     <Row>
         <Col style={{maxWidth:150}} className="">
-        <div className='div-btn-custom text-center py-1'
+        <div className='div-btn-custom text-center py-1 fw-8'
             onClick={()=>{
             if(!state.chargeLoad){
                 append({
@@ -72,7 +72,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     SEJobId:state.selectedRecord.id
                 })}}
             }
-        >Add Charge</div>
+        >Add +</div>
         </Col>
         <Col>
         <div className='div-btn-custom text-center mx-0 py-1 px-3' style={{float:'right'}} 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Popover, InputNumber, Tag, Checkbox, Modal } from "antd";
+import React, { useEffect } from 'react';
+import { Popover, Tag, Modal } from "antd";
 import SelectComp from '/Components/Shared/Form/SelectComp';
 import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
 import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
@@ -7,23 +7,22 @@ import DateComp from '/Components/Shared/Form/DateComp';
 import TimeComp from '/Components/Shared/Form/TimeComp';
 import { Row, Col } from 'react-bootstrap';
 import Dates from './Dates';
-import InputNumComp from '/Components/Shared/Form/InputNumComp';
 import CustomBoxSelect from '/Components/Shared/Form/CustomBoxSelect';
 import Notes from "./Notes";
 import ports from "/jsonData/ports";
 import { useSelector, useDispatch } from 'react-redux';
-import { incrementTab } from '/redux/tabs/tabSlice';
+import { incrementTab, removeTab } from '/redux/tabs/tabSlice';
 import Router from 'next/router';
 import InputComp from '/Components/Shared/Form/InputComp';
-import { createNotification } from '/functions/notifications'
-import Cookies from 'js-cookie';
 import { addBlCreationId } from '/redux/BlCreation/blCreationSlice';
 import Weights from './WeightComp';
 import BLInfo from './BLInfo';
 
 const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors, state, useWatch, dispatch, reset, id, type}) => {
 
-  const currentJobValue = useSelector((state) => state.blCreationValues.value);
+  const tabs = useSelector((state)=>state.tabs.tabs)
+  //const companyId = useSelector((state) => state.company.value);
+
   const dispatchNew = useDispatch();
   const transportCheck = useWatch({control, name:"transportCheck"});
   const transporterId = useWatch({control, name:"transporterId"});
@@ -40,6 +39,7 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
   const localVendorId = useWatch({control, name:"localVendorId"});
   const approved = useWatch({control, name:"approved"});
   let allValues = useWatch({control})
+  const Space = () => <div className='mt-2'/>
    
   const handleOk = () => {
     allValues.approved = approved
@@ -53,7 +53,6 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     dispatch({type:"set",payload:{
       isModalOpen : false,
     }})
-    console.log(approved==[])
     reset({...allValues, approved:approved[0]!=1?['1']:[]})
   };
  
@@ -93,8 +92,6 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     return result
   }
 
-  const Space = () => <div className='mt-2'/>
-
   const pageLinking = (pageType, value) => {
     let route= "";
     let obj = {}
@@ -115,6 +112,17 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     Router.push(route);
   }
 
+  const ShipperComp = () => {
+  return(
+    <>
+      <div className='custom-link mt-2' onClick={()=>pageLinking("client", shipperId)} >Shipper *</div>
+      <SelectSearchComp register={register} name='shipperId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
+        options={state.fields.party.shipper} 
+      />
+      <Space/>
+    </>
+  )}
+  
   return (
   <>
     <Row>
@@ -237,12 +245,11 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
         <div className='custom-link mt-2' onClick={()=>pageLinking("client", ClientId)} >Client *</div>
         <SelectSearchComp register={register} name='ClientId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.party.client} />
-        <div className='custom-link mt-2' onClick={()=>pageLinking("client", shipperId)} >Shipper *</div>
-        <SelectSearchComp register={register} name='shipperId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
-          options={state.fields.party.shipper} /><Space/>
+        {type=="SE" && <ShipperComp/>}
         <div className='custom-link mt-2' onClick={()=>pageLinking("client", consigneeId)} >Consignee *</div>
         <SelectSearchComp register={register} name='consigneeId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
           options={state.fields.party.consignee} /><Space/>
+        {type=="SI" && <ShipperComp/>}
         <SelectSearchComp register={register} name='pol' control={control} label='Port Of Loading' disabled={getStatus(approved)} width={"100%"}
           options={ports.ports} /><Space/>
         <SelectSearchComp register={register} name='pod' control={control} label='Port Of Discharge *' disabled={getStatus(approved)} width={"100%"}
@@ -363,11 +370,18 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
         <hr/>
         <div style={{display:"flex", flexWrap:"wrap", gap:"0.8rem"}}>
         <button className='btn-custom px-4' type="button"
-          onClick={()=>{
+          onClick={async()=>{
             if(id!="new"){
+              //let newTabs = [...tabs];
+              let oldTabs = type=="SE"?tabs.filter((x)=> {return x.key!="4-3" }):tabs.filter((x)=> {return x.key!="4-6" })
+              await dispatchNew(removeTab(oldTabs));
+              await dispatchNew(incrementTab({
+                "label":`${type} JOB`,
+                "key":type=="SE"?"4-3":"4-6",
+                "id":state.selectedRecord.id
+              }));
               dispatchNew(addBlCreationId(id));
-              
-              dispatchNew(incrementTab({
+              await dispatchNew(incrementTab({
                 "label":"SE BL",
                 "key":"4-4",
                 "id":state.selectedRecord.Bl!=null?`${state.selectedRecord.Bl.id}`:"new"

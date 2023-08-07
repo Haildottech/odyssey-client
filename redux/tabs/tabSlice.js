@@ -9,6 +9,9 @@ export const counterSlice = createSlice({
   name: 'tabs',
   initialState,
   reducers: {
+    removeTab: (state, action) => {
+      state.tabs = action.payload
+    },
     incrementTab: (state, action) => {
       state.value = action.payload
     },
@@ -19,6 +22,6 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { incrementTab, setTab } = counterSlice.actions
+export const { incrementTab, setTab, removeTab } = counterSlice.actions
 
 export default counterSlice.reducer

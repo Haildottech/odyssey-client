@@ -14,7 +14,6 @@ const SeJob = ({fieldsData, jobData, id, type}) => {
   const dispatchRedux = useDispatch();
 
   useEffect(() => {
-    console.log(jobData)
     let tempPerms = JSON.parse(Cookies.get('permissions'))
     dispatchRedux(appendValue({...seJobValues, hblDate:"123", hblIssue:"456", deliveryContent:'123'}))
     let tempChargeList = [];
