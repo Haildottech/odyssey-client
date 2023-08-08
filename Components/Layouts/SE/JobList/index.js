@@ -205,7 +205,6 @@ const Index = ({ data }) => {
               setVisible(true);
             }
             else {
-              console.log("first")
               openNotification("Error", `No Records Found`, "red");  
             }
           } else {
