@@ -398,7 +398,7 @@ return (
             <td style={{textAlign:'center'}}>{x.tax_apply}</td>
             <td>{x.tax_amount}</td>
             <td>{x.net_amount}</td>
-            <td>{x.ex_rate}</td>
+            <td>{x.currency=="PKR"?"1.00":x.ex_rate}</td>
             <td>{x.local_amount}</td>
         </tr>
             )
