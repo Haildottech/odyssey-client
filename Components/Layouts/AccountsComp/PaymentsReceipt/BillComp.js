@@ -315,4 +315,4 @@ const BillComp = ({partytype, selectedParty, payType, companyId, invoiceCurrency
   )
 }
 
-export default BillComp
+export default React.memo(BillComp)

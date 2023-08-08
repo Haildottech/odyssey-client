@@ -1,5 +1,6 @@
 import { Select } from "antd";
 import { useController } from "react-hook-form";
+import React from 'react'
 
 const SelectSearchComp = (props) => {
     const { control, name } = props;
@@ -35,4 +36,4 @@ return(
 
 )}
 
-export default SelectSearchComp
+export default React.memo(SelectSearchComp)

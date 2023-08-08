@@ -140,4 +140,4 @@ const PaymentsReceipt = () => {
   )
 }
 
-export default PaymentsReceipt
+export default React.memo(PaymentsReceipt)

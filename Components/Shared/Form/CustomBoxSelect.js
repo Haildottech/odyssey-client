@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, memo } from 'react'
 import { Select, Modal } from "antd";
 import { Controller } from "react-hook-form";
 import { Table, Row, Col } from "react-bootstrap";
@@ -70,4 +70,4 @@ return(
     }
     </Modal>
 )}
-export default CustomBoxSelect
+export default memo(CustomBoxSelect)

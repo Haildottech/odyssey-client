@@ -50,4 +50,4 @@ const SeJob = ({fieldsData, jobData, id, type}) => {
   )
 }
 
-export default SeJob;
+export default React.memo(SeJob);

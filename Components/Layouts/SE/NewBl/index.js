@@ -19,15 +19,20 @@ import axios from 'axios';
 const NewBl = ({ id, blData, partiesData }) => {
 
   const [state, dispatch] = useReducer(recordsReducer, initialState);
+
   const set = (a, b) => dispatch({ type: "toggle", fieldName: a, payload: b });
+
   const [deleteArr, setDeleteArr] = useState([]);
+  
   const dispatchNew = useDispatch();
+
   const { register, control, handleSubmit, reset, formState: { errors }, } = useForm({
     // resolver: yupResolver(validationSchema),
     defaultValues: state.values,
   });
 
   const allValues = useWatch({ control });
+
   const { fields, append, remove } = useFieldArray({
     name: "stamps",
     control,
@@ -188,4 +193,4 @@ const NewBl = ({ id, blData, partiesData }) => {
   );
 };
 
-export default NewBl;
+export default React.memo(NewBl);

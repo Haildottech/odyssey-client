@@ -26,6 +26,10 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
     const Line = () => <div style={{backgroundColor:"black", height:3, position:'relative', top:12}}></div>
     const border = "1px solid black";
 
+    // useEffect(() => {
+    //   console.log(invoice.SE_Job)
+    // }, [invoice])
+
   return (
     <div className='p-5'>
     <Row>
@@ -166,7 +170,15 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
                 </Col>
                 <Col md={4}>
                     <div style={heading}>PCS</div>
-                    <div style={paraStyles}>{invoice.SE_Job.pcs}</div>
+                    <div style={paraStyles}>
+                        {invoice.SE_Job?.SE_Equipments.length>0 && <>
+                        {  
+                            invoice.SE_Job.SE_Equipments.map((z, i)=>{
+                                return(<span key={i}>{z.qty} x {z.size}</span>)
+                            })
+                        }
+                        </>}
+                    </div>
                 </Col>
             </Row>
         </Col>
@@ -186,11 +198,17 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
         <Col md={12} style={{border:'1px solid silver'}} className=''>
             <Row>
                 <Col md={12}>
-                    {/*<>
+                    <>
                         <span style={heading}>Container #</span>
-                        <span className='mx-1' style={paraStyles}>1X40</span>
-                        <span className='mx-1' style={paraStyles}>FCIU8538841</span>
-                    </>*/}
+                        <span className='mx-2'></span>
+                        {invoice.SE_Job?.Bl?.Container_Infos.length>0 &&<>
+                        {invoice.SE_Job?.Bl?.Container_Infos.map((z, i)=>{
+                            return(
+                                <span className='mx-1' style={paraStyles} key={i}>{z.no}, </span>
+                            )
+                        })}
+                        </>}
+                    </>
                 </Col>
             </Row>
         </Col>
@@ -284,4 +302,4 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
   )
 }
 
-export default InvoicePrint
+export default React.memo(InvoicePrint)

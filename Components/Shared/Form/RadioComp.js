@@ -25,6 +25,7 @@
 
 import { Radio } from "antd";
 import { useController } from "react-hook-form";
+import React from 'react'
 
 const RadioComp = (props) => {
 
@@ -42,4 +43,4 @@ const RadioComp = (props) => {
   )
 }
 
-export default RadioComp
+export default React.memo(RadioComp)

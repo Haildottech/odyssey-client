@@ -135,4 +135,4 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
   )
 }
 
-export default PartySearch
+export default React.memo(PartySearch)

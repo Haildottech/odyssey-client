@@ -93,4 +93,4 @@ const EquipmentInfo = ({state, dispatch}) => {
   )
 }
 
-export default EquipmentInfo
+export default React.memo(EquipmentInfo)

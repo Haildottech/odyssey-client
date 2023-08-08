@@ -30,6 +30,7 @@
 
 import { InputNumber } from "antd";
 import { useController } from "react-hook-form";
+import React from 'react'
 
 const NumComp = (props) => {
   const { control, name } = props;
@@ -44,4 +45,4 @@ const NumComp = (props) => {
   )
 }
 
-export default NumComp
+export default React.memo(NumComp)

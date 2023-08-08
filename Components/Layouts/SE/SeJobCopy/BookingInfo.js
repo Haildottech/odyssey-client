@@ -425,4 +425,4 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
       </Modal>
   </>
 )}
-export default BookingInfo
+export default React.memo(BookingInfo)

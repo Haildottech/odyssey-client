@@ -121,9 +121,9 @@ const MainLayout = ({children}) => {
     nonGlParties:false,
   });
 
-  useEffect(()=>{ alterTabs(); }, [tabs]);
-
-  const alterTabs = () => {
+  //useEffect(()=>{ alterTabs() }, [tabs]);
+  
+  const memoizedAlterTabs = () => {
     if(Object.keys(tabs).length>0){
       let tempTabs = [...tabItems];
       let cancel = false;
@@ -172,6 +172,8 @@ const MainLayout = ({children}) => {
       }
     }
   };
+
+  React.useMemo(() => memoizedAlterTabs(), [tabs]);
 
   const setKey = (value) => {
     let result = "";
@@ -286,4 +288,4 @@ return (
     </Layout>
   </Layout>
 )};
-export default MainLayout;
+export default React.memo(MainLayout);

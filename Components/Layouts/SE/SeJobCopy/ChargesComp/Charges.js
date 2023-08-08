@@ -14,22 +14,22 @@ import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "
 const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType}) => {
 
     const { permissions } = state;
-    
+
     const [ selection, setSelection ] = useState({
         partyId:null,
         InvoiceId:null
     });
-    
+
     useEffect(() => {
         if(chargeList){
             let list = chargeList.filter((x)=> x.check);
             list.length>0?
-            setSelection({InvoiceId:list[0].InvoiceId, partyId:list[0].partyId}):
-            setSelection({partyId:null, InvoiceId:null})
+                setSelection({InvoiceId:list[0].InvoiceId, partyId:list[0].partyId}):
+                setSelection({partyId:null, InvoiceId:null})
         }
     }, [chargeList])
 
-    function calculate (){
+    const calculate  = () => {
         let tempChargeList = [...chargeList];
         for(let i = 0; i<tempChargeList.length; i++){
             let amount = tempChargeList[i].amount - tempChargeList[i].discount;
@@ -37,11 +37,15 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             if(tempChargeList[i].tax_apply==true){
                 tax = (amount/100.00) * tempChargeList[i].taxPerc;
                 tempChargeList[i].tax_amount = tax;
-                tempChargeList[i].net_amount =( amount + tax ) * parseInt(tempChargeList[i].qty);
+                tempChargeList[i].net_amount =( amount + tax ) * parseFloat(tempChargeList[i].qty);
             }else{
-                tempChargeList[i].net_amount = amount * parseInt(tempChargeList[i].qty);
+                tempChargeList[i].net_amount = (amount * parseFloat(tempChargeList[i].qty)).toFixed(2);
             }
-            tempChargeList[i].local_amount = (tempChargeList[i].net_amount*tempChargeList[i].ex_rate    ).toFixed(2);
+            if(tempChargeList[i].currency=="PKR"){
+                tempChargeList[i].local_amount = (tempChargeList[i].net_amount*1.00).toFixed(2);
+            }else{
+                tempChargeList[i].local_amount = (tempChargeList[i].net_amount*tempChargeList[i].ex_rate).toFixed(2);
+            }
         }
         let tempChargeHeadsArray = calculateChargeHeadsTotal(tempChargeList, 'full');
         dispatch({type:'set', payload:{...tempChargeHeadsArray}})
@@ -49,12 +53,11 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     }
 
     const permissionAssign = (permissions, x) => {
-        console.log(permissions)
-        return  permissions.admin? //if is admin
+        return  permissions.admin?                //if is admin
             x.Invoice?.approved=="1"?true:false:  // <-- Check if Invoice is approved or not
-            x.InvoiceId!=null? true : false  //If not admin
+            x.InvoiceId!=null? true : false       //If not admin
     }
-    
+
   return(
     <>
     <Row>
@@ -222,21 +225,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                             searchPartyId = state.selectedRecord.localVendorId;
                             break;
                     }
-                    // if (partyType == "Client") {
-                    //     searchPartyId = state.selectedRecord.ClientId;
-                    // } else if (partyType == "Local-Agent") {
-                    //     searchPartyId = state.selectedRecord.localVendorId;
-                    // } else if (partyType == "Custom-Agent") {
-                    //     searchPartyId = state.selectedRecord.customAgentId;
-                    // } else if (partyType == "Transport-Agent") {
-                    //     searchPartyId = state.selectedRecord.transporterId;
-                    // } else if (partyType == "Forwarding-Agent") {
-                    //     searchPartyId = state.selectedRecord.forwarderId;
-                    // } else if (partyType == "Overseas-Agent") {
-                    //     searchPartyId = state.selectedRecord.overseasAgentId;
-                    // } else if (partyType == "Shipping-Line") {
-                    //     searchPartyId = state.selectedRecord.shippingLineId;
-                    // }
+
                     let partyData = partyType == "Client" ? await getClients(searchPartyId) : await getVendors(searchPartyId);
                     if (state.chargesTab == '1') {
                         tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Bill" : "Job Invoice";
@@ -314,8 +303,12 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <td>{x.tax_amount}</td> {/* Tax Amount */}
         <td>{x.net_amount}</td>
         <td style={{ padding: 3 }}> {/* Ex. Rate */}
-            <InputNumComp register={register} name={`chargeList.${index}.ex_rate`} control={control} label='' width={10} 
-            disabled={permissionAssign(permissions, x)} />
+            {chargeList[index].currency!="PKR" && <InputNumComp register={register} name={`chargeList.${index}.ex_rate`}  control={control} label='' width={10} 
+                disabled={permissionAssign(permissions, x)} 
+            />}
+            {chargeList[index].currency=="PKR" && 
+            <InputNumber value={1.00}
+            />}
         </td>
         <td>{x.local_amount}</td>
         <td className='text-center'>{/* Party Selection */}
@@ -345,4 +338,4 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     </>
   )
 }
-export default ChargesList
+export default React.memo(ChargesList)

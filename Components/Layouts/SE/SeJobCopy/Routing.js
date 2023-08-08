@@ -53,4 +53,4 @@ const Routing = ({register, control, errors, state, useWatch}) => {
   )
 }
 
-export default Routing
+export default React.memo(Routing)

@@ -426,4 +426,4 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
   )
 }
 
-export default AgentBillComp
+export default React.memo(AgentBillComp)

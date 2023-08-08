@@ -5,6 +5,7 @@ import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from 'next/router';
 
 const SEJobList = ({jobsData, sessionData, type}) => {
+  
   const companyId = useSelector((state) => state.company.value);
   const [records, setRecords] = useState([]);
   const dispatch = useDispatch();

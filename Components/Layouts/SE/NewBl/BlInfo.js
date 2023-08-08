@@ -256,4 +256,4 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset}) => {
   )
 }
 
-export default BlInfo
+export default React.memo(BlInfo)

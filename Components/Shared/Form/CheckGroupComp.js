@@ -29,6 +29,7 @@
 
 import { Checkbox } from "antd";
 import { useController } from "react-hook-form";
+import { memo } from "react";
 
 //const CheckGroupComp = ({ control, name, label, ...rest }) => {
 const CheckGroupComp = (props) => {
@@ -48,4 +49,4 @@ const CheckGroupComp = (props) => {
   )
 }
 
-export default CheckGroupComp
+export default memo(CheckGroupComp)

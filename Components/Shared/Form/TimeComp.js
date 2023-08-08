@@ -23,6 +23,7 @@
 
 import { TimePicker } from 'antd';
 import { useController } from "react-hook-form";
+import React from 'react'
 
 const TimeComp = (props) => {
   const { control, name } = props;
@@ -37,4 +38,4 @@ const TimeComp = (props) => {
   </>
   )
 }
-export default TimeComp
+export default React.memo(TimeComp)

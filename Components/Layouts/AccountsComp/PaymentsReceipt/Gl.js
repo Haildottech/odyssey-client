@@ -141,4 +141,4 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
   )
 }
 
-export default Gl;
+export default React.memo(Gl);

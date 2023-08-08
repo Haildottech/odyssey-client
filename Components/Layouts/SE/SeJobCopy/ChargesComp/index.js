@@ -123,4 +123,4 @@ const ChargesComp = ({state, dispatch, type}) => {
   )
 }
 
-export default ChargesComp
+export default React.memo(ChargesComp)

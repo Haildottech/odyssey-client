@@ -175,4 +175,4 @@ return (
     </div>
   )
 }
-export default ChartOFAccount
+export default React.memo(ChartOFAccount)

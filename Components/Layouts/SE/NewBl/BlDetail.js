@@ -197,4 +197,4 @@ return(
   </Row>
 </div>
 )}
-export default BlDetail
+export default React.memo(BlDetail)

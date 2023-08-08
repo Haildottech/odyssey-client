@@ -71,4 +71,4 @@ const AccountSelection = ({state, dispatch, companyId}) => {
   )
 }
 
-export default AccountSelection
+export default React.memo(AccountSelection)

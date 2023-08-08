@@ -38,4 +38,4 @@ const Invoice = ({state, dispatch, companyId}) => {
   )
 }
 
-export default Invoice
+export default React.memo(Invoice)

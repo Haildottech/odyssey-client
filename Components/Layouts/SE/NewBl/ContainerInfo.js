@@ -237,4 +237,4 @@ return (
 </Row>
 </div>
 )}
-export default ContainerInfo
+export default React.memo(ContainerInfo)

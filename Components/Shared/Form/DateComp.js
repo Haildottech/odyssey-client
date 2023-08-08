@@ -23,6 +23,7 @@
 
 import { DatePicker } from "antd";
 import { useController } from "react-hook-form";
+import React, { memo } from 'react'
 
 const NumComp = (props) => {
   const { control, name } = props;
@@ -36,4 +37,4 @@ const NumComp = (props) => {
   )
 }
 
-export default NumComp
+export default memo(NumComp)

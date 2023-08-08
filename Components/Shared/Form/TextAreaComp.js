@@ -25,6 +25,7 @@
 
 // export default TextAreaComp
 
+import React from 'react'
 import { Input, Form } from "antd";
 import { useController } from "react-hook-form";
 const { TextArea } = Input;
@@ -41,4 +42,4 @@ const TextComp = (props) => {
   )
 }
 
-export default TextComp
+export default React.memo(TextComp)

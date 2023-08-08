@@ -208,7 +208,7 @@ const setJob = (set, x, state, reset, allValues, dispatch) => {
     dispatch({type:"set",payload:{
       deliveryContent:convetAsHtml(x.overseas_agent),
       consigneeContent:convetAsHtml(x.consignee),
-      shipperContent:convetAsHtml(x.Client),
+      shipperContent:convetAsHtml(x.shipper),
       partyVisible:false,
       updateContent:!state.updateContent
     }})
@@ -231,7 +231,7 @@ const calculateContainerInfos=(state, set, reset, allValues)=>{
 }
 
 const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) => {
-  const setAll = (obj) => dispatch({type:'set', payload:obj});
+  //const setAll = (obj) => dispatch({type:'set', payload:obj});
   set("load", true);
   let result = {...blData};
   result.equip = [{}];
@@ -252,18 +252,25 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
   allValues.freightType =    fetchedResult[0].freightType;
   allValues.freightPaybleAt =fetchedResult[0].freightPaybleAt;
   allValues.delivery =       fetchedResult[0].delivery;
+  
+  //console.log(fetchedResult);
 
   result.Container_Infos.forEach((x, i)=>{
     result.Container_Infos[i].date = x.date!=""?moment(x.date):""
   })
   let cbm = 0.0, tare = 0.0, net = 0.0, gross = 0.0, pkgs = 0, unit = "", wtUnit = "";
-  result.Container_Infos.forEach((x,i)=>{
-    if(i==0){ unit= x.unit; wtUnit= x.wtUnit; }
+
+  result.Container_Infos.forEach((x,i) => {
+    if(i==0){ 
+      unit= x.unit; wtUnit= x.wtUnit; 
+    }
     cbm = cbm + parseFloat(x.cbm||0); tare = tare + parseFloat(x.tare||0); net = net + parseFloat(x.net||0); gross = gross + parseFloat(x.gross||0); pkgs = pkgs + parseInt(x.pkgs||0);
   })
+
   allValues = {...allValues, gross:""+gross, net:""+net, tare:""+tare, wtUnit, pkgs:""+pkgs, unit, cbm:""+cbm}
+
   let contInfos = result.Container_Infos;
-  //set("Container_Infos", result.Container_Infos);
+  
   result = {
     ...allValues,
     ...result

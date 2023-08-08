@@ -12,7 +12,9 @@ const LoadingProgram = ({ state, jobData }) => {
   const { register, control, handleSubmit, reset } = useForm({
     defaultValues: initialState.values,
   });
+  
   const allValues = useWatch({ control });
+
   const onSubmit = async (data) => {
     setLoad(true);
     const SEJobId = jobData.id;
@@ -35,7 +37,11 @@ const LoadingProgram = ({ state, jobData }) => {
   };
 
   useEffect(() => {
-    axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_LOADING_PROGRAM, {
+    getValues();
+  }, []);
+
+  const getValues = async() => {
+    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_LOADING_PROGRAM, {
       headers: { id: jobData.id },
     })  .then((res) => {
       if (res.data.result !== null) {
@@ -81,8 +87,7 @@ const LoadingProgram = ({ state, jobData }) => {
         })
       }
     })
-    console.log(state.selectedRecord)
-  }, []);
+  }
 
   return (
     <LoadingForm onSubmit={onSubmit} register={register} control={control} handleSubmit={handleSubmit}
@@ -91,4 +96,4 @@ const LoadingProgram = ({ state, jobData }) => {
   );
 };
 
-export default LoadingProgram
+export default React.memo(LoadingProgram)
