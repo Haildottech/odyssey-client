@@ -30,7 +30,7 @@ const reducers = (state, action) => {
   }
 }
 
-const riderID = ({riderData, tasks, id}) => {
+const RiderID = ({riderData, tasks, id}) => {
 
   const [state, dispatch] = useReducer(reducers, initialState)
   const { register, control, handleSubmit, reset } = useForm({});
@@ -126,6 +126,6 @@ const riderID = ({riderData, tasks, id}) => {
   )
 }
 
-export default riderID
+export default RiderID
 
 

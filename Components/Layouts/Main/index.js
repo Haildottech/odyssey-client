@@ -22793,7 +22793,6 @@ const Main = ({sessionData}) => {
         {companyId!=3 && 
           <div>
             <>
-            Select & Add Tabs to Get Started
                 {/* 
                 <>
                 Account List Importer
