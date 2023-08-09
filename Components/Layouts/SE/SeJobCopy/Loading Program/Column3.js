@@ -6,7 +6,7 @@ import RadioComp  from "../../../../Shared/Form/RadioComp";
 import { Spinner } from 'react-bootstrap';
 
 
-const Column3 = ({  register, control, state, handleSubmit, onSubmit, load}) => {
+const Column3 = ({  register, control, state, load}) => {
   return (
     <div style={{ width: "30%" }}>
     <div className="fs-12" style={{ width: "40%", display: "flex" }}>
@@ -86,9 +86,7 @@ const Column3 = ({  register, control, state, handleSubmit, onSubmit, load}) => 
       <label>Text 1 </label>
       <TextAreaComp name="text1" register={register} control={control} />
     </div>
-    <button type="button" className="btn-custom mt-1" onClick={handleSubmit(onSubmit)}>
-       {load ? <Spinner size='sm'/> : "Save Data"}
-    </button>
+
     <br/>
   </div>
   )

@@ -30,22 +30,19 @@ export const cargoStatus = [
   { id: "LCL / FCL", value: "LCL / FCL" },
   { id: "PART / FCL", value: "PART / FCL" },
   { id: "FCL / DOOR", value: "FCL / DOOR" },
-  
 ];
-
 
 export const costCenter = [
     {id: "KHI", value: "KHI" },
     {id: "SKT", value: "SKT" },
     {id: "LHR", value: "LHR" },
     {id: "FSD", value: "FSD" },
-
-
 ]
 
 export const initialState = {
   values : {
     id:                "",
+    doNo:              "",
     localCustom:       "", 
     wharf:             "", 
     loadingTerminal:   "", 

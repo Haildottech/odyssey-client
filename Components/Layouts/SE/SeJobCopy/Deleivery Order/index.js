@@ -81,7 +81,6 @@ const LoadingProgram = ({ state, jobData }) => {
         })
       }
     })
-    console.log(state.selectedRecord)
   }, []);
 
   return (

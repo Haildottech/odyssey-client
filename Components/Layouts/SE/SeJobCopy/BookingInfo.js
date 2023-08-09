@@ -393,7 +393,7 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
         >BL
         </button>
         <Popover
-        content={
+          content={
           <>{state.InvoiceList?.map((x, i) => 
             (<div key={i} className='my-1'>
               <Tag color="geekblue" style={{fontSize:15, cursor:"pointer", width:130, textAlign:'center'}}
@@ -408,29 +408,19 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
           </>}>
           <button type="button" className="btn-custom">Invoice/Bills {`(${state.InvoiceList.length})`}</button>
         </Popover>
-        {type == "SE" ?
-         <button className='btn-custom px-4'  type='button' 
-          onClick={()=>{
-           dispatch({type:'toggle', fieldName:'loadingProgram', payload:"6"}) ;
-           state.tabState = "6"
-          }}
-        >Loading Program</button> :
-        <button className='btn-custom px-4'  type='button' 
-        onClick={()=>{
-         dispatch({type:'toggle', fieldName:'loadingProgram', payload:"6"}) ;
-         state.tabState = "6"
-        }}
-      >DO</button>
-        }
+
+        <button className='btn-custom px-4' type='button' onClick={()=>dispatch({type:'set',payload:{loadingProgram:1,tabState:"6"}})}
+        >Loading Program</button> 
+        <button className='btn-custom px-4' type='button' onClick={()=>dispatch({type:'set',payload:{do:1,tabState:"7"}})}>DO</button>
         </div>
       </Col>
     </Row>
     {(state.voyageVisible && approved[0]!="1") && 
       <CustomBoxSelect reset={reset} useWatch={useWatch} control={control} state={state} dispatch={dispatch}/>
     }
-     <Modal open={state.isModalOpen} onOk={handleOk} onCancel={handleCancel} maskClosable={false}>
-        {approved=="1" ? "Are You Sure You Want To Approve This Job? " : "Are You Sure You Want To Disapprove This Job?"}
-      </Modal>
+    <Modal open={state.isModalOpen} onOk={handleOk} onCancel={handleCancel} maskClosable={false}>
+      {approved=="1" ? "Are You Sure You Want To Approve This Job? " : "Are You Sure You Want To Disapprove This Job?"}
+    </Modal>
   </>
 )}
 export default React.memo(BookingInfo)

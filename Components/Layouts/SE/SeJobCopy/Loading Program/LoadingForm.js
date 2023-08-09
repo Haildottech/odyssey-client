@@ -4,7 +4,8 @@ import { useState } from 'react';
 import Column1 from './Column1';
 import Column2 from './Column2';
 import Column3 from './Column3';
-import {  Popover } from 'antd'
+import { Popover } from 'antd';
+import { Row, Col } from "react-bootstrap";
 
 const LoadingForm = ({handleSubmit, register, control, onSubmit, state, load, allValues}) => {
 
@@ -31,8 +32,15 @@ const LoadingForm = ({handleSubmit, register, control, onSubmit, state, load, al
 
     <Column1 registr={register} control={control} state={state} />
     <Column2 registr={register} control={control} state={state} />
-    <Column3 registr={register}  load={load} control={control} state={state}  onSubmit={onSubmit} handleSubmit={handleSubmit}/>
+    <Column3 registr={register}  load={load} control={control} state={state} />
     </div>
+    <Row>
+      <Col>
+        <button type="button" className="btn-custom mt-1" onClick={handleSubmit(onSubmit)}>
+          {load ? <Spinner size='sm'/> : "Save Data"}
+        </button>
+      </Col>
+    </Row>
     </form>
   </div>
   )

@@ -5,7 +5,7 @@ import Column1 from './Column1';
 import Column2 from './Column2';
 import Column3 from './Column3';
 import {  Popover } from 'antd'
-import { Col, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 const LoadingForm = ({handleSubmit, register, control, onSubmit, state, load, allValues, jobData}) => {
 

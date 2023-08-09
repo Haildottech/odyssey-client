@@ -198,11 +198,13 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
         </Tabs.TabPane>
       }
       {(state.loadingProgram!='') &&
-        <Tabs.TabPane tab={ type == "SE" ?` Loading Program` : "Delivery Order"} key="6">
-          {type == "SE" ?
-            <LoadingProgram state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} /> :
-            <DeleiveryOrder state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
-          }
+        <Tabs.TabPane tab={`Loading Program`} key="6">
+          <LoadingProgram state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
+        </Tabs.TabPane>
+      }
+      {(state.do!='') &&
+        <Tabs.TabPane tab={"Delivery Order"} key="7">
+          <DeleiveryOrder state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
         </Tabs.TabPane>
       }
       </Tabs>

@@ -19,8 +19,8 @@ const Column1 = ({register, control, state, jobData}) => {
     <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{state.selectedRecord.jobNo}</div>
       </Col>
       <Col md={3}>
-    <div className='fs-12'>DO No # :</div>
-    <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{state.selectedRecord.jobNo}</div>
+      <div className='fs-12'>DO No # :</div>
+      <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{state.selectedRecord.jobNo}</div>
       </Col>
       </Row>
       <Row md={6} className='fs-12'>
