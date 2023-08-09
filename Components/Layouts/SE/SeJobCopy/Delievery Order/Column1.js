@@ -26,7 +26,7 @@ const Column1 = ({register, control, state, jobData}) => {
       <DateComp width={"100%"} name="date" label="Date" control={control} register={register}/>
       </Col>
       <Col md={3}>
-        <DateComp width="100%" name="valid_date" label="Valid Date" control={control} register={register}/>
+        <DateComp width="100%" name="validDate" label="Valid Date" control={control} register={register}/>
       </Col>
       </Row>
       <hr />
@@ -80,7 +80,7 @@ const Column1 = ({register, control, state, jobData}) => {
       <InputComp  register={register} name="balance" label="Balance" control={control} />
       </Col>
       <Col className='mt-1'>
-      <InputComp  register={register} name="ref_no" label="Refrence No" control={control} />
+      <InputComp  register={register} name="refNo" label="Refrence No" control={control} />
       </Col>
       </Col>
       </Row>

@@ -16,41 +16,45 @@ const Column2 = ({register, control, state, jobData}) => {
       <Row className="fs-12">
       <Col md={4}>
       <Col>
-      <SelectSearchComp width="100%" name="clearing_agent" options={[]} control={control} register={register} label="Clearing Agent"/>
+      <SelectSearchComp width="100%" name="clearingAgent" options={state.fields.vendor.chaChb.map((x) =>(
+        {name: x.name, id: x.id}
+      ))} control={control} register={register} label="Clearing Agent"/>
       </Col>
       <Col md={12}>
       <div className='fs-12'>Deliver To</div>
       <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{deliverTo[0].name}</div>
       </Col>
       <Col className='mt-1'>
-      <TextAreaComp width="100%" name="on_account_of" control={control} register={register} label="On Account Of"/>
+      <TextAreaComp width="100%" name="onAccountOf" control={control} register={register} label="On Account Of"/>
       </Col>
       <Col className='mt-1'>
       <InputComp width="100%" name="name" control={control} register={register} label="Name"/>
       </Col>
       <Col className='mt-1'>
-      <InputComp width="100%" name="print_by" control={control} register={register} label="Print By"/>
+      <InputComp width="100%" name="printBy" control={control} register={register} label="Print By"/>
       </Col>
       </Col>
 
       <Col md={4}>
      
       <Col>
-      <SelectSearchComp width="100%" name="local_cutom" options={[]} control={control} register={register} label="Local Custom"/>
+      <SelectSearchComp width="100%" name="localCustom" 
+      options={[{id:"AFU-Jinnah Terminal-Karachi", name:"AFU-Jinnah Terminal-Karachi"}, {id:"PKKHI", name:"Karachi"}]} 
+      control={control} register={register} label="Local Custom"/>
       </Col>
       <Col className='mt-1'>
-      <TextAreaComp width="100%" name="delivery_req" control={control} register={register} label="Delivery Req To"/>
+      <TextAreaComp width="100%" name="deliveryReqTo" control={control} register={register} label="Delivery Req To"/>
       </Col>
 
       <Row>
       <Col md={6}>
-      <InputComp label={"CNIC No"} name="cnic_no" register={register} control={control}/>
+      <InputComp label={"CNIC No"} name="cnicNo" register={register} control={control}/>
       </Col>
       <Col md={6}>
-      <DateComp name="expire_date" label="Expiry Date" control={control} register={register}/>
+      <DateComp  label="Expire Date" name="expDate" control={control} register={register}/>
       </Col>
       <Col md={12}>
-      <InputComp label={"Mobile No"} name="Mobile No" register={register} control={control}/>
+      <InputComp label={"Mobile No"} name="mobileNo" register={register} control={control}/>
       </Col>
       </Row>
 

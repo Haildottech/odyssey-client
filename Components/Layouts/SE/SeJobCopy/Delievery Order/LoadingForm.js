@@ -9,14 +9,7 @@ import { Col } from 'react-bootstrap';
 
 const LoadingForm = ({handleSubmit, register, control, onSubmit, state, load, allValues, jobData}) => {
 
-  const [open, setOpen] = useState(false);
-  const hide = () => {
-    setOpen(false);
-  };
-  const handleOpenChange = (newOpen) => {
-    setOpen(newOpen);
-  };
-
+  
   return (
     <div style={{overflowY:"scroll", height:700, overflowX:"hidden"}}>
     <form className="d-flex justify-content-between flex-column" >

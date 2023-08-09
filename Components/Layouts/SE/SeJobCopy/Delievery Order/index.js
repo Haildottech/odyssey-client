@@ -19,6 +19,7 @@ const DeliveryOrder = ({ state, jobData }) => {
     const SEJobId = jobData.id;
     data.operation = "SI"
     data.companyId = companyId
+    data.type = data.type?.toString();
     data.id == "" ? delete data.id : data.id;
     console.log(data)
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_UPSERT_DELIVER_ORDER, {
@@ -39,53 +40,23 @@ const DeliveryOrder = ({ state, jobData }) => {
   };
 
   useEffect(() => {
-    // axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_LOADING_PROGRAM, {
-    //   headers: { id: jobData.id },
-    // })  .then((res) => {
-    //   if (res.data.result !== null) {
-    //     let loadingProgram = res.data.result;
-    //     reset({
-    //       ...loadingProgram,
-    //       loadingDate:loadingProgram.loadingDate ==""?"":moment(loadingProgram.loadingDate),
-    //       croIssueDate:loadingProgram.croIssueDate == ""?"": moment(loadingProgram.croIssueDate),
-    //       expiryDate:loadingProgram.expiryDate ==""?"":moment(loadingProgram.expiryDate),
-    //       loadingTime:loadingProgram.loadingTime == ""?"": moment(loadingProgram.loadingTime),
-    //       arrivalDate:loadingProgram.arrivalDate == ""?"": moment(loadingProgram.arrivalDate),
-    //       sobDate:loadingProgram.sobDate == ""?"": moment(loadingProgram.sobDateDate),
-    //       etd: loadingProgram.etd ==""?"" : moment(loadingProgram.etd),
-    //       gatePassDate:loadingProgram.getGatePassDate==""?"":moment(loadingProgram.getGatePassDate),
-    //       validityDate:loadingProgram.validityDate==""?"":moment(loadingProgram.validityDate)
-    //       // dischargeTerminal: loadingProgram.dischargeTerminal,
-    //       // localCustom:loadingProgram.localCustom==""?"":loadingProgram.localCustom,
-    //       // loadingTerminal: loadingProgram.loadingTerminal,
-    //       // letter: loadingProgram.letter,
-    //       // book: loadingProgram.book,
-    //       // egm: loadingProgram.egm,
-    //       // gatePass: loadingProgram.gatePass,
-    //       // letter: loadingProgram.letter,
-    //       // cro: loadingProgram.cro,
-    //       // berth: loadingProgram.berth,
-    //       // viaPort: loadingProgram.viaPort,
-    //       // containerInfo: loadingProgram.containerInfo,
-    //       // portOfReciept: loadingProgram.portOfReciept,
-    //       // instruction: loadingProgram.instruction,
-    //       // loadingFlag: loadingProgram.loadingFlag,
-    //       // status: loadingProgram.status,
-    //       // allocAvailable: loadingProgram.allocAvailable,
-    //       // contAvailable: loadingProgram.contAvailable,
-    //       // containerSplit: loadingProgram.containerSplit,
-    //       // blRequired: loadingProgram.blRequired,
-    //       // containerWt: loadingProgram.containerWt,
-    //       // containerTemp: loadingProgram.containerTemp,
-    //       // vent: loadingProgram.vent,
-    //       // loadingTerms: loadingProgram.loadingTerms,
-    //       // cargoStauts: loadingProgram.cargoStauts,
-    //       // instruction: loadingProgram.instruction,
-    //       // loadingTerms: loadingProgram.loadingTerms
-    //     })
-    //   }
-    // })
+    axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_DELIVER_ORDER, {
+      headers: { id: jobData.id },
+    })  .then((res) => {
+      if (res.data.result !== null) {
+        console.log(res.data.result)
+        let deliveryOrder = res.data.result;
+        reset({
+          ...deliveryOrder,
+          date:deliveryOrder.date ==""?"":moment(deliveryOrder.date),
+          validDate:deliveryOrder.validDate ==""?"":moment(deliveryOrder.validDate),
+          expDate:deliveryOrder.expDate ==""?"":moment(deliveryOrder.expDate),
+       
+        })
+      }
+    })
   }, []);
+  console.log({jobData, state})
 
   return (
     <LoadingForm onSubmit={onSubmit} register={register} control={control} handleSubmit={handleSubmit}

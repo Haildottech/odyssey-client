@@ -15,13 +15,13 @@ const Column3 = ({  register, control, state, handleSubmit, onSubmit, load}) => 
       <Col className='fs-12'>
       <Col md={6}>
 
-      <TextAreaComp width="100%" name="acknoledge_email" control={control} register={register} label="Acknoledge Email"/>
-      <TextAreaComp width="100%" name="endoresement" control={control} register={register} label="Endoresement Instruction"/>
+      <TextAreaComp width="100%" name="acknoledgeEmails" control={control} register={register} label="Acknoledge Email"/>
+      <TextAreaComp width="100%" name="endoresementInstruction" control={control} register={register} label="Endoresement Instruction"/>
       </Col>
       <Col md={8} >
       <CheckGroupComp register={register} name='type' control={control}
-      options={[{label:"Clearing Agent", value:"clearing_agent"}, 
-      {label:"Consignee", value:"Consignee"},
+      options={[{label:"Clearing Agent", value:"clearingAgent"}, 
+      {label:"Consignee", value:"consignee"},
       {label:"Client", value:"client"},
       {label:"CC To Admin", value:"cc_to_admin"},
       {label:"CC To Me", value:"cc_to_me"},
