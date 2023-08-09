@@ -20,18 +20,14 @@ const Column3 = ({  register, control, state, handleSubmit, onSubmit, load}) => 
       </Col>
       <Col md={8} >
       <CheckGroupComp register={register} name='type' control={control}
-      options={[{label:"Clearing Agent", value:"clearing_agent"}, 
+      options={[{label:"Clearing Agent", value:"Clearing Agent"}, 
       {label:"Consignee", value:"Consignee"},
-      {label:"Client", value:"client"},
-      {label:"CC To Admin", value:"cc_to_admin"},
-      {label:"CC To Me", value:"cc_to_me"},
+      {label:"Client", value:"Client"},
+      {label:"CC To Admin", value:"CC To Admin"},
+      {label:"CC To Me", value:"CC To Me"},
 
       ]}/>
       </Col>
-
-     <Col md={3}>
-      <button className='btn-custom' onClick={handleSubmit(onSubmit)}>Save DO </button>
-     </Col>
   </Col>
   )
 }

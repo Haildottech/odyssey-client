@@ -7,7 +7,7 @@ import moment from "moment";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const DeliveryOrder = ({ state, jobData }) => {
+const DeliveryOrder = ({ state, jobData, clearingAgents }) => {
 
   const [load, setLoad] = useState(false);
   const companyId = useSelector((state) => state.company.value);
@@ -19,7 +19,7 @@ const DeliveryOrder = ({ state, jobData }) => {
     const SEJobId = jobData.id;
     data.operation = "SI"
     data.companyId = companyId
-    data.id == "" ? delete data.id : data.id;
+    data.id == "" ? delete data.id : null;
     console.log(data)
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_UPSERT_DELIVER_ORDER, {
         ...data,
@@ -89,7 +89,7 @@ const DeliveryOrder = ({ state, jobData }) => {
 
   return (
     <LoadingForm onSubmit={onSubmit} register={register} control={control} handleSubmit={handleSubmit}
-      load={load} allValues={allValues} state={state} jobData={jobData}
+      load={load} allValues={allValues} state={state} jobData={jobData} clearingAgents={clearingAgents}
     />
   );
 };

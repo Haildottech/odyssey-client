@@ -9,14 +9,14 @@ import SelectSearchComp from "../../../../Shared/Form/SelectSearchComp";
 import DateComp from "../../../../Shared/Form/DateComp";
 import TimeComp from "../../../../Shared/Form/TimeComp";
  
-const Column2 = ({register, control, state, jobData}) => {
+const Column2 = ({register, control, state, jobData, clearingAgents}) => {
   let deliverTo = jobData.consigneeId && state.fields.party.consignee.filter((x) => x.id == jobData.consigneeId)
   return (
 
       <Row className="fs-12">
       <Col md={4}>
       <Col>
-      <SelectSearchComp width="100%" name="clearing_agent" options={[]} control={control} register={register} label="Clearing Agent"/>
+      <SelectSearchComp width="100%" name="clearing_agent" options={clearingAgents} control={control} register={register} label="Clearing Agent"/>
       </Col>
       <Col md={12}>
       <div className='fs-12'>Deliver To</div>
@@ -36,7 +36,9 @@ const Column2 = ({register, control, state, jobData}) => {
       <Col md={4}>
      
       <Col>
-      <SelectSearchComp width="100%" name="local_cutom" options={[]} control={control} register={register} label="Local Custom"/>
+      <SelectSearchComp width="100%" name="local_cutom" control={control} register={register} label="Local Custom"
+        options={[{id:"AFU-Jinnah Terminal-Karachi", name:"AFU-Jinnah Terminal-Karachi"}, {id:"PKKHI", name:"Karachi"}]} 
+      />
       </Col>
       <Col className='mt-1'>
       <TextAreaComp width="100%" name="delivery_req" control={control} register={register} label="Delivery Req To"/>
