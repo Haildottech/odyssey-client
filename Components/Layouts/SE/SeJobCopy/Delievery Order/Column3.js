@@ -29,7 +29,9 @@ const Column3 = ({  register, control, state, handleSubmit, onSubmit, load}) => 
       ]}/>
       </Col>
 
-     
+     <Col md={3}>
+      <button className='btn-custom' onClick={handleSubmit(onSubmit)}>Save DO </button>
+     </Col>
   </Col>
   )
 }

@@ -14,7 +14,7 @@ import Routing from './Routing';
 import Invoice from './Invoice';
 import ChargesComp from './ChargesComp/'
 import LoadingProgram from './Loading Program';
-import DeleiveryOrder from './Deleivery Order';
+import DelieveryOrder from './Delievery Order';
 import { useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from "next/router";
@@ -204,7 +204,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
       }
       {(state.do!='') &&
         <Tabs.TabPane tab={"Delivery Order"} key="7">
-          <DeleiveryOrder state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
+          <DelieveryOrder state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
         </Tabs.TabPane>
       }
       </Tabs>

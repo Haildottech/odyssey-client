@@ -18,16 +18,9 @@ const LoadingForm = ({handleSubmit, register, control, onSubmit, state, load, al
   };
 
   return (
-    <div style={{overflowY:"scroll", height:600, overflowX:"hidden"}}>
+    <div style={{overflowY:"scroll", height:700, overflowX:"hidden"}}>
     <form className="d-flex justify-content-between flex-column" >
       
-    <Popover content={<div>{(open && allValues.id ) && <PrintComp allValues={allValues} state={state} />}</div>}
-      trigger="click"
-      open={open}
-      onOpenChange={handleOpenChange}
-    >
-      <button type="button" className="btn-custom mt-1" style={{width:"100px"}}>Print</button>
-    </Popover>
     <Col>
     <Column1 registr={register} control={control} state={state} jobData={jobData}/>
     <hr />

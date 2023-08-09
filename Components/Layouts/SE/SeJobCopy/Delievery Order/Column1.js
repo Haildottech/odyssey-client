@@ -7,7 +7,6 @@ import InputComp from "../../../../Shared/Form/InputComp";
  
 
 const Column1 = ({register, control, state, jobData}) => {
-  console.log(state.fields)
   let exporter = jobData.shipperId &&  state.fields.party.shipper?.filter((x) => x.id == jobData.shipperId)
   let importer = jobData.consigneeId && state.fields.party.consignee?.filter((x) => x.id == jobData.consigneeId)
   let vessel = jobData.vesselId && state.fields.vessel?.filter((x) => x.id == jobData.vesselId)
@@ -19,8 +18,7 @@ const Column1 = ({register, control, state, jobData}) => {
     <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{state.selectedRecord.jobNo}</div>
       </Col>
       <Col md={3}>
-      <div className='fs-12'>DO No # :</div>
-      <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{state.selectedRecord.jobNo}</div>
+      <InputComp label="DO #" name="doNo" register={register} control={control}/>
       </Col>
       </Row>
       <Row md={6} className='fs-12'>
@@ -57,11 +55,11 @@ const Column1 = ({register, control, state, jobData}) => {
       <Row className='fs-12 mt-1'>
       <Col md={6}>
       <div className='fs-12'>HBL</div>
-      <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{jobData.Bl.hbl}</div>
+      <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{jobData.Bl?.hbl}</div>
       </Col>
       <Col md={6}>
       <div className='fs-12'>HBL Date</div>
-      <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{jobData.Bl.hblDate.substring(0, 10)}</div>
+      <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{jobData.Bl?.hblDate.substring(0, 10)}</div>
       </Col>
       </Row>
       </Col>
@@ -69,7 +67,7 @@ const Column1 = ({register, control, state, jobData}) => {
       <Row className=''>
       <Col>
       <div className='fs-12'>MBL</div>
-      <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{jobData.Bl.mbl}</div>
+      <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{jobData.Bl?.mbl}</div>
       </Col>
       </Row>
       <Col className='mt-1'>

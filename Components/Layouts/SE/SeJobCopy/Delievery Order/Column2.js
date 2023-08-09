@@ -11,7 +11,6 @@ import TimeComp from "../../../../Shared/Form/TimeComp";
  
 const Column2 = ({register, control, state, jobData}) => {
   let deliverTo = jobData.consigneeId && state.fields.party.consignee.filter((x) => x.id == jobData.consigneeId)
-  console.log(jobData)
   return (
 
       <Row className="fs-12">
