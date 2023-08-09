@@ -408,12 +408,20 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
           </>}>
           <button type="button" className="btn-custom">Invoice/Bills {`(${state.InvoiceList.length})`}</button>
         </Popover>
+        {type == "SE" ?
          <button className='btn-custom px-4'  type='button' 
           onClick={()=>{
            dispatch({type:'toggle', fieldName:'loadingProgram', payload:"6"}) ;
            state.tabState = "6"
           }}
-        >Loading Program</button>
+        >Loading Program</button> :
+        <button className='btn-custom px-4'  type='button' 
+        onClick={()=>{
+         dispatch({type:'toggle', fieldName:'loadingProgram', payload:"6"}) ;
+         state.tabState = "6"
+        }}
+      >DO</button>
+        }
         </div>
       </Col>
     </Row>

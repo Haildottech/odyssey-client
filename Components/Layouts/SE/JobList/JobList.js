@@ -11,26 +11,25 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
     errors ,sortBy, setDg, setGroupBy, setApproved,
      groupBy, dg ,approved, setSortBy}) => {
 
-
+ 
   return (
     <div>
-        <form onSubmit={handleSubmit(onsubmit)}>
+    <form onSubmit={handleSubmit(onsubmit)}>
 
-<Col md={6}>
-  <Row>
-  <Col className="m-0 p-0">
-   <DateComp control={control} register={register} name="from" label={"From"}  width={"100%"}/>
+    <Col md={6}>
+    <Row> 
+    <Col>
+    <DateComp control={control} register={register} name="from" label={"From"}  width={"100%"}/>
     {errors.from && <div className='error-line'>This Field Is Required*</div>}
- 
-  </Col>
-  <Col   className="ml-2 p-0" style={{marginLeft:"5px"}}>
-   <DateComp control={control} register={register} name="to" label={"To"}  width={"100%"}/>
-   {errors.to && <div className='error-line'>This Field Is Required*</div>}  
-  </Col>
-  </Row>
+    </Col>
+    <Col style={{marginLeft:"5px"}}>
+    <DateComp control={control} register={register} name="to" label={"To"}  width={"100%"}/>
+    {errors.to && <div className='error-line'>This Field Is Required*</div>}  
+    </Col>
+    </Row>
 
-  <Col>
-    <Row>
+    <Col className='m-0 p-0'>
+    <Col className='' >
       <SelectSearchComp
         width={"100%"}  
         name={"client"}
@@ -41,10 +40,10 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
           id: x.id,
           name: x.name,
         }))}
-      />
-    </Row>
+        />
+    </Col>
 
-    <Row>
+    <Col>
       <SelectSearchComp
       width={"100%"}
         name={"shipping_air_line"}
@@ -53,9 +52,9 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         options={data.vedor_details.sLine.map((x) => ({id:x.id, name:x.name}))}
         label="Shipping Air Line"
       />
-    </Row>
+    </Col>
 
-    <Row>
+    <Col>
     <SelectSearchComp
       width={"100%"}
         name={"vendor"}
@@ -67,9 +66,9 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
           name: `${x.name} (${x.code})`,
         }))}
       />
-    </Row>
+    </Col>
 
-    <Row>
+    <Col>
     <SelectSearchComp
         width={"100%"}
         label={"Final Destination"}
@@ -81,9 +80,9 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
           name: x.name,
         }))}
       />
-    </Row>
+    </Col>
 
-    <Row>
+    <Col>
     <SelectSearchComp
         width={"100%"}
         name={"overseas_agent"}
@@ -95,9 +94,9 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
           name: x.name,
         }))}
       />
-    </Row>
+    </Col>
 
-    <Row>
+    <Col>
     <SelectSearchComp
         width={"100%"}
         name={"consignee"}
@@ -109,9 +108,9 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
           name: x.name,
         }))}
       />
-    </Row>
+    </Col>
 
-    <Row>
+    <Col>
     <SelectSearchComp
         width={"100%"}
         name={"Vessel"}
@@ -123,9 +122,9 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
           name: `${x.name} (${x.code})`,
         }))}
       />
-    </Row>
+    </Col>
 
-    <Row>
+    <Col>
     <SelectSearchComp
         width={"100%"}
         name={"clearing_agent"}
@@ -137,7 +136,7 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
           name: `${x.name}`,
         }))}
       />
-    </Row>
+    </Col>
 
     <Row className="">
      
@@ -158,9 +157,9 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         />
       </Col>
     </Row>
-  </Col>
+    </Col>
 
-  <Row >
+    <Row >
     <Col>
       <h6 className="mt-2">All Job Types</h6>
 
@@ -209,9 +208,9 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         </Col>
       </Col>
     </Col>
-  </Row>
+    </Row>
 
-  <Row className="mt-2">
+    <Row className="mt-2">
     <Col md={5}>
       <Radio.Group onChange={(e)=> setDg(e.target.value)} value={dg}>
         <Radio value={"all"}>All</Radio>
@@ -226,10 +225,10 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         <Radio value={"unUpproved"}>Un Approved</Radio>
       </Radio.Group>
     </Col>
-  </Row>
-</Col>
-<button type="submit" className="btn-custom mt-1">Get Jobs</button>
-</form>
+    </Row>
+    </Col>
+    <button type="submit" className="btn-custom mt-1">Get Jobs</button>
+    </form>
     </div>
   )
 }
