@@ -16,6 +16,7 @@ const DeliveryOrder = ({ state, jobData, clearingAgents }) => {
 
   const onSubmit = async (data) => {
     setLoad(true);
+    console.log(data)
     const SEJobId = jobData.id;
     data.operation = "SI"
     data.companyId = companyId
@@ -55,7 +56,6 @@ const DeliveryOrder = ({ state, jobData, clearingAgents }) => {
       }
     })
   }, []);
-  console.log({jobData, state})
 
   return (
     <LoadingForm onSubmit={onSubmit} register={register} control={control} handleSubmit={handleSubmit}
