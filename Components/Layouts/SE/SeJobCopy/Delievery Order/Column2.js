@@ -9,16 +9,14 @@ import SelectSearchComp from "../../../../Shared/Form/SelectSearchComp";
 import DateComp from "../../../../Shared/Form/DateComp";
 import TimeComp from "../../../../Shared/Form/TimeComp";
  
-const Column2 = ({register, control, state, jobData}) => {
+const Column2 = ({register, control, state, jobData, clearingAgents}) => {
   let deliverTo = jobData.consigneeId && state.fields.party.consignee.filter((x) => x.id == jobData.consigneeId)
   return (
 
       <Row className="fs-12">
       <Col md={4}>
       <Col>
-      <SelectSearchComp width="100%" name="clearingAgent" options={state.fields.vendor.chaChb.map((x) =>(
-        {name: x.name, id: x.id}
-      ))} control={control} register={register} label="Clearing Agent"/>
+      <SelectSearchComp width="100%" name="clearingAgent" options={clearingAgents} control={control} register={register} label="Clearing Agent"/>
       </Col>
       <Col md={12}>
       <div className='fs-12'>Deliver To</div>
@@ -62,7 +60,7 @@ const Column2 = ({register, control, state, jobData}) => {
       <InputComp  register={register} name="remarks" label="Remarks" control={control} />
       </Col>
       <Col className='mt-1'>
-      <SelectSearchComp width="100%" options={[]} register={register} name="return_at" label="Return At" control={control} />
+      <SelectSearchComp width="100%" options={[]} register={register} name="returnAt" label="Return At" control={control} />
       </Col>
       </Col>
 

@@ -204,11 +204,11 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
       }
       {(state.do!='') &&
         <Tabs.TabPane tab={"Delivery Order"} key="7">
-          <DelieveryOrder state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} />
+          <DelieveryOrder state={state} dispatch={dispatch} companyId={companyId} jobData={jobData} clearingAgents={state.fields.vendor.chaChb} />
         </Tabs.TabPane>
       }
       </Tabs>
-      {(state.tabState!="4" && state.tabState!="5" && state.tabState!="6") &&
+      {(state.tabState=="1") &&
         <>
         <button type="submit" disabled={state.load?true:false} className='btn-custom mt-3'>
           {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Save Job'}
