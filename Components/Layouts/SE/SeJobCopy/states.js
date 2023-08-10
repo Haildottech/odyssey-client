@@ -198,38 +198,6 @@ const getVendors = (id) => {
   return result;
 }
 
-const getHeads = async(id) => {
-  let paybleCharges = [];
-  let reciveableCharges = [];
-  await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_HEADS,{
-      headers:{"id": `${id}`}
-  }).then((x)=>{
-      if(x.data.status=="success"){
-          let tempCharge = [];
-          x.data.result.forEach((x)=>{
-              if(x.payType!='Payble'){
-                  x.Charge_Heads.forEach((y)=>{
-                      tempCharge.push({...y, sep:false});
-                  })
-              }
-          });
-
-          reciveableCharges = tempCharge;
-          tempCharge = [];
-          x.data.result.forEach((x)=>{
-              if(x.payType=='Payble'){
-                  x.Charge_Heads.forEach((y)=>{
-                      tempCharge.push({...y, sep:false});
-                  })
-              }
-          })
-          paybleCharges = tempCharge;
-
-        }
-    })
-    return { reciveableCharges, paybleCharges }
-}
-
 const saveHeads = async(charges, state, dispatch, reset) => {
   //dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
   await axios.post(process.env.NEXT_PUBLIC_CLIMAX_SAVE_SE_HEADS_NEW, 
@@ -353,7 +321,7 @@ const getInvoices = async(id, dispatch) => {
 export {
   recordsReducer, initialState, baseValues,
   SignupSchema, getClients, getVendors,
-  getHeads, saveHeads, getHeadsNew,
+  saveHeads, getHeadsNew,
   calculateChargeHeadsTotal,
   makeInvoice, getInvoices
 };

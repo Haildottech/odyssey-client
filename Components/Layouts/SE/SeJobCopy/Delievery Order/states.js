@@ -3,6 +3,7 @@
 export const initialState = {
   values : {
     id:                       "",
+    no:                       "",
     doNo:                     "",
     date:                     "",
     validDate:                "",
@@ -20,7 +21,6 @@ export const initialState = {
     endoresementInstruction:  "",
     operation:                "",
     companyId:                "",
-    type:                     ""
-    
+    type:                     []
   }
 }

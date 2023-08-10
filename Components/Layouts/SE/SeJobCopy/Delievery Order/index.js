@@ -2,7 +2,7 @@ import openNotification from "/Components/Shared/Notification";
 import { useForm, useWatch } from "react-hook-form";
 import React,{useEffect, useState} from "react";
 import LoadingForm from "./LoadingForm";
-import {initialState} from "./states";
+import { initialState } from "./states";
 import moment from "moment";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -14,9 +14,21 @@ const DeliveryOrder = ({ state, jobData, clearingAgents }) => {
   const { register, control, handleSubmit, reset } = useForm({});
   const allValues = useWatch({ control });
 
+  const calculate = () => {
+    let receivable = 0
+    let received = 0
+    state.InvoiceList.forEach((x)=>{
+      if(x.payType=="Recievable"){
+        receivable = receivable + parseFloat(x.total);
+        received = received + parseFloat(x.received);
+      }
+    })
+    //console.log(receivable, recieved)
+    return {receivable, received}
+  }
+
   const onSubmit = async (data) => {
     setLoad(true);
-    console.log(data)
     const SEJobId = jobData.id;
     data.operation = "SI"
     data.companyId = companyId
@@ -26,11 +38,7 @@ const DeliveryOrder = ({ state, jobData, clearingAgents }) => {
         ...data,
         SEJobId,
     }).then((x) => {
-      console.log(x)
       if(x.data.status=="success"){
-        // if(!data.id){
-        //   reset({...allValues, id:x.data.result[0].id});
-        // }
         openNotification("Success", "Loading Program Saved!", "Green")
       }else{
         openNotification("Error", "Something Went Wrong, please try again", "red")
@@ -38,28 +46,35 @@ const DeliveryOrder = ({ state, jobData, clearingAgents }) => {
     }).catch((e) => console.log(e.message))
     setLoad(false)
   };
+  const calculatePrice = React.useMemo(() => calculate(state.InvoiceList), [state.InvoiceList]);
 
   useEffect(() => {
-    axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_DELIVER_ORDER, {
+    getValues()
+  }, []);
+
+  async function getValues(){
+    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_DELIVER_ORDER, {
       headers: { id: jobData.id },
     })  .then((res) => {
       if (res.data.result !== null) {
-        console.log(res.data.result)
         let deliveryOrder = res.data.result;
         reset({
           ...deliveryOrder,
           date:deliveryOrder.date ==""?"":moment(deliveryOrder.date),
           validDate:deliveryOrder.validDate ==""?"":moment(deliveryOrder.validDate),
           expDate:deliveryOrder.expDate ==""?"":moment(deliveryOrder.expDate),
-       
+          type:deliveryOrder.type.length>0?deliveryOrder.type.split(","):[]
         })
+      } else {
+        reset(initialState.values)
       }
     })
-  }, []);
-
+  }
+  
   return (
     <LoadingForm onSubmit={onSubmit} register={register} control={control} handleSubmit={handleSubmit}
       load={load} allValues={allValues} state={state} jobData={jobData} clearingAgents={clearingAgents}
+      calculatePrice={calculatePrice}
     />
   );
 };
