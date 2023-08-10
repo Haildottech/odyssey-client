@@ -303,10 +303,10 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <td>{x.tax_amount}</td> {/* Tax Amount */}
         <td>{x.net_amount}</td>
         <td style={{ padding: 3 }}> {/* Ex. Rate */}
-            {chargeList[index].currency!="PKR" && <InputNumComp register={register} name={`chargeList.${index}.ex_rate`}  control={control} label='' width={10} 
+            {chargeList[index]?.currency!="PKR" && <InputNumComp register={register} name={`chargeList.${index}.ex_rate`}  control={control} label='' width={10} 
                 disabled={permissionAssign(permissions, x)} 
             />}
-            {chargeList[index].currency=="PKR" && 
+            {chargeList[index]?.currency=="PKR" && 
             <InputNumber value={1.00}
             />}
         </td>
