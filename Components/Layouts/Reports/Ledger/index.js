@@ -198,7 +198,9 @@ const Index = () => {
       balance += parseFloat(y?.amount)
     : balance -= parseFloat(y?.amount) 
   
-    return balance <0? Math.abs(balance).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")+" Cr" : balance.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")+" Dr"
+    return balance <0? 
+      Math.abs(balance).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")+" Cr" :
+      balance.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")+" Dr"
   }
 
   return (

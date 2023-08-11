@@ -78,7 +78,7 @@ const Column1 = ({register, control, state, jobData, allValues, calculatePrice})
         </Col>
         <Col className='mt-1'>
           <div>Received</div>
-          <Input value={calculatePrice.received} />
+          <Input value={calculatePrice.recieved} />
         </Col>
         <Col className='mt-1'>
           <InputComp register={register} name="balance" label="Balance" control={control} />

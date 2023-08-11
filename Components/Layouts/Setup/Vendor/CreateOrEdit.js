@@ -49,8 +49,8 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
     useEffect(() => {
         if(id!=="new"){
             let tempState = {...vendorData};
-            tempState.operations = tempState.operations.split(', ');
-            tempState.types = tempState.types.split(', ');
+            tempState.operations = tempState.operations?.split(', ');
+            tempState.types = tempState.types?.split(', ');
             tempState.registerDate = moment(tempState.registerDate);
             tempState.bankAuthorizeDate = moment(tempState.bankAuthorizeDate);
             tempState.companies = [1,2,3];
@@ -68,6 +68,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_VENDOR,{
                 data
             }).then((x)=>{
+                console.log(x.data)
                 if(x.data.status=='success'){
                     openNotification('Success', `Vendor ${x.data.result.name} Created!`, 'green');
                     Router.push(`/setup/vendor/${x.data.result.id}`)

@@ -16,15 +16,17 @@ const DeliveryOrder = ({ state, jobData, clearingAgents }) => {
 
   const calculate = () => {
     let receivable = 0
-    let received = 0
+    let recieved = 0
+    console.log(state.InvoiceList)
     state.InvoiceList.forEach((x)=>{
       if(x.payType=="Recievable"){
         receivable = receivable + parseFloat(x.total);
-        received = received + parseFloat(x.received);
+        recieved = recieved + parseFloat(x.recieved)*parseFloat(x.ex_rate);
       }
     })
-    //console.log(receivable, recieved)
-    return {receivable, received}
+    recieved = recieved?recieved:0
+    console.log(receivable, recieved)
+    return {receivable, recieved}
   }
 
   const onSubmit = async (data) => {
@@ -55,15 +57,15 @@ const DeliveryOrder = ({ state, jobData, clearingAgents }) => {
   async function getValues(){
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_DELIVER_ORDER, {
       headers: { id: jobData.id },
-    })  .then((res) => {
+    }).then((res) => {
       if (res.data.result !== null) {
         let deliveryOrder = res.data.result;
         reset({
           ...deliveryOrder,
-          date:deliveryOrder.date ==""?"":moment(deliveryOrder.date),
-          validDate:deliveryOrder.validDate ==""?"":moment(deliveryOrder.validDate),
-          expDate:deliveryOrder.expDate ==""?"":moment(deliveryOrder.expDate),
-          type:deliveryOrder.type.length>0?deliveryOrder.type.split(","):[]
+          date:deliveryOrder?.date ==""?"":moment(deliveryOrder.date),
+          validDate:deliveryOrder?.validDate ==""?"":moment(deliveryOrder.validDate),
+          expDate:deliveryOrder?.expDate ==""?"":moment(deliveryOrder.expDate),
+          type:deliveryOrder?.type?.length>0?deliveryOrder.type.split(","):[]
         })
       } else {
         reset(initialState.values)
