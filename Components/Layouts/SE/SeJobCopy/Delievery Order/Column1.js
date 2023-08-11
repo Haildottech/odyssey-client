@@ -23,7 +23,7 @@ const Column1 = ({register, control, state, jobData, allValues, calculatePrice})
           <div style={{border:'1px solid silver', padding:"7px 1px 4px 4px"}}>{state.selectedRecord.jobNo}</div>
         </Col>
         <Col md={3}>
-          <InputComp label="DO #" name="doNo" disabled={allValues.no==""?false:true} register={register} control={control}/>
+          <InputComp label="DO #" name="doNo" disabled={allValues.id==""?false:true} register={register} control={control}/>
         </Col>
         </Row>
         <Row md={6} className='fs-12'>
