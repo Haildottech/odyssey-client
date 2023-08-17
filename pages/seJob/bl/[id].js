@@ -1,11 +1,11 @@
 import React from 'react';
-import NewBl from '/Components/Layouts/SE/NewBl';
+import BlComp from '/Components/Layouts/JobsLayout/BlComp';
 import axios from "axios";
 
 const seBl = ({id, blData, partiesData}) => {
   return (
     <div>
-      <NewBl id={id} blData={blData} partiesData={partiesData} />
+      <BlComp id={id} blData={blData} partiesData={partiesData} />
     </div>
   )
 }

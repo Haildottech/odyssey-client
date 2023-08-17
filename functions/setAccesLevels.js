@@ -121,7 +121,7 @@ function setAccesLevels(dispatch, collapsed){
       }),
     ]
     )
-    const se = getParentItem('Sea Jobs', '4', <span className=''><RiShipLine /><IoMdArrowDropleft className='flip' /></span>,
+    const seaJobs = getParentItem('Sea Jobs', '4', <span className=''><RiShipLine /><IoMdArrowDropleft className='flip' /></span>,
     [
       getItem('Export Job List', '4-1',<></>, null, {
         label: `Export Jobs`,
@@ -133,11 +133,30 @@ function setAccesLevels(dispatch, collapsed){
         key: '4-5',
         children: `Content of Tab Pane 2`,
       }),
-      getItem('BL List', '4-2',<></>, null, {
-        label: `SE BLs`,
-        key: '4-2',
+      // getItem('BL List', '4-2',<></>, null, {
+      //   label: `SE BLs`,
+      //   key: '4-2',
+      //   children: `Content of Tab Pane 2`,
+      // }),
+    ]
+    )
+    const airJobs = getParentItem('Air Jobs', '7', <span className=''><RiShipLine /><IoMdArrowDropleft className='flip' /></span>,
+    [
+      getItem('Export Job List', '7-1',<></>, null, {
+        label: `Air Export Jobs`,
+        key: '7-1',
         children: `Content of Tab Pane 2`,
       }),
+      // getItem('Import Job List', '7-5',<></>, null, {
+      //   label: `Air Import Jobs`,
+      //   key: '7-5',
+      //   children: `Content of Tab Pane 2`,
+      // }),
+      // getItem('AWB List', '7-2',<></>, null, {
+      //   label: `Air AWBs`,
+      //   key: '7-2',
+      //   children: `Content of Tab Pane 2`,
+      // }),
     ]
     )
     const tasks = getParentItem('Tasks', '6', <UnorderedListOutlined  />,
@@ -159,7 +178,7 @@ function setAccesLevels(dispatch, collapsed){
         }
     }}
 
-    let obj = { se:false, ae:false, setup:false, accounts:false, admin:false }
+    let obj = { seaJobs:false, ae:false, setup:false, accounts:false, admin:false }
     let levels = Cookies.get("access");
     if(levels){
         levels = levels.slice(0, -1)
@@ -168,10 +187,10 @@ function setAccesLevels(dispatch, collapsed){
         levels.forEach(x => {
         switch (x) {
           case "se":
-              obj.se = true;
+              obj.seaJobs = true;
               break;
           case "ae":
-              obj.ae = true;
+              obj.airJobs = true;
               break;
           case "setup":
               obj.setup = true;
@@ -189,14 +208,17 @@ function setAccesLevels(dispatch, collapsed){
         });
     }
     // console.log(obj)
-    obj.se?
-    items.push(se):null;
+    obj.seaJobs?
+    items.push(seaJobs):null;
+    obj.airJobs?
+    items.push(airJobs):null;
     obj.setup?
     items.push(setup):null
     
     obj.accounts?
     items = [
-      se,
+      seaJobs,
+      airJobs,
       accounts,
       reports
     ]:null
@@ -205,7 +227,8 @@ function setAccesLevels(dispatch, collapsed){
         //dashboard,
         setup,
         accounts,
-        se,
+        seaJobs,
+        airJobs,
         reports
     ]:null
     Cookies.set("permissions", JSON.stringify(obj));

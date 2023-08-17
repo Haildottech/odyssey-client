@@ -50,20 +50,32 @@ const MainLayout = ({children}) => {
 
   useEffect(() => {
     // When visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
-    if(
-      newRouter.pathname.includes("seJob/") &&  
-      !newRouter.pathname.includes("seJob/seJobList") && 
-      !newRouter.pathname.includes("seJob/siJobList") && 
-      !newRouter.pathname.includes("seJob/seBlList")
-    ){
-      setToggleState('4-3');
+    if(newRouter.pathname.includes("/airJobs/export/[id]")){
+      setToggleState('7-2');
     }
-    if(newRouter.pathname.includes("seJob/import/")){
+    if(newRouter.pathname.includes("/airJobs/export/bl/[id]")){
+      setToggleState('7-3');
+    }
+    if(
+        newRouter.pathname.includes("/seaJobs/import/[id]") 
+        //&& !newRouter.pathname.includes("/seaJobs/import/bl")
+      ){
       setToggleState('4-6');
     }
-    if(newRouter.pathname.includes("seJob/bl/")){
+    if(newRouter.pathname.includes("seaJobs/import/bl/[id]")){
+      setToggleState('4-7');
+    }
+
+    if(
+        newRouter.pathname.includes("seaJobs/export/[id]") 
+        //&& !newRouter.pathname.includes("seaJobs/export/bl")
+      ){
+      setToggleState('4-3');
+    }
+    if(newRouter.pathname.includes("/seaJobs/export/bl/[id]")){
       setToggleState('4-4');
     }
+
     if(newRouter.pathname.includes("accounts/vouchers/")){
       setToggleState('3-5');
     }
@@ -104,6 +116,7 @@ const MainLayout = ({children}) => {
     seJob:false,
     siJob:false,
     seBl:false,
+    siBl:false,
     charges:false,
     invoiceBills:false,
     paymentReceipt:false,
@@ -119,6 +132,9 @@ const MainLayout = ({children}) => {
     riderAssign:false,
     ledger:false,
     nonGlParties:false,
+    aeJobList:false,
+    aeJob:false,
+    aeBl:false,
   });
 
   //useEffect(()=>{ alterTabs() }, [tabs]);
@@ -159,6 +175,7 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='4-4'){ tempTabActive.seBl=true }
         else if(tabs.key=='4-5'){ tempTabActive.siJobList=true }
         else if(tabs.key=='4-6'){ tempTabActive.siJob=true }
+        else if(tabs.key=='4-7'){ tempTabActive.siBl=true }
         else if(tabs.key=='5-1'){ tempTabActive.jobBalancing=true }
         else if(tabs.key=='5-2'){ tempTabActive.accountActivity=true }
         else if(tabs.key=='5-3'){ tempTabActive.balanceSheet=true }
@@ -166,6 +183,9 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='5-5'){ tempTabActive.ledger=true }
         else if(tabs.key=='6-1'){ tempTabActive.riders=true }
         else if(tabs.key=='6-1'){ tempTabActive.riderAssign=true }
+        else if(tabs.key=='7-1'){ tempTabActive.aeJobList=true }
+        else if(tabs.key=='7-2'){ tempTabActive.aeJob=true }
+        else if(tabs.key=='7-2'){ tempTabActive.aeBl=true }
         dispatch(setTab(tempTabs))
         //setTabItems(tempTabs);
         setTabActive(tempTabActive);
@@ -219,12 +239,14 @@ const MainLayout = ({children}) => {
     else if(x.key=='3-6'){ Router.push('/accounts/voucherList') }
     else if(x.key=='3-7'){ Router.push('/accounts/officeVouchers/list') }
     else if(x.key=='3-8'){ Router.push(`/accounts/officeVouchers/${setKey(x)}`) }
-    else if(x.key=='4-1'){ Router.push('/seJob/seJobList') }
-    else if(x.key=='4-2'){ Router.push('/seJob/seBlList') }
-    else if(x.key=='4-3'){ Router.push(`/seJob/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
-    else if(x.key=='4-4'){ Router.push(`/seJob/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
-    else if(x.key=='4-5'){ Router.push('/seJob/siJobList') }
-    else if(x.key=='4-6'){ Router.push(`/seJob/import/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='4-1'){ Router.push('/seaJobs/seJobList') }
+    else if(x.key=='4-2'){ Router.push('/seaJobs/export/blList') }
+    else if(x.key=='4-3'){ Router.push(`/seaJobs/export/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='4-4'){ Router.push(`/seaJobs/export/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+
+    else if(x.key=='4-5'){ Router.push('/seaJobs/siJobList') }
+    else if(x.key=='4-6'){ Router.push(`/seaJobs/import/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='4-7'){ Router.push(`/seaJobs/import/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='5-1'){ Router.push('/reports/jobBalancing') }
     else if(x.key=='5-2'){ Router.push('/reports/accountActivity') }
     else if(x.key=='5-3'){ Router.push('/reports/balanceSheet') }
@@ -232,6 +254,9 @@ const MainLayout = ({children}) => {
     else if(x.key=='5-5'){ Router.push('/reports/ledger') }
     else if(x.key=='6-1'){ Router.push('/tasks/riders') }
     else if(x.key=='6-2'){ Router.push(`/tasks/riders/riderAssign/${setKey(x)}`) }
+    else if(x.key=='7-1'){ Router.push('/airJobs/aeJobList') }
+    else if(x.key=='7-2'){ Router.push(`/airJobs/export/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='7-3'){ Router.push(`/airJobs/export/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
   };
 
   const removeTab = (index) => {

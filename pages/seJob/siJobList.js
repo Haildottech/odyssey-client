@@ -1,6 +1,6 @@
 import React from 'react';
 import Cookies from 'cookies';
-import SEJobList from '/Components/Layouts/SE/SEJobList';
+import SEJobList from '/Components/Layouts/JobsLayout/SEJobList';
 
 const seJobList = ({sessionData, jobsData}) => {
   return (
@@ -26,32 +26,3 @@ export async function getServerSideProps({req,res}){
     }
   }
 }
-
-// import React from 'react';
-// import Cookies from 'cookies';
-// import SIJobList from '/Components/Layouts/SE/SIJobList';
-
-// const siJobList = ({sessionData, jobsData}) => {
-//   return (
-//     <SIJobList sessionData={sessionData} jobsData={jobsData} />
-//   )
-// }
-// export default siJobList
-
-// export async function getServerSideProps({req,res}){
-//   const cookies = new Cookies(req, res);
-//   const sessionRequest = await fetch(process.env.NEXT_PUBLIC_CLIMAX_GET_LOGIN_VERIFICATION, {
-//     headers:{"x-access-token": `${cookies.get('token')}`}
-//   }).then((x)=>x.json());
-
-//   const jobsData = await fetch(process.env.NEXT_PUBLIC_CLIMAX_POST_GET_ALL_SI_JOBS, {
-//     headers:{ companyid: `${cookies.get('companyId')}`}
-//   }).then((x)=>x.json());
-
-//   return {
-//     props: {
-//       sessionData:sessionRequest, 
-//       jobsData:jobsData
-//     }
-//   }
-// }

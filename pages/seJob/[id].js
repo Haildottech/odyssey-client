@@ -1,11 +1,13 @@
 import React from 'react';
 //import { useRouter } from 'next/router';
 import axios from "axios";
-import SeJobCopy from '../../Components/Layouts/SE/SeJobCopy';
+import Jobs from '/Components/Layouts/JobsLayout/Jobs';
 
 const seJob = ({jobData, id, fieldsData}) => {
   return (
-    <SeJobCopy jobData={jobData} id={id} fieldsData={fieldsData} type={"SE"} />
+    <>
+      <Jobs jobData={jobData} id={id} fieldsData={fieldsData} type={"SE"} />
+    </>
   )
 }
 export default seJob
