@@ -1,10 +1,12 @@
 import React from 'react';
 import Cookies from 'cookies';
-import SEJobList from '/Components/Layouts/JobsLayout/SEJobList';
+// import SEJobList from '/Components/Layouts/JobsLayout/SEJobList';
 
 const seJobList = ({sessionData, jobsData}) => {
   return (
-    <SEJobList sessionData={sessionData} jobsData={jobsData} type={"SI"} />
+    <>
+    {/* <SEJobList sessionData={sessionData} jobsData={jobsData} type={"SI"} /> */}
+    </>
   )
 }
 export default seJobList
