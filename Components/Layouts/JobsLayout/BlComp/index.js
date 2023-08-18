@@ -15,6 +15,8 @@ import { validationSchema } from "./validion";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { setAndFetchBlData, recordsReducer, initialState, baseValues } from "./states";
 import axios from 'axios';
+import ItemDetail from "./ItemDetail";
+import ChargesDetail from "./ChargesDetail";
 
 const NewBl = ({ id, blData, partiesData, type}) => {
 
@@ -54,6 +56,7 @@ const NewBl = ({ id, blData, partiesData, type}) => {
   };
 
   const onSubmit = async (data) => {
+    
     set("load", true);
     let tempData = {
       ...data,
@@ -74,6 +77,7 @@ const NewBl = ({ id, blData, partiesData, type}) => {
       measurementContent: state.measurementContent,
       Container_Infos: state.Container_Infos,
       deletingContinersList: state.deletingContinersList,
+      Item_Details:state.Item_Details
     };
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_BL, tempData).then((x) => {
       if (x.data.status == "success") {
@@ -121,6 +125,8 @@ const NewBl = ({ id, blData, partiesData, type}) => {
       measurementContent: state.measurementContent,
       Container_Infos: state.Container_Infos,
       deletingContinersList: state.deletingContinersList,
+      Item_Details:state.Item_Details,
+      deletingItemList:state.deletingItemList,
     };
     let emp = stamps?.find(
       (x) => x.code == undefined && x.stamp_group == undefined
@@ -151,7 +157,7 @@ const NewBl = ({ id, blData, partiesData, type}) => {
   }, [state.tabState]);
 
   const onError = (errors) => console.log(errors);
-  
+
   return (
     <div className="base-page-layout">
       <div className="client-styles" style={{ overflowY: "auto", overflowX: "hidden" }}>
@@ -161,8 +167,16 @@ const NewBl = ({ id, blData, partiesData, type}) => {
               <BlInfo control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} type={type} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={(type=="SE"||type=="SI")?"Container Info":"Item Detail"} key="2">
-              <ContainerInfo control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} />
+              {type!="AE" && <ContainerInfo control={control} id={id} register={register} 
+                state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} 
+              />}
+              {type=="AE" && <ItemDetail control={control} id={id} register={register} 
+                state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} 
+              />}
             </Tabs.TabPane>
+            {type=="AE" && <Tabs.TabPane tab={"Charges Detail"} key="5">
+              <ChargesDetail control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} />
+            </Tabs.TabPane>}
             <Tabs.TabPane tab={(type=="SE"||type=="SI")?"BL Detail":"Basic Information"} key="3">
               <BlDetail control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} type={type} />
             </Tabs.TabPane>

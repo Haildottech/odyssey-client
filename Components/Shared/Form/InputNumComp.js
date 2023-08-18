@@ -39,7 +39,7 @@ const NumComp = (props) => {
     <>
       <div>{props.label}</div>
       <InputNumber {...props.rest} name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} disabled={props.disabled} 
-        style={{minWidth:props.width, fontSize:props.font}}
+        style={{minWidth:props.width, fontSize:props.font}} min="0"
       />
     </>
   )

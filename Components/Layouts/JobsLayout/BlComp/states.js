@@ -141,7 +141,20 @@ const baseValues = {
   wtValPPC:       '',
   wtValCOLL:      '',
   othersPPC:      '',
-  othersCOLL:     ''
+  othersCOLL:     '',
+
+  ppWeightCharges:        0,
+  ccWeightCharges:        0,
+  ppvaluationCharges:     0,
+  ccvaluationCharges:     0,
+  ppTax:                  0,
+  ccTax:                  0,
+  ppOtherDueChargeAgent:  0,
+  ccOtherDueChargeAgent:  0,
+  ppOtherDueChargeCarrier:0,
+  ccOtherDueChargeCarrier:0,
+  ppTotal:                0,
+  ccTotal:                0,
 };
 
 const initialState = {
@@ -154,8 +167,11 @@ const initialState = {
   jobsData:[],
   partiesData:[],
   Container_Infos:[],
+  Item_Details:[],
   Stamps_Info:[],
   deletingContinersList:[],
+  deletingItemList:[],
+
   //setNotifyParties:false,
   updateContent:false,
   shipperContent:       "",
@@ -212,7 +228,7 @@ const convetAsHtml = (values) => {
   return result
 }
 
-const setJob = (set, x, state, reset, allValues, dispatch) => {
+const setJob = (set, x, state, reset, allValues, dispatch, id) => {
     allValues.SEJobId =      x.id;                 
     allValues.jobNo =        x.jobNo;                        
     allValues.consignee =    x.consignee?.name;     
@@ -230,15 +246,19 @@ const setJob = (set, x, state, reset, allValues, dispatch) => {
     allValues.delivery   =   x.delivery;      
     allValues.operation =    x.operation;      
     allValues.flightNo =     x.flightNo;      
-    allValues.shipping_line =x.shipping_line?.name;
+    allValues.shipping_line= x.shipping_line?.name;
     allValues.voyage =       x.Voyage?.voyage;
 
-    dispatch({type:"set",payload:{
+    dispatch({type:"set", payload:{
       deliveryContent:convetAsHtml(x.overseas_agent),
       consigneeContent:convetAsHtml(x.consignee),
       shipperContent:convetAsHtml(x.shipper),
       partyVisible:false,
-      updateContent:!state.updateContent
+      updateContent:!state.updateContent,
+      Item_Details:id=="new"?[{
+        id:null, noOfPcs:'0', unit:'',grossWt:'0', kh_lb:'', r_class:'', itemNo:'',
+        chargableWt:x.cwtClient, rate_charge:'0', total:'0', lineWeight: x.cwtLine
+    }]:[]
     }})
     reset(allValues)
 }
@@ -264,7 +284,6 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
   let result = {...blData};
   result.equip = [{}];
   const fetchedResult = await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_FIND_JOB_BY_NO,{ no:result.SE_Job.jobNo }).then((x)=>x.data.result)
-  console.log(fetchedResult[0])
   allValues.SEJobId =        fetchedResult[0].id;
   allValues.jobNo =          fetchedResult[0].jobNo;
   allValues.consignee =      fetchedResult[0].consignee?.name;
@@ -320,6 +339,7 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
 
   dispatch({type:"set",payload:{
     Container_Infos:contInfos,
+    Item_Details:result.Item_Details,
     load:false,
     updateContent:true,
     shipperContent       :result.shipperContent       ,

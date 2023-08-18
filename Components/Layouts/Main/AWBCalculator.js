@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { InputNumber } from 'antd';
 import { Row, Col } from "react-bootstrap";
 import { CSVLink } from "react-csv";
@@ -10,14 +10,11 @@ const AWBCalculator = () => {
     const [qty, setQty] = useState(0);
     const [scvData, setCsvData] = useState([]);
 
-
-
     const calculate = () => {
         let tempData = [["HAWB Series"]]
         for (let index = 0; index < qty; index++) {
             let newDigit = digits + index;
             tempData.push([`${prefix}-${newDigit}${newDigit%7}`]);
-            // console.log(`${prefix}-${newDigit}${newDigit%7}`);
         }
         setCsvData(tempData);
     }

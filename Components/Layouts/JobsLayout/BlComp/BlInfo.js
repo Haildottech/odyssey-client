@@ -22,7 +22,7 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset, type})
                 //console.log(currentJobValue);
                 let jobValue = await fetchJobsData(set, dispatch, currentJobValue);
                 //console.log(jobValue)
-                setJob(set, jobValue[0], state, reset, allValues, dispatch)
+                setJob(set, jobValue[0], state, reset, allValues, dispatch, id)
             }
         }
         retrieveData();
@@ -40,13 +40,13 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset, type})
 
     const parseValues = (data) => {
         let tempVal = [];
-        data.forEach((x) => {
+        data.length>0?data.forEach((x) => {
             tempVal.push({
                 value:x.id,
                 label:x.name,
                 code:x.code
             })
-        })
+        }):null;
         return tempVal
     }
 
