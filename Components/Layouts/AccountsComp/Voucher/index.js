@@ -1,7 +1,7 @@
 import openNotification from "/Components/Shared/Notification";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { validationSchema } from "./state";
-import { useForm } from "react-hook-form";
+import { validationSchema, defaultValues } from "./state";
+import { useForm, useWatch  } from "react-hook-form";
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import Vouchers from "./Vouchers";
@@ -17,38 +17,31 @@ const Voucher = ({ id, voucherData }) => {
 
   const { register, handleSubmit, control, reset, formState:{ errors } } = useForm({
     resolver: yupResolver(validationSchema),
-    defaultValues: {
-      ComapnyId:1,
-      chequeDate:"",
-      chequeNo:"",
-      costCenter:"KHI",
-      payTo:"",
-      type:"",
-      vType:"",
-      Voucher_Heads: [{ type: "", ChildAccountId: "", narration: "", amount: 0 }]
-    }
+    defaultValues:defaultValues
   });
 
   const onSubmit = async(data) => {
+
     let tempData = data;
     let settlementAmmount = 0;
-
-    tempData.Voucher_Heads.forEach((x)=>{
-      settlementAmmount = settlementAmmount + x.amount
-    })
-
-    let newObj = {
-      ChildAccountId:data.ChildAccountId,
-      amount:settlementAmmount,
-      type:data.vType==("CRV"||"BRV")?"debit":"credit",
-      settlement:"1",
-      narration:"1"
+    let newObj = {}
+    if(tempData.ChildAccountId){
+      tempData.Voucher_Heads.forEach((x)=>{
+        settlementAmmount = settlementAmmount + x.amount
+      })
+      newObj = {
+        ChildAccountId:data.ChildAccountId,
+        amount:settlementAmmount,
+        type:data.vType==("CRV"||"BRV")?"debit":"credit",
+        settlement:"1",
+        narration:"1"
+      }
     }
-
     id=="new"?null:newObj.id=tempData.settleId;
-    tempData.Voucher_Heads.push(newObj)
+    Object.keys(newObj).length>0?tempData.Voucher_Heads.push(newObj):null;
     tempData.chequeDate=tempData.chequeDate?moment(tempData.chequeDate).format("DD/MM/YYYY"):"";
-    tempData.CompanyId=CompanyId?CompanyId:1
+    tempData.CompanyId=CompanyId?CompanyId:1;
+
     if(id=="new"){
       delete tempData.id;
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, tempData).then((x)=>{

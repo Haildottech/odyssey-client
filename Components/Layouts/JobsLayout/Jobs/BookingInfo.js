@@ -17,6 +17,7 @@ import InputComp from '/Components/Shared/Form/InputComp';
 import { addBlCreationId } from '/redux/BlCreation/blCreationSlice';
 import Weights from './WeightComp';
 import BLInfo from './BLInfo';
+import airports from "/jsonData/airports";
 import Carrier from './Carrier';
 
 const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors, state, useWatch, dispatch, reset, id, type}) => {
@@ -155,12 +156,12 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
           ]} />
       </Col>
       <Col md={1} className='py-1'>
-        <SelectComp register={register} name='subType' control={control} disabled={getStatus(approved) || state.selectedRecord.id!=null} 
+        {(type=="SE"||type=="SI") && <SelectComp register={register} name='subType' control={control} disabled={getStatus(approved) || state.selectedRecord.id!=null} 
         label='Sub Type' width={"100%"}
           options={[  
             {id:'FCL', name:'FCL'},
             {id:'LCL', name:'LCL'},
-        ]} />
+        ]} />}
       </Col>
       <Col md={1} className='py-1'>
         <SelectComp register={register} name='dg' control={control} label='DG Type' width={"100%"} disabled={getStatus(approved)}
@@ -240,10 +241,10 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
         }
         {(type=="AE" || type=="AI") && <>
           {type=="AI" &&<>
-            <SelectSearchComp register={register} name='pol' control={control} label='Port Of Loading' disabled={getStatus(approved)} width={"100%"}
-              options={ports.ports} /><Space/>
-            <SelectSearchComp register={register} name='pod' control={control} label='Port Of Discharge *' disabled={getStatus(approved)} width={"100%"}
-              options={ports.ports} /><Space/>
+            <SelectSearchComp register={register} name='pol' control={control} label='Air Port Of Loading' disabled={getStatus(approved)} width={"100%"}
+              options={airports} /><Space/>
+            <SelectSearchComp register={register} name='pod' control={control} label='Air Port Of Discharge *' disabled={getStatus(approved)} width={"100%"}
+              options={airports} /><Space/>
           </>}
         </>}
         <SelectSearchComp register={register} name='fd' control={control} label='Final Destination *' disabled={getStatus(approved)} width={"100%"}
@@ -328,17 +329,17 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
               let oldTabs = await type=="SE"?tabs.filter((x)=> {return x.key!="4-3" }):
                             await type=="SI"?tabs.filter((x)=> {return x.key!="4-6" }):
                             await type=="AE"?tabs.filter((x)=> {return x.key!="7-2" }):
-                            await tabs.filter((x)=> {return x.key!="4-6" })
+                            await tabs.filter((x)=> {return x.key!="7-5" })
               dispatchNew(await removeTab(oldTabs)); // First deleting Job Tab
               dispatchNew(await incrementTab({ // Then Re adding Job Tab with updated info
                 "label":`${type} JOB`,
-                "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"0",
+                "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
                 "id":state.selectedRecord.id
               }));
               dispatchNew(await addBlCreationId(id)); //sending JobId to Bl
               dispatchNew(await incrementTab({  //Now Adding a BL Tab
                 "label":`${type} BL`,
-                "key":type=="SE"?"4-4":type=="SI"?"4-7":type=="AE"?"7-3":"0",
+                "key":type=="SE"?"4-4":type=="SI"?"4-7":type=="AE"?"7-3":"7-6",
                 "id":state.selectedRecord.Bl!=null?`${state.selectedRecord.Bl.id}`:"new"
               }));
               await Router.push(`${type=="SE"?"/seaJobs/export/bl/":type=="SI"?"/seaJobs/import/bl/":type=="AE"?"/airJobs/export/bl/":"/airJobs/import/bl/"}${state.selectedRecord.Bl!=null?state.selectedRecord.Bl.id:"new"}`);

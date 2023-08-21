@@ -115,7 +115,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
               openNotification('Success', `Job Created!`, 'green');
               dispatchNew(incrementTab({
                 "label": type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
-                "key": type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"0",
+                "key": type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
                 "id":x.data.result.id
               }))
               Router.push(

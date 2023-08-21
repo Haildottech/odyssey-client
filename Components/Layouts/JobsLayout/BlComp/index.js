@@ -85,11 +85,11 @@ const NewBl = ({ id, blData, partiesData, type}) => {
         dispatchNew(
           incrementTab({
             label: `${data.operation} BL`,
-            key: data.operation=="SE"?"4-4":data.operation=="SI"?"4-7":data.operation=="AE"?"7-3":"",
+            key: data.operation=="SE"?"4-4":data.operation=="SI"?"4-7":data.operation=="AE"?"7-3":"7-6",
             id: x.data.result,
           })
         );
-        Router.push(type=="SE"?`/seaJobs/export/bl/${x.data.result}`:type=="SI"?`/seaJobs/import/bl/${x.data.result}`:type=="AE"?`/airJobs/export/bl/${x.data.result}`:``);
+        Router.push(type=="SE"?`/seaJobs/export/bl/${x.data.result}`:type=="SI"?`/seaJobs/import/bl/${x.data.result}`:type=="AE"?`/airJobs/export/bl/${x.data.result}`:`/airJobs/import/bl/${x.data.result}`);
       } else {
         openNotification("Error","something went wrong, try again with correct values","red");
       }
@@ -167,14 +167,14 @@ const NewBl = ({ id, blData, partiesData, type}) => {
               <BlInfo control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} type={type} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={(type=="SE"||type=="SI")?"Container Info":"Item Detail"} key="2">
-              {type!="AE" && <ContainerInfo control={control} id={id} register={register} 
+              {(type=="SE"|| type=="SI") && <ContainerInfo control={control} id={id} register={register} 
                 state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} 
               />}
-              {type=="AE" && <ItemDetail control={control} id={id} register={register} 
+              {(type=="AE"|| type=="AI") && <ItemDetail control={control} id={id} register={register} 
                 state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} 
               />}
             </Tabs.TabPane>
-            {type=="AE" && <Tabs.TabPane tab={"Charges Detail"} key="5">
+            {(type=="AE"||type=="AI") && <Tabs.TabPane tab={"Charges Detail"} key="5">
               <ChargesDetail control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} />
             </Tabs.TabPane>}
             <Tabs.TabPane tab={(type=="SE"||type=="SI")?"BL Detail":"Basic Information"} key="3">

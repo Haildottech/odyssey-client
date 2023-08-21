@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
 import moment from "moment";
 import ports from "/jsonData/ports";
-import inWords from '../../functions/numToWords';
-import parse from "html-react-parser";
+import inWords from '/functions/numToWords';
 import Cookies from 'js-cookie';
 
 const InvoicePrint = ({records, invoice, calculateTotal}) => {
@@ -25,10 +24,6 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
     const heading = { lineHeight:1, fontSize:11, fontWeight:'800', paddingBottom:5 };
     const Line = () => <div style={{backgroundColor:"black", height:3, position:'relative', top:12}}></div>
     const border = "1px solid black";
-
-    // useEffect(() => {
-    //   console.log(invoice.SE_Job)
-    // }, [invoice])
 
   return (
     <div className='p-5'>

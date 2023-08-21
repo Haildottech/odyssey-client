@@ -17,16 +17,14 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset, type})
     const currentJobValue = useSelector((state) => state.blCreationValues.value);
 
     useEffect(() => {
+        console.log(type)
         const retrieveData = async() => {
             if(id=='new'){
-                //console.log(currentJobValue);
                 let jobValue = await fetchJobsData(set, dispatch, currentJobValue);
-                //console.log(jobValue)
                 setJob(set, jobValue[0], state, reset, allValues, dispatch, id)
             }
         }
         retrieveData();
-        //console.log(allValues)
     },[])
 
     const findNotifyParty = (id,content) => {
@@ -67,7 +65,7 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset, type})
                     <div className='mt-2'></div>
                     <InputComp register={register} name='hbl' control={control} width={150} 
                         label={(type=="SE"||type=="SI")?'HBL # *':"HAWB #*"}
-                        disabled={(type=="SI"||type=="AE")?false:true} 
+                        disabled={(type=="SI"||type=="AI")?false:true} 
                     />
                 </Col>
                 <Col md={12}>

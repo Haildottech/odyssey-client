@@ -144,7 +144,7 @@ const Weights = ({register, control, getStatus, allValues, type, approved, getWe
             <InputNumComp register={register} name='vol' control={control} label='Bill Vol' width={"100%"} step={'0.00001'} disabled={getStatus(approved)}/>
         </Col>
         </>}
-        {(type=="AE") && 
+        {(type=="AE"||type=="AI") && 
         <>
         <Col md={6} className='mt-2'>
             <InputNumComp register={register} name='weight' control={control} width={"100%"} label='Weight' step={'0.01'} disabled={getStatus(approved)} />

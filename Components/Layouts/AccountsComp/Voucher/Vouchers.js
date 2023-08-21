@@ -31,7 +31,7 @@ const Vouchers=({handleSubmit, onSubmit, register, control, errors, CompanyId, c
   }, [allValues.vType])
 
   async function getValues(){
-    const { chequeNo, costCenter, payTo, vType, type } = voucherData;
+    const { chequeNo,  payTo, vType, type } = voucherData;
     console.log(voucherData)
     let id="";
     let settleId="";
@@ -45,7 +45,7 @@ const Vouchers=({handleSubmit, onSubmit, register, control, errors, CompanyId, c
         id = voucherData.id;
       }
     });
-    reset({ CompanyId, vType, chequeDate, chequeNo, costCenter, payTo, type, Voucher_Heads, ChildAccountId, settleId, id });
+    reset({ CompanyId, vType, chequeDate, chequeNo, payTo, type, Voucher_Heads, ChildAccountId, settleId, id });
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {headers:{CompanyId:CompanyId}})
     .then((x)=>{
       setChild(x.data.result);
@@ -110,8 +110,12 @@ const Vouchers=({handleSubmit, onSubmit, register, control, errors, CompanyId, c
                   { id: "CRV", name: "CRV" },
                   { id: "BRV", name: "BRV" },
                   { id: "BPV", name: "BPV" },
+                  { id: "CR", name: "CR" },
+                  { id: "TV", name: "TV" },
+                  { id: "JV", name: "JV" },
                 ]}
               />
+              <p className="error-line">{errors?.vType?.message}</p>
             </Col>
             <Col md={12} className="my-2">
               <div>Company</div>
@@ -125,6 +129,7 @@ const Vouchers=({handleSubmit, onSubmit, register, control, errors, CompanyId, c
                   }):[]
                 }
               />
+              {/* <p className="error-line">{errors?.ChildAccountId?.message}</p> */}
             </Col>
             <Col md={5} className="my-2">
               <InputComp className="form-control" name={"chequeNo"} label="Cheque No" placeholder="Cheque No" register={register} control={control} />

@@ -33,8 +33,8 @@ const SignupSchema = yup.object().shape({
     //zip: yup.string().required('Required'),
     //telephone1: yup.string().required('Required'),
     //telephone2: yup.string().required('Required'),
-    //infoMail: yup.string().email('Must be an E-mail!').required('Required'),
-    //accountsMail: yup.string().email('Must be an E-mail!').required('Required'),
+    infoMail: yup.string().email('Must be an E-mail!'),
+    accountsMail: yup.string().email('Must be an E-mail!'),
     types: yup.array().required('Atleast 1 Type Required!').min(1, "Atleast 1 Type Required!"),
     operations: yup.array().required('Atleast 1 Operation Required!').min(1, "Atleast 1 Operation Required!"),
 });

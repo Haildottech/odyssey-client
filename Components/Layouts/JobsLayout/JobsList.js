@@ -35,7 +35,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
           onClick={()=>{
             dispatch(incrementTab({
               "label":type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
-              "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"0",
+              "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
               "id":"new"
             }))
             Router.push(
@@ -66,7 +66,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
               // Router.push(type=="SE"?`/seaJobs/export/${x.id}`:`/seaJobs/import/${x.id}`)
               dispatch(incrementTab({
                 "label":type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
-                "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"0",
+                "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
                 "id":x.id
               }))
               Router.push(

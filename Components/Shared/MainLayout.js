@@ -50,14 +50,19 @@ const MainLayout = ({children}) => {
 
   useEffect(() => {
     // When visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
+    if(newRouter.pathname.includes("/airJobs/import/bl/[id]")){
+      setToggleState('7-6');
+    }
+    if(newRouter.pathname.includes("/airJobs/import/[id]")){
+      setToggleState('7-5');
+    }
     if(newRouter.pathname.includes("/airJobs/export/[id]")){
       setToggleState('7-2');
     }
     if(newRouter.pathname.includes("/airJobs/export/bl/[id]")){
       setToggleState('7-3');
     }
-    if(
-        newRouter.pathname.includes("/seaJobs/import/[id]") 
+    if(newRouter.pathname.includes("/seaJobs/import/[id]") 
         //&& !newRouter.pathname.includes("/seaJobs/import/bl")
       ){
       setToggleState('4-6');
@@ -65,9 +70,7 @@ const MainLayout = ({children}) => {
     if(newRouter.pathname.includes("seaJobs/import/bl/[id]")){
       setToggleState('4-7');
     }
-
-    if(
-        newRouter.pathname.includes("seaJobs/export/[id]") 
+    if( newRouter.pathname.includes("seaJobs/export/[id]") 
         //&& !newRouter.pathname.includes("seaJobs/export/bl")
       ){
       setToggleState('4-3');
@@ -135,6 +138,9 @@ const MainLayout = ({children}) => {
     aeJobList:false,
     aeJob:false,
     aeBl:false,
+    aiJobList:false,
+    aiJob:false,
+    aiBl:false,
   });
 
   //useEffect(()=>{ alterTabs() }, [tabs]);
@@ -185,7 +191,11 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='6-1'){ tempTabActive.riderAssign=true }
         else if(tabs.key=='7-1'){ tempTabActive.aeJobList=true }
         else if(tabs.key=='7-2'){ tempTabActive.aeJob=true }
-        else if(tabs.key=='7-2'){ tempTabActive.aeBl=true }
+        else if(tabs.key=='7-3'){ tempTabActive.aeBl=true }
+        else if(tabs.key=='7-4'){ tempTabActive.aiJobList=true }
+        else if(tabs.key=='7-5'){ tempTabActive.aiJob=true }
+        else if(tabs.key=='7-6'){ tempTabActive.aiBl=true }
+        
         dispatch(setTab(tempTabs))
         //setTabItems(tempTabs);
         setTabActive(tempTabActive);
@@ -257,6 +267,9 @@ const MainLayout = ({children}) => {
     else if(x.key=='7-1'){ Router.push('/airJobs/aeJobList') }
     else if(x.key=='7-2'){ Router.push(`/airJobs/export/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='7-3'){ Router.push(`/airJobs/export/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='7-4'){ Router.push(`/airJobs/aiJobList`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='7-5'){ Router.push(`/airJobs/import/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='7-6'){ Router.push(`/airJobs/import/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
   };
 
   const removeTab = (index) => {

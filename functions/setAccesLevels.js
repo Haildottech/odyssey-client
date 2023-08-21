@@ -147,11 +147,11 @@ function setAccesLevels(dispatch, collapsed){
         key: '7-1',
         children: `Content of Tab Pane 2`,
       }),
-      // getItem('Import Job List', '7-5',<></>, null, {
-      //   label: `Air Import Jobs`,
-      //   key: '7-5',
-      //   children: `Content of Tab Pane 2`,
-      // }),
+      getItem('Import Job List', '7-4',<></>, null, {
+        label: `Air Import Jobs`,
+        key: '7-4',
+        children: `Content of Tab Pane 2`,
+      }),
       // getItem('AWB List', '7-2',<></>, null, {
       //   label: `Air AWBs`,
       //   key: '7-2',
