@@ -1,16 +1,15 @@
 import React from 'react'
-import { Checkbox, DatePicker, Input, Radio } from "antd";
+import { Checkbox, Radio } from "antd";
 import ports from '../../../../jsonData/ports'
 import InputComp from "../../../Shared/Form/InputComp";
 import DateComp from "../../../Shared/Form/DateComp";
-import { Col, Modal, Row } from "react-bootstrap";  
+import { Col, Row } from "react-bootstrap";  
 import SelectSearchComp from "../../../Shared/Form/SelectSearchComp";
 import moment from "moment";
 
 const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
     errors ,sortBy, setDg, setGroupBy, setApproved,
      groupBy, dg ,approved, setSortBy}) => {
-
  
   return (
   <>
@@ -35,7 +34,7 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         register={register}
         control={control}
         label="Client"
-        options={data.party.client.map((x) => ({
+        options={data.party?.client.map((x) => ({
           id: x.id,
           name: x.name,
         }))}
@@ -48,8 +47,18 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         name={"shipping_air_line"}
         register={register}
         control={control}
-        options={data.vedor_details.sLine.map((x) => ({id:x.id, name:x.name}))}
-        label="Shipping Air Line"
+        options={data.vendor_details?.sLine.map((x) => ({id:x.id, name:x.name}))}
+        label="Shipping Line"
+      />
+    </Col>
+    <Col>
+      <SelectSearchComp
+      width={"100%"}
+        name={"air_line"}
+        register={register}
+        control={control}
+        options={data.vendor_details?.airLine.map((x) => ({id:x.id, name:x.name}))}
+        label="Air Line"
       />
     </Col>
 
@@ -60,7 +69,7 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         register={register}
         control={control}
         label="Vendor"
-        options={data.vendor.map((x) => ({
+        options={data.vendor?.map((x) => ({
           id: x.id,
           name: `${x.name} (${x.code})`,
         }))}
@@ -88,7 +97,7 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         register={register}
         control={control}
         label="Overseas Agent"
-        options={data.vedor_details.overseasAgent.map((x) => ({
+        options={data.vendor_details.overseasAgent.map((x) => ({
           id: x.id,
           name: x.name,
         }))}
@@ -102,7 +111,7 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         register={register}
         control={control}
         label="Consignee"
-        options={data.party.consignee.map((x) => ({
+        options={data.party?.consignee.map((x) => ({
           id: x.id,
           name: x.name,
         }))}
@@ -116,7 +125,7 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         register={register}
         control={control}
         label="Vessel"
-        options={data.vessel.map((x) => ({
+        options={data.vessel?.map((x) => ({
           id: x.id,
           name: `${x.name} (${x.code})`,
         }))}
@@ -130,7 +139,7 @@ const JobList = ({register, data, onChange, control ,onsubmit, handleSubmit,
         register={register}
         control={control}
         label="Clearing Agent"
-        options={data.vedor_details.chaChb.map((x) => ({
+        options={data.vendor_details?.chaChb.map((x) => ({
           id: x.id,
           name: `${x.name}`,
         }))}

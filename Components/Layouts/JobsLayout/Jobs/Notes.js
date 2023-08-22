@@ -5,9 +5,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import openNotification from '../../../Shared/Notification';
 import moment from 'moment'
+import { useRouter } from 'next/router'
 
 const Notes = ({state, dispatch}) => {
-
+  const params = useRouter();
   const handleSubmit = async() => {
 
     if(state.title!=""&&state.note!=""){
@@ -16,7 +17,9 @@ const Notes = ({state, dispatch}) => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_ADD_SEAJOB_NOTE,{
             title:state.title, note:state.note, recordId:state.selectedRecord.id, opened: "0", 
             recordId: state.selectedRecord.id,
-            type:'SE', createdBy:Cookies.get('username')
+            type: params.pathname.includes("airJobs/export") ? "AE" : params.pathname.includes("airJobs/import") ? "AI" :
+            params.pathname.includes("seaJobs/import") ? "SI" : "SE",
+            createdBy:Cookies.get('username')
         }).then((x)=>{
         if(x.data.status=='success'){
           const data = {opened : 1, recordId: x.recordId}
