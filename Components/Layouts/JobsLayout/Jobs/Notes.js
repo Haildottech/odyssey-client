@@ -39,7 +39,7 @@ const Notes = ({state, dispatch}) => {
     dispatch({type:'toggle', fieldName:'load', payload:true});
     setTimeout(async() => {
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_GET_SEAJOB_NOTES,{
-        id:state.selectedRecord.id
+        id: state.selectedRecord.id, type :state.selectedRecord.operation
       }).then((x)=>{
         if(x.data.status=='success'){
           const data = {opened : "1", recordId : x.data.result[0]?.recordId};

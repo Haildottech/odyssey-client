@@ -12,7 +12,6 @@ import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
 
 const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType}) => {
-
     const { permissions } = state;
 
     const [ selection, setSelection ] = useState({

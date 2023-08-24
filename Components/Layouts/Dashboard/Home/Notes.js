@@ -23,8 +23,10 @@ const [notes, setNotes] = useState([])
           <div key={i} 
           onClick={() => {
             dispatch(incrementTab({"label": "SE JOB","key": "4-3","id":x.recordId}))
-            x.type == "SE" ? Router.push(`/seaJobs/export/${x.recordId}`) : x.type == "SI" ? Router.push(`/seaJobs/import/${x.recordId}`) :
-             Router.push(`/airJobs/export/${x.recordId}`) 
+            x.type == "SE" ? Router.push(`/seaJobs/export/${x.recordId}`) 
+            : x.type == "SI" ? Router.push(`/seaJobs/import/${x.recordId}`) 
+            : x.type == "AI" ? Router.push(`/airJobs/import/${x.recordId}`) :
+            Router.push(`/airJobs/export/${x.recordId}`) 
           }}
               className="notifications"
               style={x.opened==0?{backgroundColor:'rgb(181, 227, 169)'}:{backgroundColor:'rgba(255, 255, 255, 0.1)'}}

@@ -30,6 +30,7 @@ const ChargesComp = ({state, dispatch, type}) => {
    reset({chargeList:[ ...state.reciveableCharges, ...state.paybleCharges ]})
   }, [state.reciveableCharges, state.paybleCharges])
     
+
   return (
     <>
     <div style={{minHeight:525, maxHeight:525}}>
