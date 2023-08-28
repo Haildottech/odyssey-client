@@ -12,6 +12,9 @@ const ItemDetail = ({control, register, state, useWatch, dispatch, reset}) => {
   const onChange = (e, i, variable, type) => {
     let temp = [...state.Item_Details];
     temp[i][variable] = type=='e'?e:e.target.value;
+    temp.forEach((x)=>{
+        x.total = (parseFloat(x.chargableWt?x.chargableWt:0) * parseFloat(x.rate_charge?x.rate_charge:0)).toFixed(2)||0
+    })
     set('Item_Details', temp)
   }
 

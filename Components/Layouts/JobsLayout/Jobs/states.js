@@ -17,11 +17,14 @@ function recordsReducer(state, action){
       }
       case 'voyageSelection': {
         let temp = state.fields.vessel.filter((x)=> x.id == action.payload)[0].Voyages;
-        temp.forEach((x)=>{ x.check=false });
+        let newTemp = [];
+        temp.forEach((x)=> {
+          newTemp.push({...x, check:false})
+        });
         return {
             ...state,
             voyageVisible: true,
-            voyageList:temp,
+            voyageList:newTemp,
         }
       }
       default: return state 
@@ -89,6 +92,7 @@ const baseValues = {
   bkg:'',
   container:'',
   shpVol:'',
+  billVol:'',
   teu:'',
   pcs:'',
   vol:'',
@@ -194,21 +198,39 @@ const initialState = {
   oldRecord:{},
 };
 
-const getClients = (id) => {
-  const result = axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_CLIENTS_FOR_CHARGES, {
-    headers:{id:id}
-  })
-  .then((x)=>x.data.result)
-  return result;
+const memoize = (fn) => {
+  let cache = {};
+  return (...args) => {
+    let n = args[0];
+    if (n in cache) {
+      console.log('Fetching from cache', n);
+      return cache[n];
+    }
+    else {
+      console.log('Calculating result', n);
+      let result = fn(n);
+      cache[n] = result;
+      return result;
+    }
+  }
 }
 
-const getVendors = (id) => {
-  const result = axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_VENDORS_FOR_CHARGES, {
+const getClients = memoize(async(id) => {
+  const result = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_CLIENTS_FOR_CHARGES, {
+    headers:{id:id}
+  })
+  .then((x)=>x.data.result);
+  console.log(result)
+  return result;
+})
+
+const getVendors = memoize(async(id) => {
+  const result = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_VENDORS_FOR_CHARGES, {
     headers:{id:id}
   })
   .then((x) => x.data.result)
   return result;
-}
+})
 
 const saveHeads = async(charges, state, dispatch, reset) => {
   //dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})

@@ -111,7 +111,7 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
       <Col md={2} className=''>
         <div className="mt-1">Job No.</div>
         <div className="dummy-input">
-          {state.edit?(state.selectedRecord.jobNo):<span style={{color:'white'}}>.</span>}
+          {state.edit?(state.selectedRecord?.jobNo):<span style={{color:'white'}}>.</span>}
         </div>
       </Col>
       <Col md={2} className='py-1'>
@@ -336,16 +336,16 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
                 "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
                 "id":state.selectedRecord.id
               }));
-              dispatchNew(await addBlCreationId(id)); //sending JobId to Bl
-              dispatchNew(await incrementTab({  //Now Adding a BL Tab
-                "label":`${type} BL`,
+              dispatchNew(await addBlCreationId(id)); // Sending JobId to Bl
+              dispatchNew(await incrementTab({ // Now Adding a BL Tab
+                "label":`${type} ${type=="SE"||type=="SI"?"":"AW"}BL`,
                 "key":type=="SE"?"4-4":type=="SI"?"4-7":type=="AE"?"7-3":"7-6",
                 "id":state.selectedRecord.Bl!=null?`${state.selectedRecord.Bl.id}`:"new"
               }));
               await Router.push(`${type=="SE"?"/seaJobs/export/bl/":type=="SI"?"/seaJobs/import/bl/":type=="AE"?"/airJobs/export/bl/":"/airJobs/import/bl/"}${state.selectedRecord.Bl!=null?state.selectedRecord.Bl.id:"new"}`);
             }
           }}
-        >BL</button>
+        >{(type=="SE"||type=="SI")?"BL":"AWBL"}</button>
         <Popover
           content={
           <>{state.InvoiceList?.map((x, i) => 

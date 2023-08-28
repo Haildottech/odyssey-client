@@ -73,7 +73,7 @@ const Weights = ({register, control, getStatus, allValues, type, approved, getWe
             />
         </Col>
         <Col md={6} className='mt-2'>
-            <InputNumComp register={register} name='vol' control={control} label='Bill Vol' width={"100%"} step={'0.00001'} disabled={getStatus(approved)}/>
+            <InputNumComp register={register} name='billVol' control={control} label='Bill Vol' width={"100%"} step={'0.00001'} disabled={getStatus(approved)}/>
         </Col>
         </>}
         {(type=="SI" && allValues.subType=="FCL") && 
@@ -141,7 +141,7 @@ const Weights = ({register, control, getStatus, allValues, type, approved, getWe
             <div className="py-1"><b>{parseFloat(parseFloat(allValues.weight)/1000).toFixed(2)}</b></div>
         </Col>
         <Col md={6} className='mt-2'>
-            <InputNumComp register={register} name='vol' control={control} label='Bill Vol' width={"100%"} step={'0.00001'} disabled={getStatus(approved)}/>
+            <InputNumComp register={register} name='billVol' control={control} label='Bill Vol' width={"100%"} step={'0.00001'} disabled={getStatus(approved)}/>
         </Col>
         </>}
         {(type=="AE"||type=="AI") && 

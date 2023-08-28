@@ -1,8 +1,8 @@
-import {Row, Col, Table} from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Tag, Switch, Input } from 'antd';
-import {CheckCircleOutlined} from "@ant-design/icons"
+import { CheckCircleOutlined } from "@ant-design/icons"
 
 const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
 
@@ -11,6 +11,7 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
   const chargeList = useWatch({ control, name: 'chargeList' });
   
   const getClients = async() => {
+    console.log("Client Hit")
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CLIENTS)
     .then((x) => {
         dispatch({type:'toggle', fieldName:'clientParties', payload:x.data.result});
@@ -18,6 +19,7 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
   }
   
   const getVendors = async() => {
+    console.log("Vendor Hit")
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_VENDOR_FOR_PARTY_SEARCH)
     .then((x) => {
         let data = [];
@@ -28,18 +30,19 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
     })
   }
 
-  useEffect(() => { 
+  useEffect(() => {
+    
     getClients();
     getVendors();
   }, [])
 
-  const RenderData = (props) => {
+  const RenderData = React.memo((props) => {
     return(<>
       {props.data.filter((x)=>{
         if(
           x.name.toLowerCase().includes(searchTerm.toLowerCase())||
           x.code.toLowerCase().includes(searchTerm.toLowerCase())||
-          x.types.toLowerCase().includes(searchTerm.toLowerCase())
+          x.types?.toLowerCase().includes(searchTerm.toLowerCase())
         ){ return x }
         if(searchTerm==""){ return x }
       }).map((x, i)=> {
@@ -57,7 +60,7 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
             let temp = [];
             temp = chargeList;
             if(state.chargesTab=='1'){
-              temp[state.headIndex].invoiceType = x.types.includes("Overseas Agent")?"Agent Bill":"Job Invoice" ;
+              temp[state.headIndex].invoiceType = x.types?.includes("Overseas Agent")?"Agent Bill":"Job Invoice" ;
             }
             else {
               temp[state.headIndex].invoiceType = x.types.includes("Overseas Agent")?"Agent Invoice":"Job Bill" ;
@@ -68,12 +71,7 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
               partyId:x.id, 
               partyType:partyType
             }
-            // dispatch({
-            //   type:'set',
-            //   payload:{headIndex:"", headVisible:false}
-            // })
             reset({ chargeList: temp });
-
             let tempOne = [...state.vendorParties];
             let tempTwo = [...state.clientParties];
             tempOne.forEach((y, i1)=>{
@@ -100,7 +98,7 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
         <td className='pt-1 text-center'><Tag color="cyan" className='mb-1'>{x.mobile1}</Tag></td>
       </tr>
       )})}</>)
-  }
+  })
 
   return(
     <>

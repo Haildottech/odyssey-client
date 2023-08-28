@@ -6,27 +6,28 @@ import Cookies from 'js-cookie';
 import Invoice from './Invoice';
 import Router from "next/router";
 import BookingInfo from './BookingInfo';
+import React, { useEffect } from 'react';
 import ChargesComp from './ChargesComp/';
 import { useDispatch } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
 import EquipmentInfo from './EquipmentInfo';
 import LoadingProgram from './Loading Program';
 import DelieveryOrder from './Delievery Order';
-import React, { useEffect, useState } from 'react';
 import { useForm, useWatch } from "react-hook-form";
 import { incrementTab } from '/redux/tabs/tabSlice';
 import { SignupSchema, getInvoices } from './states';
 import { yupResolver } from "@hookform/resolvers/yup";
-import {createNotification} from '/functions/notifications';
+import { createNotification } from '/functions/notifications';
 import openNotification from '/Components/Shared/Notification';
+import FullScreenLoader from '/Components/Shared/FullScreenLoader';
 
-const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type}) => {
+const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type, refetch}) => {
 
   const {register, control, handleSubmit, reset, formState:{errors}, watch } = useForm({
     resolver:yupResolver(SignupSchema), defaultValues:state.values
   });
 
-  const [check, setCheck] = useState(state.selectedRecord.approved == 1 ? true : false);
+  //const [check, setCheck] = useState(state.selectedRecord?.approved == 1 ? true : false);
   const approved = useWatch({control, name:"approved"});
   const subType = useWatch({control, name:"subType"});
   const dispatchNew = useDispatch();
@@ -36,13 +37,15 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
       let tempState = {...jobData};
       let tempVoyageList = [...state.voyageList];
       tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage);
-      tempState = { ...tempState,
+      tempState = { 
+        ...tempState,
         customCheck: tempState.customCheck!==""?tempState.customCheck.split(", "):"",
         transportCheck:tempState.transportCheck!==""?tempState.transportCheck.split(", "):"",// tempState.transportCheck.split(", "),
         eta: tempState.eta==""?"":moment(tempState.eta),
         etd: tempState.etd==""?"":moment(tempState.etd),
         approved: tempState.approved=="true"?["1"]:[],
-        //val.length==0?false:val[0]=="1"?false:true 
+        //val.length==0?false:val[0]=="1"?false:true
+
         arrivalDate: tempState.arrivalDate==""?"":moment(tempState.arrivalDate),
         arrivalTime: tempState.arrivalTime==""?"":moment(tempState.arrivalTime),
         departureDate: tempState.departureDate==""?"":moment(tempState.departureDate),
@@ -66,7 +69,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
         vgmCutOffDate:tempState.vgmCutOffDate==""?"":moment(tempState.vgmCutOffDate),
         vgmCutOffTime:tempState.vgmCutOffTime==""?"":moment(tempState.vgmCutOffTime)
       }
-      let tempEquipments = []
+      let tempEquipments = [];
       if(tempState.SE_Equipments.length>0){
         let tempEquips = tempState.SE_Equipments;
         //tempEquips.push({id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''})
@@ -112,6 +115,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
           data
         }).then((x)=>{
           if(x.data.status=='success'){
+              refetch()
               openNotification('Success', `Job Created!`, 'green');
               dispatchNew(incrementTab({
                 "label": type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
@@ -136,7 +140,6 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
     data.equipments = state.equipments
     data.customAgentId = data.customCheck.length>0?data.customAgentId:null;
     data.transporterId = data.transportCheck.length>0?data.transporterId:null;
-
     data.VoyageId = data.VoyageId!=""?data.VoyageId:null;
     data.ClientId = data.ClientId!=""?data.ClientId:null;
     data.shippingLineId = data.shippingLineId!=""?data.shippingLineId:null;
@@ -169,7 +172,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
           if(x.data.status=='success'){
               openNotification('Success', `Job Updated!`, 'green')
               createNotification(notification)
-
+              refetch();
           }else{
               openNotification('Error', `An Error occured Please Try Again!`, 'red')
           }
@@ -219,7 +222,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
         </Tabs.TabPane>
       }
       </Tabs>
-      {(state.tabState=="1") &&
+      {(state.tabState=="1"||state.tabState=="2"||state.tabState=="3") &&
       <>
         <button type="submit" disabled={state.load?true:false} className='btn-custom mt-3'>
           {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Save Job'}
@@ -227,6 +230,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
       </>
       }
     </form>
+    {state.load && <FullScreenLoader/>}
   </div>
   )
 }

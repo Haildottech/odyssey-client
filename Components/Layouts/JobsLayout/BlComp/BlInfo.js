@@ -10,18 +10,16 @@ import { Modal, Select } from 'antd';
 import JobSearch from './JobSearch';
 import moment from 'moment';
 
-const BlInfo = ({control, id, register, state, useWatch, dispatch, reset, type}) => {
+const BlInfo = ({control, id, register, state, useWatch, dispatch, reset, type, currentJobValue}) => {
 
     const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b})
     const allValues = useWatch({control});
-    const currentJobValue = useSelector((state) => state.blCreationValues.value);
 
     useEffect(() => {
-        console.log(type)
         const retrieveData = async() => {
             if(id=='new'){
                 let jobValue = await fetchJobsData(set, dispatch, currentJobValue);
-                setJob(set, jobValue[0], state, reset, allValues, dispatch, id)
+                setJob(set, jobValue[0], state, reset, allValues, dispatch, id);
             }
         }
         retrieveData();
@@ -65,7 +63,7 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset, type})
                     <div className='mt-2'></div>
                     <InputComp register={register} name='hbl' control={control} width={150} 
                         label={(type=="SE"||type=="SI")?'HBL # *':"HAWB #*"}
-                        disabled={(type=="SI"||type=="AI")?false:true} 
+                        disabled={(type=="SI"||type=="AI"||type=="AE")?false:true} 
                     />
                 </Col>
                 <Col md={12}>

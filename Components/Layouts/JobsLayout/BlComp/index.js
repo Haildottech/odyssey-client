@@ -17,13 +17,17 @@ import { setAndFetchBlData, recordsReducer, initialState, baseValues } from "./s
 import axios from 'axios';
 import ItemDetail from "./ItemDetail";
 import ChargesDetail from "./ChargesDetail";
+import { useJobDataQuery } from '/redux/apis/seJobValues';
 
-const NewBl = ({ id, blData, partiesData, type}) => {
+const NewBl = ({id, blData, partiesData, type}) => {
 
+  const currentJobValue = useSelector((state) => state.blCreationValues.value);
   const [state, dispatch] = useReducer(recordsReducer, initialState);
   const set = (a, b) => dispatch({ type: "toggle", fieldName: a, payload: b });
   const [deleteArr, setDeleteArr] = useState([]);
   const dispatchNew = useDispatch();
+  const { refetch } = useJobDataQuery({id:blData.SEJobId, operation:type});
+  
   const { register, control, handleSubmit, reset, formState: { errors }, } = useForm({
     defaultValues: state.values,
   });
@@ -94,6 +98,7 @@ const NewBl = ({ id, blData, partiesData, type}) => {
         openNotification("Error","something went wrong, try again with correct values","red");
       }
       set("load", false);
+      refetch();
     });
   };
 
@@ -143,7 +148,7 @@ const NewBl = ({ id, blData, partiesData, type}) => {
             set("load", false);
           }
         })
-
+        refetch();
     getStamps();
   };
 
@@ -164,7 +169,7 @@ const NewBl = ({ id, blData, partiesData, type}) => {
         <form onSubmit={handleSubmit(id != "new" ? onEdit : onSubmit, onError)}>
           <Tabs defaultActiveKey={state.tabState} activeKey={state.tabState} onChange={(e)=>dispatch({ type:"toggle", fieldName:"tabState", payload:e })}>
             <Tabs.TabPane tab={(type=="SE"||type=="SI")?"BL Info.":"AWB Info"} key="1">
-              <BlInfo control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} type={type} />
+              <BlInfo control={control} id={id} register={register} state={state} useWatch={useWatch} dispatch={dispatch} reset={reset} type={type} currentJobValue={currentJobValue} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={(type=="SE"||type=="SI")?"Container Info":"Item Detail"} key="2">
               {(type=="SE"|| type=="SI") && <ContainerInfo control={control} id={id} register={register} 
@@ -188,7 +193,12 @@ const NewBl = ({ id, blData, partiesData, type}) => {
           </Tabs>
           {allValues.jobNo && (
             <button type="submit" disabled={state.load ? true : false} className="btn-custom mt-3">
-              {state.load ? <Spinner animation="border" size="sm" className="mx-3" />:"Save BL"}
+              {state.load ? 
+                <Spinner animation="border" size="sm" className="mx-3" />:
+                <>
+                  {(type=="SE"||type=="SI")?"Save BL":"Save AWBL"}
+                </>
+                }
             </button>
           )}
         </form>

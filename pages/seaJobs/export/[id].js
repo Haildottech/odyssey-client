@@ -3,10 +3,10 @@ import React from 'react';
 import axios from "axios";
 import Jobs from '/Components/Layouts/JobsLayout/Jobs';
 
-const seExport = ({jobData, id, fieldsData}) => {
+const seExport = ({id, type}) => {
   return (
     <>
-      <Jobs jobData={jobData} id={id} fieldsData={fieldsData} type={"SE"} />
+      <Jobs id={id} type={type} />
     </>
   )
 }
@@ -14,19 +14,8 @@ export default seExport
 
 export async function getServerSideProps(context) {
   const { params } = context;
-  let jobData = {};
-  const fieldsData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SEAJOB_VALUES).then((x)=>x.data);
-  if(params.id!="new"){
-    jobData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SE_JOB_BY_ID,{
-      headers:{ "id": `${params.id}` }
-    }).then((x)=>x.data.result);
-    if (!jobData.id) {
-      return {
-        notFound: true
-      }
-    }
-  }
+
   return {
-    props: { jobData:jobData, id:params.id, fieldsData:fieldsData,  }
+    props: { id:params.id, type:"SE" }
   }
 }

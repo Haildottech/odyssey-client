@@ -2,49 +2,54 @@ import React, { useEffect, useReducer } from 'react';
 import { recordsReducer, initialState, baseValues } from './states';
 import CreateOrEdit from './CreateOrEdit';
 import { useSelector, useDispatch } from 'react-redux';
-import { appendValue } from '/redux/seJobValues/seJobValuesSlice';
 import Cookies from "js-cookie";
+import { useJobValuesQuery, useJobDataQuery } from '/redux/apis/seJobValues';
 
-const SeJob = ({fieldsData, jobData, id, type}) => {
+const SeJob = ({id, type}) => {
+
+  const { data, isSuccess:dataSuccess } = useJobValuesQuery();
+  const { data:newdata, isSuccess, refetch } = useJobDataQuery({id:id, operation:type});
   const companyId = useSelector((state) => state.company.value);
-  const seJobValues = useSelector((state) => state.seJobValues.values);
   const tabs = useSelector((state) => state.tabs.value);
-  const [ state, dispatch ] = useReducer(recordsReducer, initialState);
 
+  const [ state, dispatch ] = useReducer(recordsReducer, initialState);
   const dispatchRedux = useDispatch();
 
   useEffect(() => {
-    let tempPerms = JSON.parse(Cookies.get('permissions'))
-    dispatchRedux(appendValue({...seJobValues, hblDate:"123", hblIssue:"456", deliveryContent:'123'}))
-    let tempChargeList = [];
-    if(fieldsData){
-      fieldsData.result.chargeList.forEach((x) => {
-        tempChargeList.push({...x, label:`(${x.code}) ${x.short}`, value:x.code});
-      });
-      fieldsData.result.chargeList=tempChargeList;
-      fieldsData.result.commodity.forEach((x)=>{
-        x.name = `${x.name} (${x.hs})`
-      })
-      dispatch({type:'set', 
+    let tempPerms = JSON.parse(Cookies.get('permissions'));
+    // console.log(data, 'Job Values')
+    // console.log(newdata, 'Job Data')
+    // console.log(dataSuccess, 'Job Data Success')
+    if(dataSuccess && newdata) {
+      dispatch({type:'set',
         payload:{
-          fields:fieldsData.result,
-          selectedRecord:jobData,
+          fields:data.result,
+          selectedRecord:dataSuccess?newdata?.result:{},
           fetched:true,
           edit:id=="new"?false:true,
           permissions:tempPerms
         }
       })
     }
-  }, [])
-  
+  }, [dataSuccess, isSuccess])
+
   return (
   <>
     <div className='base-page-layout'>
-     {state.fetched && 
-      <>
-      <CreateOrEdit state={state} dispatch={dispatch} baseValues={baseValues} companyId={companyId} jobData={jobData} id={id} type={type} />
-      </>
-     }
+      {state.fetched && 
+        <>
+          <CreateOrEdit
+            jobData={isSuccess?newdata.result:{}}
+            baseValues={baseValues}
+            companyId={companyId}
+            dispatch={dispatch}
+            refetch={refetch}
+            state={state}
+            type={type}
+            id={id}
+          />
+        </>
+      }
     </div>
   </>
   )

@@ -14,7 +14,6 @@ import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "
 const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType}) => {
 
     const { permissions } = state;
-
     const [ selection, setSelection ] = useState({
         partyId:null,
         InvoiceId:null
@@ -32,7 +31,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     const calculate  = () => {
         let tempChargeList = [...chargeList];
         for(let i = 0; i<tempChargeList.length; i++){
-            let amount = tempChargeList[i].amount - tempChargeList[i].discount;
+            let amount = tempChargeList[i].amount*tempChargeList[i].rate_charge - tempChargeList[i].discount;
             let tax = 0.00;
             if(tempChargeList[i].tax_apply==true){
                 tax = (amount/100.00) * tempChargeList[i].taxPerc;
@@ -69,7 +68,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     type:type, description:'', basis:'', 
                     new:true,  ex_rate: parseFloat(state.exRate), pp_cc:state.selectedRecord.freightType=="Prepaid"?'PP':'CC', 
                     local_amount: 0,  size_type:'40HC', dg_type:state.selectedRecord.dg=="Mix"?"DG":state.selectedRecord.dg, 
-                    qty:1, currency:'USD', amount:0, check: false, bill_invoice: '', charge: '', particular: '',
+                    qty:1, rate_charge:1, currency:'USD', amount:1, check: false, bill_invoice: '', charge: '', particular: '',
                     discount:0, tax_apply:false, taxPerc:0.00, tax_amount:0, net_amount:0, invoiceType:"", name: "", 
                     partyId:"", sep:false, status:'', approved_by:'', approval_date:'', InvoiceId:null, 
                     SEJobId:state.selectedRecord.id
@@ -87,7 +86,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     getHeadsNew(state.selectedRecord.id, dispatch);
                 }
             }}
-        >Save</div>
+        >Save Charges</div>
         <div className='div-btn-custom-green text-center py-1 mx-2 px-3' style={{float:'right'}}
             onClick={async()=>{
                 if(!state.chargeLoad){
@@ -121,9 +120,10 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
           <th>Particular</th>
           <th>Basis</th>
           <th>PP/CC</th>
-          <th>SizeType</th>
-          <th style={{minWidth:95}}>DG Type</th>
-          <th>Qty</th>
+          {(operationType!="AI"||operationType!="AE") &&<th>SizeType</th>}
+          {(operationType!="AI"||operationType!="AE") &&<th style={{minWidth:95}}>DG Type</th>}
+          <th>Qty/Weight</th>
+          {(operationType=="AI"||operationType=="AE")&&<th>Rate</th>}
           <th>Currency</th>
           <th>Amount</th>
           <th>Discount</th>
@@ -245,7 +245,8 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             />
         </td>
         <td>{x.particular}</td>
-        <td>{x.invoiceType} {/* Basis */}</td>
+        <td>{x.basis} {/* Basis */}
+        </td>
         <td style={{ padding: 3, minWidth: 50 }}> {/* PP?CC */}
             <SelectComp register={register} name={`chargeList.${index}.pp_cc`} control={control} width={60} font={13} 
                 disabled={permissionAssign(permissions, x)}
@@ -255,7 +256,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 ]}
             />
         </td>
-        <td style={{ padding: 3 }}> {/* Size/Type */}
+        {(operationType!="AI"||operationType!="AE") &&<td style={{ padding: 3 }}> {/* Size/Type */}
             <SelectSearchComp register={register} name={`chargeList.${index}.size_type`} control={control} width={100} font={13} 
             disabled={permissionAssign(permissions, x)}
                 options={[
@@ -263,19 +264,23 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     { id: '20HC', name: '20HC' }
                 ]}
             />
-        </td>
-        <td style={{ padding: 3 }}> {/* DG */}
+        </td>}
+        {(operationType!="AI"||operationType!="AE") &&<td style={{ padding: 3 }}> {/* DG */}
             <SelectSearchComp register={register} name={`chargeList.${index}.dg_type`} control={control} width={95} font={13} disabled={permissions.admin?false:x.InvoiceId!=null?true:false}
                 options={[
                     { id: 'DG', name: 'DG' },
                     { id: 'non-DG', name: 'non-DG' }
                 ]}
             />
-        </td>
+        </td>}
         <td style={{ padding: 3 }}>{/* QTY */}
             <InputNumComp register={register} name={`chargeList.${index}.qty`} control={control} width={30} font={13} 
             disabled={permissionAssign(permissions, x)}/>
         </td> 
+        {(operationType=="AI"||operationType=="AE") &&<td style={{ padding: 3 }}>{/* rate_charge */}
+            <InputNumComp register={register} name={`chargeList.${index}.rate_charge`} control={control} width={30} font={13} 
+            disabled={permissionAssign(permissions, x)}/>
+        </td> }
         <td style={{ padding: 3 }} > {/* Currency */}
             <SelectSearchComp register={register} name={`chargeList.${index}.currency`} control={control} width={100} font={13} 
             disabled={permissionAssign(permissions, x)}
@@ -290,7 +295,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         </td>
         <td style={{ padding: 3 }}> {/* Amount */}
             <InputNumComp register={register} name={`chargeList.${index}.amount`} control={control} label='' width={20} 
-            disabled={permissionAssign(permissions, x)} />
+            disabled={(operationType=="AI"||operationType=="AE")?true:permissionAssign(permissions, x)} />
         </td>
         <td style={{ padding: 3 }}>  {/* Discount */}
             <InputNumComp register={register} name={`chargeList.${index}.discount`} control={control} width={30} font={13} 
