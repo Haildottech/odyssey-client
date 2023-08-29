@@ -19,7 +19,7 @@ import ItemDetail from "./ItemDetail";
 import ChargesDetail from "./ChargesDetail";
 import { useJobDataQuery } from '/redux/apis/seJobValues';
 
-const NewBl = ({id, blData, partiesData, type}) => {
+const BlComp = ({id, blData, partiesData, type}) => {
 
   const currentJobValue = useSelector((state) => state.blCreationValues.value);
   const [state, dispatch] = useReducer(recordsReducer, initialState);
@@ -60,7 +60,6 @@ const NewBl = ({id, blData, partiesData, type}) => {
   };
 
   const onSubmit = async (data) => {
-    
     set("load", true);
     let tempData = {
       ...data,
@@ -81,7 +80,9 @@ const NewBl = ({id, blData, partiesData, type}) => {
       measurementContent: state.measurementContent,
       Container_Infos: state.Container_Infos,
       deletingContinersList: state.deletingContinersList,
-      Item_Details:state.Item_Details
+      Item_Details:state.Item_Details,
+      Dimensions:state.Dimensions,
+      applyToCWT:data.applyToCWT[0]==1?'1':'0'
     };
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_BL, tempData).then((x) => {
       if (x.data.status == "success") {
@@ -103,6 +104,7 @@ const NewBl = ({id, blData, partiesData, type}) => {
   };
 
   const onEdit = async (data) => {
+
     set("load", true);
     const stamps = data.stamps?.map((x) => ({
       ...x,
@@ -132,6 +134,9 @@ const NewBl = ({id, blData, partiesData, type}) => {
       deletingContinersList: state.deletingContinersList,
       Item_Details:state.Item_Details,
       deletingItemList:state.deletingItemList,
+      Dimensions:state.Dimensions,
+      deletingDimensionsList:state.deletingDimensionsList,
+      applyToCWT:data.applyToCWT[0]==1?'1':'0'
     };
     let emp = stamps?.find(
       (x) => x.code == undefined && x.stamp_group == undefined
@@ -207,4 +212,4 @@ const NewBl = ({id, blData, partiesData, type}) => {
   );
 };
 
-export default React.memo(NewBl);
+export default React.memo(BlComp);

@@ -5,7 +5,7 @@ import ports from "/jsonData/ports";
 import inWords from '/functions/numToWords';
 import Cookies from 'js-cookie';
 
-const InvoicePrint = ({records, invoice, calculateTotal}) => {
+const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => {
 
     const getPort = (id) => {
         const index = ports.ports.findIndex(element => element.id == id);
@@ -265,13 +265,8 @@ const InvoicePrint = ({records, invoice, calculateTotal}) => {
     <Row className='mx-0'>
         <Col md={6} className='p-1' style={{borderRight:border, borderLeft:border, borderBottom:border}}>
             <b className='fw-8' style={{fontSize:12}}>Bank Details</b>
-            <div style={{fontSize:12, lineHeight:1.5}}>
-                IBAN: PK08 BAHL 1054 0081 0028 1201<br/>
-                A/C #: 1054-0081-002182-01-5<br/>
-                TITLE: SEANET SHIPPING & LOGISTICS<br/>
-                BANK: BANL AL HABIB LIMITED<br/>
-                BRANCH: TARIQ ROAD 1054, KARACHI<br/>
-                SWIFT: BAHLPKKAXXX
+            <div style={{fontSize:12, lineHeight:0.7, whiteSpace:'pre-wrap', position:'relative', right:10}}>
+                {bank==1?bankDetails.one:bank==2?bankDetails.two:bankDetails.three}
             </div>
         </Col>
     </Row>

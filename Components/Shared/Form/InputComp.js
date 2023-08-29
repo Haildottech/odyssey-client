@@ -32,7 +32,7 @@ const InputComp = (props) => {
       <div>{props.label}</div>
       <Input 
         disabled={props.disabled} style={{minWidth:props.width}} {...props.field} 
-        name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} showSearch
+        name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur}
       />
     </>
   )

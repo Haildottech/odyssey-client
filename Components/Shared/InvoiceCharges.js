@@ -6,17 +6,14 @@ import axios from 'axios';
 import openNotification from '../Shared/Notification';
 import FullScreenLoader from './FullScreenLoader';
 import InvoicePrint from './InvoicePrint';
-import { Checkbox, Popover, Input } from 'antd';
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Paragraph from '@tiptap/extension-paragraph';
-import BulletList from '@tiptap/extension-bullet-list';
+import { Checkbox, Popover, Input, Radio } from 'antd';
 const { TextArea } = Input;
 
 const InvoiceCharges = ({data, companyId}) => {
 
   let inputRef = useRef(null);
-  
+
+  const [bank, setBank] = useState(1);
   const [invoiceData, setInvoiceData] = useState(false);
   const [records, setRecords] = useState([]);
   const [invoice, setInvoice] = useState({
@@ -38,7 +35,31 @@ const InvoiceCharges = ({data, companyId}) => {
   const [ref, setRef] = useState(false);
   const [logo, setLogo] = useState(false);
   const [balance, setBalance] = useState(false);
-  
+
+  let bankDetails = {
+    one:`
+    IBAN: PK08 BAHL 1054 0081 0028 1201 \n
+    A/C #: 1054-0081-002182-01-5 \n
+    TITLE: SEANET SHIPPING & LOGISTICS \n
+    BANK: BANL AL HABIB LIMITED \n
+    BRANCH: TARIQ ROAD 1054, KARACHI \n
+    SWIFT: BAHLPKKAXXX`,
+    two:`
+    IBAN: PK08 BAHL 1054 0081 0028 1201 \n
+    A/C #: 1054-0081-002182-01-5 \n
+    TITLE: AIR CARGO SERVICES \n
+    BANK: BANL AL HABIB LIMITED \n
+    BRANCH: TARIQ ROAD 1054, KARACHI \n
+    SWIFT: BAHLPKKAXXX`,
+    three:`
+    IBAN: PK08 BAHL 1054 0081 0028 1201 \n
+    A/C #: 1054-0081-002182-01-5 \n
+    TITLE: CARGO LINKERS \n
+    BANK: BANL AL HABIB LIMITED \n
+    BRANCH: TARIQ ROAD 1054, KARACHI \n
+    SWIFT: BAHLPKKAXXX`
+  }
+
   useEffect(()=>{
     if(Object.keys(data).length>0){
         setInvoice(data.resultOne);
@@ -258,7 +279,7 @@ const InvoiceCharges = ({data, companyId}) => {
 return (
   <>
     {load && <FullScreenLoader/>}
-    <div className='invoice-styles'>
+    <div className='invoice-styles' style={{maxHeight:800}}>
     {Object.keys(data).length>0 &&
     <>
     <div style={{maxWidth:70}}>
@@ -358,7 +379,7 @@ return (
         </Col>
     </Row>
     <div style={{minHeight:300}}>
-        <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto'}}>
+        <div className='table-sm-1 mt-3' style={{maxHeight:250, overflowY:'auto'}}>
         <Table className='tableFixHead' bordered>
         <thead>
             <tr className='table-heading-center'>
@@ -428,15 +449,26 @@ return (
         </div>
     </div>
     <Row>
-        <Col className='mx-2' md={4}>
-            Note
+        <Col className='mx-2 pt-3' md={4}>
+            <h5>Note</h5>
             <div style={{border:"1px solid silver"}}>
-            <TextArea rows={4} value={invoice.note} onChange={(e)=>setInvoice({...invoice, note:e.target.value})} />
+                <TextArea rows={4} value={invoice.note} onChange={(e)=>setInvoice({...invoice, note:e.target.value})} />
+            </div>
+            <button className='btn-custom mt-3' onClick={updateNote} type='button'>Save Note</button>
+        </Col>
+        <Col className='px-0' md={4}>
+            <Radio.Group onChange={(e)=>setBank(e.target.value)} value={bank} >
+                <Radio value={1}>BANK A</Radio>
+                <Radio value={2}>BANK B</Radio>
+                <Radio value={3}>BANK C</Radio>
+            </Radio.Group>
+            <div style={{border:"1px solid silver"}}>
+             <div style={{fontSize:12, lineHeight:0.8, whiteSpace:'pre-wrap', paddingBottom:10}}>
+                {bank==1?bankDetails.one:bank==2?bankDetails.two:bankDetails.three}
+            </div>
             </div>
         </Col>
-        <Col className='py-4'>
-            <button className='btn-custom' onClick={updateNote} type='button'>Save Note</button>
-        </Col>
+        <Col md={2}></Col>
     </Row>
     <hr/>
     <div>
@@ -459,7 +491,7 @@ return (
             display:"none"
         }}>
         <div ref={(response)=>(inputRef=response)}>
-            {invoice && <InvoicePrint records={records} invoice={invoice} calculateTotal={calculateTotal} /> }
+            {invoice && <InvoicePrint records={records} bank={bank} bankDetails={bankDetails} invoice={invoice} calculateTotal={calculateTotal} /> }
         </div>
     </div>
     </div>

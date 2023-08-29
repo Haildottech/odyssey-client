@@ -2,8 +2,9 @@ import { useForm, useWatch, useFormContext } from "react-hook-form";
 import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 import openNotification from '/Components/Shared/Notification';
 import SelectComp from '/Components/Shared/Form/SelectComp';
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useJobValuesQuery } from '/redux/apis/seJobValues';
 import InputComp from '/Components/Shared/Form/InputComp';
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Row, Col, Spinner } from 'react-bootstrap';
 import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
@@ -13,9 +14,9 @@ import axios from 'axios';
 
 const CreateOrEdit = ({state, dispatch, baseValues}) => {
 
+    const { refetch } = useJobValuesQuery();
     const SignupSchema = yup.object().shape({
-        name: yup.string().required('Required'),
-        hs: yup.string().required('Required'),
+        name: yup.string().required('Required')
     });
 
     const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
@@ -35,28 +36,26 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     }, [state.selectedRecord])
 
     const isHazmat = useWatch({control, name:"isHazmat"});
-
+    const onError = (errors) => console.log(errors);
     const onSubmit = async(data) => {
         dispatch({type:'toggle', fieldName:'load', payload:true});
-        console.log(data);
         setTimeout(async() => {             
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_COMMODITY,{
                 data
-            }).then((x)=>{
-                console.log(x.data)
+            }).then(async(x)=>{
                 if(x.data.status!='success'){
                     openNotification('Error', `Error Occured Try Again!`, 'red')
                 }else{
                     openNotification('Success', `Commodity Created!`, 'green');
                     let tempRecord = [...state.records];
-                    console.log(x.data.result)
                     tempRecord.unshift(x.data.result);
                     dispatch({type:'toggle', fieldName:'records', payload:tempRecord});
                     dispatch({ type: 'modalOff' })
+                    await refetch()
                 }
-                dispatch({type:'toggle', fieldName:'load', payload:false});
+                await dispatch({type:'toggle', fieldName:'load', payload:false});
             })
-         }, 3000);
+        }, 3000);
     };
 
     const onEdit = async(data) => {
@@ -64,10 +63,8 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
         dispatch({type:'toggle', fieldName:'load', payload:true});
         //console.log(data);
         setTimeout(async() => {             
-            await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_COMMODITY,{
-                data
-            }).then((x)=>{
-                console.log(x.data)
+            await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_COMMODITY,{data})
+            .then(async(x)=>{
                 if(x.data.status=='exists'){
                     openNotification('Error', `Same Code Already Exists!`, 'red')
                 }else{
@@ -78,12 +75,12 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                     tempRecords[i] = x.data.result;
                     dispatch({type:'toggle', fieldName:'records', payload:tempRecords});
                     dispatch({ type: 'modalOff' })
+                    await refetch()
                 }
                 dispatch({type:'toggle', fieldName:'load', payload:false});
             })
          }, 3000);
     };
-    const onError = (errors) => console.log(errors);
 
   return (
     <div className='client-styles' style={{maxHeight:720, overflowY:'auto', overflowX:'hidden'}}>

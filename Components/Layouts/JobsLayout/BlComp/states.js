@@ -1,5 +1,5 @@
-import moment from "moment";
 import { delay } from "/functions/delay";
+import moment from "moment";
 import axios from "axios";
 
 function recordsReducer(state, action){
@@ -65,6 +65,7 @@ function recordsReducer(state, action){
 };
 
 const baseValues = {
+
   //Basic Info
   id:'',
   operation:'',
@@ -102,13 +103,12 @@ const baseValues = {
   pofd:'',
   pot:'',
   fd:'',
-  
+
   //Second Ports Option
   polTwo:'',
   podTwo:'',
   poDeliveryTwo:'',
   AgentStamp:'',
-
   freightType:"",
   unit:'',
   hs:'',
@@ -155,6 +155,7 @@ const baseValues = {
   ccOtherDueChargeCarrier:0,
   ppTotal:                0,
   ccTotal:                0,
+  applyToCWT:           "0",
 };
 
 const initialState = {
@@ -168,9 +169,11 @@ const initialState = {
   partiesData:[],
   Container_Infos:[],
   Item_Details:[],
+  Dimensions:[{length:'0', width:'0', height:'0', qty:'0', vol:'0', weight:'0'}],
   Stamps_Info:[],
   deletingContinersList:[],
   deletingItemList:[],
+  deletingDimensionsList:[],
 
   //setNotifyParties:false,
   updateContent:false,
@@ -280,8 +283,8 @@ const calculateContainerInfos=(state, set, reset, allValues)=>{
 
 const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) => {
   //const setAll = (obj) => dispatch({type:'set', payload:obj});
-  set("load", true);
   let result = {...blData};
+  set("load", true);
   result.equip = [{}];
   const fetchedResult = await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_FIND_JOB_BY_NO,{ no:result.SE_Job.jobNo }).then((x)=>x.data.result)
   allValues.SEJobId =        fetchedResult[0].id;
@@ -307,12 +310,13 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
   
   //console.log(fetchedResult);
 
-  result.Container_Infos.forEach((x, i)=>{
-    result.Container_Infos[i].date = x.date!=""?moment(x.date):""
-  })
+  // result.Container_Infos.forEach((x, i)=>{
+  //   result.Container_Infos[i].date = x.date!=""?moment(x.date):""
+  // })
   let cbm = 0.0, tare = 0.0, net = 0.0, gross = 0.0, pkgs = 0, unit = "", wtUnit = "";
 
   result.Container_Infos.forEach((x,i) => {
+    x.Container_Infos[i].date = x.date!=""?moment(x.date):""
     if(i==0){ 
       unit= x.unit; wtUnit= x.wtUnit; 
     }
@@ -322,7 +326,7 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
   allValues = {...allValues, gross:""+gross, net:""+net, tare:""+tare, wtUnit, pkgs:""+pkgs, unit, cbm:""+cbm}
 
   let contInfos = result.Container_Infos;
-  
+  console.log(result.Dimension)
   result = {
     ...allValues,
     ...result
@@ -336,10 +340,11 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
 
   result.date1 = result.date1?moment(result.date1):"";
   result.date2 = result.date2?moment(result.date2):"";
-
+  console.log(result.Dimensions)
   dispatch({type:"set",payload:{
     Container_Infos:contInfos,
     Item_Details:result.Item_Details,
+    Dimensions:result.Dimensions,
     load:false,
     updateContent:true,
     shipperContent       :result.shipperContent       ,
@@ -359,12 +364,12 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
 } 
 
 export {
-  initialState,
-  baseValues,
-  convetAsHtml,
   calculateContainerInfos,
+  setAndFetchBlData,
   recordsReducer,
   fetchJobsData,
+  convetAsHtml,
+  initialState,
+  baseValues,
   setJob,
-  setAndFetchBlData 
 }
