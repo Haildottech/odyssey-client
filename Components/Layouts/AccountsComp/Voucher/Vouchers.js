@@ -11,7 +11,11 @@ import { Row, Col } from "react-bootstrap";
 import moment from "moment";
 import axios from "axios";
 
-const Vouchers=({handleSubmit, onSubmit, register, control, errors, CompanyId, child,settlement, reset,voucherData, setSettlement, setChild,load})=>{
+const Vouchers=({
+  handleSubmit, onSubmit, register, control, errors,
+  CompanyId, child, settlement, reset, load,
+  voucherData, setSettlement, setChild, id
+})=>{
 
   const { fields, append, remove } = useFieldArray({
     name: "Voucher_Heads",
@@ -32,11 +36,10 @@ const Vouchers=({handleSubmit, onSubmit, register, control, errors, CompanyId, c
 
   async function getValues(){
     const { chequeNo,  payTo, vType, type } = voucherData;
-    console.log(voucherData)
     let id="";
     let settleId="";
     let ChildAccountId = "";
-    let chequeDate = voucherData.chequeDate==""?"":moment(voucherData.chequeDate);
+    let chequeDate = voucherData.chequeDate?moment(voucherData.chequeDate):"";
     let Voucher_Heads = voucherData.Voucher_Heads?.filter((x)=>x.settlement!=="1");
     voucherData?.Voucher_Heads?.filter((voucher) => {
       if(voucher.settlement === "1") {
@@ -110,10 +113,11 @@ const Vouchers=({handleSubmit, onSubmit, register, control, errors, CompanyId, c
                   { id: "CRV", name: "CRV" },
                   { id: "BRV", name: "BRV" },
                   { id: "BPV", name: "BPV" },
-                  { id: "CR", name: "CR" },
+                  // { id: "CR", name: "CR" },
                   { id: "TV", name: "TV" },
                   { id: "JV", name: "JV" },
                 ]}
+                disabled={id=="new"?false:true}
               />
               <p className="error-line">{errors?.vType?.message}</p>
             </Col>
@@ -127,6 +131,13 @@ const Vouchers=({handleSubmit, onSubmit, register, control, errors, CompanyId, c
                   settlement.length>0?settlement.map((x)=>{
                     return { id: x?.id, name: x?.title };
                   }):[]
+                }
+                disabled={
+                  (
+                    allValues.vType=="CPV"||allValues.vType=="CRV"||
+                    allValues.vType=="BRV"||allValues.vType=="BPV"||
+                    allValues.vType=="TV"
+                  )?false:true
                 }
               />
               {/* <p className="error-line">{errors?.ChildAccountId?.message}</p> */}

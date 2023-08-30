@@ -1,14 +1,14 @@
 import openNotification from "/Components/Shared/Notification";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema, defaultValues } from "./state";
-import { useForm, useWatch  } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import Vouchers from "./Vouchers";
 import moment from "moment";
 import axios from "axios";
 
-const Voucher = ({ id, voucherData }) => {
+const Voucher = ({id, voucherData}) => {
 
   const CompanyId = useSelector((state) => state.company.value);
   const [child, setChild] = useState([]);
@@ -21,7 +21,7 @@ const Voucher = ({ id, voucherData }) => {
   });
 
   const onSubmit = async(data) => {
-
+    let settlementExists = false;
     let tempData = data;
     let settlementAmmount = 0;
     let newObj = {}
@@ -38,10 +38,8 @@ const Voucher = ({ id, voucherData }) => {
       }
     }
     id=="new"?null:newObj.id=tempData.settleId;
-    Object.keys(newObj).length>0?tempData.Voucher_Heads.push(newObj):null;
-    tempData.chequeDate=tempData.chequeDate?moment(tempData.chequeDate).format("DD/MM/YYYY"):"";
+    tempData.ChildAccountId?tempData.Voucher_Heads.push(newObj):null;
     tempData.CompanyId=CompanyId?CompanyId:1;
-
     if(id=="new"){
       delete tempData.id;
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, tempData).then((x)=>{
@@ -62,7 +60,7 @@ const Voucher = ({ id, voucherData }) => {
     <Vouchers handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} control={control}
       reset={reset} setSettlement={setSettlement} errors={errors} settlement={settlement} CompanyId={CompanyId}
       child={child} voucherData={voucherData} setChild={setChild} 
-      load={load} 
+      load={load} id={id}
     />
   );
 };
