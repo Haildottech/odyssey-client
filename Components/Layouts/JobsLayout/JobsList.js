@@ -1,3 +1,4 @@
+import { addValues } from '/redux/persistValues/persistValuesSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import React, { useEffect, useState } from 'react';
@@ -6,6 +7,7 @@ import Router from 'next/router';
 
 const SEJobList = ({ jobsData, sessionData, type }) => {
   
+  const changedValues = useSelector((state)=>state.persistValues);
   const companyId = useSelector((state) => state.company.value);
   const [records, setRecords] = useState([]);
   const dispatch = useDispatch();
@@ -25,7 +27,6 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
       <Col md={1}>
         <button className='btn-custom right'
           onClick={()=>{
-            // dispatch(incrementTab({"label":"SE JOB","key":"4-3","id":"new"}))
             Router.push(`/seaJobs/jobList`)
           }}
         >List</button>
@@ -33,6 +34,9 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
       <Col md={1}>
         <button className='btn-custom right'
           onClick={()=>{
+            let obj = {...changedValues.value}
+            obj[type] = ""
+            dispatch(addValues(obj));
             dispatch(incrementTab({
               "label":type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
               "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
@@ -58,12 +62,9 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
         return (
           <tr key={index} className='f row-hov'
             onClick={() => {
-              // dispatch(incrementTab({
-              //   "label": type=="SE"?"SE JOB":"SI JOB",
-              //   "key":type=="SE"?"4-3":"4-6",
-              //   "id":x.id
-              // }))
-              // Router.push(type=="SE"?`/seaJobs/export/${x.id}`:`/seaJobs/import/${x.id}`)
+              let obj = {...changedValues.value}
+              obj[type] = ""
+              dispatch(addValues(obj));
               dispatch(incrementTab({
                 "label":type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
                 "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
@@ -74,7 +75,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
                 type=="SI"?`/seaJobs/import/${x.id}`:
                 type=="AE"?`/airJobs/export/${x.id}`:
                 `/airJobs/import/${x.id}`
-                )
+              )
             }}
           >
             <td>{index + 1}</td>

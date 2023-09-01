@@ -6,7 +6,7 @@ import Charges from './Charges';
 import { getHeadsNew } from '../states';
 import { useSelector } from 'react-redux';
 
-const ChargesComp = ({state, dispatch, type}) => {
+const ChargesComp = ({state, dispatch, type, allValues}) => {
 
   const companyId = useSelector((state) => state.company.value);
 
@@ -23,11 +23,10 @@ const ChargesComp = ({state, dispatch, type}) => {
       control,
       name: "chargeList"
   });
-
   const chargeList = useWatch({ control, name: 'chargeList' });
 
   useEffect(() => {
-   reset({chargeList:[ ...state.reciveableCharges, ...state.paybleCharges ]})
+    reset({chargeList:[ ...state.reciveableCharges, ...state.paybleCharges ]})
   }, [state.reciveableCharges, state.paybleCharges])
     
   return (
@@ -37,13 +36,13 @@ const ChargesComp = ({state, dispatch, type}) => {
       <Tabs.TabPane tab="Recievable" key="1">
         <Charges state={state} dispatch={dispatch} chargeType={state.reciveableCharges} type={"Recievable"} 
           chargeList={chargeList} fields={fields} append={append} reset={reset} control={control} register={register}
-          companyId={companyId} operationType={type}
+          companyId={companyId} operationType={type} allValues={allValues}
         />
       </Tabs.TabPane>
       <Tabs.TabPane tab="Payble" key="2">
         <Charges state={state} dispatch={dispatch} chargeType={state.paybleCharges} type={"Payble"} 
           chargeList={chargeList} fields={fields} append={append} reset={reset} control={control} register={register}
-          companyId={companyId} operationType={type}
+          companyId={companyId} operationType={type} allValues={allValues}
         />
       </Tabs.TabPane>
     </Tabs>

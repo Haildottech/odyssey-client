@@ -9,15 +9,14 @@ export const seJobValues = createApi({
             keepUnusedDataFor:60*60*24
         }),
         jobData: builder.query({
-            //query: (id) => `/seaJob/getSEJobById`
             query(args) {
-                console.log(args);
+                console.log("Data Refetched")
                 return {
                   url: `/seaJob/getSEJobById`,
                   headers: {"id":`${args.id}`, operation:`${args.operation}`}
                 }
             },
-            keepUnusedDataFor:60*60*24
+            keepUnusedDataFor:60*60*24,
         })
     })
 })

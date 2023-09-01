@@ -8,7 +8,6 @@ import Loader from '/Components/Shared/Loader';
 import Router, { useRouter  } from 'next/router';
 import { store } from '/redux/store';
 import { Provider } from 'react-redux';
-
 // abdullah-branch
 
 function MyApp({ Component, pageProps:{ session, ...pageProps }, }) {
@@ -23,14 +22,14 @@ function MyApp({ Component, pageProps:{ session, ...pageProps }, }) {
     <>
       { router.pathname !='/login' &&
           <Provider store={store}>
-          <MainLayout>
+            <MainLayout>
               { loading && <Loader/> }
               { !loading && <Component {...pageProps} /> }
-          </MainLayout>
+            </MainLayout>
           </Provider>
       }
       { router.pathname =='/login' &&
-        <Component {...pageProps} />
+          <Component {...pageProps} />
       }
     </>
   )

@@ -276,9 +276,7 @@ const calculateContainerInfos=(state, set, reset, allValues)=>{
   })
   set('saveContainers',false);
   allValues = {...allValues, gross:""+gross, net:""+net, tare:""+tare, wtUnit, pkgs:""+pkgs, unit, cbm:""+cbm}
-
   reset(allValues);
-
 }
 
 const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) => {
@@ -316,7 +314,7 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
   let cbm = 0.0, tare = 0.0, net = 0.0, gross = 0.0, pkgs = 0, unit = "", wtUnit = "";
 
   result.Container_Infos.forEach((x,i) => {
-    x.Container_Infos[i].date = x.date!=""?moment(x.date):""
+    //x.Container_Infos[i].date = x.date!=""?moment(x.date):""
     if(i==0){ 
       unit= x.unit; wtUnit= x.wtUnit; 
     }
@@ -326,7 +324,6 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
   allValues = {...allValues, gross:""+gross, net:""+net, tare:""+tare, wtUnit, pkgs:""+pkgs, unit, cbm:""+cbm}
 
   let contInfos = result.Container_Infos;
-  console.log(result.Dimension)
   result = {
     ...allValues,
     ...result
@@ -340,7 +337,6 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
 
   result.date1 = result.date1?moment(result.date1):"";
   result.date2 = result.date2?moment(result.date2):"";
-  console.log(result.Dimensions)
   dispatch({type:"set",payload:{
     Container_Infos:contInfos,
     Item_Details:result.Item_Details,

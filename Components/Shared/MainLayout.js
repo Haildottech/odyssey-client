@@ -16,15 +16,18 @@ const { Header, Content, Sider } = Layout;
 const MainLayout = ({children}) => {
 
   const newRouter = useRouter();
-
+  const dispatch = useDispatch();
   const [load, setLoad] = useState(true);
+  const [company, setCompany] = useState('');
   const [companies, setCompanies] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
-  const [company, setCompany] = useState('');
+  const items = setAccesLevels(dispatch, collapsed);
   const tabs = useSelector((state) => state.tabs.value);
   const tabItems = useSelector((state) => state.tabs.tabs);
-  const dispatch = useDispatch();
-  useEffect(() => { getCompanies(); }, [])
+
+  useEffect(() => { 
+    getCompanies(); 
+  }, [])
 
   async function getCompanies(){
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_COMPANIES)
@@ -38,8 +41,6 @@ const MainLayout = ({children}) => {
       setCompanies(tempState)
     });
   }
-
-  const items = setAccesLevels(dispatch, collapsed);
 
   const handleChange = (value) => {
     Cookies.set('companyId', value, { expires: 1 });
@@ -100,7 +101,6 @@ const MainLayout = ({children}) => {
   }, [newRouter])
 
   const [toggleState, setToggleState] = useState(0);
-  //const [tabItems, setTabItems] = useState([]);
 
   const [tabActive, setTabActive] = useState({
     home:false,
@@ -142,8 +142,6 @@ const MainLayout = ({children}) => {
     aiJob:false,
     aiBl:false,
   });
-
-  //useEffect(()=>{ alterTabs() }, [tabs]);
   
   const memoizedAlterTabs = () => {
     if(Object.keys(tabs).length>0){
@@ -203,7 +201,7 @@ const MainLayout = ({children}) => {
     }
   };
 
-  React.useMemo(() => memoizedAlterTabs(), [tabs]);
+  useEffect(() => memoizedAlterTabs(), [tabs]);
 
   const setKey = (value) => {
     let result = "";
@@ -287,43 +285,43 @@ const MainLayout = ({children}) => {
     }
   };
 
-return (
-  <Layout className="main-dashboard-layout">
-    {!load && 
-    <Sider trigger={null} collapsible collapsed={collapsed} className='side-menu-styles' style={{maxHeight:'100vh',overflowY:'auto'}}>
-      <div className={!collapsed?'big-logo':'small-logo'}>
-        <span>
-          <img src={company=='1'?'/seanet-logo.png':company=='3'?'/aircargo-logo.png':company=='2'?'/cargolinkers-logo.png':null}/>
-          <p>Dashboard</p>
-        </span>
+  return (
+    <Layout className="main-dashboard-layout">
+      {!load && 
+      <Sider trigger={null} collapsible collapsed={collapsed} className='side-menu-styles' style={{maxHeight:'100vh',overflowY:'auto'}}>
+        <div className={!collapsed?'big-logo':'small-logo'}>
+          <span>
+            <img src={company=='1'?'/seanet-logo.png':company=='3'?'/aircargo-logo.png':company=='2'?'/cargolinkers-logo.png':null}/>
+            <p>Dashboard</p>
+          </span>
+        </div>
+        <Menu mode="inline" theme="dark" defaultSelectedKeys={['1']} items={!collapsed?items:[]} />
+      </Sider>
+      }
+      <Layout className="site-layout">
+      <Header className="site-layout-background" style={{padding:0}}>
+      {collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)}><AiOutlineRight /></span>}
+      {!collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)} ><AiOutlineLeft /></span>}
+      <Select style={{width: 155, opacity:0.7}} onChange={handleChange} options={companies} />
+      <span style={{float:'right'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
+      </Header>
+      <Content style={{ margin:'24px 16px', padding:0, minHeight:280}}> 
+      <div className='dashboard-styles'>
+        <div className="bloc-tabs">
+          {tabItems.map((x, index)=>{
+            return(
+            <div key={index} className={toggleState===x.key?"tabs active-tabs":"tabs"}>
+              <button onClick={()=>toggleTab(x)}> {x.label} </button>
+                <CloseOutlined onClick={()=>removeTab(x.key)} className='clos-btn'/>
+            </div>
+          )})}
+        </div>
+        <div className="content-tabs">
+          {children}
+        </div>
       </div>
-      <Menu mode="inline" theme="dark" defaultSelectedKeys={['1']} items={!collapsed?items:[]} />
-    </Sider>
-    }
-    <Layout className="site-layout">
-    <Header className="site-layout-background" style={{padding:0}}>
-    {collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)}><AiOutlineRight /></span>}
-    {!collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)} ><AiOutlineLeft /></span>}
-    <Select style={{width: 155, opacity:0.7}} onChange={handleChange} options={companies} />
-    <span style={{float:'right'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
-    </Header>
-    <Content style={{ margin:'24px 16px', padding:0, minHeight:280}}> 
-    <div className='dashboard-styles'>
-      <div className="bloc-tabs">
-        {tabItems.map((x, index)=>{
-          return(
-          <div key={index} className={toggleState===x.key?"tabs active-tabs":"tabs"}>
-            <button onClick={()=>toggleTab(x)}> {x.label} </button>
-              <CloseOutlined onClick={()=>removeTab(x.key)} className='clos-btn'/>
-          </div>
-        )})}
-      </div>
-      <div className="content-tabs">
-        {children}
-      </div>
-    </div>
-    </Content>
+      </Content>
+      </Layout>
     </Layout>
-  </Layout>
 )};
 export default React.memo(MainLayout);

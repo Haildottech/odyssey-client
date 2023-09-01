@@ -13,7 +13,7 @@ import { incrementTab } from "/redux/tabs/tabSlice";
 import { stamps as stamp } from "./groupData";
 import { validationSchema } from "./validion";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setAndFetchBlData, recordsReducer, initialState, baseValues } from "./states";
+import { setAndFetchBlData, recordsReducer, initialState, baseValues, calculateContainerInfos } from "./states";
 import axios from 'axios';
 import ItemDetail from "./ItemDetail";
 import ChargesDetail from "./ChargesDetail";
@@ -26,7 +26,7 @@ const BlComp = ({id, blData, partiesData, type}) => {
   const set = (a, b) => dispatch({ type: "toggle", fieldName: a, payload: b });
   const [deleteArr, setDeleteArr] = useState([]);
   const dispatchNew = useDispatch();
-  const { refetch } = useJobDataQuery({id:blData.SEJobId, operation:type});
+  const { refetch } = useJobDataQuery({id:id=="new"?currentJobValue:blData.SEJobId, operation:type});
   
   const { register, control, handleSubmit, reset, formState: { errors }, } = useForm({
     defaultValues: state.values,
@@ -37,6 +37,10 @@ const BlComp = ({id, blData, partiesData, type}) => {
     control,
   });
 
+  useEffect(() => {
+    console.log(blData.SEJobId)
+  }, [])
+  
   useEffect(() => {
     set("partiesData", partiesData);
     if (id != "new") {
@@ -84,7 +88,8 @@ const BlComp = ({id, blData, partiesData, type}) => {
       Dimensions:state.Dimensions,
       applyToCWT:data.applyToCWT[0]==1?'1':'0'
     };
-    await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_BL, tempData).then((x) => {
+    await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_BL, tempData).then(async(x) => {
+
       if (x.data.status == "success") {
         openNotification("Success", "BL Created Successfully", "green");
         dispatchNew(
@@ -99,12 +104,10 @@ const BlComp = ({id, blData, partiesData, type}) => {
         openNotification("Error","something went wrong, try again with correct values","red");
       }
       set("load", false);
-      refetch();
     });
   };
 
   const onEdit = async (data) => {
-
     set("load", true);
     const stamps = data.stamps?.map((x) => ({
       ...x,
@@ -141,19 +144,19 @@ const BlComp = ({id, blData, partiesData, type}) => {
     let emp = stamps?.find(
       (x) => x.code == undefined && x.stamp_group == undefined
     );
-    emp
-      ? openNotification("Error", "Fields Can't Be Empty", "red")
-      : await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_BL, tempData)
-        .then((x) => {
-          if (x.data.status == "error") {
-            openNotification("Error", "Something went wrong", "red");
-            set("load", false);
-          } else {
-            openNotification("Success", "Bl Eidted Successfully", "green");
-            set("load", false);
-          }
-        })
-        refetch();
+    emp?openNotification("Error", "Fields Can't Be Empty", "red")
+      :await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_BL, tempData)
+      .then(async(x) => {
+        await refetch();
+        if (x.data.status == "error") {
+          openNotification("Error", "Something went wrong", "red");
+          set("load", false);
+        } else {
+          openNotification("Success", "Bl Eidted Successfully", "green");
+          set("load", false);
+        }
+      })
+    refetch();
     getStamps();
   };
 
@@ -165,6 +168,10 @@ const BlComp = ({id, blData, partiesData, type}) => {
       getStamps();
     }
   }, [state.tabState]);
+
+  useEffect(() => {
+    calculateContainerInfos(state, set, reset, allValues)
+  }, [state.Container_Infos]);
 
   const onError = (errors) => console.log(errors);
 

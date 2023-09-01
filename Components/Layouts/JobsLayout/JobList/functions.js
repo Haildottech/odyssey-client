@@ -1,7 +1,8 @@
 export const calculatePershable = (groupBy, result, setCsvData) => {
     let tempData = [["S No", "AWB Number" ,"Line", "Date",  "Booking", "PCS", "Weight", "Dest", "Tact Rate", "Comm"]]
     for (let index = 0; index < result.length; index++) {
-        let data = !groupBy ? [index + 1, 
+        let data = !groupBy ? [
+          index + 1, 
           result[index].Bl?.hbl ? result[index].Bl.hbl : "",
           result[index].shipping_line?.name ? result[index].shipping_line?.name : "",
           result[index].createdAt ? result[index].createdAt.slice(0, 10) : "",
@@ -11,7 +12,7 @@ export const calculatePershable = (groupBy, result, setCsvData) => {
           result[index].fd ? result[index].fd : "",
           "tact rate",
           result[index].commodity?.name ? result[index].commodity?.name : ""
-        ] : [index + 1, 
+          ] : [index + 1,
           result[index].map((x) => x.Bl?.hbl) ? result[index].map((x) => x.Bl?.hbl) : "",
           result[index].map((x) => x.shipping_line?.name) ? result[index].map((x) => x.shipping_line?.name) : "",
           result[index].map((x) => x.createdAt) ? result[index].map((x) => x.createdAt.slice(0, 10)) : "",

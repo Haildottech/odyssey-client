@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { Col, Row, Table } from 'react-bootstrap';
-import { DatePicker, Input, InputNumber, Select } from 'antd';
+import { Input, InputNumber, Select } from 'antd';
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { calculateContainerInfos } from './states';
 import CheckGroupComp from "/Components/Shared/Form/CheckGroupComp"
 
 const ItemDetail = ({control, register, state, useWatch, dispatch, reset}) => {

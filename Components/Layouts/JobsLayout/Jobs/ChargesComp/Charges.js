@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
 
-const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType}) => {
+const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType, allValues}) => {
 
     const { permissions } = state;
     const [ selection, setSelection ] = useState({
@@ -188,12 +188,14 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 let tempChargeList = [...chargeList];
                 state.fields.chargeList.forEach(async (y, i) => {
                 if (y.code == e) {
+                    console.log(y.calculationType)
                     tempChargeList[index] = {
                         ...tempChargeList[index],
                         charge: e,
                         particular: y.name,
                         basis: y.calculationType,
-                        taxPerc: y.taxApply == "Yes" ? parseFloat(y.taxPerc) : 0.00
+                        taxPerc: y.taxApply == "Yes" ? parseFloat(y.taxPerc) : 0.00,
+                        qty:(y.calculationType!="Per Unit"||allValues.cwtClient=="")?1:allValues.cwtClient
                     }
                     let partyType = "";
                     let choiceArr = ['', 'defaultRecivableParty', 'defaultPaybleParty'];// 0=null, 1=recivable, 2=payble

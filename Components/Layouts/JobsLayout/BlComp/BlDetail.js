@@ -7,12 +7,11 @@ import InputComp from '/Components/Shared/Form/InputComp';
 import InputNumComp from '/Components/Shared/Form/InputNumComp';
 import DateComp from '/Components/Shared/Form/DateComp';
 import TextAreaComp from '/Components/Shared/Form/TextAreaComp';
-import { calculateContainerInfos } from './states';
 
 const BlDetail = ({control, register, state, useWatch, dispatch, reset, type}) => {
 
   const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b});
-
+  const allValues = useWatch({control})
   const Editor = (variable) => useEditor({
     extensions: [
       StarterKit,
@@ -31,20 +30,11 @@ const BlDetail = ({control, register, state, useWatch, dispatch, reset, type}) =
       set(variable, editor.getHTML())
     },
   },[state.updateContent])
-
   const partyDetail = {
     height:80,
     overflowY:'auto',
     padding:0
   }
-
-  const allValues = useWatch({control})
-
-  useEffect(()=>{
-    if(state.tabState==3){
-      calculateContainerInfos(state, set, reset, allValues)
-    }
-  },[state.tabState])
 
 return(
 <div style={{height:600, overflowY:'auto', overflowX:'hidden'}}>

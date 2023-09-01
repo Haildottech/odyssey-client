@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { recordsReducer, initialState, baseValues } from './states';
 import CreateOrEdit from './CreateOrEdit';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import { useJobValuesQuery, useJobDataQuery } from '/redux/apis/seJobValues';
 
@@ -10,16 +10,10 @@ const SeJob = ({id, type}) => {
   const { data, isSuccess:dataSuccess } = useJobValuesQuery();
   const { data:newdata, isSuccess, refetch } = useJobDataQuery({id:id, operation:type});
   const companyId = useSelector((state) => state.company.value);
-  const tabs = useSelector((state) => state.tabs.value);
-
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
-  const dispatchRedux = useDispatch();
 
   useEffect(() => {
     let tempPerms = JSON.parse(Cookies.get('permissions'));
-    // console.log(data, 'Job Values')
-    // console.log(newdata, 'Job Data')
-    // console.log(dataSuccess, 'Job Data Success')
     if(dataSuccess && newdata) {
       dispatch({type:'set',
         payload:{
