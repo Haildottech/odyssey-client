@@ -4,10 +4,16 @@ import CreateOrEdit from './CreateOrEdit';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
 import { useJobValuesQuery, useJobDataQuery } from '/redux/apis/seJobValues';
+import { getJobValues } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
 
 const SeJob = ({id, type}) => {
 
-  const { data, isSuccess:dataSuccess } = useJobValuesQuery();
+  //const { data, isSuccess:dataSuccess } = useJobValuesQuery();
+  const { error, data, isSuccess:dataSuccess } = useQuery({
+    queryKey:['values'],
+    queryFn:getJobValues
+  });
   const { data:newdata, isSuccess, refetch } = useJobDataQuery({id:id, operation:type});
   const companyId = useSelector((state) => state.company.value);
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);

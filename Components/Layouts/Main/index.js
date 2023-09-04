@@ -5,19 +5,25 @@ import Router from 'next/router';
 import { useSelector } from 'react-redux';
 import CSVReader from 'react-csv-reader';
 import { useJobValuesQuery } from '/redux/apis/seJobValues';
+import { getJobValues } from '/apis/jobs';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 const Main = ({sessionData}) => {
 
   const companyId = useSelector((state) => state.company.value);
-  const { data, refetch } = useJobValuesQuery();
+  //const { data, refetch } = useJobValuesQuery();
 
-  useEffect(() => {
-    //  refetch();
-    console.log(data)
-    if(sessionData.isLoggedIn==false){
-      Router.push('/login');
-    }
-  }, [sessionData]);
+  const queryClient = useQueryClient();
+  const { data, status, error } = useQuery({
+    queryKey:['values'],
+    queryFn:getJobValues
+  });
+
+  // useEffect(() => {
+  //   if(sessionData.isLoggedIn==false){
+  //     Router.push('/login');
+  //   }
+  // }, [sessionData]);
 
   return (
     <div className='base-page-layout'>
@@ -79,7 +85,6 @@ const Main = ({sessionData}) => {
               </> 
               */}
           </div>
-
           <div>
           {/* Client List Importer
           <hr/>
@@ -146,7 +151,6 @@ const Main = ({sessionData}) => {
             }}
           /> */}
           </div>
-
           <div>
           {/* <>
           NonGL Parties List Importer
@@ -226,7 +230,6 @@ const Main = ({sessionData}) => {
           />
           </>   */}
           </div>
-
           <div>
           {/* Parties List Importer
           <hr/>
@@ -316,6 +319,18 @@ const Main = ({sessionData}) => {
           </div>
         </>
         }
+        {/* <button onClick={()=>{
+            queryClient.setQueryData(
+              ['values'],
+              // ✅ this is the way
+              (oldData) => oldData ? {
+                ...oldData,
+                result: []
+              } : oldData
+            )
+        }}>
+          Test
+        </button> */}
       </Row>
     </div>
   )

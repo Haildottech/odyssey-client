@@ -8,7 +8,14 @@ import Loader from '/Components/Shared/Loader';
 import Router, { useRouter  } from 'next/router';
 import { store } from '/redux/store';
 import { Provider } from 'react-redux';
-// abdullah-branch
+import { QueryClient, QueryClientProvider, QueryCache } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { 
+    staleTime: 9_600_000,
+    refetchOnWindowFocus: false,
+   }}
+})
 
 function MyApp({ Component, pageProps:{ session, ...pageProps }, }) {
 
@@ -21,15 +28,17 @@ function MyApp({ Component, pageProps:{ session, ...pageProps }, }) {
   return (
     <>
       { router.pathname !='/login' &&
-          <Provider store={store}>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
             <MainLayout>
               { loading && <Loader/> }
               { !loading && <Component {...pageProps} /> }
             </MainLayout>
-          </Provider>
+          </QueryClientProvider>
+        </Provider>
       }
       { router.pathname =='/login' &&
-          <Component {...pageProps} />
+        <Component {...pageProps} />
       }
     </>
   )
