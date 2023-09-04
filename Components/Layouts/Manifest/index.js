@@ -69,10 +69,6 @@ const Index=({manifest})=>{
       </Table>
       </div>
       </div>
-
-
-
-      {/* <CreateOrEdit awbNo={awbNo}/> */}
     </div>
   );
 };

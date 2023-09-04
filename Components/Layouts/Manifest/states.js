@@ -1,7 +1,5 @@
 import * as yup from "yup"; 
 
-
-
 export const initialValue = {
     awb:"",
     mbl:"",
@@ -78,8 +76,44 @@ export const initialValue = {
     visible:false   
 }
 
-
 export const validationSchema = yup.object().shape({
     flight_no: yup.string().required('Flight No is required'),
     point_of_loading: yup.string().required('Point of Loading is required'),
 })
+
+
+
+export const createManifest = ( result, setManifestData) => {
+    let tempData = [[ "S No", "date" ,"Flight no", "Job No", "Owner and Operator", "Point Of Loading",  "Point Of Unloading", "Type Of Aircraft"]]
+        let data = [
+           1, 
+          result.date._i.substr(0, 10),
+          result.flight_no,
+          result.job_no,
+          result.owner_and_operator,
+          result.point_of_loading,
+          result.point_of_unloading,
+          result.type_of_aircraft
+        ]
+        tempData.push(data);
+    setManifestData(tempData);
+}
+
+export const manifestJobs = ( result, setManifestData) => {
+    let tempData = [[ "Field", "AWB No" ,"No Of Pcs", "Nature Of Goods", "G-Weight", "Destination",  "Office Use"]]
+    console.log(result.Manifest_Jobs)
+ 
+    for (let index = 0; index < result.Manifest_Jobs.length; index++) {
+        let data = [
+          result.Manifest_Jobs[index].awb,
+          result.Manifest_Jobs[index].mbl,
+          result.Manifest_Jobs[index].no_of_pc,
+          result.Manifest_Jobs[index].nature_of_good,
+          result.Manifest_Jobs[index].goross_wt,
+          result.Manifest_Jobs[index].destination,
+          result.Manifest_Jobs[index].office_use,
+        ]
+        tempData.push(data);
+        setManifestData(tempData);
+}
+}

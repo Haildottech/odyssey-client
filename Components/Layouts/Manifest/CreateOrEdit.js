@@ -16,11 +16,15 @@ import openNotification from "../../Shared/Notification";
 import { initialValue, validationSchema } from "./states";
 import Router, { useRouter} from 'next/router'
 import { yupResolver } from "@hookform/resolvers/yup";
+import { CSVLink } from "react-csv";
+import { createManifest, manifestJobs } from './states'
 
 const Index=({awbNo, manifest})=>{
 
   const router =  useRouter()
   const [load, setLoad] = useState(false);
+  const [manifestData, setManifestData] = useState();
+  const [manifestJobData, setManifestJobData] = useState([]);
 
   const awbList = awbNo.result.filter((x) => x.Bl?.mbl)
   const { register, handleSubmit, control, reset, formState:{ errors } } = useForm({
@@ -33,8 +37,6 @@ const Index=({awbNo, manifest})=>{
   });
   const all_values = useWatch({control});
 
-  console.log(all_values.Manifest_Jobs?.reduce((x, c) => {return Number(c.no_of_pc) + x},0))
-
   useEffect(() => {
     if (manifest.status == "success"){
       const data = manifest.result;
@@ -43,10 +45,12 @@ const Index=({awbNo, manifest})=>{
         let excludedDate = x.excluded_on_date ? moment(x.excluded_on_date) : "" 
         let requesteDate = x.requested_flight_date ? moment(x.requested_flight_date) : "" 
           return {
-            ...x, excluded_on_date : excludedDate, requested_flight_date: requesteDate
+           ...x, excluded_on_date : excludedDate, requested_flight_date: requesteDate
           }
       });
       reset(data);
+      createManifest(data, setManifestData )
+      manifestJobs(data, setManifestJobData )
     }
   },[])
 
@@ -68,7 +72,7 @@ const Index=({awbNo, manifest})=>{
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_EDIT_MANIFEST, data)
     .then((x)=> {
       if (x.status = "success"){
-        openNotification("Success", "Transaction Recorded!", "green")
+      openNotification("Success", "Transaction Recorded!", "green")
       } 
       setLoad(false)
     })
@@ -235,9 +239,19 @@ const Index=({awbNo, manifest})=>{
           </Table>
         </div>
   
-        <button className="btn-custom" disabled={load ? true : false} type="submit"
+        <button  className="btn-custom" disabled={load ? true : false} type="submit"
         >{load ? <Spinner size="sm" className="mx-3" /> : "Save"}
         </button>
+        {manifestData &&
+        <CSVLink filename={"manifest.csv"} data={manifestData} className='btn-custom mx-3 px-4 py-2 mb-2' style={{color:'white'}}>
+        Download Manifest
+        </CSVLink>
+        }
+         {manifestJobData &&
+        <CSVLink filename={"manifest-jobs.csv"} data={manifestJobData} className='btn-custom mx-3 px-4 py-2 mb-2' style={{color:'white'}}>
+        Download Manifest Jobs
+        </CSVLink>
+        }
       </form>
     </div>
     </>
