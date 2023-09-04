@@ -152,6 +152,11 @@ function setAccesLevels(dispatch, collapsed){
         key: '7-4',
         children: `Content of Tab Pane 2`,
       }),
+      getItem('Manifest List', '7-7',<></>, null, {
+        label: `Manifest List`,
+        key: '7-7',
+        children: `Content of Tab Pane 2`,
+      }),
       // getItem('AWB List', '7-2',<></>, null, {
       //   label: `Air AWBs`,
       //   key: '7-2',

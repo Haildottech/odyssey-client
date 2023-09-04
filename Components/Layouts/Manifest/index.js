@@ -1,9 +1,11 @@
 import React from "react";
-import CreateOrEdit from "./CreateOrEdit"
 import { Row, Col, Table } from "react-bootstrap";
-import moment from "moment";
+import { incrementTab } from '/redux/tabs/tabSlice';
+import { useSelector, useDispatch } from 'react-redux';
 import Router from 'next/router';
 const Index=({manifest})=>{
+
+  const dispatch = useDispatch();
 
   return (
     <div className="base-page-layout">
@@ -14,7 +16,12 @@ const Index=({manifest})=>{
           <button className='btn-custom right'
             onClick={()=>{
               // dispatch(incrementTab({"label":"Voucher","key":"3-5","id":"new"}))
-              Router.push(`/manifest/new`);
+              dispatch(incrementTab({
+                "label":"Manifest",
+                "key":"7-8",
+                "id":"new"
+              }))
+              Router.push(`/airJobs/manifest/new`);
             }}
           >
             Create
@@ -41,7 +48,12 @@ const Index=({manifest})=>{
         <tr key={index} className='f table-row-center-singleLine row-hov' 
           onClick={() => {
           // dispatch(incrementTab({"label":"Voucher","key":"3-5","id":`${x.id}`}));
-          Router.push(`/manifest/${x.id}`);
+          dispatch(incrementTab({
+            "label":"Manifest",
+            "key":"7-8",
+            "id":x.id
+          }))
+          Router.push(`/airJobs/manifest/${x.id}`);
           }}>
           <td>{index + 1}</td>
           <td>{x?.owner_and_operator}</td>

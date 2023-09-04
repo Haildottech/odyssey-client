@@ -34,30 +34,30 @@ const Index=({awbNo, manifest})=>{
 
 
   useEffect(() => {
-    if (manifest.status == "success") {
-    const data = manifest.result
-    data.date = data?.date ? moment(data.date):""
-    data.Manifest_Jobs = data.Manifest_Jobs.map((x) => {
-    let excludedDate = x.excluded_on_date ? moment(x.excluded_on_date) : "" 
-    let requesteDate = x.requested_flight_date ? moment(x.requested_flight_date) : "" 
-    return {...x, excluded_on_date : excludedDate, requested_flight_date: requesteDate}
-    })
-
-    reset(data) 
+    if (manifest.status == "success"){
+      const data = manifest.result;
+      data.date = data?.date ? moment(data.date):"";
+      data.Manifest_Jobs = data.Manifest_Jobs.map((x) => {
+        let excludedDate = x.excluded_on_date ? moment(x.excluded_on_date) : "" 
+        let requesteDate = x.requested_flight_date ? moment(x.requested_flight_date) : "" 
+          return {
+            ...x, excluded_on_date : excludedDate, requested_flight_date: requesteDate
+          }
+      });
+      reset(data);
     }
-    },[])
+  },[])
 
   const onSubmit = async(data) =>{
-    setLoad(true)
+    setLoad(true);
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_MANIFEST, data)
     .then((x)=> {
-    if (x.status = "success"){
-      console.log(x)
-    openNotification("Success", "Transaction Recorded!", "green")
-    Router.push(`/manifest/${x.data.result.id}`);
-    } 
-    setLoad(false)
-  })
+      if (x.status = "success"){
+        openNotification("Success", "Transaction Recorded!", "green")
+        Router.push(`/manifest/${x.data.result.id}`);
+      } 
+      setLoad(false)
+    })
   }
 
   const onEdit = async(data) =>{
@@ -66,12 +66,11 @@ const Index=({awbNo, manifest})=>{
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_EDIT_MANIFEST, data)
     .then((x)=> {
       console.log(data)
-    if (x.status = "success"){
-    openNotification("Success", "Transaction Recorded!", "green")
-    } 
-    setLoad(false)
-  })
-  
+      if (x.status = "success"){
+        openNotification("Success", "Transaction Recorded!", "green")
+      } 
+      setLoad(false)
+    })
   }
 
   return (

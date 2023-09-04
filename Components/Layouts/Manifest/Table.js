@@ -1,112 +1,111 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row, Table } from "react-bootstrap";
 import InputComp from "../../Shared/Form/InputComp";
+import InputNumComp from "../../Shared/Form/InputNumComp";
 import TextAreaComp from "../../Shared/Form/TextAreaComp";
 import DateComp from "/Components/Shared/Form/DateComp";
-
-
 
 const Modal = ({index,  register, control}) => {
 
   return (
-    <div style={{ maxHeight: 760, overflowY: "auto", overflowX:'hidden', padding:"10px" }}>   
-    <Col md={12}>
+  <div style={{ maxHeight: 760, overflowY: "auto", overflowX:'hidden', padding:"10px" }}>   
+  <Col md={12}>
+
     <Row>
-    <Col md={6}>
-    <Row>
-      <Col md={12}>
-      <TextAreaComp control={control} register={register} label={"Shipper's Name and Address"} width={"100%"} name={`Manifest_Jobs.${index}.shipper_content`}/>
+      <Col md={6}>
+        <Row>
+          <Col md={12}>
+            <TextAreaComp control={control} register={register} label={"Shipper's Name and Address"} width={"100%"} name={`Manifest_Jobs.${index}.shipper_content`}/>
+          </Col>
+          <Col md={12}>
+            <InputComp control={control} register={register} label={"Shipper's Account No"} name={`Manifest_Jobs.${index}.shipper_account_no`}/>  
+          </Col>
+        </Row>
       </Col>
-      <Col md={12}>
-      <InputComp control={control} register={register} label={"Shipper's Account No"} name={`Manifest_Jobs.${index}.shipper_account_no`}/>  
+      <Col md={6}>
+        <Row>
+          <Col md={12}>
+            <InputComp control={control} register={register} label={"Not Negotiable Bill"} name={`Manifest_Jobs.${index}.non_negotiable`}/>
+          </Col>
+          <Col md={12}>
+            <InputComp control={control} register={register} label={"Issued By"} name={`Manifest_Jobs.${index}.issued_by`}/>
+          </Col>
+          <Col md={12}>
+            <div className="px-1" style={{textAlign:"center"}}>Copies 1, 2 and 3 of this Air Waybill are originals and have the same validity.</div>
+          </Col>
+        </Row>
       </Col>
-    </Row>
-    </Col>
-    <Col md={6}>
-    <Row>
-      <Col md={12}>
-      <InputComp control={control} register={register} label={"Not Negotiable Bill"} name={`Manifest_Jobs.${index}.non_negotiable`}/>
-      </Col>
-      <Col md={12}>
-      <InputComp control={control} register={register} label={"Issued By"} name={`Manifest_Jobs.${index}.issued_by`}/>
-      </Col>
-      <Col md={12}>
-      <div className="px-1" style={{textAlign:"center"}}>Copies 1, 2 and 3 of this Air Waybill are originals and have the same validity.</div>
-      </Col>
-    </Row>
-    </Col>
     </Row>
 
     <Row className="mt-2" >
-    <Col md={6} >
-    <Row>
-      <Col md={12}>
-      <TextAreaComp control={control} register={register} label={"Consignee's Name and Address"} width={"100%"} name={`Manifest_Jobs.${index}.consignee_content`}/>
-      </Col>
-      <Col md={12}>
-      <InputComp control={control} register={register} label={"Consignee's Account No"} name={`Manifest_Jobs.${index}.consignee_account_no`}/>  
-      </Col>
-    </Row>
-    </Col>
-    <Col md={6} >
-    <Row>
-      <Col md={12}>
-      <InputComp control={control} register={register} label={"Recieved In Good Order And Condition"} name={`Manifest_Jobs.${index}.recieved_condition`}/>
-      </Col>
+      <Col md={6} >
       <Row>
-      <Col md={6}>
-      <InputComp control={control} register={register} label={"At"} name={`Manifest_Jobs.${index}.at`}/>
-      </Col>
-      <Col md={6}>
-      <InputComp control={control} register={register} label={"On"} name={`Manifest_Jobs.${index}.on`}/>
-      </Col>
+        <Col md={12}>
+          <TextAreaComp control={control} register={register} label={"Consignee's Name and Address"} width={"100%"} name={`Manifest_Jobs.${index}.consignee_content`}/>
+        </Col>
+        <Col md={12}>
+          <InputComp control={control} register={register} label={"Consignee's Account No"} name={`Manifest_Jobs.${index}.consignee_account_no`}/>  
+        </Col>
       </Row>
-      <Col md={12}>
-      <div style={{textAlign:"center" }}>Signature Of Consignee or his Agent</div>
       </Col>
-    </Row>
-    </Col>
+      <Col md={6} >
+        <Row>
+          <Col md={12}>
+            <InputComp control={control} register={register} label={"Recieved In Good Order And Condition"} name={`Manifest_Jobs.${index}.recieved_condition`}/>
+          </Col>
+          <Row>
+          <Col md={6}>
+            <InputComp control={control} register={register} label={"At"} name={`Manifest_Jobs.${index}.at`}/>
+          </Col>
+          <Col md={6}>
+            <InputComp control={control} register={register} label={"On"} name={`Manifest_Jobs.${index}.on`}/>
+          </Col>
+          </Row>
+          <Col md={12}>
+            <div style={{textAlign:"center" }}>Signature Of Consignee or his Agent</div>
+          </Col>
+        </Row>
+      </Col>
     </Row>
 
     <Row className="mt-2" >
-    <Col md={6} >
-    <Row>
-      <Col md={12}>
-      <TextAreaComp control={control} register={register} label={"Issuing Carrier's Agent Name and City"} name={`Manifest_Jobs.${index}.carriar_agent_content`}/>
+      <Col md={6} >
+        <Row>
+          <Col md={12}>
+          <TextAreaComp control={control} register={register} label={"Issuing Carrier's Agent Name and City"} name={`Manifest_Jobs.${index}.carriar_agent_content`}/>
+          </Col>
+          <Col md={6}>
+          <InputComp control={control} register={register} label={"Agents's IAT Code"} name={`Manifest_Jobs.${index}.agent_IATA_code`}/>  
+          </Col>
+          <Col md={6}>
+          <InputComp control={control} register={register} label={"Account No"} name={`Manifest_Jobs.${index}.account_no`}/>  
+          </Col>
+        </Row>
       </Col>
-      <Col md={6}>
-      <InputComp control={control} register={register} label={"Agents's IAT Code"} name={`Manifest_Jobs.${index}.agent_IATA_code`}/>  
+      <Col md={6} >    
+        <TextAreaComp control={control} register={register} width="100%"
+        label={"Account Information"} name={`Manifest_Jobs.${index}.accounting_information`}/>
       </Col>
-      <Col md={6}>
-      <InputComp control={control} register={register} label={"Account No"} name={`Manifest_Jobs.${index}.account_no`}/>  
-      </Col>
-    </Row>
-    </Col>
-    <Col md={6} >    
-    <TextAreaComp control={control} register={register} width="100%"
-    label={"Account Information"} name={`Manifest_Jobs.${index}.accounting_information`}/>
-    </Col>
     </Row>
 
     <Row className="mt-2" >
-    <Col md={6} >
-    <Row>
-    <Col md={12}>
-    <InputComp control={control} register={register} label={"Airport Of Departure And Requested Route"} name={`Manifest_Jobs.${index}.airport_of_departure`}/>
-    </Col>      
-    </Row>
-    </Col>
-    <Col md={6} >
-    <Row>
-    <Col md={6}>
-    <InputComp control={control} register={register} label={"Refrence Number"} name={`Manifest_Jobs.${index}.refrence_number`}/>
-    </Col>      
-    <Col md={6}>
-    <InputComp control={control} register={register} label={"Optional Shipping Information"} name={`Manifest_Jobs.${index}.optional_shipping_information`}/>
-    </Col>
-
-    </Row>
-    </Col>
+      <Col md={6} >
+        <Row>
+          <Col md={12}>
+            <InputComp control={control} register={register} label={"Airport Of Departure And Requested Route"} name={`Manifest_Jobs.${index}.airport_of_departure`}/>
+          </Col>      
+        </Row>
+      </Col>
+      <Col md={6} >
+        <Row>
+          <Col md={6}>
+            <InputComp control={control} register={register} label={"Refrence Number"} name={`Manifest_Jobs.${index}.refrence_number`}/>
+          </Col>      
+          <Col md={6}>
+            <InputComp control={control} register={register} label={"Optional Shipping Information"} name={`Manifest_Jobs.${index}.optional_shipping_information`}/>
+          </Col>
+        </Row>
+      </Col>
     </Row>
 
     <Row className="mt-2" >
@@ -203,31 +202,31 @@ const Modal = ({index,  register, control}) => {
 
     <Row className="mt-2" >
     <Col md={2}>
-    <InputComp control={control} register={register} label={"No Of Pieces RCP"} name={`Manifest_Jobs.${index}.no_of_pc`}/>
+      <InputNumComp control={control} register={register} label={"No Of Pieces RCP"} name={`Manifest_Jobs.${index}.no_of_pc`}/>
     </Col>
     <Col md={1}>
-    <InputComp control={control} register={register} label={"Gross Weight"} name={`Manifest_Jobs.${index}.goross_wt`}/>
+      <InputNumComp control={control} register={register} label={"G Weight"} name={`Manifest_Jobs.${index}.goross_wt`}/>
     </Col>
     <Col md={1}>
-    <InputComp control={control} register={register} label={"KG / LB"} name={`Manifest_Jobs.${index}.kg`}/>
+      <InputComp control={control} register={register} label={"KG / LB"} name={`Manifest_Jobs.${index}.kg`}/>
     </Col>
     <Col md={1}>
-    <InputComp control={control} register={register} label={"Rate Class"} name={`Manifest_Jobs.${index}.rate_class`}/>
+      <InputComp control={control} register={register} label={"Rate Class"} name={`Manifest_Jobs.${index}.rate_class`}/>
     </Col>
     <Col md={1}>
-    <InputComp control={control} register={register} label={"Commodity"} name={`Manifest_Jobs.${index}.commodity_no`}/>
+      <InputComp control={control} register={register} label={"Commodity"} name={`Manifest_Jobs.${index}.commodity_no`}/>
     </Col>
     <Col md={2}>
-    <InputComp control={control} register={register} label={"Chargeable Weight"} name={`Manifest_Jobs.${index}.chargeable_weight`}/>
+      <InputNumComp control={control} register={register} label={"Chargeable Weight"} name={`Manifest_Jobs.${index}.chargeable_weight`}/>
     </Col>
     <Col md={1}>
-    <InputComp control={control} register={register} label={"Rate / Charge"} name={`Manifest_Jobs.${index}.rate`}/>
+      <InputNumComp control={control} register={register} label={"Rate/Chrg"} name={`Manifest_Jobs.${index}.rate`}/>
     </Col>
     <Col md={1}>
-    <InputComp control={control} register={register} label={"Total"} name={`Manifest_Jobs.${index}.total`}/>
+      <InputComp control={control} register={register} label={"Total"} name={`Manifest_Jobs.${index}.total`}/>
     </Col>
     <Col md={2}>
-    <InputComp control={control} register={register} label={"Nature And Quantity Of Goods"} name={`Manifest_Jobs.${index}.nature_of_good`}/>
+    <InputComp control={control} register={register} label={"Nature of Goods"} name={`Manifest_Jobs.${index}.nature_of_good`}/>
     </Col>
     </Row>
 
@@ -332,10 +331,8 @@ const Modal = ({index,  register, control}) => {
     <InputComp control={control} register={register} label={"AWB No."} name={`Manifest_Jobs.${index}.awb`}/>
     </Col>    
     </Row>
-    </Col>   
-
-    </div>
-    
+  </Col>
+  </div>
   );
 };
 

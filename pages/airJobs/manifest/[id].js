@@ -1,10 +1,8 @@
 import React from 'react'
-import { useRouter } from 'next/router'
-import CreateOrEdit from '../../Components/Layouts/Manifest/CreateOrEdit'
+import CreateOrEdit from '/Components/Layouts/Manifest/CreateOrEdit'
 import axios from 'axios'
 const index = ({manifest, awb}) => {
   return (
-    
     <CreateOrEdit manifest={manifest} awbNo={awb}/>
   )
 }
