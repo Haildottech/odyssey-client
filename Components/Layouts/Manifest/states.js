@@ -1,3 +1,7 @@
+import * as yup from "yup"; 
+
+
+
 export const initialValue = {
     awb:"",
     no_of_pc:"",
@@ -72,3 +76,9 @@ export const initialValue = {
     issuing_agent:"",
     visible:false   
 }
+
+
+export const validationSchema = yup.object().shape({
+    flight_no: yup.string().required('Flight No is required'),
+    point_of_loading: yup.string().required('Point of Loading is required'),
+})

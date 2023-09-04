@@ -13,15 +13,18 @@ import axios from "axios";
 import {  Modal } from "antd";
 import ModalTable from './Table'
 import openNotification from "../../Shared/Notification";
-import { initialValue } from "./states";
-import { useRouter} from 'next/router'
+import { initialValue, validationSchema } from "./states";
+import Router, { useRouter} from 'next/router'
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const Index=({awbNo, manifest})=>{
 
   const router =  useRouter()
   const [load, setLoad] = useState(false);
 
-  const { register, handleSubmit, control, reset, formState:{ errors } } = useForm({});
+  const { register, handleSubmit, control, reset, formState:{ errors } } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
   const { fields, append, remove } = useFieldArray({
     name: "Manifest_Jobs",
     control,
@@ -43,15 +46,15 @@ const Index=({awbNo, manifest})=>{
     reset(data) 
     }
     },[])
- 
-
 
   const onSubmit = async(data) =>{
     setLoad(true)
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_MANIFEST, data)
     .then((x)=> {
     if (x.status = "success"){
+      console.log(x)
     openNotification("Success", "Transaction Recorded!", "green")
+    Router.push(`/manifest/${x.data.result.id}`);
     } 
     setLoad(false)
   })
@@ -62,12 +65,13 @@ const Index=({awbNo, manifest})=>{
     data.id = router.query.id
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_EDIT_MANIFEST, data)
     .then((x)=> {
+      console.log(data)
     if (x.status = "success"){
     openNotification("Success", "Transaction Recorded!", "green")
     } 
     setLoad(false)
   })
-  console.log("on edit", data)
+  
   }
 
   return (
@@ -88,11 +92,14 @@ const Index=({awbNo, manifest})=>{
             <Col md={3}>
               <InputComp control={control} register={register} 
               label={"Flight No"} name="flight_no"/>
+              <p className="error-line">{errors?.flight_no?.message}</p>
             </Col>
 
             <Col md={4}>
               <InputComp control={control} register={register} 
               label={"Point Of Loading"} name="point_of_loading"/>
+              <p className="error-line">{errors?.point_of_loading?.message}</p>
+
             </Col>
             <Col md={4}>
               <InputComp control={control} register={register} 

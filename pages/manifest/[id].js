@@ -13,7 +13,6 @@ export default index
 
 export async function getServerSideProps(context){
     const {params} = context;
-   console.log(params) 
     const values = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_MANIFEST_BY_ID, {headers:{id: params.id}})
     .then((x)=>x.data);
     const awb = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_AWB_NUMBER)
