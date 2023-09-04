@@ -10,7 +10,6 @@ export const seJobValues = createApi({
         }),
         jobData: builder.query({
             query(args) {
-                console.log("Data Refetched")
                 return {
                   url: `/seaJob/getSEJobById`,
                   headers: {"id":`${args.id}`, operation:`${args.operation}`}

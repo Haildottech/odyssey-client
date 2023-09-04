@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
 import DateComp from '/Components/Shared/Form/DateComp';
 import TimeComp from '/Components/Shared/Form/TimeComp';
@@ -8,10 +8,10 @@ import { Popover } from "antd";
 import { Row, Col } from "react-bootstrap";
 
 const Carrier = ({state, register, control, pageLinking, dispatch, getStatus, approved, VoyageId, vesselId, type}) => {
-
+    
     function getVoyageNumber (id) {
         let result = '';
-        if(state.voyageList[0]!==null){
+        if(state.voyageList[0]){
             state.voyageList.forEach((x)=>{
             if(x.id==id){
                 result = x.voyage
@@ -20,7 +20,6 @@ const Carrier = ({state, register, control, pageLinking, dispatch, getStatus, ap
         }
         return result
     }
-
     const filterVessels = (list) => {
         let result = [];
         list.forEach((x)=>{
@@ -39,11 +38,11 @@ const Carrier = ({state, register, control, pageLinking, dispatch, getStatus, ap
         <div className='mt-2'>Voyage *</div>
         <div className="dummy-input"
             onClick={()=>{
-                if(vesselId!=''){
+                if(vesselId!=undefined && vesselId!=''){
                     dispatch({type:'voyageSelection', payload:vesselId})
                 }
             }}
-        >{getVoyageNumber(VoyageId)}</div>
+        >{`${getVoyageNumber(VoyageId)}`}</div>
         <Row>
             <Col md={6}>
                 <div className='my-2'></div>

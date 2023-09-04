@@ -21,30 +21,27 @@ import { createNotification } from '/functions/notifications';
 import openNotification from '/Components/Shared/Notification';
 import FullScreenLoader from '/Components/Shared/FullScreenLoader';
 import { addValues } from '/redux/persistValues/persistValuesSlice';
+import { useQueryClient } from '@tanstack/react-query';
 
 const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type, refetch}) => {
+  const queryClient = useQueryClient();
   const {register, control, handleSubmit, reset, formState:{errors}, watch } = useForm({
     resolver:yupResolver(SignupSchema), defaultValues:state.values
   });
-
   const approved = useWatch({control, name:"approved"});
   const subType = useWatch({control, name:"subType"});
   const allValues = useWatch({control});
-  const changedValues = useSelector((state)=>state.persistValues);
   const dispatchNew = useDispatch();
-
+  
   useEffect(() => {
-    if(state.edit){
+    //if(state.edit){
       let tempState = {...jobData};
-      if(changedValues.value[type]!=""){
-        tempState = {...tempState}
-      }
       let tempVoyageList = [...state.voyageList];
       tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage);
       tempState = {
         ...tempState,
-        customCheck: tempState.customCheck!==""?tempState.customCheck.split(", "):"",
-        transportCheck:tempState.transportCheck!==""?tempState.transportCheck.split(", "):"",// tempState.transportCheck.split(", "),
+        customCheck: state.edit?tempState.customCheck!==""?tempState.customCheck.split(", "):"":[],
+        transportCheck:state.edit?tempState.transportCheck!==""?tempState.transportCheck.split(", "):"":[] ,// tempState.transportCheck.split(", "),
         eta: tempState.eta==""?"":moment(tempState.eta),
         etd: tempState.etd==""?"":moment(tempState.etd),
         approved: tempState.approved=="true"?["1"]:[],
@@ -71,9 +68,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
         vgmCutOffTime:tempState.vgmCutOffTime==""?"":moment(tempState.vgmCutOffTime)
       }
       let tempEquipments = [];
-      if(tempState.SE_Equipments.length>0){
-        let tempEquips = tempState.SE_Equipments;
-        //tempEquips.push({id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''})
+      if(tempState.SE_Equipments?.length>0){
         tempEquipments = tempState.SE_Equipments
       }else{
         tempEquipments = [{id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''}]
@@ -81,48 +76,16 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
       dispatch({type:"set",payload:{
         exRate:tempState.exRate,
         equipments:tempEquipments,
-        voyageList:tempVoyageList
+        voyageList:tempVoyageList,
       }});
+      dispatch({type:'voyageSelection', payload:tempState.vesselId})
+      dispatch({type:"set", payload:{voyageVisible:false}});
       getInvoices(tempState.id, dispatch);
       reset(tempState);
-    }
-    if(!state.edit){
-      if(changedValues.value[type]==""){
-        reset(baseValues);
-      }else{
-        let tempState = JSON.parse(changedValues.value[type]);
-        let tempVoyageList = [...state.voyageList];
-        tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage);
-        tempState = {
-          ...tempState,
-          eta: tempState.eta==""?"":moment(tempState.eta),
-          etd: tempState.etd==""?"":moment(tempState.etd),
-          approved: tempState.approved=="true"?["1"]:[],
-          arrivalDate: tempState.arrivalDate==""?"":moment(tempState.arrivalDate),
-          arrivalTime: tempState.arrivalTime==""?"":moment(tempState.arrivalTime),
-          departureDate: tempState.departureDate==""?"":moment(tempState.departureDate),
-          departureTime: tempState.departureTime==""?"":moment(tempState.departureTime),
-          polDate: tempState.polDate==""?"":moment(tempState.polDate),
-          podDate: tempState.podDate==""?"":moment(tempState.podDate),
-          aesDate: tempState.aesDate==""?"":moment(tempState.aesDate),
-          aesTime: tempState.aesTime==""?"":moment(tempState.aesTime),
-          eRcDate: tempState.eRcDate==""?"":moment(tempState.eRcDate),
-          eRcTime: tempState.eRcTime==""?"":moment(tempState.eRcTime),
-          eRlDate: tempState.eRlDate==""?"":moment(tempState.eRlDate),
-          eRlTime: tempState.eRlTime==""?"":moment(tempState.eRlTime),
-          jobDate: tempState.jobDate==""?"":moment(tempState.jobDate),
-          shipDate:tempState.shipDate==""?"":moment(tempState.shipDate),
-          doorMove:tempState.doorMove==""?"":moment(tempState.doorMove),
-          cutOffDate:tempState.cutOffDate==""?"":moment(tempState.cutOffDate),
-          cutOffTime:tempState.cutOffTime==""?"":moment(tempState.cutOffTime),
-          siCutOffDate:tempState.siCutOffDate==""?"":moment(tempState.siCutOffDate),
-          siCutOffTime:tempState.siCutOffTime==""?"":moment(tempState.siCutOffTime),
-          vgmCutOffDate:tempState.vgmCutOffDate==""?"":moment(tempState.vgmCutOffDate),
-          vgmCutOffTime:tempState.vgmCutOffTime==""?"":moment(tempState.vgmCutOffTime)
-        }
-        reset(tempState);
-      }
-    }
+    // }
+    // if(!state.edit){
+    //   reset(baseValues);
+    // }
   }, [state.selectedRecord]);
 
   const onSubmit = async(data) => {
@@ -221,10 +184,12 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
   const onError = (errors) => console.log(errors);
 
   useEffect(() => {
-    let obj = {...changedValues.value}
-    obj[type] = JSON.stringify(allValues)
-    dispatchNew(addValues(obj));
-  }, [allValues])
+    let obj = {...allValues, SE_Equipments:state.equipments};
+    queryClient.setQueryData(
+      ['posts', {id, type}],
+      (x) => x?{...x,result:obj}:x
+    )
+  }, [allValues, state.equipments])
 
   return(
   <div className='client-styles' style={{overflowY:'auto', overflowX:'hidden'}}>

@@ -6,24 +6,22 @@ import { useSelector } from 'react-redux';
 import CSVReader from 'react-csv-reader';
 import { useJobValuesQuery } from '/redux/apis/seJobValues';
 import { getJobValues } from '/apis/jobs';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const Main = ({sessionData}) => {
 
   const companyId = useSelector((state) => state.company.value);
-  //const { data, refetch } = useJobValuesQuery();
-
   const queryClient = useQueryClient();
-  const { data, status, error } = useQuery({
+  const { data, status, error, refetch } = useQuery({
     queryKey:['values'],
     queryFn:getJobValues
   });
 
-  // useEffect(() => {
-  //   if(sessionData.isLoggedIn==false){
-  //     Router.push('/login');
-  //   }
-  // }, [sessionData]);
+  useEffect(() => {
+    if(sessionData.isLoggedIn==false){
+      Router.push('/login');
+    }
+  }, [sessionData]);
 
   return (
     <div className='base-page-layout'>
@@ -320,16 +318,14 @@ const Main = ({sessionData}) => {
         </>
         }
         {/* <button onClick={()=>{
-            queryClient.setQueryData(
-              ['values'],
-              // ✅ this is the way
-              (oldData) => oldData ? {
-                ...oldData,
-                result: []
-              } : oldData
-            )
-        }}>
+            queryClient.setQueryData(['values'],
+            (oldData) => oldData ? {...oldData,result: []} : oldData)
+          }}
+        >
           Test
+        </button>
+        <button onClick={()=>refetch()}>
+        Refetch
         </button> */}
       </Row>
     </div>

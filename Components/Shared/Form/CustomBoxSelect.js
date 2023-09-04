@@ -10,8 +10,7 @@ const CustomBoxSelect = ({reset, useWatch, control, state, dispatch}) => {
     const all = useWatch({control});
 
 return(
-    <Modal
-        open={state.voyageVisible}
+    <Modal open={state.voyageVisible}
         onOk={()=>dispatch({type:'toggle', fieldName:'voyageVisible', payload:false})} 
         onCancel={()=>dispatch({type:'toggle', fieldName:'voyageVisible', payload:false})}
         width={600} footer={false} maskClosable={false}
