@@ -327,9 +327,7 @@ const Modal = ({index,  register, control}) => {
     <Col md={4}>
     <InputComp control={control} register={register} label={"Total Collect Charges"} name={`Manifest_Jobs.${index}.total_collect_charges`}/>
     </Col>    
-    <Col md={4}>
-    <InputComp control={control} register={register} label={"AWB No."} name={`Manifest_Jobs.${index}.awb`}/>
-    </Col>    
+   
     </Row>
   </Col>
   </div>

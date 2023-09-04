@@ -4,6 +4,7 @@ import * as yup from "yup";
 
 export const initialValue = {
     awb:"",
+    mbl:"",
     no_of_pc:"",
     nature_of_good:"",
     goross_wt:"",

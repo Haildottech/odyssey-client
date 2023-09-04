@@ -22,6 +22,7 @@ const Index=({awbNo, manifest})=>{
   const router =  useRouter()
   const [load, setLoad] = useState(false);
 
+  const awbList = awbNo.result.filter((x) => x.Bl?.mbl)
   const { register, handleSubmit, control, reset, formState:{ errors } } = useForm({
     resolver: yupResolver(validationSchema),
   });
@@ -32,6 +33,7 @@ const Index=({awbNo, manifest})=>{
   });
   const all_values = useWatch({control});
 
+  console.log(all_values.Manifest_Jobs?.reduce((x, c) => {return Number(c.no_of_pc) + x},0))
 
   useEffect(() => {
     if (manifest.status == "success"){
@@ -54,7 +56,7 @@ const Index=({awbNo, manifest})=>{
     .then((x)=> {
       if (x.status = "success"){
         openNotification("Success", "Transaction Recorded!", "green")
-        Router.push(`/manifest/${x.data.result.id}`);
+        Router.push(`/airJobs/manifest/${x.data.result.id}`);
       } 
       setLoad(false)
     })
@@ -65,7 +67,6 @@ const Index=({awbNo, manifest})=>{
     data.id = router.query.id
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_EDIT_MANIFEST, data)
     .then((x)=> {
-      console.log(data)
       if (x.status = "success"){
         openNotification("Success", "Transaction Recorded!", "green")
       } 
@@ -118,7 +119,8 @@ const Index=({awbNo, manifest})=>{
           <Table className="tableFixHead" bordered>
             <thead>
               <tr>
-                <th className="col-1">AWB</th>
+                <th>Field</th>
+                <th className="col-2">AWB</th>
                 <th>No of Pcs</th>
                 <th>Nature of Goods</th>
                 <th>G - Weight</th>
@@ -133,12 +135,20 @@ const Index=({awbNo, manifest})=>{
               return (
               <tr className="f table-row-center-singleLine" key={field.id}>
                 <td style={{padding:3}}>
-                <SelectSearchComp className="form-select" name={`Manifest_Jobs.${index}.awb`} register={register} 
-                control={control} width={"100%"} disabled={all_values.Manifest_Jobs?.length > 0 && all_values.Manifest_Jobs[index]?.job_type == "external"}
-                options={awbNo.result.length>0?awbNo.result.map((x) => { return {id: x.jobNo + "," + x.id, name: x.jobNo }}):[]}/>
+                <InputComp className="form-select" name={`Manifest_Jobs.${index}.awb`} register={register} 
+                control={control} width={"100%"} />
                 </td>
                 <td style={{padding:3}}>
-                <InputComp control={control} register={register} 
+                {all_values.Manifest_Jobs?.length > 0 && all_values.Manifest_Jobs[index]?.job_type == "external" ?
+                <InputComp className="form-select" name={`Manifest_Jobs.${index}.mbl`} register={register} 
+                control={control} width={"100%"} /> :                
+                <SelectSearchComp className="form-select" name={`Manifest_Jobs.${index}.mbl`} register={register} 
+                control={control} width={"100%"} 
+                options={awbNo.result.length>0?awbList.map((x) => {
+                return {id: x.Bl?.mbl + "," + x.id, name: x.Bl?.mbl}}):[]}/> }
+                </td>
+                <td style={{padding:3}}>
+                <InputNumComp control={control} register={register} type="number"
                 label={""} name={`Manifest_Jobs.${index}.no_of_pc`}/>
                 </td>
                 <td style={{padding:3}}>
@@ -146,7 +156,7 @@ const Index=({awbNo, manifest})=>{
                 label={""} name={`Manifest_Jobs.${index}.nature_of_good`}/>
                 </td>
                 <td style={{padding:3}}>
-                <InputComp control={control} register={register} 
+                <InputNumComp control={control} register={register} 
                 label={""} name={`Manifest_Jobs.${index}.goross_wt`}/>
                 </td>
                 <td style={{padding:3}}>
@@ -200,6 +210,27 @@ const Index=({awbNo, manifest})=>{
               </tr>
               );
             })}
+
+              <tr className="f table-row-center-singleLine">
+                <td style={{padding:3}}></td>
+                <td style={{padding:3}}>
+                <div style={{border:"1px solid silver", paddingLeft: "12px" ,  padding:"3px"}}>
+                  Total
+                </div></td>
+                <td style={{padding:3}}>
+                <div style={{border:"1px solid silver", paddingLeft: "12px" ,  padding:"3px"}}>
+                {all_values.Manifest_Jobs?.reduce((x, c) => {return Number(c.no_of_pc) + x},0)}
+                </div></td>
+                <td style={{padding:3}}></td>
+                <td style={{padding:3}}>
+                <div style={{border:"1px solid silver", paddingLeft: "12px" ,  padding:"3px"}}>
+                {all_values.Manifest_Jobs?.reduce((x, c) => {return Number(c.goross_wt) + x},0)}
+                </div></td>
+                <td style={{padding:3}}></td>
+                <td style={{padding:3}}></td>
+                <td style={{padding:3}}></td>
+                <td style={{padding:3}}></td>
+              </tr>
             </tbody>
           </Table>
         </div>
