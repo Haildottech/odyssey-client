@@ -273,6 +273,7 @@ const getHeadsNew = async(id, dispatch) => {
       }
   });
   let tempChargeHeadsArray = calculateChargeHeadsTotal([...reciveableCharges, ...paybleCharges], "full");    
+  console.log(tempChargeHeadsArray)
   dispatch({type:'set', 
   payload:{
     reciveableCharges,
@@ -352,10 +353,29 @@ const getInvoices = async(id, dispatch) => {
   //return result;
 } 
 
+const getStatus = (val) => {
+  return val[0]=="1"?true:false
+};
+
+const setHeadsCache = (chargesData, dispatch, reset) => {
+  chargesData.status=="success"?
+  dispatch({type:'set', 
+  payload:{
+    reciveableCharges:chargesData.data.reciveableCharges,
+    paybleCharges:chargesData.data.paybleCharges,
+    ...chargesData.data
+    //...tempChargeHeadsArray
+  }}):null;
+  chargesData.status=="success"?
+  reset({chargeList:[ ...chargesData.data.charges ]}):
+  null;
+}
+
 export {
   recordsReducer, initialState, baseValues,
   SignupSchema, getClients, getVendors,
-  saveHeads, getHeadsNew,
+  saveHeads, getHeadsNew, getStatus,
   calculateChargeHeadsTotal,
-  makeInvoice, getInvoices
+  makeInvoice, getInvoices,
+  setHeadsCache
 };

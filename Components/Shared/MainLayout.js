@@ -17,6 +17,7 @@ const MainLayout = ({children}) => {
 
   const newRouter = useRouter();
   const dispatch = useDispatch();
+  const [username, setUsername] = useState("");
   const [load, setLoad] = useState(true);
   const [company, setCompany] = useState('');
   const [companies, setCompanies] = useState([]);
@@ -30,6 +31,8 @@ const MainLayout = ({children}) => {
   }, [])
 
   async function getCompanies(){
+    let tempUser = await Cookies.get('username')
+    setUsername(tempUser)
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_COMPANIES)
     .then((x)=>{
       setLoad(false);
@@ -44,6 +47,7 @@ const MainLayout = ({children}) => {
 
   const handleChange = (value) => {
     Cookies.set('companyId', value, { expires: 1 });
+    
     setCompany(value);
     dispatch(companySelect(value))
     Router.push('/')
@@ -303,7 +307,14 @@ const MainLayout = ({children}) => {
       {collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)}><AiOutlineRight /></span>}
       {!collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)} ><AiOutlineLeft /></span>}
       <Select style={{width: 155, opacity:0.7}} onChange={handleChange} options={companies} />
-      <span style={{float:'right'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
+      {username=="Saad" &&<>
+        <span className='mx-3'></span>
+        <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/seaJobs/seJobList")}>SE</span>
+        <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/seaJobs/siJobList")}>SI</span>
+        <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aeJobList")}>AE</span>
+        <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aiJobList")}>AI</span>
+        <span style={{float:'right'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
+      </>}
       </Header>
       <Content style={{ margin:'24px 16px', padding:0, minHeight:280}}> 
       <div className='dashboard-styles'>

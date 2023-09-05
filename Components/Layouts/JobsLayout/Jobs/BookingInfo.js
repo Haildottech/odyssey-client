@@ -12,6 +12,7 @@ import ports from "/jsonData/ports";
 import destinations from "/jsonData/destinations";
 import { useSelector, useDispatch } from 'react-redux';
 import { incrementTab, removeTab } from '/redux/tabs/tabSlice';
+import { getStatus } from './states';
 import Router from 'next/router';
 import InputComp from '/Components/Shared/Form/InputComp';
 import { addBlCreationId } from '/redux/BlCreation/blCreationSlice';
@@ -57,22 +58,6 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
     }})
     reset({...allValues, approved:approved[0]!=1?['1']:[]})
   };
-
-  const getStatus = (val) => {
-    return val[0]=="1"?true:false
-  };
-
-  function getWeight(){
-    let weight = 0.0, teu = 0, qty = 0;
-    state.equipments.forEach((x) => {
-      if(x.gross!=''&&x.teu!=''){
-        weight = weight + parseFloat(x.gross.replace(/,/g, ''));
-        teu = teu + parseInt(x.teu);
-        qty = qty + parseInt(x.qty);
-      }
-    });
-    return {weight, teu, qty}
-  }
 
   const pageLinking = (pageType, value) => {
     let route= "";
@@ -292,7 +277,7 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
         <Col>.</Col>
         </Row>
         <SelectSearchComp register={register} name='transporterId' control={control} label='' 
-          options={state.fields.vendor.transporter} disabled={getStatus(approved) || transportCheck[0]!='Transport'} width={"100%"} />
+          options={state.fields.vendor.transporter} disabled={getStatus(approved) || transportCheck.length==0} width={"100%"} />
         <div className='mt-2'></div>
         <Row>
           <Col md={1}>
@@ -305,11 +290,11 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
           <Col>.</Col>
         </Row>
         <SelectSearchComp register={register} name='customAgentId' control={control} label='' width={"100%"}
-          options={state.fields.vendor.chaChb} disabled={getStatus(approved) || customCheck[0]!='Custom Clearance'} 
+          options={state.fields.vendor.chaChb} disabled={getStatus(approved) || customCheck.length==0} 
         />
         <div style={{marginTop:13}}></div>
-        <Weights register={register} control={control} getStatus={getStatus} allValues={allValues} 
-          type={type} approved={approved} getWeight={getWeight}
+        <Weights register={register} control={control} equipments={state.equipments} 
+          type={type} approved={approved} useWatch={useWatch}
         />
       </Col>
       <Col md={3}>

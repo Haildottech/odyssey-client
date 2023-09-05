@@ -15,15 +15,14 @@ import LoadingProgram from './Loading Program';
 import DelieveryOrder from './Delievery Order';
 import { useForm, useWatch } from "react-hook-form";
 import { incrementTab } from '/redux/tabs/tabSlice';
-import { SignupSchema, getInvoices } from './states';
+import { SignupSchema, getInvoices, baseValues } from './states';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createNotification } from '/functions/notifications';
 import openNotification from '/Components/Shared/Notification';
 import FullScreenLoader from '/Components/Shared/FullScreenLoader';
-import { addValues } from '/redux/persistValues/persistValuesSlice';
 import { useQueryClient } from '@tanstack/react-query';
 
-const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type, refetch}) => {
+const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) => {
   const queryClient = useQueryClient();
   const {register, control, handleSubmit, reset, formState:{errors}, watch } = useForm({
     resolver:yupResolver(SignupSchema), defaultValues:state.values
@@ -35,13 +34,13 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
   
   useEffect(() => {
     //if(state.edit){
-      let tempState = {...jobData};
+      let tempState = {...baseValues, ...jobData};
       let tempVoyageList = [...state.voyageList];
       tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage);
       tempState = {
         ...tempState,
-        customCheck: state.edit?tempState.customCheck!==""?tempState.customCheck.split(", "):"":[],
-        transportCheck:state.edit?tempState.transportCheck!==""?tempState.transportCheck.split(", "):"":[] ,// tempState.transportCheck.split(", "),
+        //customCheck: state.edit?tempState.customCheck!==""?tempState.customCheck.split(", "):"":[],
+        //transportCheck:state.edit?tempState.transportCheck!==""?tempState.transportCheck.split(", "):"":[] ,// tempState.transportCheck.split(", "),
         eta: tempState.eta==""?"":moment(tempState.eta),
         etd: tempState.etd==""?"":moment(tempState.etd),
         approved: tempState.approved=="true"?["1"]:[],
@@ -78,8 +77,10 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
         equipments:tempEquipments,
         voyageList:tempVoyageList,
       }});
-      dispatch({type:'voyageSelection', payload:tempState.vesselId})
-      dispatch({type:"set", payload:{voyageVisible:false}});
+      // (type=="SE"||type=="SI")?()=>{
+      //   dispatch({type:'voyageSelection', payload:tempState.vesselId});
+      //   dispatch({type:"set", payload:{voyageVisible:false}});
+      // }:null
       getInvoices(tempState.id, dispatch);
       reset(tempState);
     // }
@@ -109,7 +110,6 @@ const CreateOrEdit = ({state, dispatch, baseValues, companyId, jobData, id, type
     let loginId = Cookies.get('loginId');
     data.createdById = loginId;
     dispatch({type:'toggle', fieldName:'load', payload:true});
-    
     setTimeout(async() => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_SEAJOB,{
           data

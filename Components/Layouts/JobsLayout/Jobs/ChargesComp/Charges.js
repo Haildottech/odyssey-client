@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
 
-const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType, allValues}) => {
+const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, remove, control, register, companyId, operationType, allValues}) => {
 
     const { permissions } = state;
     const [ selection, setSelection ] = useState({
@@ -147,19 +147,20 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             <CloseCircleOutlined className='cross-icon' style={{ position: 'relative', bottom: 3 }}
                 onClick={() => {
                 if((x.Invoice==null || x.Invoice?.status==null || x.Invoice?.approved=="0") 
-                        //&& (permissions.admin || x.new)
-                ){
-                    PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
+                    //&& (permissions.admin || x.new)
+                ){opConfirm("Confirmation", "Are You Sure To Remove This Charge?",
                     () => {
-                        let tempState = [...chargeList];
                         let tempDeleteList = [...state.deleteList];
-                        tempDeleteList.push(tempState[index].id);
-                        tempState.splice(index, 1);
-                        reset({ chargeList: tempState });
+                        tempDeleteList.push(chargeList[index].id);
+                        remove(chargeList[index])
                         dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
-                    })
-                    }
-                }}
+                        // let tempState = [...chargeList];
+                        // let tempDeleteList = [...state.deleteList];
+                        // tempDeleteList.push(tempState[index].id);
+                        // tempState.splice(index, 1);
+                        // reset({ chargeList: tempState });
+                        // dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
+                })}}}
             />
         </td>
         <td className='text-center'>
@@ -332,7 +333,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
       </tbody>
       </Table>
       }
-      {state.chargeLoad && <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}><Spinner/></div>}
+      {/* {state.chargeLoad && <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}><Spinner/></div>} */}
         <Modal
             open={state.headVisible}
             onOk={()=>dispatch({type:'toggle', fieldName:'headVisible', payload:false})} 

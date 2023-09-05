@@ -9,14 +9,9 @@ import { useQuery } from '@tanstack/react-query';
 
 const SeJob = ({id, type}) => {
 
-  const { data, isSuccess:dataSuccess } = useQuery({
-    queryKey:['values'],
-    queryFn:getJobValues
-  });
-
+  const { data, isSuccess:dataSuccess } = useQuery({queryKey: ['values'], queryFn: getJobValues});
   const { data:newdata, isSuccess, refetch } = useQuery({
-    queryKey: ["posts", {id, type}],
-    queryFn: () => getJobById({id, type}),
+    queryKey:["posts", {id, type}], queryFn: () => getJobById({id, type}),
   })
 
   const companyId = useSelector((state) => state.company.value);
@@ -38,24 +33,19 @@ const SeJob = ({id, type}) => {
   }, [dataSuccess, isSuccess])
 
   return (
-  <>
-    <div className='base-page-layout'>
-      {state.fetched && 
-        <>
-          <CreateOrEdit
-            jobData={isSuccess?newdata.result:{}}
-            baseValues={baseValues}
-            companyId={companyId}
-            dispatch={dispatch}
-            refetch={refetch}
-            state={state}
-            type={type}
-            id={id}
-          />
-        </>
-      }
-    </div>
-  </>
+  <div className='base-page-layout'>
+    {state.fetched && 
+      <CreateOrEdit
+        jobData={isSuccess?newdata.result:{}}
+        companyId={companyId}
+        dispatch={dispatch}
+        refetch={refetch}
+        state={state}
+        type={type}
+        id={id}
+      />
+    }
+  </div>
   )
 }
 

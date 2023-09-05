@@ -4,9 +4,24 @@ import InputNumComp from "/Components/Shared/Form/InputNumComp";
 import SelectComp from "/Components/Shared/Form/SelectComp";
 import InputComp from "/Components/Shared/Form/InputComp";
 import { InputNumber } from "antd";
+import { getStatus } from './states';
 
-const Weights = ({register, control, getStatus, allValues, type, approved, getWeight}) => {
+const Weights = ({register, control, type, approved, equipments, useWatch}) => {
     
+    const allValues = useWatch({control})
+
+    function getWeight(){
+        let weight = 0.0, teu = 0, qty = 0;
+        equipments.forEach((x) => {
+          if(x.gross!=''&&x.teu!=''){
+            weight = weight + parseFloat(x.gross.replace(/,/g, ''));
+            teu = teu + parseInt(x.teu);
+            qty = qty + parseInt(x.qty);
+          }
+        });
+        return {weight, teu, qty}
+      }
+
     return(
     <Row style={{border:'1px solid silver', paddingBottom:15}}>
         {(type=="SE" && allValues.subType=="FCL") && 
@@ -180,4 +195,4 @@ const Weights = ({register, control, getStatus, allValues, type, approved, getWe
     </Row>
     )
 }
-export default Weights
+export default React.memo(Weights)
