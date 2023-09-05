@@ -7,12 +7,13 @@ import openNotification from '../Shared/Notification';
 import FullScreenLoader from './FullScreenLoader';
 import InvoicePrint from './InvoicePrint';
 import { Checkbox, Popover, Input, Radio } from 'antd';
+import { useQueryClient } from '@tanstack/react-query';
 const { TextArea } = Input;
 
 const InvoiceCharges = ({data, companyId}) => {
 
   let inputRef = useRef(null);
-
+  const queryClient = useQueryClient();
   const [bank, setBank] = useState(1);
   const [invoiceData, setInvoiceData] = useState(false);
   const [records, setRecords] = useState([]);
@@ -88,7 +89,6 @@ const InvoiceCharges = ({data, companyId}) => {
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_SE_JOB_CHILDS,{
         headers:{ title:JSON.stringify(["FCL FREIGHT INCOME", "FCL FREIGHT EXPENSE"]), companyid:companyId }
     }).then((x)=>{
-        console.log(x.data)
         if(x.data.status=="success"){
             x.data.result.forEach((y)=>{
                 if(y.title.endsWith("INCOME")){ 
@@ -218,7 +218,6 @@ const InvoiceCharges = ({data, companyId}) => {
             ChildAccountId:income.id
         })
     }
-    console.log(vouchers)
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_INVOICE_APPROVE_DISAPPROVE,{
         id:tempInv.id,
         total:tempInv.total,
@@ -238,6 +237,7 @@ const InvoiceCharges = ({data, companyId}) => {
             openNotification("Ops", "An Error Occured!", "red")
         }
     })
+    await queryClient.removeQueries({ queryKey: ['charges'] })
     setInvoice(tempInv);
     setLoad(false);
   }
@@ -269,7 +269,6 @@ const InvoiceCharges = ({data, companyId}) => {
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_INVOICE_NOTE_UPDATE,{
         id:invoice.id, note:invoice.note
     }).then((x)=>{
-        console.log(x.data);
         if(x.data.status=="success"){
             openNotification("Success", "Note Saved!", "green")
         }

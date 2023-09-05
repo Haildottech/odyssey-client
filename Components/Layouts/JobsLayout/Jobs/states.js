@@ -220,7 +220,6 @@ const getClients = memoize(async(id) => {
     headers:{id:id}
   })
   .then((x)=>x.data.result);
-  console.log(result)
   return result;
 })
 

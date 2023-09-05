@@ -13,11 +13,13 @@ import { incrementTab } from "/redux/tabs/tabSlice";
 import { stamps as stamp } from "./groupData";
 import { validationSchema } from "./validion";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setAndFetchBlData, recordsReducer, initialState, baseValues, calculateContainerInfos } from "./states";
+import { setAndFetchBlData, recordsReducer, initialState, baseValues, calculateContainerInfos, calculateItemInfos } from "./states";
 import axios from 'axios';
 import ItemDetail from "./ItemDetail";
 import ChargesDetail from "./ChargesDetail";
-import { useJobDataQuery } from '/redux/apis/seJobValues';
+//import { useJobDataQuery } from '/redux/apis/seJobValues';
+import { getJobValues, getJobById } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
 
 const BlComp = ({id, blData, partiesData, type}) => {
 
@@ -26,8 +28,14 @@ const BlComp = ({id, blData, partiesData, type}) => {
   const set = (a, b) => dispatch({ type: "toggle", fieldName: a, payload: b });
   const [deleteArr, setDeleteArr] = useState([]);
   const dispatchNew = useDispatch();
-  const { refetch } = useJobDataQuery({id:id=="new"?currentJobValue:blData.SEJobId, operation:type});
-  
+  //const { refetch } = useJobDataQuery({id:id=="new"?currentJobValue:blData.SEJobId, operation:type});
+  const { refetch } = useQuery({
+    queryKey:["jobData", {id:id=="new"?currentJobValue:blData.SEJobId, type:type}], 
+    queryFn: () => getJobById({
+      id:id=="new"?currentJobValue:blData.SEJobId, 
+      type:type
+    }),
+  })
   const { register, control, handleSubmit, reset, formState: { errors }, } = useForm({
     defaultValues: state.values,
   });
@@ -36,10 +44,6 @@ const BlComp = ({id, blData, partiesData, type}) => {
     name: "stamps",
     control,
   });
-
-  useEffect(() => {
-    console.log(blData.SEJobId)
-  }, [])
   
   useEffect(() => {
     set("partiesData", partiesData);
@@ -172,6 +176,9 @@ const BlComp = ({id, blData, partiesData, type}) => {
   useEffect(() => {
     calculateContainerInfos(state, set, reset, allValues)
   }, [state.Container_Infos]);
+  useEffect(() => {
+    calculateItemInfos(state, set, reset, allValues)
+  }, [state.Item_Details]);
 
   const onError = (errors) => console.log(errors);
 

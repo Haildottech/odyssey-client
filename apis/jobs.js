@@ -61,44 +61,18 @@ const calculateChargeHeadsTotal = (chageHeads, type) => {
 }
 
 export async function getChargeHeads ({id}) {
-    //dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-    let paybleCharges = [];
-    let reciveableCharges = [];
+    console.log("Query Hit");
     let charges = [];
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SE_HEADS_NEW,{
         headers:{"id": `${id}`}
     }).then((x)=>{
         if(x.data.status=="success"){
           charges = x.data.result;
-          let tempCharge = [];
-          x.data.result.forEach((x)=>{
-              if(x.type!='Payble'){
-                tempCharge.push({...x, sep:false});
-              }
-          });
-          reciveableCharges = tempCharge;
-          tempCharge = [];
-          x.data.result.forEach((x)=>{
-              if(x.type=='Payble'){
-                tempCharge.push({...x, sep:false});
-              }
-          })
-          paybleCharges = tempCharge;
         }
     });
-    let tempChargeHeadsArray = calculateChargeHeadsTotal([...reciveableCharges, ...paybleCharges], "full");    
+    let tempChargeHeadsArray = calculateChargeHeadsTotal([...charges], "full");    
     return {
         charges,
-        // reciveableCharges,
-        // paybleCharges,
-        chargeLoad:false,
         ...tempChargeHeadsArray
     }
-    // dispatch({type:'set', 
-    // payload:{
-    //   reciveableCharges,
-    //   paybleCharges,
-    //   chargeLoad:false,
-    //   ...tempChargeHeadsArray
-    // }})
   }

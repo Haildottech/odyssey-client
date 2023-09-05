@@ -11,7 +11,7 @@ const SeJob = ({id, type}) => {
 
   const { data, isSuccess:dataSuccess } = useQuery({queryKey: ['values'], queryFn: getJobValues});
   const { data:newdata, isSuccess, refetch } = useQuery({
-    queryKey:["posts", {id, type}], queryFn: () => getJobById({id, type}),
+    queryKey:["jobData", {id, type}], queryFn: () => getJobById({id, type}),
   })
 
   const companyId = useSelector((state) => state.company.value);

@@ -47,7 +47,6 @@ const MainLayout = ({children}) => {
 
   const handleChange = (value) => {
     Cookies.set('companyId', value, { expires: 1 });
-    
     setCompany(value);
     dispatch(companySelect(value))
     Router.push('/')

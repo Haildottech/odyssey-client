@@ -3,60 +3,31 @@ import React, { useEffect } from 'react';
 import { Row, Col, Spinner } from 'react-bootstrap';
 import { Tabs } from 'antd';
 import Charges from './Charges';
-import { getHeadsNew, setHeadsCache } from '../states';
+import { setHeadsCache } from '../states';
 import { useSelector } from 'react-redux';
 import { getChargeHeads } from "/apis/jobs";
-import { useQuery } from '@tanstack/react-query';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const ChargesComp = ({state, dispatch, type, allValues}) => {
 
+  const queryClient = useQueryClient();
   const companyId = useSelector((state) => state.company.value);
+  const { register, control, handleSubmit, reset } = useForm({});
+  const { fields, append, remove } = useFieldArray({ control, name:"chargeList" });
+  const chargeList = useWatch({ control, name:'chargeList' });
 
   const chargesData = useQuery({
-    queryKey:["charges", {id:state.selectedRecord.id}], queryFn: () => getChargeHeads({id:state.selectedRecord.id}),
-  })
-  // useEffect(() => {
-  //   if(state.tabState=='4'){
-  //     dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-  //     getHeadsNew(state.selectedRecord.id, dispatch);
-  //   }
-  // }, [state.selectedRecord])
-
-  const { register, control, handleSubmit, reset } = useForm({});
-  const { fields, append, remove } = useFieldArray({
-      control,
-      name: "chargeList"
+    queryKey:["charges", {id:state.selectedRecord.id}],
+    queryFn: () => getChargeHeads({id:state.selectedRecord.id})
   });
-  const chargeList = useWatch({ control, name: 'chargeList' });
+
   useEffect(() => {
-    setHeadsCache(chargesData, dispatch, reset)
-    console.log(chargesData.data)
-    // chargesData.status=="success"?
-    //   reset({chargeList:[ ...chargesData.data.reciveableCharges, ...chargesData.data.paybleCharges ]}):
-    //   null
+    setHeadsCache(chargesData, dispatch, reset);
   }, [chargesData.status])
 
-  //useEffect(() => {
-  //  reset({chargeList:[ ...state.reciveableCharges, ...state.paybleCharges ]})
-  //}, [state.reciveableCharges, state.paybleCharges])
-    
   useEffect(() => {
-    //console.log(chargeList)
-    // let obj = [...chargeList];
-    // queryClient.setQueryData(
-    //   ['charges', {id:state.selectedRecord.id}],
-    //   (x) => x?{...x,result:obj}:x
-    // )
-    //console.log(state.payble);
-    
-    // console.log(chargeList);
-    // let paybleCharges = [];
-    // chargeList.map((x)=>{
-    //   if(x.type=="Recievable"){
-    //     paybleCharges.push(x)
-    //   }
-    // })
+    let obj = { charges:chargeList, payble:state.payble, reciveable:state.reciveable };
+    queryClient.setQueryData(['charges', {id:state.selectedRecord.id}], (x)=>x?{...obj}:x);
   }, [chargeList])
 
   return (
@@ -64,19 +35,17 @@ const ChargesComp = ({state, dispatch, type, allValues}) => {
     <div style={{minHeight:525, maxHeight:525}}>
       <Tabs defaultActiveKey="1" onChange={(e)=> dispatch({type:'toggle', fieldName:'chargesTab',payload:e})}>
       <Tabs.TabPane tab="Recievable" key="1">
-        {chargesData.status=="success" && <Charges state={state} dispatch={dispatch} type={"Recievable"} register={register}
+        <Charges state={state} dispatch={dispatch} type={"Recievable"} register={register}
           chargeList={chargeList} fields={fields} append={append} reset={reset} control={control} 
-          companyId={companyId} operationType={type} allValues={allValues} remove={remove}
-        />}
-        {chargesData.status!="success" && <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}><Spinner/></div>}
-      </Tabs.TabPane>
+          companyId={companyId} operationType={type} allValues={allValues} remove={remove} chargesData={chargesData}
+        />
+        </Tabs.TabPane>
       <Tabs.TabPane tab="Payble" key="2">
-        {chargesData.status=="success" && <Charges state={state} dispatch={dispatch} type={"Payble"} register={register}
+        <Charges state={state} dispatch={dispatch} type={"Payble"} register={register}
           chargeList={chargeList} fields={fields} append={append} reset={reset} control={control} 
-          companyId={companyId} operationType={type} allValues={allValues} remove={remove}
-        />}
-        {chargesData.status!="success" && <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}><Spinner/></div>}
-      </Tabs.TabPane>
+          companyId={companyId} operationType={type} allValues={allValues} remove={remove} chargesData={chargesData}
+        />
+        </Tabs.TabPane>
     </Tabs>
     <hr/>
     </div>

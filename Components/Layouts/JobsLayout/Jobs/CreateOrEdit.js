@@ -186,7 +186,7 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
   useEffect(() => {
     let obj = {...allValues, SE_Equipments:state.equipments};
     queryClient.setQueryData(
-      ['posts', {id, type}],
+      ['jobData', {id, type}],
       (x) => x?{...x,result:obj}:x
     )
   }, [allValues, state.equipments])

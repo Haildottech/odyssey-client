@@ -279,6 +279,21 @@ const calculateContainerInfos=(state, set, reset, allValues)=>{
   reset(allValues);
 }
 
+const calculateItemInfos=(state, set, reset, allValues)=>{
+  let gross = 0.0, pkgs = 0, wtUnit = 0, chargableWt=0;
+  console.log(state.Item_Details)
+  state.Item_Details.forEach((x,i)=>{
+    if(i==0){
+      wtUnit= x.kh_lb;
+    }
+    gross = gross + parseFloat(x.grossWt||0); 
+    pkgs = pkgs + parseInt(x.noOfPcs||0);
+    chargableWt = chargableWt + parseInt(x.chargableWt||0);
+  })
+  allValues = {...allValues, gross:""+gross, wtUnit, pkgs:""+pkgs, chargableWt }
+  reset(allValues);
+}
+
 const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) => {
   //const setAll = (obj) => dispatch({type:'set', payload:obj});
   let result = {...blData};
@@ -361,6 +376,7 @@ const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) 
 
 export {
   calculateContainerInfos,
+  calculateItemInfos,
   setAndFetchBlData,
   recordsReducer,
   fetchJobsData,

@@ -10,21 +10,24 @@ import PopConfirm from '../../../../Shared/PopConfirm';
 import React, { useEffect, useState } from 'react';
 import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
+import { useQueryClient } from '@tanstack/react-query';
 
-const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, remove, control, register, companyId, operationType, allValues}) => {
-
+const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, remove, control, register, companyId, operationType, allValues, chargesData}) => {
+    
+    const queryClient = useQueryClient();
     const { permissions } = state;
     const [ selection, setSelection ] = useState({
         partyId:null,
         InvoiceId:null
     });
-
     useEffect(() => {
         if(chargeList){
             let list = chargeList.filter((x)=> x.check);
-            list.length>0?
-                setSelection({InvoiceId:list[0].InvoiceId, partyId:list[0].partyId}):
-                setSelection({partyId:null, InvoiceId:null})
+            list.length>0?()=>{
+                setSelection({InvoiceId:list[0].InvoiceId, partyId:list[0].partyId})
+                console.log('Selection')
+            }:null
+            
         }
     }, [chargeList])
 
@@ -83,7 +86,8 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
                     await calculate();
                     await saveHeads(chargeList, state, dispatch, reset);
-                    getHeadsNew(state.selectedRecord.id, dispatch);
+                    await queryClient.removeQueries({ queryKey: ['charges'] })
+                    chargesData.refetch();
                 }
             }}
         >Save Charges</div>
@@ -93,7 +97,9 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
                     let status = await makeInvoice(chargeList, companyId, reset, operationType);
                     if(status=="success"){
-                        getHeadsNew(state.selectedRecord.id, dispatch);
+                        //getHeadsNew(state.selectedRecord.id, dispatch);
+                        await queryClient.removeQueries({ queryKey: ['charges'] })
+                        chargesData.refetch();
                     }else{
                         dispatch({type:'toggle', fieldName:'chargeLoad', payload:false})
                     }
@@ -109,7 +115,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         </Col>
     </Row>
       <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto'}}>
-      {!state.chargeLoad &&
+      {chargesData.status=="success" &&
       <Table className='tableFixHead' bordered>
       <thead>
         <tr className='table-heading-center'>
@@ -120,8 +126,8 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
           <th>Particular</th>
           <th>Basis</th>
           <th>PP/CC</th>
-          {(operationType!="AI"||operationType!="AE") &&<th>SizeType</th>}
-          {(operationType!="AI"||operationType!="AE") &&<th style={{minWidth:95}}>DG Type</th>}
+          {(operationType=="SE"||operationType=="SI") &&<th>SizeType</th>}
+          {(operationType=="SE"||operationType=="SI") &&<th style={{minWidth:95}}>DG Type</th>}
           <th>Qty/Weight</th>
           {(operationType=="AI"||operationType=="AE")&&<th>Rate</th>}
           <th>Currency</th>
@@ -259,7 +265,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 ]}
             />
         </td>
-        {(operationType!="AI"||operationType!="AE") &&<td style={{ padding: 3 }}> {/* Size/Type */}
+        {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* Size/Type */}
             <SelectSearchComp register={register} name={`chargeList.${index}.size_type`} control={control} width={100} font={13} 
             disabled={permissionAssign(permissions, x)}
                 options={[
@@ -268,7 +274,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 ]}
             />
         </td>}
-        {(operationType!="AI"||operationType!="AE") &&<td style={{ padding: 3 }}> {/* DG */}
+        {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* DG */}
             <SelectSearchComp register={register} name={`chargeList.${index}.dg_type`} control={control} width={95} font={13} disabled={permissions.admin?false:x.InvoiceId!=null?true:false}
                 options={[
                     { id: 'DG', name: 'DG' },
@@ -333,7 +339,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
       </tbody>
       </Table>
       }
-      {/* {state.chargeLoad && <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}><Spinner/></div>} */}
+      {chargesData.status!="success" && <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}><Spinner/></div>}
         <Modal
             open={state.headVisible}
             onOk={()=>dispatch({type:'toggle', fieldName:'headVisible', payload:false})} 

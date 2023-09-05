@@ -4,9 +4,11 @@ import { incrementTab } from '/redux/tabs/tabSlice';
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
 import Router from 'next/router';
+import { useQueryClient } from '@tanstack/react-query';
 
 const SEJobList = ({ jobsData, sessionData, type }) => {
   
+  const queryClient = useQueryClient();
   const changedValues = useSelector((state)=>state.persistValues);
   const companyId = useSelector((state) => state.company.value);
   const [records, setRecords] = useState([]);
@@ -34,6 +36,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
       <Col md={1}>
         <button className='btn-custom right'
           onClick={()=>{
+            queryClient.removeQueries({ queryKey: ['jobData',{ type }] })
             let obj = {...changedValues.value}
             obj[type] = ""
             dispatch(addValues(obj));
@@ -62,6 +65,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
         return (
           <tr key={index} className='f row-hov'
             onClick={() => {
+              queryClient.removeQueries({ queryKey: ['jobData',{ type }] })
               let obj = {...changedValues.value}
               obj[type] = ""
               dispatch(addValues(obj));

@@ -87,6 +87,7 @@ const ItemDetail = ({control, register, state, useWatch, dispatch, reset}) => {
   }
 
   const calculateChargableWeight = (values) => {
+    console.log("Hit 1")
     if(state.Item_Details.length>0){
         let finalWeight = 0.0;
         values.forEach((x)=>{
@@ -104,6 +105,7 @@ const ItemDetail = ({control, register, state, useWatch, dispatch, reset}) => {
   }
 
   const calculateRateTotal = (temp) => {
+    console.log("Hit 2")
     temp.forEach((x)=>{
         x.total = (parseFloat(x.chargableWt?x.chargableWt:0) * parseFloat(x.rate_charge?x.rate_charge:0)).toFixed(3)||0;
     })
