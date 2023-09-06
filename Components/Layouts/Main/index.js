@@ -7,6 +7,7 @@ import CSVReader from 'react-csv-reader';
 import { useJobValuesQuery } from '/redux/apis/seJobValues';
 import { getJobValues } from '/apis/jobs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import destinations from "../../../jsonData/destinations.json"
 
 const Main = ({sessionData}) => {
 
@@ -22,6 +23,24 @@ const Main = ({sessionData}) => {
       Router.push('/login');
     }
   }, [sessionData]);
+
+  useEffect(() => {
+    // let data = [...destinations]
+    // let newData = [];
+    // data.forEach((x, i) => {
+    //   let country = x.name.slice(x.name.indexOf(", "),x.name.length)
+    //   if(i==0 || (country != data[i-1].name.slice(data[i-1].name.indexOf(", "),data[i-1].name.length))){
+    //     newData.push({
+    //       id:  country.slice(2,country.length),
+    //       name:country.slice(2,country.length),
+    //     })
+    //     newData.push(x);
+    //   } else if(i!=0 && country == data[i-1].name.slice(data[i-1].name.indexOf(", "),data[i-1].name.length)) {
+    //     newData.push(x);
+    //   }
+    // });
+    // console.log(newData)
+  }, []);
 
   return (
     <div className='base-page-layout'>
