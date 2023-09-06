@@ -202,7 +202,6 @@ function setAccesLevels(dispatch, collapsed){
               obj.admin = true;
               break;
           default:
-              searchPartyId = state.selectedRecord.localVendorId;
               break;
           }
         });

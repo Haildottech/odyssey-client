@@ -312,8 +312,8 @@ const MainLayout = ({children}) => {
         <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/seaJobs/siJobList")}>SI</span>
         <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aeJobList")}>AE</span>
         <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aiJobList")}>AI</span>
-        <span style={{float:'right'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
       </>}
+        <span style={{float:'right'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
       </Header>
       <Content style={{ margin:'24px 16px', padding:0, minHeight:280}}> 
       <div className='dashboard-styles'>
