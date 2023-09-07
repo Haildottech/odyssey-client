@@ -43,7 +43,7 @@ const CheckGroupComp = (props) => {
         {...props.rest}
         disabled={props.disabled}
         options={props.options}
-        style={{width:props.width}}
+        style={{width:props.width, fontSize:12}}
       />
     </>
   )

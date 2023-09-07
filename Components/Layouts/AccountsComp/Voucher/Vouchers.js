@@ -35,7 +35,7 @@ const Vouchers=({
   }, [allValues.vType])
 
   async function getValues(){
-    const { chequeNo,  payTo, vType, type } = voucherData;
+    const { chequeNo,  payTo, vType, type, exRate, currency } = voucherData;
     let id="";
     let settleId="";
     let ChildAccountId = "";
@@ -48,7 +48,7 @@ const Vouchers=({
         id = voucherData.id;
       }
     });
-    reset({ CompanyId, vType, chequeDate, chequeNo, payTo, type, Voucher_Heads, ChildAccountId, settleId, id });
+    reset({ CompanyId, vType, chequeDate, chequeNo, payTo, type, Voucher_Heads, exRate, currency, ChildAccountId, settleId, id });
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {headers:{CompanyId:CompanyId}})
     .then((x)=>{
       setChild(x.data.result);

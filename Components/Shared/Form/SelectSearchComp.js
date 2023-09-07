@@ -16,14 +16,15 @@ const SelectSearchComp = (props) => {
             })
         });
         return(
-            <Select disabled={props.disabled} style={{minWidth:props.width||200, maxWidth:props.width||200, fontSize:props.font||15}}
-                name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} showSearch allowClear
+            <Select disabled={props.disabled} style={{minWidth:props.width||200, maxWidth:props.width||200, fontSize:12}}
+                name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} showSearch 
                 optionFilterProp="children"
                 filterOption={(input, option) =>
                     ((option?.label) ?? '').toLowerCase().includes(input.toLowerCase())||
                     ((option?.code) ?? '').toLowerCase().includes(input.toLowerCase())
                 }
                 options={tempVal}
+                allowClear
                 {...rest}
             />
     )}

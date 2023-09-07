@@ -32,7 +32,7 @@ const TimeComp = (props) => {
   <>
     <div>{props.label}</div>
     <TimePicker disabled={props.disabled} 
-      use12Hours size={props.size} style={{minWidth:props.width}} format={'h:mm A'} //{...field} 
+      use12Hours size={props.size} style={{minWidth:props.width, fontSize:12}} format={'h:mm A'} //{...field} 
       {...props.rest} name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} 
     />
   </>

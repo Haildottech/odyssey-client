@@ -37,7 +37,7 @@ const TextComp = (props) => {
   return (
     <>
       <div>{props.label}</div>
-      <TextArea {...props.rest} name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} style={{minWidth:props.width}} />
+      <TextArea {...props.rest} name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} style={{minWidth:props.width, fontSize:12}} />
     </>
   )
 }

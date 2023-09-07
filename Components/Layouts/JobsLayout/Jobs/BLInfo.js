@@ -4,7 +4,7 @@ import moment from 'moment';
 const BLInfo = ({blValues}) => {
   return (
     <>
-        <div style={{border:'1px solid silver', marginTop:26, padding:4, flexDirection:'row', display:'flex'}}>
+        <div style={{border:'1px solid silver', marginTop:10, padding:4, flexDirection:'row', display:'flex'}}>
         {blValues==null &&<div style={{color:'silver', marginLeft:10}}> No Bl Attached</div>}
         {blValues!=null &&<>
         <div style={{marginLeft:20}}>BL Info: </div>

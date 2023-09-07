@@ -35,7 +35,7 @@ const RadioComp = (props) => {
   return (
     <>
       <div>{props.label}</div>
-      <Radio.Group  name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} 
+      <Radio.Group  name={fieldName} onChange={onChange} value={value} ref={ref} onBlur={onBlur} style={{fontSize:12}}
         {...props.rest}
         options={props.options}
       />

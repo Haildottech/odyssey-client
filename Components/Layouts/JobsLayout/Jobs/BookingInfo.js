@@ -66,11 +66,11 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
       route=`/setup/client/${(value!="" && value!==null)?value:"new"}`
       obj={"label":"Client", "key":"2-7", "id":(value!="" && value!==null)?value:"new"}
 
-    }else if(pageType=="vendor"){
+    } else if(pageType=="vendor"){
       route=`/setup/vendor/${(value!="" && value!==null)?value:"new"}`
       obj={"label":"Vendor", "key":"2-8", "id":(value!="" && value!==null)?value:"new"}
       
-    }else if(pageType="vessel"){
+    } else if(pageType="vessel"){
       route=`/setup/voyage/`
       obj={"label":"Voyages", "key":"2-4"}
     }
@@ -80,19 +80,23 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
   }
 
   const ShipperComp = () => {
-  return(
-    <>
-      <div className='custom-link mt-2' onClick={()=>pageLinking("client", shipperId)} >Shipper *</div>
-      <SelectSearchComp register={register} name='shipperId' control={control} label='' disabled={getStatus(approved)} width={"100%"}
-        options={state.fields.party.shipper} 
-      />
-      <Space/>
-    </>
-  )}
+    return(
+      <>
+        <div className='custom-link mt-2' onClick={()=>pageLinking("client",shipperId)}>
+          Shipper *
+        </div>
+        <SelectSearchComp register={register} name='shipperId' control={control} label='' 
+          disabled={getStatus(approved)} width={"100%"}
+          options={state.fields.party.shipper} 
+        />
+        <Space/>
+      </>
+    )
+  }
   
   return (
   <>
-    <Row>
+    <Row style={{fontSize:12}}>
       <Col md={2} className=''>
         <div className="mt-1">Job No.</div>
         <div className="dummy-input">
@@ -199,15 +203,15 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
       <Col md={2} className='py-1'>
         <InputComp register={register} name='customerRef' control={control} label='Customer Ref#' width={"100%"} disabled={getStatus(approved)} />
       </Col>
-      <Col md={2} className='py-1'>
+      <Col md={2} className='pt-1 mb-0 pb-0'>
         <InputComp register={register} name='fileNo' control={control} label='File #' width={"100%"} disabled={getStatus(approved)} />
       </Col>
-      <Col >
+      <Col className='py-0 my-0'>
         <BLInfo blValues={state.selectedRecord.Bl} />
       </Col>
     </Row>
-    <hr className='my-3' />
-    <Row>
+    <hr className='mb-0' />
+    <Row style={{fontSize:12}}>
       <Col md={3} className=''>
         <div className='custom-link mt-2' onClick={()=>pageLinking("client", ClientId)} >Client *</div>
         <SelectSearchComp register={register} name='ClientId' control={control} label='' disabled={getStatus(approved)} width={"100%"}

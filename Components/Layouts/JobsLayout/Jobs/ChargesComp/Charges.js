@@ -12,22 +12,23 @@ import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
 import { useQueryClient } from '@tanstack/react-query';
 
-const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType, allValues, chargesData}) => {
+const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, remove, control, register, companyId, operationType, allValues, chargesData}) => {
     
     const queryClient = useQueryClient();
     const { permissions } = state;
-    const [ selection, setSelection ] = useState({
-        partyId:null,
-        InvoiceId:null
-    });
+    // const [ selection, setSelection ] = useState({
+    //     partyId:null,
+    //     InvoiceId:null
+    // });
     useEffect(() => {
         if(chargeList){
             let list = chargeList.filter((x)=> x.check);
-            list.length>0?()=>{
-                setSelection({InvoiceId:list[0].InvoiceId, partyId:list[0].partyId})
-                console.log('Selection')
-            }:null
-            
+            list.length>0?
+            dispatch({
+                type: 'set',
+                payload: {selection:{InvoiceId:list[0].InvoiceId, partyId:list[0].partyId}}
+            })
+            :null
         }
     }, [chargeList])
 
@@ -87,7 +88,11 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     await calculate();
                     await saveHeads(chargeList, state, dispatch, reset);
                     await queryClient.removeQueries({ queryKey: ['charges'] })
-                    chargesData.refetch();
+                    await chargesData.refetch();
+                    await dispatch({type:'set', payload:{
+                        chargeLoad:false,
+                        selection:{InvoiceId:null, partyId:null}
+                    }})
                 }
             }}
         >Save Charges</div>
@@ -97,12 +102,13 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
                     let status = await makeInvoice(chargeList, companyId, reset, operationType);
                     if(status=="success"){
-                        //getHeadsNew(state.selectedRecord.id, dispatch);
                         await queryClient.removeQueries({ queryKey: ['charges'] })
                         chargesData.refetch();
-                    }else{
-                        dispatch({type:'toggle', fieldName:'chargeLoad', payload:false})
-                    }
+                    }  
+                    dispatch({type:'set', payload:{
+                        chargeLoad:false,
+                        selection:{InvoiceId:null, partyId:null}
+                    }})
                 }
             }}
         >Generate Invoice No</div>
@@ -115,7 +121,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         </Col>
     </Row>
       <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto'}}>
-      {chargesData.status=="success" &&
+      {(chargesData.status=="success" || !state.chargeLoad) &&
       <Table className='tableFixHead' bordered>
       <thead>
         <tr className='table-heading-center'>
@@ -160,6 +166,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                         // tempDeleteList.push(chargeList[index].id);
                         // remove(chargeList[index])
                         // dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
+                        
                         let tempState = [...chargeList];
                         let tempDeleteList = [...state.deleteList];
                         tempDeleteList.push(tempState[index].id);
@@ -173,7 +180,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             {(x.InvoiceId==null && x.new!=true)  &&
             <input type="checkbox" {...register(`chargeList.${index}.check`)}
                 style={{ cursor: 'pointer' }} 
-                disabled={x.partyId==selection.partyId?false:selection.partyId==null?false:true}
+                disabled={x.partyId==state.selection.partyId?false:state.selection.partyId==null?false:true}
             />}
         </td>
         <td className='text-center'>{/* Invoice Number */}
@@ -339,7 +346,11 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
       </tbody>
       </Table>
       }
-      {chargesData.status!="success" && <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}><Spinner/></div>}
+      {(chargesData.status!="success" || state.chargeLoad) && 
+      <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}>
+        <Spinner/>
+      </div>
+      }
         <Modal
             open={state.headVisible}
             onOk={()=>dispatch({type:'toggle', fieldName:'headVisible', payload:false})} 

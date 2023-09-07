@@ -130,6 +130,11 @@ const initialState = {
   invoiceData : [],
   InvoiceList : [],
 
+  selection:{
+    partyId:null,
+    InvoiceId:null
+  },
+
   paybleCharges:[],
   reciveableCharges:[],
 

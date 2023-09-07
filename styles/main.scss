@@ -460,6 +460,7 @@
 }
 
 .ant-select-item-option-content{
+  //width: 100%;
 }
 
 .bl-print > p{
@@ -572,4 +573,9 @@ div.rc-virtual-list > div.rc-virtual-list-holder > div > div{
 
 .table-row-no-padding > td{
   padding: 0px!important;
+}
+
+body > div > div > div > div > div.rc-virtual-list > div.rc-virtual-list-holder > div > div{
+  width: 1000px;
+  overflow-x: scroll;
 }

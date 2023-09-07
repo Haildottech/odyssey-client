@@ -18,7 +18,7 @@ return(
     {(state.voyageVisible) && 
     <>
         <h6>Select Voyage</h6><hr/>
-        <div className='table-sm-1 mt-4' style={{maxHeight:300, overflowY:'auto'}}>
+        <div className='table-sm-1 mt-4' style={{maxHeight:300, overflowY:'auto', fontSize:12}}>
         <Table className='tableFixHead'>
         <thead>
             <tr>
