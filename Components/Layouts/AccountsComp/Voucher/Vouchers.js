@@ -29,7 +29,7 @@ const Vouchers=({
   const [approveLoad, setApproveLoad] = useState(false);
   const [approve, setApprove] = useState(false);
   
-  useEffect(() => { getValues(); }, []);
+  useEffect(() => { getValues(); console.log(voucherData) }, []);
   useEffect(() => {
     getAccounts();
   }, [allValues.vType])
@@ -121,7 +121,7 @@ const Vouchers=({
               />
               <p className="error-line">{errors?.vType?.message}</p>
             </Col>
-            <Col md={12} className="my-2">
+            <Col md={12} className="mb-2">
               <div>Company</div>
               <div style={box}>{ CompanyId==1?"SEANET SHIPPING & LOGISTICS":CompanyId==2?"CARGO LINKERS":"AIR CARGO SERVICES" }</div>
             </Col>
@@ -149,7 +149,21 @@ const Vouchers=({
             <Col md={5} className="my-2">
               <DateComp register={register} name="chequeDate" label="Cheque Date" control={control} width={"100%"} />
             </Col>
-            <Col md={12}>
+            <Col md={5}>
+              <SelectComp className="form-select" name={`currency`} label="Currency" register={register} control={control} 
+                    width={"100%"}
+                    options={[
+                      { id:"USD", name: "USD" },
+                      { id:"PKR", name: "PKR" },
+                      { id:"GBP", name: "GBP" },
+                    ]}
+                  />
+            </Col>
+            <Col md={2}></Col>
+            <Col md={5}>
+              <InputNumComp name="exRate" label="Ex.Rate" register={register} control={control} width={"100%"} />
+            </Col>
+            <Col md={12} className="mt-2">
               <InputComp name="payTo" label="Pay/Recieve To" register={register} control={control} width={"100%"} />
               <p className="error-line">{errors?.payTo?.message}</p>
             </Col>

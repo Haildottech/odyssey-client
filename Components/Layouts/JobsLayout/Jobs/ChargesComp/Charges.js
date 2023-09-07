@@ -12,7 +12,7 @@ import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
 import { useQueryClient } from '@tanstack/react-query';
 
-const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, remove, control, register, companyId, operationType, allValues, chargesData}) => {
+const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, control, register, companyId, operationType, allValues, chargesData}) => {
     
     const queryClient = useQueryClient();
     const { permissions } = state;
@@ -154,18 +154,18 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 onClick={() => {
                 if((x.Invoice==null || x.Invoice?.status==null || x.Invoice?.approved=="0") 
                     //&& (permissions.admin || x.new)
-                ){opConfirm("Confirmation", "Are You Sure To Remove This Charge?",
+                ){PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
                     () => {
-                        let tempDeleteList = [...state.deleteList];
-                        tempDeleteList.push(chargeList[index].id);
-                        remove(chargeList[index])
-                        dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
-                        // let tempState = [...chargeList];
                         // let tempDeleteList = [...state.deleteList];
-                        // tempDeleteList.push(tempState[index].id);
-                        // tempState.splice(index, 1);
-                        // reset({ chargeList: tempState });
+                        // tempDeleteList.push(chargeList[index].id);
+                        // remove(chargeList[index])
                         // dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
+                        let tempState = [...chargeList];
+                        let tempDeleteList = [...state.deleteList];
+                        tempDeleteList.push(tempState[index].id);
+                        tempState.splice(index, 1);
+                        reset({ chargeList: tempState });
+                        dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
                 })}}}
             />
         </td>

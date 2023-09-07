@@ -37,13 +37,13 @@ const ChargesComp = ({state, dispatch, type, allValues}) => {
       <Tabs.TabPane tab="Recievable" key="1">
         <Charges state={state} dispatch={dispatch} type={"Recievable"} register={register}
           chargeList={chargeList} fields={fields} append={append} reset={reset} control={control} 
-          companyId={companyId} operationType={type} allValues={allValues} remove={remove} chargesData={chargesData}
+          companyId={companyId} operationType={type} allValues={allValues} chargesData={chargesData}
         />
         </Tabs.TabPane>
       <Tabs.TabPane tab="Payble" key="2">
         <Charges state={state} dispatch={dispatch} type={"Payble"} register={register}
           chargeList={chargeList} fields={fields} append={append} reset={reset} control={control} 
-          companyId={companyId} operationType={type} allValues={allValues} remove={remove} chargesData={chargesData}
+          companyId={companyId} operationType={type} allValues={allValues} chargesData={chargesData}
         />
         </Tabs.TabPane>
     </Tabs>

@@ -135,7 +135,7 @@ const AccountActivity = () => {
         </button>
         <Modal 
             open={visible} 
-            width={"60%"}
+            width={"80%"}
             onOk={()=>setVisible(false)} 
             onCancel={()=> { setVisible(false); setVoucherRecords([]); }}
             footer={false} maskClosable={false}
@@ -167,6 +167,8 @@ const AccountActivity = () => {
                             <th className='' style={{width:260}}>Particular</th>
                             <th className='text-center' style={{width:25}}>Debit</th>
                             <th className='text-center' style={{width:25}}>Credit</th>
+                            <th className='text-center' style={{width:25}}>Debit</th>
+                            <th className='text-center' style={{width:25}}>Credit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -174,6 +176,8 @@ const AccountActivity = () => {
                     return (
                         <tr key={index}>
                             <td>{x.Child_Account?.title}</td>
+                            <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{z.currency}.{" "}</span>{commas(x.amount/z.exRate)}</>:''}</td>
+                            <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>{z.currency}.{" "}</span>{commas(x.amount/z.exRate)}</>:''}</td>
                             <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
                             <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
                         </tr>
@@ -181,6 +185,10 @@ const AccountActivity = () => {
                     })}
                       <tr>
                           <td>Balance</td>
+                          {/* <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td> */}
+                          {/* <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td> */}
+                          <td></td>
+                          <td></td>
                           <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td>
                           <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td>
                       </tr>
