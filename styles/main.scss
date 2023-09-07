@@ -459,10 +459,6 @@
   background-color:rgba(63, 179, 195, 0.215);
 }
 
-.ant-select-item-option-content{
-  //width: 100%;
-}
-
 .bl-print > p{
   line-height: 11px;
   margin: 0px;
@@ -575,7 +571,6 @@ div.rc-virtual-list > div.rc-virtual-list-holder > div > div{
   padding: 0px!important;
 }
 
-body > div > div > div > div > div.rc-virtual-list > div.rc-virtual-list-holder > div > div{
-  width: 1000px;
-  overflow-x: scroll;
+.ant-select-item {
+  font-size: 12px!important;
 }

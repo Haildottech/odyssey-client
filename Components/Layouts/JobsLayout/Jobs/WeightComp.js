@@ -14,7 +14,9 @@ const Weights = ({register, control, type, approved, equipments, useWatch}) => {
         let weight = 0.0, teu = 0, qty = 0;
         equipments.forEach((x) => {
           if(x.gross!=''&&x.teu!=''){
-            weight = weight + parseFloat(x.gross.replace(/,/g, ''));
+            weight = weight + parseFloat(
+                x.gross//.replace(/,/g, '')
+                );
             teu = teu + parseInt(x.teu);
             qty = qty + parseInt(x.qty);
           }

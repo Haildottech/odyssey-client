@@ -10,6 +10,7 @@ import { Spinner, Table } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
 import moment from "moment";
 import axios from "axios";
+import { InputNumber } from "antd";
 
 const Vouchers=({
   handleSubmit, onSubmit, register, control, errors,
@@ -26,14 +27,24 @@ const Vouchers=({
   });
 
   const allValues = useWatch({control});
-  const [approveLoad, setApproveLoad] = useState(false);
-  const [approve, setApprove] = useState(false);
-  
-  useEffect(() => { getValues(); console.log(voucherData) }, []);
+  const Voucher_Heads = useWatch({ control, name:'Voucher_Heads' });
+
+  useEffect(() => { getValues(); }, []);
   useEffect(() => {
     getAccounts();
-  }, [allValues.vType])
+  }, [allValues.vType]);
 
+  // useEffect(() => {
+  //   if(allValues.currency!="PKR"){
+  //     console.log(Voucher_Heads);
+  //     let tempRecords = [...Voucher_Heads];
+  //     tempRecords.forEach((x)=>{
+  //       x.amount = parseFloat(x.defaultAmount)*parseFloat(allValues.exRate);
+  //     })
+  //     reset({...allValues, Voucher_Heads:tempRecords})
+  //   }
+  // }, [])
+  
   async function getValues(){
     const { chequeNo,  payTo, vType, type, exRate, currency } = voucherData;
     let id="";
@@ -151,13 +162,13 @@ const Vouchers=({
             </Col>
             <Col md={5}>
               <SelectComp className="form-select" name={`currency`} label="Currency" register={register} control={control} 
-                    width={"100%"}
-                    options={[
-                      { id:"USD", name: "USD" },
-                      { id:"PKR", name: "PKR" },
-                      { id:"GBP", name: "GBP" },
-                    ]}
-                  />
+                width={"100%"}
+                options={[
+                  { id:"USD", name: "USD" },
+                  { id:"PKR", name: "PKR" },
+                  { id:"GBP", name: "GBP" },
+                ]}
+              />
             </Col>
             <Col md={2}></Col>
             <Col md={5}>
@@ -171,7 +182,13 @@ const Vouchers=({
           </Col>
         </Row>
         <button type="button" className="btn-custom mb-3" style={{width:"110px", float:'right'}}
-          onClick={()=>append({type:allValues.vType==("BRV"||"CRV")?"credit":"debit", ChildAccountId:"", narration:"", amount:0})}
+          onClick={()=>append({
+            type:allValues.vType==("BRV"||"CRV")?"credit":"debit",
+            ChildAccountId:"",
+            narration:"",
+            amount:0,
+            defaultAmount:0
+          })}
         >Add
         </button>
         <div className="table-sm-1 col-12" style={{ maxHeight: 300, overflowY: "auto" }} >
@@ -180,6 +197,7 @@ const Vouchers=({
               <tr>
                 <th className="col-3">Account</th>
                 <th>Type</th>
+                {allValues.currency!="PKR" && <th>{allValues.currency}</th>}
                 <th>Amount</th>
                 <th>Narration</th>
                 <th></th>
@@ -188,14 +206,14 @@ const Vouchers=({
             <tbody>
             {fields.map((field, index) => {
               return (
-              <tr className="f table-row-center-singleLine" key={field.id}>
-                <td style={{padding:3}}>
+              <tr className="f table-row-center-singleLine" key={index}>
+                <td style={{padding:3, minWidth:500}}>
                   <SelectSearchComp className="form-select" name={`Voucher_Heads.${index}.ChildAccountId`} register={register} 
                     control={control} width={"100%"} 
                     options={ child.length>0?child.map((x) => { return{ id: x?.id, name: x?.title }}):[]}
                   />
                 </td>
-                <td style={{padding:3}}>
+                <td style={{padding:3, width:90}}>
                   <SelectComp className="form-select" name={`Voucher_Heads.${index}.type`} register={register} control={control} 
                     width={"100%"}
                     options={[
@@ -204,7 +222,20 @@ const Vouchers=({
                     ]}
                   />
                 </td>
-                <td style={{padding:3}}>
+                {allValues.currency!="PKR" &&
+                <td style={{padding:3, width:90}}>
+                  {/* <InputNumComp name={`Voucher_Heads.${index}.defaultAmount`} register={register} control={control} width={"100%"} /> */}
+                    <InputNumber value={Voucher_Heads[index].defaultAmount} style={{width:'100%'}} 
+                      onChange={(e)=>{
+                          let tempRecords = [...Voucher_Heads];
+                          tempRecords[index].defaultAmount = e;
+                          tempRecords[index].amount =e? (parseFloat(e)*parseFloat(allValues.exRate)).toFixed(2):tempRecords[index].amount;
+                          
+                          reset({...allValues, Voucher_Heads:tempRecords})
+                      }}
+                    />
+                </td>}
+                <td style={{padding:3, width:90}}>
                   <InputNumComp name={`Voucher_Heads.${index}.amount`} register={register} control={control} width={"100%"} />
                 </td>
                 <td style={{padding:3}}>

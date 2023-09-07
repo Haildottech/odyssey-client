@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import { Select, Input  } from 'antd';
+import { Select, Input, InputNumber  } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import PopConfirm from '../../../Shared/PopConfirm';
 
@@ -36,7 +36,7 @@ const EquipmentInfo = ({state, dispatch}) => {
                     let tempState = [...state.equipments];
                     tempState[i].size = e;
                     if(e=='40HC'){
-                      tempState[i].gross = '3,600';
+                      tempState[i].gross = 3900;
                     }else if(e=='20HC') { tempState[i].gross = '0'; }
                     dispatch({type:'toggle', fieldName:'equipments', payload:tempState})
                   }}
@@ -47,11 +47,12 @@ const EquipmentInfo = ({state, dispatch}) => {
                 />
                 </td>
                 <td>
-                  <Input placeholder="Basic usage" value={x.qty} style={{width:width}}
+                  <InputNumber placeholder="Basic usage" value={x.qty} style={{width:width}}
                     onChange={(e)=>{
                       let tempState = [...state.equipments];
-                      tempState[i].qty = e.target.value;
-                      tempState[i].teu = e.target.value*2;
+                      tempState[i].gross = 3900 * e;
+                      tempState[i].qty = e;
+                      tempState[i].teu = e*2;
                       dispatch({type:'toggle', fieldName:'equipments', payload:tempState})
                     }} />
                 </td>

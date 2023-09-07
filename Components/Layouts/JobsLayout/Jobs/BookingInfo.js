@@ -138,7 +138,7 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
           ]} />
       </Col>
       <Col md={1} className='py-1'>
-        <SelectComp register={register} name='costCenter' control={control} label='Cost Center' width={"100%"} disabled={getStatus(approved)}
+        <SelectComp register={register} name='costCenter' control={control} label='C. Center' width={"100%"} disabled={getStatus(approved)}
           options={[  
             {id:'FSD', name:'FSD'},
             {id:'KHI', name:'KHI'}

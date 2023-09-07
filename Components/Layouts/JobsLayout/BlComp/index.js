@@ -17,7 +17,6 @@ import { setAndFetchBlData, recordsReducer, initialState, baseValues, calculateC
 import axios from 'axios';
 import ItemDetail from "./ItemDetail";
 import ChargesDetail from "./ChargesDetail";
-//import { useJobDataQuery } from '/redux/apis/seJobValues';
 import { getJobValues, getJobById } from '/apis/jobs';
 import { useQuery } from '@tanstack/react-query';
 
@@ -28,7 +27,6 @@ const BlComp = ({id, blData, partiesData, type}) => {
   const set = (a, b) => dispatch({ type: "toggle", fieldName: a, payload: b });
   const [deleteArr, setDeleteArr] = useState([]);
   const dispatchNew = useDispatch();
-  //const { refetch } = useJobDataQuery({id:id=="new"?currentJobValue:blData.SEJobId, operation:type});
   const { refetch } = useQuery({
     queryKey:["jobData", {id:id=="new"?currentJobValue:blData.SEJobId, type:type}], 
     queryFn: () => getJobById({
@@ -93,7 +91,6 @@ const BlComp = ({id, blData, partiesData, type}) => {
       applyToCWT:data.applyToCWT[0]==1?'1':'0'
     };
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_BL, tempData).then(async(x) => {
-
       if (x.data.status == "success") {
         openNotification("Success", "BL Created Successfully", "green");
         dispatchNew(
@@ -109,6 +106,7 @@ const BlComp = ({id, blData, partiesData, type}) => {
       }
       set("load", false);
     });
+    await refetch();
   };
 
   const onEdit = async (data) => {
@@ -151,7 +149,6 @@ const BlComp = ({id, blData, partiesData, type}) => {
     emp?openNotification("Error", "Fields Can't Be Empty", "red")
       :await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_BL, tempData)
       .then(async(x) => {
-        await refetch();
         if (x.data.status == "error") {
           openNotification("Error", "Something went wrong", "red");
           set("load", false);
@@ -160,8 +157,8 @@ const BlComp = ({id, blData, partiesData, type}) => {
           set("load", false);
         }
       })
-    refetch();
-    getStamps();
+      getStamps();
+      await refetch();
   };
 
   useEffect(() => {
