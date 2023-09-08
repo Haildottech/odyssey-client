@@ -119,6 +119,11 @@ function setAccesLevels(dispatch, collapsed){
         key: '5-5',
         children: `Content of Tab Pane 3`,
       }),
+      getItem('Invoice Balancing', '5-6',<></>, null, {
+        label: `Invoice Balancing`,
+        key: '5-6',
+        children: `Content of Tab Pane 3`,
+      }),
     ]
     )
     const seaJobs = getParentItem('Sea Jobs', '4', <span className=''><RiShipLine /><IoMdArrowDropleft className='flip' /></span>,
@@ -133,11 +138,6 @@ function setAccesLevels(dispatch, collapsed){
         key: '4-5',
         children: `Content of Tab Pane 2`,
       }),
-      // getItem('BL List', '4-2',<></>, null, {
-      //   label: `SE BLs`,
-      //   key: '4-2',
-      //   children: `Content of Tab Pane 2`,
-      // }),
     ]
     )
     const airJobs = getParentItem('Air Jobs', '7', <span className=''><RiShipLine /><IoMdArrowDropleft className='flip' /></span>,
@@ -152,11 +152,6 @@ function setAccesLevels(dispatch, collapsed){
         key: '7-4',
         children: `Content of Tab Pane 2`,
       }),
-      // getItem('AWB List', '7-2',<></>, null, {
-      //   label: `Air AWBs`,
-      //   key: '7-2',
-      //   children: `Content of Tab Pane 2`,
-      // }),
     ]
     )
     const tasks = getParentItem('Tasks', '6', <UnorderedListOutlined  />,

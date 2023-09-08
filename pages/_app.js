@@ -12,7 +12,7 @@ import { QueryClient, QueryClientProvider, QueryCache } from '@tanstack/react-qu
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { 
-    staleTime: 9_600_000,
+    staleTime: 9_900_600_000,
     refetchOnWindowFocus: false,
    }}
 })

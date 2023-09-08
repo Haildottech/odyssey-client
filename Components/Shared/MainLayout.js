@@ -137,6 +137,7 @@ const MainLayout = ({children}) => {
     riders:false,
     riderAssign:false,
     ledger:false,
+    invoiceBalancing:false,
     nonGlParties:false,
     aeJobList:false,
     aeJob:false,
@@ -188,6 +189,7 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='5-3'){ tempTabActive.balanceSheet=true }
         else if(tabs.key=='5-4'){ tempTabActive.jobPlReport=true }
         else if(tabs.key=='5-5'){ tempTabActive.ledger=true }
+        else if(tabs.key=='5-6'){ tempTabActive.invoiceBalancing=true }
         else if(tabs.key=='6-1'){ tempTabActive.riders=true }
         else if(tabs.key=='6-1'){ tempTabActive.riderAssign=true }
         else if(tabs.key=='7-1'){ tempTabActive.aeJobList=true }
@@ -220,8 +222,7 @@ const MainLayout = ({children}) => {
         return x.key!=value.key;
       })
       tempTabes.splice(index,0,tabs);
-      dispatch(setTab(tempTabes))
-      //setTabItems(tempTabes)
+      dispatch(setTab(tempTabes));
       result = tabs.id
     }else{
       result = value.id
@@ -263,6 +264,7 @@ const MainLayout = ({children}) => {
     else if(x.key=='5-3'){ Router.push('/reports/balanceSheet') }
     else if(x.key=='5-4'){ Router.push('/reports/jobPLReport') }
     else if(x.key=='5-5'){ Router.push('/reports/ledger') }
+    else if(x.key=='5-6'){ Router.push('/reports/invoiceBalancing') }
     else if(x.key=='6-1'){ Router.push('/tasks/riders') }
     else if(x.key=='6-2'){ Router.push(`/tasks/riders/riderAssign/${setKey(x)}`) }
     else if(x.key=='7-1'){ Router.push('/airJobs/aeJobList') }
