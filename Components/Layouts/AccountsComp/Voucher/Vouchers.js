@@ -208,10 +208,10 @@ const Vouchers=({
                 ]}
               />
             </td>
-            {allValues.currency!="PKR" &&
+            {(allValues.currency!="PKR" && Voucher_Heads?.length>0) &&
             <td style={{padding:3, width:90}}>
               {/* <InputNumComp name={`Voucher_Heads.${index}.defaultAmount`} register={register} control={control} width={"100%"} /> */}
-                <InputNumber value={Voucher_Heads[index].defaultAmount} style={{width:'100%'}} 
+                <InputNumber value={Voucher_Heads[index]?.defaultAmount} style={{width:'100%'}} 
                   onChange={(e)=>{
                       let tempRecords = [...Voucher_Heads];
                       tempRecords[index].defaultAmount = e;
