@@ -27,9 +27,6 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
     }, [state.totalrecieving, state.taxPerc, state.taxAmount, state.autoOn, state.exRate, state.manualExRate]);
 
     async function calculateTax(){
-        console.log(state.manualExRate, "Manual")
-        console.log(state.exRate, "Auto")
-        console.log(state.autoOn, "Auto Status")
         let tempRate = state.autoOn? state.exRate:state.manualExRate
         if(state.isPerc){
             let tax = ((state.totalrecieving * tempRate)/100)*state.taxPerc;
@@ -121,7 +118,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                     tran:{
                         type:'debit',//state.taxAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
                         amount:state.finalTax,
-                        defaultAmount:0
+                        defaultAmount:parseFloat(state.finalTax)/parseFloat(state.autoOn?state.exRate:state.manualExRate),//0
                     }
                 })
             }
@@ -132,40 +129,42 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                     tran:{
                         type:'debit',//state.bankChargesAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
                         amount:state.bankCharges,
-                        defaultAmount:0
+                        defaultAmount:parseFloat(state.bankCharges)/parseFloat(state.autoOn?state.exRate:state.manualExRate),//0
                     }
                 })
             }
             if((Object.keys(state.gainLossAccountRecord).length!=0) && (state.gainLossAmount!=0) && (state.gainLossAmount!=null) && (state.totalrecieving!=0)){
-                //removing = removing + state.gainLossAmount;
+            let gainAndLossAmount = state.gainLossAmount>0?parseFloat(state.gainLossAmount):(-1*parseFloat(state.gainLossAmount))
                 transTwo.push({
                     particular:state.gainLossAccountRecord,
                     tran:{
                         type:parseFloat(state.gainLossAmount)>0? (payType!="Recievable"?'debit':'credit') : (payType!="Recievable"?'credit':'debit'),
-                        //type:state.gainLossAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
-                        amount:state.gainLossAmount>0?parseFloat(state.gainLossAmount):(-1*parseFloat(state.gainLossAmount)),
-                        defaultAmount:0
+                        amount:gainAndLossAmount,//state.gainLossAmount>0?parseFloat(state.gainLossAmount):(-1*parseFloat(state.gainLossAmount)),
+                        defaultAmount:parseFloat(gainAndLossAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate) //- removing
                     }
                 })
             }
+            let partyAmount = state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate) - parseFloat(state.gainLossAmount)
+            let payAmount = payType=="Recievable"? 
+                (state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) - removing:
+                (state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) + removing; 
+            
             transTwo.push({
                 particular:state.partyAccountRecord,
                 tran:{
-                    //type:state.partyAccountRecord.Parent_Account.Account[payType=="Recievable"?'dec':'inc'],
                     type:payType=="Recievable"?'credit':'debit',
-                    amount:state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate) - parseFloat(state.gainLossAmount),
-                    defaultAmount:state.totalrecieving //- removing
+                    amount:partyAmount, //state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate) - parseFloat(state.gainLossAmount),
+                    defaultAmount:parseFloat(partyAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate) //- removing
                 }
             })
             transTwo.push({
                 particular:state.payAccountRecord,  
                 tran:{ 
                     type:state.payAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],// <-Checks the account type to make Debit or Credit
-                    //amount:parseFloat(state.totalrecieving)-parseFloat(removing)+parseFloat(state.gainLossAmount)
-                    amount:payType=="Recievable"? 
-                    (state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) - removing:
-                        (state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) + removing,
-                    defaultAmount:(state.totalrecieving)//-removing
+                    amount:payAmount,//payType=="Recievable"? 
+                        //(state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) - removing:
+                        //(state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) + removing,
+                    defaultAmount:parseFloat(payAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate)//-removing
                 }
             })
         }
@@ -174,9 +173,6 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
             transactionCreation:transTwo,
             glVisible:true
         }})
-        // set('removing', removing);
-        // set('transactionCreation', transTwo);
-        // set('glVisible', true);
     }
 
   return (
@@ -365,7 +361,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                 <td style={{width:100}}>{x.ex_rate}</td>
                 <td>{x.inVbalance}</td>
                 <td style={{padding:3, width:150}}>
-                    <InputNumber style={{height:30, width:140}} value={x.receiving} min="0.00" max={`${x.remBalance}`} stringMode  disabled={state.autoOn}
+                    <InputNumber style={{height:30, width:140, fontSize:12}} value={x.receiving} min="0.00" max={`${x.remBalance}`} stringMode  disabled={state.autoOn}
                         onChange={(e)=>{
                             let tempState = [...state.invoices];
                             tempState[index].receiving = e;

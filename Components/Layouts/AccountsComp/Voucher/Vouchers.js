@@ -213,10 +213,10 @@ const Vouchers=({
               {/* <InputNumComp name={`Voucher_Heads.${index}.defaultAmount`} register={register} control={control} width={"100%"} /> */}
                 <InputNumber value={Voucher_Heads[index]?.defaultAmount} style={{width:'100%'}} 
                   onChange={(e)=>{
-                      let tempRecords = [...Voucher_Heads];
-                      tempRecords[index].defaultAmount = e;
-                      tempRecords[index].amount =e? (parseFloat(e)*parseFloat(allValues.exRate)).toFixed(2):tempRecords[index].amount;
-                      reset({...allValues, Voucher_Heads:tempRecords})
+                    let tempRecords = [...Voucher_Heads];
+                    tempRecords[index].defaultAmount = e;
+                    tempRecords[index].amount =e? (parseFloat(e)*parseFloat(allValues.exRate)).toFixed(2):tempRecords[index].amount;
+                    reset({...allValues, Voucher_Heads:tempRecords})
                   }}
                 />
             </td>}

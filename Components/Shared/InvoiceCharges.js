@@ -278,7 +278,7 @@ const InvoiceCharges = ({data, companyId}) => {
 return (
   <>
     {load && <FullScreenLoader/>}
-    <div className='invoice-styles' style={{maxHeight:800}}>
+    <div className='invoice-styles' style={{maxHeight:300}}>
     {Object.keys(data).length>0 &&
     <>
     <div style={{maxWidth:70}}>

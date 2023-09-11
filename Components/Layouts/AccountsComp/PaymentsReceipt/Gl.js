@@ -15,13 +15,19 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
     return a==0?'':parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
   }
 
-  const getTotal = (type, list) => {
+  const getTotal = (type, list, curr) => {
     let result = 0.00;
+    curr=="PKR"?
     list.forEach((x)=>{
       if(type==x.tran.type){
         result = result + x.tran.amount
       }
-    })
+    }):
+    list.forEach((x)=>{
+      if(type==x.tran.type){
+        result = result + x.tran.defaultAmount
+      }
+    });
     return result;
   }
 
@@ -34,23 +40,27 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
         invoicesIds.push(x.invoice_No)
         tempInvoices.unshift({
           id:x.id,
-          recieved:parseFloat(x.recieved) + parseFloat(x.receiving),
-          status:parseFloat(x.recieved) + parseFloat(x.receiving)<x.inVbalance?"3":"2"
+          recieved:parseFloat(x.recieved) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2)),
+          status:parseFloat(x.recieved) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2))<(parseFloat(x.inVbalance)*parseFloat(x.ex_rate).toFixed(2))?"3":"2",
+          //inVbalance:x.inVbalance
         })
       }else if(x.receiving>0 && payType!="Recievable"){
         invoicesIds.push(x.invoice_No)
         tempInvoices.unshift({
           id:x.id,
-          paid:parseFloat(x.paid) + parseFloat(x.receiving),
-          status:parseFloat(x.paid) + parseFloat(x.receiving)<x.inVbalance?"3":"2"
+          paid:parseFloat(x.paid) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2)),
+          status:parseFloat(x.paid) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2))<(parseFloat(x.inVbalance)*parseFloat(x.ex_rate).toFixed(2))?"3":"2",
+          //inVbalance:x.inVbalance
         })
       }
     });
-
-    let voucher;
-    voucher = {
+    let voucher = {
       type:payType=="Recievable"?"Job Reciept":"Job Payment",
-      vType:state.transaction=="Bank"? payType=="Recievable"?"BRV":"BPV" : payType=="Recievable"?"CRV":"CPV",
+      vType:state.transaction=="Bank"? 
+        payType=="Recievable"?
+          "BRV":"BPV":
+        payType=="Recievable"?
+          "CRV":"CPV",
       CompanyId:companyId,
       amount:"",
       currency:invoiceCurrency,
@@ -60,6 +70,7 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
       costCenter:"KHI",
       Voucher_Heads:[]
     }
+
     state.transactionCreation.forEach((x)=>{
       voucher.Voucher_Heads.push({
         defaultAmount:`${x.tran.defaultAmount==0?'':x.tran.defaultAmount}`,
@@ -91,19 +102,20 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
       width={'75%'}
     >
     <div style={{minHeight:330}}>
-      <h3 className='grey-txt'>Proceed With Following Transaction Against?</h3>
+      <h4 className='grey-txt'>Proceed with following transaction?</h4>
       <div className='table-sm-1 mt-3' style={{maxHeight:330, overflowY:'auto'}}>
         <Table className='tableFixHead' bordered>
           <thead>
               <tr>
-                <th className='' colSpan={5} style={{textAlign:'end', fontWeight:100}}>
-                  <span className='mx-2'>Ex.Rates:</span>{parseFloat(state.autoOn?state.exRate:state.manualExRate).toFixed(2)}
+                <th className='' colSpan={6} style={{textAlign:'end', fontWeight:100}}>
+                  <span className='mx-2'>Ex. Rate:</span>{parseFloat(state.autoOn?state.exRate:state.manualExRate).toFixed(2)}
                 </th>
               </tr>
               <tr>
                 <th className='' style={{width:260}}>Particular</th>
-                <th className='text-center' style={{width:25}}></th>
-                <th className='text-center' style={{width:25}}></th>
+                <th className='text-center' style={{width:25}}>Debit</th>
+                <th className='text-center' style={{width:25}}>Credit</th>
+                <th className='px-0' style={{width:"1px"}}></th>
                 <th className='text-center' style={{width:25}}>Debit</th>
                 <th className='text-center' style={{width:25}}>Credit</th>
               </tr>
@@ -113,24 +125,26 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
           return (
               <tr key={index}>
                 <td>{x.particular?.title}</td>
-                <td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>{" "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>
-                <td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>{" "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>
-                <td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
-                <td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
+                <td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>
+                <td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>
+                <td className='px-0' style={{width:"1px"}}></td>
+                <td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>PKR.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
+                <td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>PKR.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
               </tr>
             )})}
             <tr>
-              <td>Balance</td>
-              <td></td>
-              <td></td>
-              <td className='text-end'><span className='gl-curr-rep'>{" "}Rs. </span>{commas(getTotal('debit', state.transactionCreation))}</td>
-              <td className='text-end'><span className='gl-curr-rep'>{" "}Rs. </span>{commas(getTotal('credit', state.transactionCreation))}</td>
+              <td style={{textAlign:'right'}}><>Balance:</></td>
+              <td className='text-end'><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(getTotal('debit', state.transactionCreation,''))}</td>
+              <td className='text-end'><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(getTotal('debit', state.transactionCreation,''))}</td>
+              <td style={{width:"1px"}}></td>
+              <td className='text-end'><span className='gl-curr-rep'>PKR.{" "}</span>{commas(getTotal('debit', state.transactionCreation,'PKR'))}</td>
+              <td className='text-end'><span className='gl-curr-rep'>PKR.{" "}</span>{commas(getTotal('credit', state.transactionCreation,'PKR'))}</td>
             </tr>
           </tbody>
         </Table>
       </div>
     </div>
-    {getTotal('debit', state.transactionCreation) == getTotal('credit', state.transactionCreation) &&
+    {getTotal('debit', state.transactionCreation,'PKR') == getTotal('credit', state.transactionCreation,'PKR') &&
     <>
     {state.transactionCreation.length>0 && <button className='btn-custom' disabled={state.transLoad?true:false} onClick={handleSubmit}>
       {state.transLoad? <Spinner size='sm' className='mx-5' />:"Approve & Save"}
