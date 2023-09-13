@@ -133,6 +133,8 @@ const MainLayout = ({children}) => {
     voucherList:false,
     officeVoucherList:false,
     officeVoucher:false,
+    openingBalanceList:false,
+    openingBalance:false,
     jobPlReport:false,
     riders:false,
     riderAssign:false,
@@ -177,6 +179,8 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='3-6'){ tempTabActive.voucherList=true }
         else if(tabs.key=='3-7'){ tempTabActive.officeVoucherList=true }
         else if(tabs.key=='3-8'){ tempTabActive.officeVoucher=true }
+        else if(tabs.key=='3-9'){ tempTabActive.openingBalanceList=true }
+        else if(tabs.key=='3-10'){ tempTabActive.openingBalance=true }
         else if(tabs.key=='4-1'){ tempTabActive.seJobList=true }
         else if(tabs.key=='4-2'){ tempTabActive.seBl=true }
         else if(tabs.key=='4-3'){ tempTabActive.seJob=true }
@@ -251,6 +255,8 @@ const MainLayout = ({children}) => {
     else if(x.key=='3-6'){ Router.push('/accounts/voucherList') }
     else if(x.key=='3-7'){ Router.push('/accounts/officeVouchers/list') }
     else if(x.key=='3-8'){ Router.push(`/accounts/officeVouchers/${setKey(x)}`) }
+    else if(x.key=='3-9'){ Router.push(`/accounts/openingBalance/list`) }
+    else if(x.key=='3-10'){ Router.push(`/accounts/openingBalance/${setKey(x)}`) }
     else if(x.key=='4-1'){ Router.push('/seaJobs/seJobList') }
     else if(x.key=='4-2'){ Router.push('/seaJobs/export/blList') }
     else if(x.key=='4-3'){ Router.push(`/seaJobs/export/${setKey(x)}`) } //these routes are also settled in 2nd useEffect

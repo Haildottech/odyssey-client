@@ -8,27 +8,21 @@ import axios from 'axios';
 
 const InvoiceBalaincing = () => {
     
-    const [from, setFrom] = useState("2023-01-01");
-    const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
-    const [company, setCompany] = useState("");
-    const [overseasAgent, setOverseasAgent] = useState("");
-    const [representator, setRepresentator] = useState("");
-    const [currency, setCurrency] = useState("");
-    const [jobTypes, setJobTypes] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [load, setLoad] = useState(false);
-    const [records, setRecords] = useState([]);
-    const [values, setValues] = useState();
-
+    const [ from, setFrom ] = useState("2023-01-01");
+    const [ to, setTo ] = useState(moment().format("YYYY-MM-DD"));
+    const [ company, setCompany ] = useState("");
+    const [ overseasAgent, setOverseasAgent ] = useState("");
+    const [ representator, setRepresentator ] = useState("");
+    const [ currency, setCurrency ] = useState("");
+    const [ jobTypes, setJobTypes ] = useState([]);
+    const [ isModalOpen, setIsModalOpen ] = useState(false);
+    const [ load, setLoad ] = useState(false);
+    const [ records, setRecords ] = useState([]);
+    const [ values, setValues ] = useState();
     const { data, status } = useQuery({ queryKey:['values'], queryFn:getJobValues });
-    const commas=(a)=>a?parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,", "):'0.0';
-
-    useEffect(() => {
-        if(status=="success"){
-            setValues(data.result);
-        }
-    }, [status]);
-
+    const commas=(a) => a? parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,", ") : '0.0';
+    
+    useEffect(() => { if(status=="success") setValues(data.result) }, [status]);
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     const plainOptions = [
         { label: 'Sea Export', value: 'SE' },
@@ -88,18 +82,28 @@ const InvoiceBalaincing = () => {
     }
 
     const paidReceivedTotal = (list) => {
-        console.log(list)
-        let paid = 0.00;
-        let Received = 0.00;
+        let paid = 0.00, Received = 0.00, total = 0.00;
         list.forEach((x)=>{
-          if(x.payType=="payType"){
-            console.log(x.paid)
+          if(x.payType=="Payble"){
             paid = paid + parseFloat(x.paid)
-        }else{
-            Received = Received + parseFloat(x.Received)
-         }
-        })
-        return paid;
+          } else {
+            Received = Received + parseFloat(x.recieved)
+        }
+    })
+        total = Received - paid
+        return total>0?commas(total):`(${commas(total*-1)})`;
+    }
+
+    const balanceTotal = (list) => {
+        let balance = 0.00;
+        list.forEach((x)=>{
+          if(x.payType=="Payble"){
+            balance = balance - parseFloat(x.balance)
+          } else {
+            balance = balance + parseFloat(x.balance)
+        }
+    })
+        return balance>0?commas(balance):`(${commas(balance*-1)})`;
     }
 
     return(
@@ -129,7 +133,7 @@ const InvoiceBalaincing = () => {
             </Row>
             Overseas Agent
             <Select defaultValue="" style={{width:'100%', marginBottom:5}} size='small'
-                onChange={(e)=>{setOverseasAgent(e) }} 
+                onChange={(e)=>setOverseasAgent(e)}
                 showSearch
                 filterOption={filterOption}
                 options={values?.vendor?.overseasAgent.map((x)=>{ return { value:x.id, label:x.name }})}
@@ -256,30 +260,29 @@ const InvoiceBalaincing = () => {
                 </tr>
             </thead>
             <tbody>
-                {records.map((x, i)=>{
+                {records.map((x, i) => {
                     return(
-                        <tr key={i}>
-                            <td>{x.invoice_No}</td>
-                            <td>{moment(x.createdAt).format("DD-MMM-YYYY")}</td>
-                            <td>{x?.SE_Job?.Bl?.hbl}</td>
-                            <td>{x.party_Name}</td>
-                            <td>{x?.SE_Job?.fd}</td>
-                            <td style={{textAlign:'center'}}>{x?.SE_Job?.freightType=="Prepaid"?"PP":"CC"}</td>
-                            <td style={{textAlign:'center'}}>{x.currency}</td>
-                            <td style={{textAlign:'right'}} >{x.payType=="Recievable"?commas(x.total):"-"}</td>
-                            <td style={{textAlign:'right'}} >{x.payType!="Recievable"?commas(x.total):"-"}</td>
-                            <td style={{textAlign:'right'}} >{commas(x.payType=="Recievable"?x.recieved:x.paid)}</td>
-                            <td style={{textAlign:'right'}} >{x.payType!="Recievable"?`(${commas(x.balance)})`:commas(x.balance)}</td>
-                            <td style={{textAlign:'center'}}>{x.age}</td>
-                        </tr>
-                    )
-                })}
+                    <tr key={i}>
+                        <td style={{lineHeight:1.1}}>{x.invoice_No}</td>
+                        <td style={{lineHeight:1.1}}>{moment(x.createdAt).format("DD-MMM-YYYY")}</td>
+                        <td style={{lineHeight:1.1}}>{x?.SE_Job?.Bl?.hbl}</td>
+                        <td style={{lineHeight:1.1}}>{x.party_Name}</td>
+                        <td style={{lineHeight:1.1}}>{x?.SE_Job?.fd}</td>
+                        <td style={{textAlign:'center',lineHeight:1.1}}>{x?.SE_Job?.freightType=="Prepaid"?"PP":"CC"}</td>
+                        <td style={{textAlign:'center',lineHeight:1.1}}>{x.currency}</td>
+                        <td style={{textAlign:'right',lineHeight:1.1}} >{x.payType=="Recievable"?commas(x.total):"-"}</td>
+                        <td style={{textAlign:'right',lineHeight:1.1}} >{x.payType!="Recievable"?commas(x.total):"-"}</td>
+                        <td style={{textAlign:'right',lineHeight:1.1}} >{commas(x.payType=="Recievable"?x.recieved:x.paid)}</td>
+                        <td style={{textAlign:'right',lineHeight:1.1}} >{x.payType!="Recievable"?`(${commas(x.balance)})`:commas(x.balance)}</td>
+                        <td style={{textAlign:'center',lineHeight:1.1}}>{x.age}</td>
+                    </tr>
+                )})}
                 <tr>
                     <td colSpan={7} style={{textAlign:'right'}}><b>Total</b></td>
                     <td style={{textAlign:'right'}}>{getTotal("Recievable", records)}</td>
                     <td style={{textAlign:'right'}}>{getTotal("Payble", records)}</td>
                     <td style={{textAlign:'right'}}>{paidReceivedTotal(records)}</td>
-                    <td style={{textAlign:'right'}}>-</td>
+                    <td style={{textAlign:'right'}}>{balanceTotal(records)}</td>
                     <td style={{textAlign:'center'}}>-</td>
                 </tr>
             </tbody>

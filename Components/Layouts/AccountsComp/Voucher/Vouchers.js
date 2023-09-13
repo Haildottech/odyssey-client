@@ -46,7 +46,11 @@ const Vouchers=({
         id = voucherData.id;
       }
     });
-    reset({ CompanyId, vType, chequeDate, chequeNo, payTo, type, Voucher_Heads, exRate, currency, ChildAccountId, settleId, id });
+    reset({ 
+      CompanyId, vType, chequeDate, chequeNo, payTo, type,
+      Voucher_Heads, exRate, currency:currency==undefined?"PKR":currency,
+      ChildAccountId, settleId, id 
+    });
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {headers:{CompanyId:CompanyId}})
     .then((x)=>{
       setChild(x.data.result);
@@ -158,7 +162,7 @@ const Vouchers=({
           </Col>
           <Col md={2}></Col>
           <Col md={5}>
-            <InputNumComp name="exRate" label="Ex.Rate" register={register} control={control} width={"100%"} />
+            <InputNumComp name="exRate" label="Ex.Rate" register={register} control={control} width={"100%"}  />
           </Col>
           <Col md={12} className="mt-2">
             <InputComp name="payTo" label="Pay/Recieve To" register={register} control={control} width={"100%"} />
@@ -208,10 +212,10 @@ const Vouchers=({
                 ]}
               />
             </td>
-            {(allValues.currency!="PKR" && Voucher_Heads?.length>0) &&
+            {allValues.currency!="PKR" &&
             <td style={{padding:3, width:90}}>
               {/* <InputNumComp name={`Voucher_Heads.${index}.defaultAmount`} register={register} control={control} width={"100%"} /> */}
-                <InputNumber value={Voucher_Heads[index]?.defaultAmount} style={{width:'100%'}} 
+                <InputNumber value={field.defaultAmount} style={{width:'100%'}} 
                   onChange={(e)=>{
                     let tempRecords = [...Voucher_Heads];
                     tempRecords[index].defaultAmount = e;
