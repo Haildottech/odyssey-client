@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
-import { Tabs } from "antd";
-import { useForm, useWatch, useFormContext } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import axios from 'axios';
 import * as yup from "yup";
+import { Tabs } from "antd";
+import moment from 'moment';
+import Cookies from 'js-cookie';
+import Router from 'next/router';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { getJobValues } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
+import { createHistory } from './historyCreation';
+import { Row, Col, Spinner } from 'react-bootstrap';
+import { yupResolver } from "@hookform/resolvers/yup";
+import DateComp from '/Components/Shared/Form/DateComp';
 import InputComp from '/Components/Shared/Form/InputComp';
 import SelectComp from '/Components/Shared/Form/SelectComp';
-import DateComp from '/Components/Shared/Form/DateComp';
+import { useForm, useWatch, useFormContext } from "react-hook-form";
 import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
-import { Row, Col, Spinner } from 'react-bootstrap';
-import moment from 'moment';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import openNotification from '/Components/Shared/Notification';
-import { useSelector } from 'react-redux';
-import { createHistory } from './historyCreation';
-import Router from 'next/router';
 
 const SignupSchema = yup.object().shape({
     // code: yup.string().required('Required'),
@@ -23,7 +25,7 @@ const SignupSchema = yup.object().shape({
     //bankAuthorizeDate: yup.string(),
     person1: yup.string().required('Required'),
     //person2: yup.string().required('Required'),
-    mobile1:yup.string().min(11, 'Must be 11 Digits!').max(11, 'Must be 11 Digits!').required('Required'),
+    //mobile1:yup.string().min(11, 'Must be 11 Digits!').max(11, 'Must be 11 Digits!').required('Required'),
     //mobile2:yup.string().min(11, 'Must be 11 Digits!').max(11, 'Must be 11 Digits!').required('Required'),
     //ntn: yup.string().required('Required'),
     //strn: yup.string().required('Required'),
@@ -45,6 +47,10 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
         resolver: yupResolver(SignupSchema),
         defaultValues:state.values
     });
+    const { refetch } = useQuery({
+        queryKey:['values'],
+        queryFn:getJobValues
+    });
 
     useEffect(() => {
         if(id!=="new"){
@@ -65,13 +71,13 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
         data.createdBy = Username
         dispatch({type:'toggle', fieldName:'load', payload:true});
         setTimeout(async() => {
-            await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_VENDOR,{
+            await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_VENDOR, {
                 data
             }).then((x)=>{
-                console.log(x.data)
                 if(x.data.status=='success'){
                     openNotification('Success', `Vendor ${x.data.result.name} Created!`, 'green');
-                    Router.push(`/setup/vendor/${x.data.result.id}`)
+                    refetch();
+                    Router.push(`/setup/vendor/${x.data.result.id}`);
                 }else{
                     openNotification('Error', `An Error occured Please Try Again!`, 'red')
                 }
@@ -81,7 +87,6 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
     };
 
     const onEdit = async(data) => {
-        console.log(data.accountRepresentatorId)
         let history = "";
         let EmployeeId = Cookies.get('loginId');
         let updateDate = moment().format('MMM Do YY, h:mm:ss a');
@@ -89,13 +94,14 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
         //console.log(history)
         dispatch({type:'toggle', fieldName:'load', payload:true});
         setTimeout(async() => {
-            await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_VENDOR,{
+            await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_VENDOR, {
                 data, history, EmployeeId, updateDate
             }).then((x)=>{
                 if(x.data.status=='success'){
-                    openNotification('Success', `Vendor ${data.name} Updated!`, 'green')
+                    openNotification('Success', `Vendor ${data.name} Updated!`, 'green');
+                    refetch();
                 } else { 
-                    openNotification('Error', `An Error occured Please Try Again!`, 'red') 
+                    openNotification('Error', `An Error occured Please Try Again!`, 'red');
                 }
                 dispatch({type:'toggle', fieldName:'load', payload:false});
             })

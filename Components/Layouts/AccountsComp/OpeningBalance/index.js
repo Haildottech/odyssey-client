@@ -24,7 +24,7 @@ const OpeningBalance = ({id, voucherData}) => {
       setVoucherAccounts(voucherData.Voucher_Heads)
     }
   }, [])
-  
+
   useEffect(() => {
     if(companyId!="") {
       setLoad(true);
@@ -42,7 +42,7 @@ const OpeningBalance = ({id, voucherData}) => {
     condition?tempState[i].amount = parseFloat(e) * parseFloat(exRate):null;
     setVoucherAccounts(tempState);
   }
-  
+
   const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
   const submitData = async() => {
     if(id=="new"){

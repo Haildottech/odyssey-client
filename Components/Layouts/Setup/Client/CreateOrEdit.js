@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
-import { Tabs } from "antd";
-import { useForm, useFormContext } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import axios from 'axios';
 import * as yup from "yup";
+import { Tabs } from "antd";
+import moment from 'moment';
+import Cookies from 'js-cookie';
+import Router from 'next/router';
+import React, { useEffect } from 'react';
+import { getJobValues } from '/apis/jobs';
+import { useSelector } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
+import { createHistory } from './historyCreation';
+import { Row, Col, Spinner } from 'react-bootstrap';
+import { yupResolver } from "@hookform/resolvers/yup";
+import DateComp from '/Components/Shared/Form/DateComp';
+import { useForm, useFormContext } from "react-hook-form";
 import InputComp from '/Components/Shared/Form/InputComp';
 import SelectComp from '/Components/Shared/Form/SelectComp';
-import DateComp from '/Components/Shared/Form/DateComp';
-import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
-import { Row, Col, Spinner } from 'react-bootstrap';
-import moment from 'moment';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import openNotification from '/Components/Shared/Notification';
-import { useSelector } from 'react-redux';
-import { createHistory } from './historyCreation';
-import Router from 'next/router';
+import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 
 const SignupSchema = yup.object().shape({
     // code: yup.string().required('Required'),
@@ -47,6 +49,10 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
         defaultValues:state.values
     });
     const { oldRecord, Representatives } = state;
+    const { refetch } = useQuery({
+        queryKey:['values'],
+        queryFn:getJobValues
+    });
 
     useEffect(() => {
         if(id!="new"){
@@ -85,6 +91,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             }).then((x)=>{
                 if(x.data.status=='success'){
                     openNotification('Success', `Client ${x.data.result.name} Created!`, 'green');
+                    refetch();
                     Router.push(`/setup/client/${x.data.result.id}`);
                 }else{
                     openNotification('Error', `An Error occured Please Try Again!`, 'red')
@@ -97,7 +104,6 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
     const onEdit = async(data) => {
         let history = "";
         let tempAssociations = [];
-
         let EmployeeId = Cookies.get('loginId');
         let updateDate = moment().format('MMM Do YY, h:mm:ss a');
         history = await createHistory(Representatives, oldRecord, data, company);
@@ -109,7 +115,8 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
                 data, history, EmployeeId, updateDate
             }).then((x)=>{
                 if(x.data.status=='success'){
-                    openNotification('Success', `Client ${data.name} Updated!`, 'green')
+                    openNotification('Success', `Client ${data.name} Updated!`, 'green');
+                    refetch();
                 } else { openNotification('Error', `An Error occured Please Try Again!`, 'red') }
                 dispatch({type:'toggle', fieldName:'load', payload:false});
             })
