@@ -38,6 +38,7 @@ if(groupBy) {
 }
 }, [groupBy])
 
+
   return (
     <div>
     <div className="">
@@ -97,7 +98,7 @@ if(groupBy) {
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}}>{y.Bl.hbl}</td>
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}}>{y.Bl.mbl}</td>
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}} >
-                        {y.sales_representator.name }
+                        {y.sales_representator?.name }
                       </td>
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}}></td>
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}}>
@@ -144,7 +145,7 @@ if(groupBy) {
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}}>{y.Bl.hbl}</td>
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}}>{y.Bl.mbl}</td>
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}}>
-                        {y.sales_representator.name }
+                        {y.sales_representator?.name }
                       </td>
                       <td className="text-center py-1 px-1"></td>
                       <td className="text-center py-1 px-1" style={{whiteSpace:"nowrap"}}>

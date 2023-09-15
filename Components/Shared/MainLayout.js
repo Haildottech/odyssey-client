@@ -59,6 +59,9 @@ const MainLayout = ({children}) => {
 
   useEffect(() => {
     // When visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
+    if(newRouter.pathname.includes("/airJobs/manifest/[id]")){
+      setToggleState('7-8');
+    }
     if(newRouter.pathname.includes("/airJobs/import/bl/[id]")){
       setToggleState('7-6');
     }
@@ -150,6 +153,8 @@ const MainLayout = ({children}) => {
     aiJobList:false,
     aiJob:false,
     aiBl:false,
+    manifestList:false,
+    manifest:false,
   });
   
   const memoizedAlterTabs = () => {
@@ -205,6 +210,8 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='7-4'){ tempTabActive.aiJobList=true }
         else if(tabs.key=='7-5'){ tempTabActive.aiJob=true }
         else if(tabs.key=='7-6'){ tempTabActive.aiBl=true }
+        else if(tabs.key=='7-7'){ tempTabActive.manifestList=true }
+        else if(tabs.key=='7-8'){ tempTabActive.manifest=true }
         
         dispatch(setTab(tempTabs))
         //setTabItems(tempTabs);
@@ -263,7 +270,6 @@ const MainLayout = ({children}) => {
     else if(x.key=='4-2'){ Router.push('/seaJobs/export/blList') }
     else if(x.key=='4-3'){ Router.push(`/seaJobs/export/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='4-4'){ Router.push(`/seaJobs/export/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
-
     else if(x.key=='4-5'){ Router.push('/seaJobs/siJobList') }
     else if(x.key=='4-6'){ Router.push(`/seaJobs/import/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='4-7'){ Router.push(`/seaJobs/import/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
@@ -281,6 +287,8 @@ const MainLayout = ({children}) => {
     else if(x.key=='7-4'){ Router.push(`/airJobs/aiJobList`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='7-5'){ Router.push(`/airJobs/import/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='7-6'){ Router.push(`/airJobs/import/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    else if(x.key=='7-7'){ Router.push(`/airJobs/manifestList/`) }
+    else if(x.key=='7-8'){ Router.push(`/airJobs/manifest/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
   };
 
   const removeTab = (index) => {
@@ -289,7 +297,6 @@ const MainLayout = ({children}) => {
       return x.key!=index
     })
     dispatch(setTab(tempTabs))
-    //setTabItems(tempTabs);
     if(toggleState==index){
       setToggleState(0)
     }

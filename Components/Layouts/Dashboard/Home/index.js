@@ -13,7 +13,6 @@ import Notes from "./Notes";
     const dispatch = useDispatch();
 
     useEffect(() => {
-      console.log(sessionData)
       if(sessionData.isLoggedIn==false){
         Router.push('/login')
       }
@@ -21,7 +20,7 @@ import Notes from "./Notes";
 
   return (
   <div className="base-page-layout d-flex" >
-  {access?.includes("accounts") ? 
+    {access?.includes("accounts") ? 
     <Notifications dispatch={dispatch} incrementTab={incrementTab} Router={Router} moment={moment} />
     :<Notes dispatch={dispatch} incrementTab={incrementTab} Router={Router} moment={moment} />
     }
