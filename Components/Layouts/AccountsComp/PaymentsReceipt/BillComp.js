@@ -267,11 +267,12 @@ const BillComp = ({partytype, selectedParty, payType, companyId, invoiceCurrency
             <td style={{padding:3, width:150}}>
                 {/* receiving variable works for both paying and recieving amounts */}
                 <InputNumber style={{height:30, width:140}} value={x.receiving} min="0" max={`${x.remBalance + parseFloat(x.roundOff)}`} stringMode disabled={state.autoOn}
-                onChange={(e)=>{
-                    let tempState = [...state.invoices];
-                    tempState[index].receiving = e;
-                    set('invoices', tempState);
-                }}/>
+                    onChange={(e)=>{
+                        let tempState = [...state.invoices];
+                        tempState[index].receiving = e;
+                        set('invoices', tempState);
+                    }
+                }/>
             </td>
             <td>{(x.remBalance - x.receiving + parseFloat(x.roundOff)).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,", ")}
             {/* {payType=="Recievable"?
@@ -310,7 +311,17 @@ const BillComp = ({partytype, selectedParty, payType, companyId, invoiceCurrency
     </>
     }
     {state.load && <div className='text-center' ><Spinner /></div>}
-    {state.glVisible && <Gl state={state} dispatch={dispatch} selectedParty={selectedParty} payType={payType} partytype={partytype} companyId={companyId} invoiceCurrency={invoiceCurrency} />}
+    {state.glVisible && 
+        <Gl
+            invoiceCurrency={invoiceCurrency}
+            selectedParty={selectedParty}
+            partytype={partytype}
+            companyId={companyId}
+            dispatch={dispatch}
+            payType={payType}
+            state={state}
+        />
+    }
     </>
   )
 }

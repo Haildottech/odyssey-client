@@ -64,7 +64,7 @@ const JobPL = () => {
         {state.load?<Spinner size='sm' />:"Go"}
       </button>
     </div>
-    <Modal title={"Job Balancing List"} 
+    <Modal title={"Job Profit & Loss Report"} 
       open={state.visible} 
       onOk={()=>set({visible:false})} 
       onCancel={()=>set({visible:false})}

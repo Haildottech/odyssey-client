@@ -42,13 +42,14 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
         state.invoices.forEach((x)=>{
             if(x.receiving && x.receiving!=0){
                 tempGainLoss = tempGainLoss + parseFloat(state.manualExRate)*(x.receiving===null?0:parseFloat(x.receiving)) - parseFloat(x.ex_rate)*(x.receiving===null?0:parseFloat(x.receiving))
+                let tempAmount = (parseFloat(state.manualExRate)*(x.receiving===null?0:parseFloat(x.receiving)) - parseFloat(x.ex_rate)*(x.receiving===null?0:parseFloat(x.receiving))).toFixed(2)
                 tempInvoiceLosses.push({
                     InvoiceId:x.id,
-                    gainLoss:(parseFloat(state.manualExRate)*(x.receiving===null?0:parseFloat(x.receiving)) - parseFloat(x.ex_rate)*(x.receiving===null?0:parseFloat(x.receiving))).toFixed(2), 
+                    gainLoss:payType=="Recievable"? parseFloat(tempAmount)*(-1):tempAmount, 
                 })
             }
         });
-        //console.log(tempInvoiceLosses);
+        console.log(payType);
         dispatch({type:'setAll', payload:{
             gainLossAmount:tempGainLoss.toFixed(2),
             invoiceLosses:tempInvoiceLosses

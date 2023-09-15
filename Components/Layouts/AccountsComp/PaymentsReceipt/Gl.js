@@ -40,16 +40,24 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
         invoicesIds.push(x.invoice_No)
         tempInvoices.unshift({
           id:x.id,
-          recieved:parseFloat(x.recieved) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2)),
-          status:parseFloat(x.recieved) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2))<(parseFloat(x.inVbalance)*parseFloat(x.ex_rate).toFixed(2))?"3":"2",
+          recieved:invoiceCurrency!="PKR"? 
+              parseFloat(x.recieved) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2)):
+              parseFloat(x.recieved) + (parseFloat(x.receiving)),
+          status:invoiceCurrency!="PKR"?
+              parseFloat(x.recieved) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2))<(parseFloat(x.inVbalance)*parseFloat(x.ex_rate).toFixed(2))?"3":"2":
+              parseFloat(x.recieved) + (parseFloat(x.receiving))<(parseFloat(x.inVbalance))?"3":"2",
           //inVbalance:x.inVbalance
         })
       }else if(x.receiving>0 && payType!="Recievable"){
         invoicesIds.push(x.invoice_No)
         tempInvoices.unshift({
           id:x.id,
-          paid:parseFloat(x.paid) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2)),
-          status:parseFloat(x.paid) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2))<(parseFloat(x.inVbalance)*parseFloat(x.ex_rate).toFixed(2))?"3":"2",
+          paid:invoiceCurrency!="PKR"? 
+              parseFloat(x.paid) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2)):
+              parseFloat(x.paid) + (parseFloat(x.receiving)),
+          status:invoiceCurrency!="PKR"? 
+              parseFloat(x.paid) + (parseFloat(x.receiving)*parseFloat(x.ex_rate).toFixed(2))<(parseFloat(x.inVbalance)*parseFloat(x.ex_rate).toFixed(2))?"3":"2":
+              parseFloat(x.paid) + (parseFloat(x.receiving))<(parseFloat(x.inVbalance))?"3":"2",
           //inVbalance:x.inVbalance
         })
       }
@@ -81,6 +89,7 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
         ChildAccountId:x.particular.id
       })
     })
+    // console.log(tempInvoices)
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_INVOICE_TRANSACTION,{
       invoices:tempInvoices,
       invoiceLosses:state.invoiceLosses
@@ -89,8 +98,9 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
         openNotification("Success", "Transaction Recorded!", "green")
       })
     })
-    delay(1000)
-    getInvoices(selectedParty.id, dispatch, partytype, selectedParty, payType, companyId, invoiceCurrency);
+    //getInvoices(selectedParty.id, dispatch, partytype, selectedParty, payType, companyId, invoiceCurrency);
+    await delay(1000)
+    await getInvoices(selectedParty.id, dispatch, partytype, selectedParty, payType, companyId);
   }
 
   return (
@@ -113,8 +123,8 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
               </tr>
               <tr>
                 <th className='' style={{width:260}}>Particular</th>
-                <th className='text-center' style={{width:25}}>Debit</th>
-                <th className='text-center' style={{width:25}}>Credit</th>
+                {invoiceCurrency!="PKR" &&<th className='text-center' style={{width:25}}>Debit</th>
+}               {invoiceCurrency!="PKR" &&<th className='text-center' style={{width:25}}>Credit</th>}
                 <th className='px-0' style={{width:"1px"}}></th>
                 <th className='text-center' style={{width:25}}>Debit</th>
                 <th className='text-center' style={{width:25}}>Credit</th>
@@ -125,8 +135,8 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
           return (
               <tr key={index}>
                 <td>{x.particular?.title}</td>
-                <td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>
-                <td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>
+                {invoiceCurrency!="PKR" &&<td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>}
+                {invoiceCurrency!="PKR" &&<td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>}
                 <td className='px-0' style={{width:"1px"}}></td>
                 <td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>PKR.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
                 <td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>PKR.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
@@ -134,8 +144,8 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
             )})}
             <tr>
               <td style={{textAlign:'right'}}><>Balance:</></td>
-              <td className='text-end'><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(getTotal('debit', state.transactionCreation,''))}</td>
-              <td className='text-end'><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(getTotal('debit', state.transactionCreation,''))}</td>
+              {invoiceCurrency!="PKR" &&<td className='text-end'><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(getTotal('debit', state.transactionCreation,''))}</td>}
+              {invoiceCurrency!="PKR" &&<td className='text-end'><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(getTotal('debit', state.transactionCreation,''))}</td>}
               <td style={{width:"1px"}}></td>
               <td className='text-end'><span className='gl-curr-rep'>PKR.{" "}</span>{commas(getTotal('debit', state.transactionCreation,'PKR'))}</td>
               <td className='text-end'><span className='gl-curr-rep'>PKR.{" "}</span>{commas(getTotal('credit', state.transactionCreation,'PKR'))}</td>

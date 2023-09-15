@@ -102,8 +102,8 @@ const PaymentsReceipt = () => {
                         width:'100%',
                     }}
                     options={[
-                        { value:'USD', label:'USD' },
                         { value:'PKR', label:'PKR' },
+                        { value:'USD', label:'USD' },
                         { value:'GBP', label:'GBP' },
                         { value:'EUR', label:'EUR' },
                         { value:'Multi', label:'Multi' },
@@ -133,7 +133,7 @@ const PaymentsReceipt = () => {
             footer={false} maskClosable={false}
             title={`${selectedParty.name}'s Invoices/Bills`}
         >
-            {(selectedParty.id!=''&& partytype!="agent") && <BillComp      selectedParty={selectedParty} payType={payType} partytype={partytype} companyId={companyId} invoiceCurrency={invoiceCurrency} />}
+            {(selectedParty.id!=''&& partytype!="agent") && <BillComp      selectedParty={selectedParty} payType={payType} partytype={partytype} companyId={companyId} invoiceCurrency={"PKR"} />}
             {(selectedParty.id!=''&& partytype=="agent") && <AgentBillComp selectedParty={selectedParty} payType={payType} partytype={partytype} companyId={companyId} invoiceCurrency={invoiceCurrency} />}
         </Modal>
     </div>

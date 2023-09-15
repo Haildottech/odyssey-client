@@ -71,10 +71,10 @@ const companies = [
           y.load = true;
           y.gainLoss = 0.00;
           y.after = 0.00;
-          y.Invoices.forEach((z)=>{
+          y.Invoices.forEach((z) => {
             if(z.payType=="Recievable"){
               y.revenue = y.revenue + parseFloat(z.total);  //total will not be multiplied by Ex.Rate
-              y.actual = y.actual + parseFloat(z.recieved) * parseFloat(z.ex_rate); //This will be multiplied by Ex.Rate
+              y.actual = y.actual + parseFloat(z.recieved)  //This will be multiplied by Ex.Rate
               if(z.Invoice_Losses?.length>0){
                 z.Invoice_Losses.forEach((i)=>{
                   y.gainLoss = y.gainLoss + parseFloat(i.gainLoss)
@@ -82,7 +82,7 @@ const companies = [
               }
             } else {
               y.cost = y.cost + parseFloat(z.total);  //total will not be multiplied by Ex.Rate
-              y.actual = y.actual - parseFloat(z.paid) * parseFloat(z.ex_rate); //This will be multiplied by Ex.Rate
+              y.actual = y.actual - parseFloat(z.paid)  //This will be multiplied by Ex.Rate
               if(z.Invoice_Losses?.length>0){
                 z.Invoice_Losses.forEach((i)=>{
                   y.gainLoss = y.gainLoss + parseFloat(i.gainLoss)
@@ -101,6 +101,7 @@ const companies = [
           totalAfter = totalAfter + y.after
         })
       }
+      console.log(result)
       await set({
         visible:x.data.status=="success"?
           x.data.result.length>0?

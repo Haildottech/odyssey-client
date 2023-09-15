@@ -15,13 +15,13 @@ const Sheet = ({state}) => {
   return (
     <div>
     <div className='' style={{maxHeight:500, overflowY:'auto'}}>
-        <Table className='tableFixHead vertical'>
+        <Table className='tableFixHead vertical' bordered>
         <thead>
             <tr className='fs-12 text-center'>
                 <th>#</th>
                 <th>Job No</th>
-                <th>Date</th>
-                <th>Client</th>
+                <th style={{width:45}}>Date</th>
+                <th style={{width:200}}>Client</th>
                 <th>F. Dest</th>
                 <th>Weight</th>
                 <th>Containers</th>
@@ -29,8 +29,8 @@ const Sheet = ({state}) => {
                 <th>Volume</th>
                 <th>Revenue</th>
                 <th>Cost</th>
-                <th>Expected P/L</th>
-                <th>Actual P/L</th>
+                {/* <th>Expected P/L</th> */}
+                <th>P/L</th>
                 <th>Gain/Loss</th>
                 <th>After Gain/Loss</th>
             </tr>
@@ -50,7 +50,7 @@ const Sheet = ({state}) => {
             <td></td>
             <td>{setCommas(x.revenue)}</td>
             <td>{setCommas(x.cost)}</td>
-            <td>{setCommas(x.pnl)}</td>
+            {/* <td>{setCommas(x.pnl)}</td> */}
             <td>{setCommas(x.actual)}</td>
             <td style={{color:x.gainLoss<0?'crimson':'green'}}>
                 {setCommas(x.gainLoss<0?x.gainLoss*-1:x.gainLoss)}
@@ -63,7 +63,7 @@ const Sheet = ({state}) => {
             <td colSpan={8}></td>
             <td>Total: </td>
             <td>{setCommas(state.totalRevenue)}</td>
-            <td>{setCommas(state.totalCost)}</td>
+            {/* <td>{setCommas(state.totalCost)}</td> */}
             <td>{setCommas(state.totalPnl)}</td>
             <td>{setCommas(state.totalActual)}</td>
             <td>{setCommas(state.totalgainLoss)}</td>
