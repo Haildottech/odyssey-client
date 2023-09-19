@@ -50,7 +50,7 @@ const InvoiceAndBills = ({invoiceData}) => {
   }
   
   return (
-    <div className='base-page-layout'>
+    <div className='base-page-layout fs-13'>
       <Row>
         <Col md={12} xs={12}>
             <h4 className='fw-7'>Invoices / Bills</h4>
@@ -77,10 +77,10 @@ const InvoiceAndBills = ({invoiceData}) => {
           <Modal open={visible} onOk={() => setVisible(false)} onCancel={() => setVisible(false)}
             width={"80%"}
             footer={false}
-            centered={false}
+            centered={true}
             maskClosable={false}
           >
-              <InvoiceCharges data={invoice} companyId={companyId} />
+            <InvoiceCharges data={invoice} companyId={companyId} />
           </Modal>
         }
         {records.length==0 &&
@@ -97,11 +97,11 @@ const InvoiceAndBills = ({invoiceData}) => {
                 <th>No.</th>
                 <th>Job No.</th>
                 <th>Against</th>
-                <th>Party Type</th>
+                <th>Party</th>
                 <th>Status</th>
                 <th>Operation</th>
                 <th>Currency</th>
-                <th>Ex. Rate</th>
+                <th>Ex.Rate</th>
                 <th>Amount</th>
                 </tr>
               </thead>
@@ -113,7 +113,7 @@ const InvoiceAndBills = ({invoiceData}) => {
                 <td>{index + 1}</td>
                 <td><span className='blue-txt fw-7'>{x.invoice_No}</span></td>
                 <td><span className='blue-txt fw-7'>{x.SE_Job?.jobNo}</span></td>
-                <td><span className='blue-txt'>{x.party_Name}  </span></td>
+                <td style={{maxWidth:250}}><span className='blue-txt'>{x.party_Name}  </span></td>
                 <td><span className='blue-txt fw-7'>{x.partyType.toUpperCase()}</span></td>
                 <td><span className='grey-txt'>{x.approved==1?"Approved":"Un-Approved"}    </span></td>
                 <td><span className='grey-txt'>{x.operation} </span></td>

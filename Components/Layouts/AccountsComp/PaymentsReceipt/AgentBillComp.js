@@ -49,7 +49,6 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                 })
             }
         });
-        console.log(payType);
         dispatch({type:'setAll', payload:{
             gainLossAmount:tempGainLoss.toFixed(2),
             invoiceLosses:tempInvoiceLosses
@@ -110,6 +109,14 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
     const submitPrices = async() => {
         let transTwo = [];
         let removing = 0;
+        let tempInvoices = [...state.invoices];
+        let invNarration = "";
+        tempInvoices.forEach((x)=>{
+            if(x.check){
+                invNarration = invNarration + `Inv# ${x.invoice_No} for Job# ${x.jobId},`
+            }
+        });
+        invNarration = invNarration + ` For ${selectedParty.name}`;
         //Create Account Transactions
         if((Object.keys(state.payAccountRecord).length!=0) && (state.totalrecieving!=0)){ // <- Checks if The Recieving Account is Selected
             if((Object.keys(state.taxAccountRecord).length!=0) && (state.finalTax!=0) && (state.finalTax!=null) && (state.totalrecieving!=0)){
@@ -120,6 +127,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                         type:'debit',//state.taxAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
                         amount:state.finalTax,
                         defaultAmount:parseFloat(state.finalTax)/parseFloat(state.autoOn?state.exRate:state.manualExRate),//0
+                        narration:`Tax Paid Against ${invNarration}`
                     }
                 })
             }
@@ -131,6 +139,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                         type:'debit',//state.bankChargesAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
                         amount:state.bankCharges,
                         defaultAmount:parseFloat(state.bankCharges)/parseFloat(state.autoOn?state.exRate:state.manualExRate),//0
+                        narration:`Bank Charges Paid Against ${invNarration}`
                     }
                 })
             }
@@ -141,7 +150,8 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                     tran:{
                         type:parseFloat(state.gainLossAmount)>0? (payType!="Recievable"?'debit':'credit') : (payType!="Recievable"?'credit':'debit'),
                         amount:gainAndLossAmount,//state.gainLossAmount>0?parseFloat(state.gainLossAmount):(-1*parseFloat(state.gainLossAmount)),
-                        defaultAmount:parseFloat(gainAndLossAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate) //- removing
+                        defaultAmount:parseFloat(gainAndLossAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate), //- removing
+                        narration:`${payType=="Payble"?"Paid":"Received"} Against ${invNarration}`
                     }
                 })
             }
@@ -155,7 +165,8 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                 tran:{
                     type:payType=="Recievable"?'credit':'debit',
                     amount:partyAmount, //state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate) - parseFloat(state.gainLossAmount),
-                    defaultAmount:parseFloat(partyAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate) //- removing
+                    defaultAmount:parseFloat(partyAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate), //- removing
+                    narration:`${payType=="Payble"?"Paid":"Received"} Against ${invNarration}`
                 }
             })
             transTwo.push({
@@ -165,7 +176,8 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                     amount:payAmount,//payType=="Recievable"? 
                         //(state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) - removing:
                         //(state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) + removing,
-                    defaultAmount:parseFloat(payAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate)//-removing
+                    defaultAmount:parseFloat(payAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate),//-removing
+                    narration:`${payType=="Payble"?"Paid":"Received"} Against ${invNarration}`
                 }
             })
         }

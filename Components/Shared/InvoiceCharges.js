@@ -83,7 +83,7 @@ const InvoiceCharges = ({data, companyId}) => {
   }
 
   const approve = async() => {
-    let exp={}, income={},party={}; //exp is the Expense Account, income is Income Account, party is Party's account to create vouhcer with Ledger
+    let exp = {}, income = {}, party = {}; //exp is the Expense Account, income is Income Account, party is Party's account to create vouhcer with Ledger
     setLoad(true);
     let tempInv = {...invoice};
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_SE_JOB_CHILDS,{
@@ -123,18 +123,20 @@ const InvoiceCharges = ({data, companyId}) => {
         Voucher_Heads:[]
     }
     let tempRoundOff = parseFloat(tempInv.roundOff);
+    console.log(invoice)
+    let narration = `${tempInv.payType} Against Invoice ${invoice.invoice_No} For Job# ${invoice.SE_Job.jobNo} From ${invoice.party_Name}`
     if(tempRoundOff==0){
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount),
             type:tempInv.payType=="Recievable"?"debit":"credit",
-            narration:"party",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:party.id
         })
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount), //+ parseFloat(tempInv.roundOff),
             type:tempInv.payType=="Recievable"?"credit":"debit",
-            narration:"",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:tempInv.payType=="Recievable"?income.id:exp.id //income.id
         })
@@ -142,37 +144,37 @@ const InvoiceCharges = ({data, companyId}) => {
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount) + parseFloat(tempRoundOff),
             type:tempInv.payType=="Recievable"?"debit":"credit",
-            narration:"party",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:party.id
         })
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount) + parseFloat(tempRoundOff),
             type:"credit",
-            narration:"",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:income.id
         })
-
+        
     }else if(tempRoundOff <0  && tempInv.payType=="Recievable"){
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount) - parseFloat(tempRoundOff)*-1,
             type:tempInv.payType=="Recievable"?"debit":"credit",
-            narration:"party",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:party.id
         })
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount),
             type:"credit",
-            narration:"",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:income.id
         })
         vouchers.Voucher_Heads.push({
             amount:parseFloat(tempRoundOff)*-1,
             type:tempInv.payType=="Recievable"?"debit":"credit",
-            narration:"",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:exp.id
         })
@@ -181,39 +183,38 @@ const InvoiceCharges = ({data, companyId}) => {
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount)+ parseFloat(tempRoundOff),
             type:"credit",
-            narration:"party",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:party.id
         })
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount) + parseFloat(tempRoundOff),
             type:"debit",
-            narration:"",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:exp.id
         })
-
 
     }else if(tempRoundOff <0  && tempInv.payType!="Recievable"){
 
         vouchers.Voucher_Heads.push({
             amount:(parseFloat(amount) - parseFloat(tempRoundOff)*-1).toFixed(2),
             type:"credit",
-            narration:"party",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:party.id
         })
         vouchers.Voucher_Heads.push({
             amount:(parseFloat(amount)).toFixed(2),
             type:"debit",
-            narration:"",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:exp.id
         })
         vouchers.Voucher_Heads.push({
             amount:(parseFloat(tempRoundOff)*-1).toFixed(2),
             type:"credit",
-            narration:"",
+            narration:narration,
             VoucherId:null,
             ChildAccountId:income.id
         })
@@ -278,9 +279,9 @@ const InvoiceCharges = ({data, companyId}) => {
 return (
   <>
     {load && <FullScreenLoader/>}
-    <div className='invoice-styles' style={{maxHeight:300}}>
+    <div className='invoice-styles '>
     {Object.keys(data).length>0 &&
-    <>
+    <div className='fs-12'>
     <div style={{maxWidth:70}}>
     <Popover content={PrintOptions} placement="bottom" title="Printing Options">
         <div className='div-btn-custom text-center p-2'>Print</div>
@@ -378,7 +379,7 @@ return (
         </Col>
     </Row>
     <div style={{minHeight:300}}>
-        <div className='table-sm-1 mt-3' style={{maxHeight:250, overflowY:'auto'}}>
+        <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto', fontSize:11}}>
         <Table className='tableFixHead' bordered>
         <thead>
             <tr className='table-heading-center'>
@@ -400,7 +401,7 @@ return (
             <th>Total</th>  
             </tr>
         </thead>
-        <tbody style={{fontSize:13}}>
+        <tbody style={{fontSize:11}}>
         {records.map((x, index) => {
         return (
         <tr key={index} className='f table-row-center-singleLine'>
@@ -483,7 +484,7 @@ return (
             </Col>
         </Row>
     </div>
-    </>
+    </div>
     }
     {/* Printing Component */}
     <div style={{

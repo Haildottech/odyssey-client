@@ -94,7 +94,6 @@ const getAccounts = async(trans, companyId) => {
 
 const totalRecieveCalc = (vals) => {
     let total = 0.00;
-    console.log("Inside Total Receiving Function in states of payment receive")
     vals.forEach((x)=>{
       if(x.receiving>0){
         total = total+ parseFloat(x.receiving)

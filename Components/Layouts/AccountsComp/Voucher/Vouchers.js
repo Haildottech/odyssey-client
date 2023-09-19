@@ -94,7 +94,7 @@ const Vouchers=({
 
   const box = {border:'1px solid silver', paddingLeft:10, paddingTop:5, paddingBottom:3, minHeight:31}
   return (
-  <div className="base-page-layout">
+  <div className="base-page-layout fs-11">
     <form onSubmit={handleSubmit(onSubmit)}>
       <Row>
         <Col md={7}>

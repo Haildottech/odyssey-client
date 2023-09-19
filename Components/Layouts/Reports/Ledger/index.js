@@ -272,7 +272,8 @@ const Ledger = () => {
               balance:closingBalance,
               voucher:y['Voucher.voucher_Id'],
               date:y.createdAt,
-              type:y.type
+              type:y.type,
+              narration:y.narration
             })
           }
         })

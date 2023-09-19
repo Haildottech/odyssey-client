@@ -5,7 +5,7 @@ const Modal = ({ ledger, closing, opening }) => {
     const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
   return (
     <div>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between mt-4">
         <h5></h5>
         <b>Opening Balance : 
             {opening > 0 ? 
@@ -15,7 +15,7 @@ const Modal = ({ ledger, closing, opening }) => {
         </b>
       </div>
       <div style={{ maxHeight: 760, overflowY: "auto", overflowX: "hidden" }}>
-        <div className="table-sm-1">
+        <div className="table-sm-1 mt-2">
           <Table className="tableFixHead" bordered style={{ fontSize: 13 }}>
             <thead>
               <tr className="custom-width">
@@ -35,7 +35,7 @@ const Modal = ({ ledger, closing, opening }) => {
                         <td className="text-center">
                             {x.date.slice(0, 10)}
                         </td>
-                        <td className=""></td>
+                        <td className="fs-12" style={{maxWidth:100}}>{x.narration}</td>
                         <td className="text-end">
                             {x.type=="debit" && commas(x.amount)}
                         </td>

@@ -32,7 +32,7 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
   }
 
   const handleSubmit = async() => {
-    set("transLoad", true);
+    //set("transLoad", true);
     let tempInvoices = [];
     let invoicesIds = [];
     state.invoices.forEach((x, i) => {
@@ -84,23 +84,22 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
         defaultAmount:`${x.tran.defaultAmount==0?'':x.tran.defaultAmount}`,
         amount:`${x.tran.amount}`,
         type:x.tran.type,
-        narration:invoicesIds.toString(),
+        narration:x.tran.narration,
         VoucherId:null,
         ChildAccountId:x.particular.id
       })
     })
-    // console.log(tempInvoices)
-    await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_INVOICE_TRANSACTION,{
-      invoices:tempInvoices,
-      invoiceLosses:state.invoiceLosses
-    }).then(async(x)=>{
-      await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER,voucher).then(async(y)=>{
-        openNotification("Success", "Transaction Recorded!", "green")
-      })
-    })
-    //getInvoices(selectedParty.id, dispatch, partytype, selectedParty, payType, companyId, invoiceCurrency);
-    await delay(1000)
-    await getInvoices(selectedParty.id, dispatch, partytype, selectedParty, payType, companyId);
+    console.log(voucher);
+    // await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_INVOICE_TRANSACTION,{
+    //   invoices:tempInvoices,
+    //   invoiceLosses:state.invoiceLosses
+    // }).then(async(x)=>{
+    //   await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER,voucher).then(async(y)=>{
+    //     openNotification("Success", "Transaction Recorded!", "green")
+    //   })
+    // })
+    //await delay(1000)
+    //await getInvoices(selectedParty.id, dispatch, partytype, selectedParty, payType, companyId);
   }
 
   return (

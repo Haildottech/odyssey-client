@@ -66,16 +66,25 @@ const BillComp = ({partytype, selectedParty, payType, companyId, invoiceCurrency
     const submitPrices = async() => {
         let transTwo = [];
         let removing = 0;
-        //Create Account Transactions
+        let tempInvoices = [...state.invoices];
+        let invNarration = "";
+        tempInvoices.forEach((x)=>{
+            if(x.check){
+                invNarration = invNarration + `Inv# ${x.invoice_No} for Job# ${x.jobId},`
+            }
+        });
+        invNarration = invNarration + ` For ${selectedParty.name}`;
+        // Create Account Transactions
         if((Object.keys(state.payAccountRecord).length!=0) && (state.totalrecieving!=0)){ // <- Checks if The Recieving Account is Selected
             if((Object.keys(state.taxAccountRecord).length!=0) && (state.finalTax!=0) && (state.finalTax!=null) && (state.totalrecieving!=0)){
                 removing = state.finalTax;
                 transTwo.push({
                     particular:state.taxAccountRecord,
                     tran:{
-                        type:'debit',//state.taxAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
+                        type:'debit', // state.taxAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
                         amount:state.finalTax,
-                        defaultAmount:0
+                        defaultAmount:0,
+                        narration:`Tax Paid Against ${invNarration}`
                     }
                 })
             }
@@ -84,35 +93,38 @@ const BillComp = ({partytype, selectedParty, payType, companyId, invoiceCurrency
                 transTwo.push({
                     particular:state.bankChargesAccountRecord,
                     tran:{
-                        type:'debit',//state.bankChargesAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
+                        type:'debit', // state.bankChargesAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],
                         amount:state.bankCharges,
-                        defaultAmount:0
+                        defaultAmount:0,
+                        narration:`Bank Charges Paid Against ${invNarration}`
                     }
                 })
             }
             transTwo.push({
                 particular:state.partyAccountRecord,
                 tran:{
-                    //type:state.partyAccountRecord.Parent_Account.Account[payType=="Recievable"?'dec':'inc'],
+                    // type:state.partyAccountRecord.Parent_Account.Account[payType=="Recievable"?'dec':'inc'],
                     type:payType=="Recievable"?'credit':'debit',
                     amount:state.totalrecieving,
-                    defaultAmount:0
+                    defaultAmount:0,
+                    narration:`${payType=="Payble"?"Paid":"Received"} Against ${invNarration}`
                 }
             })
             transTwo.push({
                 particular:state.payAccountRecord,  
                 tran:{ 
-                    type:state.payAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],// <-Checks the account type to make Debit or Credit
+                    type:state.payAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'], // <-Checks the account type to make Debit or Credit
                     amount:payType=="Recievable"? state.totalrecieving-removing: state.totalrecieving+removing,
-                    defaultAmount:0
+                    defaultAmount:0,
+                    narration:`${payType=="Payble"?"Paid":"Received"} Against ${invNarration}`
                 }
             })
         }
         dispatch({type:'setAll', payload:{
+            glVisible:true,
             removing:removing,
-            transactionCreation:transTwo,
-            glVisible:true
-        }})
+            transactionCreation:transTwo
+        }});
         // set('removing', removing);
         // set('transactionCreation', transTwo);
         // set('glVisible', true);
