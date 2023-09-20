@@ -11,6 +11,7 @@ import ChargesComp from './ChargesComp/';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
 import EquipmentInfo from './EquipmentInfo';
+import Charges from './Charges';
 import LoadingProgram from './Loading Program';
 import DelieveryOrder from './Delievery Order';
 import { useForm, useWatch } from "react-hook-form";
@@ -214,6 +215,11 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
           <ChargesComp state={state} dispatch={dispatch} type={type} allValues={allValues} />
         </Tabs.TabPane>
       }
+      {/* {state.edit &&
+        <Tabs.TabPane tab="Charge" key="8">
+          <Charges state={state} dispatch={dispatch} type={type} allValues={allValues} />
+        </Tabs.TabPane>
+      } */}
       {(state.selectedInvoice!='') &&
         <Tabs.TabPane tab="Invoice / Bills" key="5">
           <Invoice state={state} dispatch={dispatch} companyId={companyId} />

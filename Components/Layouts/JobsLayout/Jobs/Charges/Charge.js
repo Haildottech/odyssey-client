@@ -9,7 +9,8 @@ import { Row, Col, Table, Spinner } from 'react-bootstrap';
 import PopConfirm from '../../../../Shared/PopConfirm';
 import React, { useEffect, useState } from 'react';
 import PartySearch from './PartySearch';
-import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
+import { calculateChargeHeadsTotal, getHeadsNew } from "../states";
+import { saveHeads, generateInvoice } from "./states";
 import { useQueryClient } from '@tanstack/react-query';
 
 const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, remove, control, register, companyId, operationType, allValues, chargesData}) => {
@@ -56,7 +57,9 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     }
 
     const permissionAssign = (permissions, x) => {
-        return x.Invoice?.approved=="1"?true:false       
+        return  permissions.admin?                //if is admin
+            x.Invoice?.approved=="1"?true:false:  // <-- Check if Invoice is approved or not
+            x.InvoiceId!=null? true : false       //If not admin
     }
 
   return(
@@ -82,31 +85,32 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <div className='div-btn-custom text-center mx-0 py-1 px-3' style={{float:'right'}} 
             onClick={async () => {
                 if(!state.chargeLoad){
-                    await dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-                    await calculate();
                     await saveHeads(chargeList, state, dispatch, reset);
+                    await calculate();
                     await queryClient.removeQueries({ queryKey: ['charges'] })
                     await chargesData.refetch();
                     await dispatch({type:'set', payload:{
                         chargeLoad:false,
                         selection:{InvoiceId:null, partyId:null}
                     }})
+                    // await dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
                 }
             }}
         >Save Charges</div>
         <div className='div-btn-custom-green text-center py-1 mx-2 px-3' style={{float:'right'}}
             onClick={async () => {
                 if(!state.chargeLoad){
-                    await dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-                    let status = await  makeInvoice(chargeList, companyId, reset, operationType);
-                    if(status=="success"){
-                        await queryClient.removeQueries({ queryKey: ['charges'] })
-                        await chargesData.refetch();
-                    }  
-                    await dispatch({type:'set', payload:{
-                        chargeLoad:false,
-                        selection:{InvoiceId:null, partyId:null}
-                    }})
+                    await  generateInvoice(chargeList, companyId, reset, operationType);
+                    // await dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+                    // let status = await  makeInvoice(chargeList, companyId, reset, operationType);
+                    // if(status=="success"){
+                    //     await queryClient.removeQueries({ queryKey: ['charges'] })
+                    //     await chargesData.refetch();
+                    // }  
+                    // await dispatch({type:'set', payload:{
+                    //     chargeLoad:false,
+                    //     selection:{InvoiceId:null, partyId:null}
+                    // }})
                 }
             }}
         >Generate Invoice No</div>
@@ -142,7 +146,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
           <th style={{minWidth:100}}>Net Amount</th>
           <th>Ex.Rate</th>
           <th style={{minWidth:110}}>Local Amount</th>
-          <th>Name</th>
+          <th>Party</th>
           <th>Status</th>
           <th style={{minWidth:110}}>Approved By</th>
           <th style={{minWidth:120}}>Approval Date</th>
@@ -153,7 +157,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
       return (<>
         {x.type==type && 
         <tr key={index} className='f table-row-center-singleLine'>
-        <td className='text-center'>
+        <td className='text-center'> {/*Close Button*/}
             <CloseCircleOutlined className='cross-icon' style={{ position: 'relative', bottom: 3 }}
                 onClick={() => {
                 if((x.Invoice==null || x.Invoice?.status==null || x.Invoice?.approved=="0") 
@@ -175,13 +179,9 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             />
         </td>
         <td className='text-center'>
-            {(x.InvoiceId==null && x.new!=true)  &&
-            <input type="checkbox" {...register(`chargeList.${index}.check`)}
-                style={{ cursor: 'pointer' }} 
-                disabled={x.partyId==state.selection.partyId?false:state.selection.partyId==null?false:true}
-            />}
-        </td>
-        <td className='text-center'>{/* Invoice Number */}
+            <input type="checkbox" {...register(`chargeList.${index}.check`)} style={{ cursor:'pointer' }}/>
+        </td> {/*Check Box*/}
+        <td className='text-center'>{/* Bill/Invoice # */}
             {x.invoice_id != null &&
                 <Tag color="geekblue" style={{ fontSize: 15, cursor: "pointer" }}
                     onClick={() => {
@@ -193,14 +193,13 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 >{x.invoice_id}</Tag>
             }
         </td>
-        <td style={{ padding: 3, minWidth: 100 }}> {/* charge selection */}
+        <td style={{ padding: 3, minWidth: 100 }}> {/* Charge */}
             <Select className='table-dropdown' showSearch value={x.charge} style={{ paddingLeft: 0 }}
             disabled={permissionAssign(permissions, x)}
             onChange={(e) => {
                 let tempChargeList = [...chargeList];
                 state.fields.chargeList.forEach(async (y, i) => {
                 if (y.code == e) {
-                    console.log(y.calculationType)
                     tempChargeList[index] = {
                         ...tempChargeList[index],
                         charge: e,
@@ -259,9 +258,9 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             />
         </td>
         <td>{x.particular}</td>
-        <td>{x.basis} {/* Basis */}
+        <td>{x.basis}
         </td>
-        <td style={{ padding: 3, minWidth: 50 }}> {/* PP?CC */}
+        <td style={{ padding: 3, minWidth: 50 }}> {/* PP/CC */}
             <SelectComp register={register} name={`chargeList.${index}.pp_cc`} control={control} width={60} font={13} 
                 disabled={permissionAssign(permissions, x)}
                 options={[
@@ -270,7 +269,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 ]}
             />
         </td>
-        {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* Size/Type */}
+        {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* SizeType */}
             <SelectSearchComp register={register} name={`chargeList.${index}.size_type`} control={control} width={100} font={13} 
             disabled={permissionAssign(permissions, x)}
                 options={[
@@ -279,7 +278,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 ]}
             />
         </td>}
-        {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* DG */}
+        {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* DG Type */}
             <SelectSearchComp register={register} name={`chargeList.${index}.dg_type`} control={control} width={95} font={13} disabled={permissions.admin?false:x.InvoiceId!=null?true:false}
                 options={[
                     { id: 'DG', name: 'DG' },
@@ -291,7 +290,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             <InputNumComp register={register} name={`chargeList.${index}.qty`} control={control} width={30} font={13} 
             disabled={permissionAssign(permissions, x)}/>
         </td> 
-        {(operationType=="AI"||operationType=="AE") &&<td style={{ padding: 3 }}>{/* rate_charge */}
+        {(operationType=="AI"||operationType=="AE") &&<td style={{ padding: 3 }}>{/* Rate / Qty / Weight */}
             <InputNumComp register={register} name={`chargeList.${index}.rate_charge`} control={control} width={30} font={13} 
             disabled={permissionAssign(permissions, x)}/>
         </td> }
@@ -331,12 +330,12 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         </td>
         <td>{x.local_amount}</td>
         <td className='text-center'>{/* Party Selection */}
-                {x.new == true && <RightCircleOutlined style={{ position: 'relative', bottom: 3 }}
-                    onClick={() => {
-                        dispatch({ type: 'set', payload: { headIndex: index, headVisible: true } }); //<--Identifies the Head with there Index sent to modal
-                    }}
-                />
-                }{x.name != "" ? <span className='m-2 '><Tag color="geekblue" style={{ fontSize: 15 }}>{x.name}</Tag></span> : ""}
+            <RightCircleOutlined style={{ position: 'relative', bottom: 3 }}
+                onClick={() => {
+                    dispatch({type:'set',payload:{headIndex:index,headVisible:true}}); //<--Identifies the Head with there Index sent to modal
+                }}
+            />
+            {x.name != "" ? <span className='m-2 '><Tag color="geekblue" style={{ fontSize: 15 }}>{x.name}</Tag></span> : ""}
         </td>
         <td>Un-Approved</td><td></td><td></td>
         </tr>}
