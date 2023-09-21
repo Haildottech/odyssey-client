@@ -59,8 +59,8 @@ const PaymentsReceipt = () => {
     <div className='base-page-layout'>
         <Row>
             <Col md={12} xs={12}><h4 className='fw-7'>Payments / Receipts</h4></Col>
-            <Col style={{maxWidth:100}}>
-                <div style={basestyle}>Type</div>
+            <Col md={2}>
+                <div><b>Select Party Type</b></div>
                 <Radio.Group className='mt-1' 
                     value={partytype}
                     onChange={(e)=>{
@@ -80,9 +80,11 @@ const PaymentsReceipt = () => {
                     <Radio value={"agent"}>Agent</Radio>
                 </Radio.Group>
             </Col>
-            <Col style={{maxWidth:30}}></Col>
-            <Col style={{maxWidth:250}}>
-                <div style={basestyle}>Payment</div>
+
+        </Row>
+        <Row className='mt-3'>
+            <Col md={2}>
+                <b>Payment</b>
                 <Radio.Group className='mt-1' 
                     value={payType}
                     onChange={(e)=>{
@@ -93,14 +95,14 @@ const PaymentsReceipt = () => {
                     <Radio value={"Payble"}>Payble</Radio>
                     <Radio value={"Recievable"}>Recievable</Radio>
                 </Radio.Group>
-                <div className='mt-3' style={basestyle}>Currency</div>
+            </Col>
+            <Col md={2}>
+            <b>Currency</b>
                 <Select size='small'
                     disabled={partytype!="agent"?true:false}
                     defaultValue={invoiceCurrency}
                     onChange={(e)=> setInvoiceCurrency(e)}
-                    style={{
-                        width:'100%',
-                    }}
+                    style={{ width:'100%' }}
                     options={[
                         { value:'PKR', label:'PKR' },
                         { value:'USD', label:'USD' },
@@ -110,10 +112,11 @@ const PaymentsReceipt = () => {
                     ]}
                 />
             </Col>
-            <Col style={{maxWidth:30}}></Col>
-            <Col style={{maxWidth:400}}>
-                <div style={basestyle}>Search</div>
-                <Input style={{ width: 400 }} placeholder="Search" 
+        </Row>
+        <Row>
+            <Col style={{maxWidth:400}} className='mt-3'>
+                <b>Search</b>
+                <Input style={{ width: 500 }} placeholder="Search" 
                     suffix={search.length>2?<CloseCircleOutlined onClick={()=>setSearch("")} />:<SearchOutlined/>} 
                     value={search} onChange={(e)=>setSearch(e.target.value)}
                 />

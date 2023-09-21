@@ -35,6 +35,7 @@ const InvoiceCharges = ({data, companyId}) => {
   const [load, setLoad] = useState(false);
   const [ref, setRef] = useState(false);
   const [logo, setLogo] = useState(false);
+  const [compLogo, setCompLogo] = useState("1");
   const [balance, setBalance] = useState(false);
 
   let bankDetails = {
@@ -263,6 +264,27 @@ const InvoiceCharges = ({data, companyId}) => {
         <Checkbox onChange={()=>setRef(!ref)} checked={ref} className='mb-2'>Hide Ref & Sales Rep</Checkbox><br/>
         <Checkbox onChange={()=>setLogo(!logo)} checked={logo} className='mb-2'>Hide Logo</Checkbox><br/>
         <Checkbox onChange={()=>setBalance(!balance)} checked={balance} className='mb-2'>Hide Balance</Checkbox><br/>
+        Logo: {" "}
+        <Radio.Group
+            options={
+                [
+                    {
+                      label: 'SNS',
+                      value: '1',
+                    },
+                    {
+                      label: 'ACS',
+                      value: '2',
+                    }
+                  ]
+            }
+            onChange={(e)=>setCompLogo(e.target.value)}
+            value={compLogo}
+            optionType="button"
+            buttonStyle="solid"
+        />
+        <br/>
+        <div className='mt-3'></div>
         <ReactToPrint content={()=>inputRef} trigger={()=><div className='div-btn-custom text-center p-2'>Go</div>} />
     </div>
   )
@@ -282,7 +304,9 @@ return (
     {load && <FullScreenLoader/>}
     <div className='invoice-styles '>
     {Object.keys(data).length>0 &&
-    <div className='fs-12'>
+    <div className='fs-12' 
+        style={{maxHeight:660, overflowY:'auto', overflowX:'hidden'}}
+    >
     <div style={{maxWidth:70}}>
     <Popover content={PrintOptions} placement="bottom" title="Printing Options">
         <div className='div-btn-custom text-center p-2'>Print</div>
@@ -315,7 +339,7 @@ return (
         </Col>
         <Col md={3} className="mb-3">
             <div>
-                <span className='inv-label'>Invoie/Bill:</span>
+                <span className='inv-label'>Invoice/Bill:</span>
                 <span className='inv-value'>{" "}{invoice.type}</span>
             </div>
         </Col>
@@ -379,7 +403,7 @@ return (
             </div>
         </Col>
     </Row>
-    <div style={{minHeight:300}}>
+    <div style={{minHeight:250}}>
         <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto', fontSize:11}}>
         <Table className='tableFixHead' bordered>
         <thead>
@@ -405,7 +429,7 @@ return (
         <tbody style={{fontSize:11}}>
         {records.map((x, index) => {
         return (
-        <tr key={index} className='f table-row-center-singleLine'>
+        <tr key={index} className='f table-row-center-singleLine' style={{lineHeight:0.5}}>
             <td>{index + 1}</td>
             <td>{x.charge}</td>
             <td>{x.particular}</td>
@@ -417,7 +441,7 @@ return (
             <td>{x.currency}</td>
             <td>{x.amount}</td>
             <td>{x.discount}</td>
-            <td style={{textAlign:'center'}}>{x.tax_apply}</td>
+            <td>{x.tax_apply}</td>
             <td>{x.tax_amount}</td>
             <td>{x.net_amount}</td>
             <td>{x.currency=="PKR"?"1.00":x.ex_rate}</td>
@@ -426,7 +450,7 @@ return (
             )
         })}
         {invoice.roundOff!="0" &&
-        <tr>
+        <tr style={{lineHeight:0.5}}>
             <td>{records.length+1}</td>
             <td>ROFC</td>
             <td>Round Off</td>
@@ -457,19 +481,21 @@ return (
             </div>
             <button className='btn-custom mt-3' onClick={updateNote} type='button'>Save Note</button>
         </Col>
-        <Col className='px-0' md={4}>
-            <Radio.Group onChange={(e)=>setBank(e.target.value)} value={bank} >
+        <Col md={4} className='mt-4'>
+            <b>Bank Details</b>
+            <div style={{border:"1px solid silver"}}>
+                <div style={{fontSize:12, lineHeight:0.8, whiteSpace:'pre-wrap', paddingBottom:10}}>
+                    {bank==1?bankDetails.one:bank==2?bankDetails.two:bankDetails.three}
+                </div>
+            </div>
+        </Col>
+        <Col className='mt-5 p-0' md={1}>
+            <Radio.Group onChange={(e)=>setBank(e.target.value)} value={bank}>
                 <Radio value={1}>BANK A</Radio>
                 <Radio value={2}>BANK B</Radio>
                 <Radio value={3}>BANK C</Radio>
             </Radio.Group>
-            <div style={{border:"1px solid silver"}}>
-             <div style={{fontSize:12, lineHeight:0.8, whiteSpace:'pre-wrap', paddingBottom:10}}>
-                {bank==1?bankDetails.one:bank==2?bankDetails.two:bankDetails.three}
-            </div>
-            </div>
         </Col>
-        <Col md={2}></Col>
     </Row>
     <hr/>
     <div>
@@ -492,7 +518,17 @@ return (
             display:"none"
         }}>
         <div ref={(response)=>(inputRef=response)}>
-            {invoice && <InvoicePrint records={records} bank={bank} bankDetails={bankDetails} invoice={invoice} calculateTotal={calculateTotal} /> }
+            {invoice && 
+                <InvoicePrint 
+                    logo={logo} 
+                    compLogo={compLogo} 
+                    records={records} 
+                    bank={bank} 
+                    bankDetails={bankDetails} 
+                    invoice={invoice} 
+                    calculateTotal={calculateTotal} 
+                /> 
+            }
         </div>
     </div>
     </div>

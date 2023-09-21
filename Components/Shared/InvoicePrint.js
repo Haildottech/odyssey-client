@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
 import moment from "moment";
 import ports from "/jsonData/ports";
+import airports from "/jsonData/airports";
 import inWords from '/functions/numToWords';
 import Cookies from 'js-cookie';
 
-const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => {
+const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calculateTotal}) => {
 
     const getPort = (id) => {
         const index = ports.ports.findIndex(element => element.id == id);
@@ -19,42 +20,70 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
         }
         return value
     }
+    const getAirPort = (id) => {
+        const index = airports.findIndex(element => element.id == id);
+        let value = "";
+        if(index>-1){
+            value = airports[index].name;
+            let str;
+            let ourSubstring = "(";
+            str = value.indexOf(ourSubstring);
+            value = value.slice(0,str-1)
+        }
+        return value
+    }
 
     const paraStyles = { lineHeight:1.2, fontSize:11 }
     const heading = { lineHeight:1, fontSize:11, fontWeight:'800', paddingBottom:5 };
     const Line = () => <div style={{backgroundColor:"black", height:3, position:'relative', top:12}}></div>
     const border = "1px solid black";
 
+    useEffect(() => {
+      console.log(invoice)
+      console.log(airports)
+    }, [])
+    
   return (
-    <div className='p-5'>
+    <div className='pb-5 px-5 pt-4'>
     <Row>
+        {!logo && 
         <Col md={4} className='text-center'>
-            <img src={'/seanet-logo.png'} style={{filter: `invert(0.5)`}} height={100} />
-            <div>SHIPPING & LOGISTICS</div>
+            {compLogo=="1"&&
+            <>
+                <img src={'/seanet-logo.png'} style={{filter: `invert(0.5)`}} height={100} />
+                <div>SHIPPING & LOGISTICS</div>
+            </>
+            }
+            {compLogo=="2"&&
+            <>
+                <img src={'/aircargo-logo.png'} style={{filter: `invert(0.5)`}} height={100} />
+            </>
+            }
         </Col>
+        }
         <Col>
         <div className='text-center '>
-            <div style={{fontSize:20}}><b>SEA NET SHIPPING & LOGISTICS</b></div>
+            <div style={{fontSize:20}}><b>{compLogo=="1"?"SEA NET SHIPPING & LOGISTICS":"AIR CARGO SERVICES"}</b></div>
             <div style={paraStyles}>House# D-213, DMCHS, Siraj Ud Daula Road, Karachi</div>
             <div style={paraStyles}>Tel: 9221 34395444-55-66   Fax: 9221 34385001</div>
-            <div style={paraStyles}>Email: info@seanetpk.com   Web: www.seanetpk.com</div>
-            <div style={paraStyles}>NTN # 8271203-5</div>
+            <div style={paraStyles}>Email: {compLogo=="1"?"info@seanetpk.com":"info@acs.com.pk"}   Web: {compLogo=="1"?"www.seanetpk.com":"www.acs.com.pk"}</div>
+            <div style={paraStyles}>NTN # {compLogo=="1"?"8271203-5":"0287230-7"}</div>
         </div>
         </Col>
     </Row>
     <Row>
         <Col md={5}><Line/></Col>
-        <Col md={2}><p className='text-center fs-15'><strong>{invoice.type}</strong></p></Col>
+        <Col md={2}><p className='text-center fs-15' style={{lineHeight:0.2, position:'relative', top:6}}><strong>{invoice.type}</strong></p></Col>
         <Col md={5}><Line/></Col>
     </Row>
     <Row style={{paddingLeft:12, paddingRight:12}}>
         <Col md={6} style={{borderTop:border, borderRight:border, borderLeft:border, borderBottom:border, maxHeight:70, overflow:'hidden'}} className='p-0 px-1'>
             <div style={heading}>INVOICE TO</div>
             <div style={paraStyles}>{invoice.party_Name}</div>
-            {/* <div style={paraStyles}>{invoice.SE_Job.Client?.address1}</div>
+            <div style={paraStyles}>{invoice.SE_Job.Client?.address1}</div>
             <div style={paraStyles}>{invoice.SE_Job.Client?.infoMail}</div>
             <div style={paraStyles}>{invoice.SE_Job.Client?.telephone1}</div>
-            <div style={paraStyles}>{invoice.SE_Job.Client?.mobile1}</div> */}
+            <div style={paraStyles}>{invoice.SE_Job.Client?.mobile1}</div>
         </Col>
         <Col md={6} style={{  borderTop:border, borderBottom:border, borderRight:border, maxHeight:70, overflow:'hidden'}} className='p-0 px-1'>
         <div style={heading}>Shipper/Consignee</div>
@@ -79,7 +108,7 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
         <Col md={6} style={{borderRight:border, borderLeft:border, borderBottom:border}} className='p-1'>
             <Row>
                 <Col md={7}>
-                    <div style={heading}>MBL No.</div>
+                    <div style={heading}>{(invoice.operation=="SE"||invoice.operation=="SI")?"MBL":"MAWB"} No.</div>
                     <div style={paraStyles}>{invoice.SE_Job?.Bl?.mbl}</div>
                 </Col>
                 <Col md={5}>
@@ -106,11 +135,24 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
         <Col md={6} style={{borderRight:border, borderLeft:border, borderBottom:border}} className='p-1'>
             <Row>
                 <Col md={7}>
-                    <div style={heading}>Vessel / Voyage</div>
-                    <div style={paraStyles}>{invoice.SE_Job?.vessel?.name} / {invoice.SE_Job?.Voyage?.voyage}</div>
+                    <div style={heading}>{(invoice.operation=="SE"||invoice.operation=="SI")?"Vessel / Voyage":"Airline / Flight No."}</div>
+                    <div style={paraStyles}>
+                        {
+                            (invoice.operation=="SE"||invoice.operation=="SI") &&
+                            <>
+                                {invoice.SE_Job?.vessel?.name} / {invoice.SE_Job?.Voyage?.voyage}
+                            </>
+                        }
+                        {
+                            (invoice.operation1="SE"||invoice.operation!="SI") &&
+                            <>
+                                {invoice.SE_Job?.air_line?.name} / {invoice.SE_Job?.flightNo}
+                            </>
+                        }
+                    </div>
                 </Col>
                 <Col md={5}>
-                    <div style={heading}>Sailing Date</div>
+                    <div style={heading}>{(invoice.operation=="SE"||invoice.operation=="SI")?"Sailing Date":"Departure Date"}</div>
                     <div style={paraStyles}>{moment(invoice.SE_Job?.Voyage?.exportSailDate).format("DD-MMM-YYYY")}</div>
                 </Col>
             </Row>
@@ -133,11 +175,15 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
             <Row>
                 <Col md={7}>
                     <div style={heading}>Port of Loading</div>
-                    <div style={paraStyles}>{getPort(invoice.SE_Job.pol)}</div>
+                    <div style={paraStyles}>
+                        {(invoice.operation=="SE"||invoice.operation=="SI")? getPort(invoice.SE_Job.pol):getAirPort(invoice.SE_Job.pol)}
+                    </div>
                 </Col>
                 <Col md={5}>
                     <div style={heading}>Port of Discharge</div>
-                    <div style={paraStyles}>{getPort(invoice.SE_Job.pod)}</div>
+                    <div style={paraStyles}>
+                        {(invoice.operation=="SE"||invoice.operation=="SI")? getPort(invoice.SE_Job.pod):getAirPort(invoice.SE_Job.pod)}
+                    </div>
                 </Col>
             </Row>
         </Col>
@@ -145,11 +191,27 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
             <Row>
                 <Col md={7}>
                     <div style={heading}>Destination Port</div>
-                    <div style={paraStyles}>{getPort(invoice.SE_Job.fd)}</div>
+                    <div style={paraStyles}>
+                        {getPort(invoice.SE_Job.fd)}
+                        {invoice.SE_Job.fd}
+                    </div>
                 </Col>
                 <Col md={5}>
-                    <div style={heading}>Shipping Line</div>
-                    <div style={paraStyles}>{invoice.SE_Job.shipping_line?.name}</div>
+                    <div style={heading}>{(invoice.operation=="SE"||invoice.operation=="SI")?"Shipping Line":"Airline"}</div>
+                    <div style={paraStyles}>
+                    {
+                            (invoice.operation=="SE"||invoice.operation=="SI") &&
+                            <>
+                                {invoice.SE_Job?.vessel?.name} / {invoice.SE_Job?.Voyage?.voyage}
+                            </>
+                        }
+                        {
+                            (invoice.operation1="SE"||invoice.operation!="SI") &&
+                            <>
+                                {invoice.SE_Job?.air_line?.name} / {invoice.SE_Job?.flightNo}
+                            </>
+                        }
+                    </div>
                 </Col>
             </Row>
         </Col>
@@ -166,12 +228,20 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
                 <Col md={4}>
                     <div style={heading}>PCS</div>
                     <div style={paraStyles}>
-                        {invoice.SE_Job?.SE_Equipments.length>0 && <>
-                        {  
-                            invoice.SE_Job.SE_Equipments.map((z, i)=>{
-                                return(<span key={i}>{z.qty} x {z.size}</span>)
-                            })
-                        }
+                        {(invoice.operation=="SE"||invoice.operation=="SI") && <>
+                            {invoice.SE_Job?.SE_Equipments.length>0 && 
+                            <>
+                            {  
+                                invoice.SE_Job.SE_Equipments.map((z, i)=>{
+                                    return(<span key={i}>{z.qty} x {z.size}</span>)
+                                })
+                            }
+                            </>
+                            }
+                        </>}
+                        {(invoice.operation!="SE"||invoice.operation!="SI")&&
+                        <>
+                            {invoice?.SE_Job?.pcs}
                         </>}
                     </div>
                 </Col>
@@ -190,7 +260,8 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
                 </Col>
             </Row>
         </Col>
-        <Col md={12} style={{border:'1px solid silver'}} className=''>
+        {(invoice.operation=="SE"||invoice.operation=="SI") &&
+        <Col md={12} style={{borderLeft:'1px solid black', borderRight:'1px solid black'}} className=''>
             <Row>
                 <Col md={12}>
                     <>
@@ -206,7 +277,7 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
                     </>
                 </Col>
             </Row>
-        </Col>
+        </Col>}
     </Row>
     <Table className='pb-0 mb-0' bordered variant='white' size='sm'>
     <thead className='p-0 m-0'>
@@ -276,7 +347,7 @@ const InvoicePrint = ({records, bank, bankDetails, invoice, calculateTotal}) => 
             <Col md={4} className='fs-10'></Col>
             <Col md={4} className='text-center'>
                 <div>____________________</div>
-                <div className='fs-12 px-5'><b>SEAN NET SHIPPING {"&"} LOGISTICS</b></div>
+                <div className='fs-12 px-5'><b>{compLogo=="1"?"SEA NET SHIPPING & LOGISTICS":"AIR CARGO SERVICES"}</b></div>
             </Col>
         </Row>
     </div>
