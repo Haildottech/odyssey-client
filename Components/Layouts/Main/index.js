@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import CSVReader from 'react-csv-reader';
 import { getJobValues } from '/apis/jobs';
 import { useQuery } from '@tanstack/react-query';
+import { read, utils, writeFile } from 'xlsx';
 
 const Main = ({sessionData}) => {
 
@@ -23,14 +24,80 @@ const Main = ({sessionData}) => {
   }, [sessionData]);
 
   useEffect(() => {
-
+    // console.log(`Consigner: ${dataz[11][0]}`)
+    // console.log(`Consignee: ${dataz[19][0]}`)
+    // console.log(`POL: ${dataz[51][4]}`)
+    // console.log(`PODischarge: ${dataz[54][0]}`)
+    // console.log(`PODelivery: ${dataz[54][4]}`)
+    // console.log(`Item Goods Detail: ${dataz[72][0]}`)
+    // console.log(`Declarent: ${dataz[20][18]}`)
+    // console.log(`Pkgs: ${dataz[57][0]}`)
+    // console.log(`Pkg Type: ${dataz[57][5]}`)
+    // console.log(`Gross Wt: ${dataz[57][9]}`)
+    // console.log(`Net Wt: ${dataz[60][9]}`)
+    // console.log(`BL.AWl.CON.NO / Inv No.: ${dataz[49][4]}`)
+    // console.log(`Currency: ${dataz[42][8]}`)
+    // console.log(`Ex.Rate: ${dataz[49][9]}`)
+    // console.log(`Inv Value: ${dataz[34][9]}`)
+    // console.log(`GD/Machinee: ${dataz[108][0]}`)
   }, []);
+
+
+  const [movies, setMovies] = useState([]);
+
+  const handleImport = ($event) => {
+    const files = $event.target.files;
+    if (files.length) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const wb = read(event.target.result);
+        //console.log(wb)
+        const sheets = wb.SheetNames;
+        const rows = utils.sheet_to_slk(wb.Sheets[sheets]);
+        console.log(rows)
+        // if (sheets.length) {
+        // }
+      }
+      reader.readAsArrayBuffer(file);
+    }
+  }
+
 
   return (
     <div className='base-page-layout'>
       <Row>
+        {companyId==2 &&
+          <>
+            {/* 
+            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required onChange={handleImport}
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            /> 
+            */}
+            <CSVReader
+              onFileLoaded={(dataz, fileInfo, originalFile) => {
+                console.log(`Consigner: ${dataz[11][0]}`)
+                console.log(`Consignee: ${dataz[19][0]}`)
+                console.log(`POL: ${dataz[51][4]}`)
+                console.log(`PODischarge: ${dataz[54][0]}`)
+                console.log(`PODelivery: ${dataz[54][4]}`)
+                console.log(`Item Goods Detail: ${dataz[72][0]}`)
+                console.log(`Declarent: ${dataz[20][18]}`)
+                console.log(`Pkgs: ${dataz[57][0]}`)
+                console.log(`Pkg Type: ${dataz[57][5]}`)
+                console.log(`Gross Wt: ${dataz[57][9]}`)
+                console.log(`Net Wt: ${dataz[60][9]}`)
+                console.log(`BL.AWl.CON.NO / Inv No.: ${dataz[49][4]}`)
+                console.log(`Currency: ${dataz[42][8]}`)
+                console.log(`Ex.Rate: ${dataz[49][9]}`)
+                console.log(`Inv Value: ${dataz[34][9]}`)
+                console.log(`GD/Machinee: ${dataz[108][0]}`)
+              }}
+            />
+          </>
+        }
         {companyId==3 && <AWBCalculator/>}
-        {companyId!=3 && 
+        {companyId==1 && 
         <>
           <div>
               {/* 
