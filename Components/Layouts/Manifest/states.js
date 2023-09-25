@@ -1,4 +1,5 @@
-import * as yup from "yup"; 
+import * as yup from "yup";
+import moment from "moment";
 
 export const initialValue = {
     awb:"",
@@ -81,21 +82,24 @@ export const validationSchema = yup.object().shape({
     point_of_loading: yup.string().required('Point of Loading is required'),
 })
 
-
-
 export const createManifest = ( result, setManifestData) => {
+    // result.atd = result.atd?moment(result.atd):null
+    // result.date = result.date?moment(result.date):null
+    result.date = result.date==""?"":moment(result.date),
+    result.atd = result.atd==""?"":moment(result.atd),
+    console.log(result)
     let tempData = [[ "S No", "date" ,"Flight no", "Job No", "Owner and Operator", "Point Of Loading",  "Point Of Unloading", "Type Of Aircraft"]]
-        let data = [
-           1, 
-          result.date._i.substr(0, 10),
-          result.flight_no,
-          result.job_no,
-          result.owner_and_operator,
-          result.point_of_loading,
-          result.point_of_unloading,
-          result.type_of_aircraft
-        ]
-        tempData.push(data);
+    let data = [
+        1, 
+        result?.date,
+        result?.flight_no,
+        result?.job_no,
+        result?.owner_and_operator,
+        result?.point_of_loading,
+        result?.point_of_unloading,
+        result?.type_of_aircraft,
+    ]
+    tempData.push(data);
     setManifestData(tempData);
 }
 
@@ -105,13 +109,13 @@ export const manifestJobs = ( result, setManifestData) => {
  
     for (let index = 0; index < result.Manifest_Jobs.length; index++) {
         let data = [
-          result.Manifest_Jobs[index].awb,
-          result.Manifest_Jobs[index].mbl,
-          result.Manifest_Jobs[index].no_of_pc,
-          result.Manifest_Jobs[index].nature_of_good,
-          result.Manifest_Jobs[index].goross_wt,
-          result.Manifest_Jobs[index].destination,
-          result.Manifest_Jobs[index].office_use,
+            result.Manifest_Jobs[index].awb,
+            result.Manifest_Jobs[index].mbl,
+            result.Manifest_Jobs[index].no_of_pc,
+            result.Manifest_Jobs[index].nature_of_good,
+            result.Manifest_Jobs[index].goross_wt,
+            result.Manifest_Jobs[index].destination,
+            result.Manifest_Jobs[index].office_use,
         ]
         tempData.push(data);
         setManifestData(tempData);
