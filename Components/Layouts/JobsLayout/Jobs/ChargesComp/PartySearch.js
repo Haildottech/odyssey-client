@@ -11,7 +11,6 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
   const chargeList = useWatch({ control, name: 'chargeList' });
   
   const getClients = async() => {
-    console.log("Client Hit")
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CLIENTS)
     .then((x) => {
         dispatch({type:'toggle', fieldName:'clientParties', payload:x.data.result});
@@ -19,7 +18,6 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
   }
   
   const getVendors = async() => {
-    console.log("Vendor Hit")
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_VENDOR_FOR_PARTY_SEARCH)
     .then((x) => {
         let data = [];
@@ -31,12 +29,11 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
   }
 
   useEffect(() => {
-    
     getClients();
     getVendors();
   }, [])
 
-  const RenderData = React.memo((props) => {
+  const RenderData = ((props) => {
     return(<>
       {props.data.filter((x)=>{
         if(

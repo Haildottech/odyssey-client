@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, Table } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import InputComp from "../../Shared/Form/InputComp";
 import InputNumComp from "../../Shared/Form/InputNumComp";
 import TextAreaComp from "../../Shared/Form/TextAreaComp";
@@ -184,7 +184,7 @@ const Modal = ({index,  register, control}) => {
     <InputComp control={control} register={register} label={"Amount Of Insurance"} name={`Manifest_Jobs.${index}.amount_of_insurance`}/>
     </Col>  
     <Col md={9} style={{lineHeight:"19px"}}>
-    INSURANCE - If carrier offers insurance and such insuranc is requested in accordance with the conditions there of, indicate amount to be insured in figures in box marked "Amount of Insurance".
+    INSURANCE - If carrier offers insurance and such insuranc is requested in accordance with the conditions there of, indicate amount to be insured in figures in box marked &quot;Amount of Insurance&quot;.
     </Col>
 
     </Row>
