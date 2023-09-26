@@ -9,6 +9,8 @@ import RadioComp from '/Components/Shared/Form/RadioComp';
 import { Row, Col, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import openNotification from '/Components/Shared/Notification';
+import { getJobValues } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
 
 const SignupSchema = yup.object().shape({
     // code: yup.string().required('Required'),
@@ -28,6 +30,10 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
   });
 
   const taxApply = useWatch({control, name:"taxApply"});
+  const { refetch } = useQuery({
+    queryKey:['values'],
+    queryFn:getJobValues
+  });
 
   useEffect(() => {
     if(state.edit){
@@ -39,7 +45,6 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
 
   const onSubmit = async(data) => {
     dispatch({type:'toggle', fieldName:'load', payload:true});
-
     setTimeout(async() => {
         console.log(data)
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_CHARGE,{
@@ -50,8 +55,9 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 tempRecords.unshift(x.data.result);
                 dispatch({type:'toggle', fieldName:'records', payload:tempRecords});
                 dispatch({type:'modalOff'});
-                reset(baseValues)
-                openNotification('Success', `Charge ${x.data.result.name} Created!`, 'green')
+                reset(baseValues);
+                openNotification('Success', `Charge ${x.data.result.name} Created!`, 'green');
+                refetch();
             }else if(x.data.status="exists"){
                 openNotification('Error', `Charge with same code already exists Created!`, 'red')
             }else{
@@ -76,7 +82,8 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 dispatch({type:'toggle', fieldName:'records', payload:tempRecords});
                 dispatch({type:'modalOff'});
                 reset(baseValues)
-                openNotification('Success', `Charge ${x.data.result.name} Updated!`, 'green')
+                openNotification('Success', `Charge ${x.data.result.name} Updated!`, 'green');
+                refetch();
             }else if(x.data.status="exists"){
                 openNotification('Error', `Charge with same code already exists Created!`, 'red')
             }else{

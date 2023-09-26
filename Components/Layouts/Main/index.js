@@ -6,10 +6,11 @@ import { useSelector } from 'react-redux';
 import CSVReader from 'react-csv-reader';
 import { getJobValues } from '/apis/jobs';
 import { useQuery } from '@tanstack/react-query';
-import { read, utils, writeFile } from 'xlsx';
+//import { read, utils, writeFile } from 'xlsx';
 
 const Main = ({sessionData}) => {
 
+  const [movies, setMovies] = useState([]);
   const companyId = useSelector((state) => state.company.value);
   const { data, status, error, refetch } = useQuery({
     queryKey:['values'],
@@ -42,9 +43,6 @@ const Main = ({sessionData}) => {
     // console.log(`GD/Machinee: ${dataz[108][0]}`)
   }, []);
 
-
-  const [movies, setMovies] = useState([]);
-
   const handleImport = ($event) => {
     const files = $event.target.files;
     if (files.length) {
@@ -62,7 +60,6 @@ const Main = ({sessionData}) => {
       reader.readAsArrayBuffer(file);
     }
   }
-
 
   return (
     <div className='base-page-layout'>

@@ -8,26 +8,26 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import Vouchers from "./Vouchers";
+import { getJobValues } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
 
 const SignupSchema = Yup.object().shape({
-    empName: Yup.string().min(3, 'Too Short!').max(45, 'Too Long!').required('Required'),
-    selectDesignation: Yup.string().min(3, 'Too Short!').max(30, 'Too Long!').required('Required'),
-    selectDepart: Yup.string().min(1, 'Too Short!').max(30, 'Too Long!').required('Required'),
-    //selectCompany: Yup.string().min(1, 'Required!').max(30, 'Too Long!').required('Required'),
-    cnic: Yup.string().min(10, 'Too Short!').max(30, 'Too Long!').required('Required'),
-    userName: Yup.string().min(3, 'Too Short!').max(30, 'Too Long!').required('Required'),
-    pass: Yup.string().min(5, 'Too Short!').max(30, 'Too Long!').required('Required'),
-    phone: Yup.string().min(11, 'Must be 11 Digits!').max(11, 'Must be 11 Digits!').required('Required'),
-    code: Yup.string().min(1, 'Must be 11 Digits!').max(20, 'Must be 11 Digits!').required('Required'),
+  empName: Yup.string().min(3, 'Too Short!').max(45, 'Too Long!').required('Required'),
+  selectDesignation: Yup.string().min(3, 'Too Short!').max(30, 'Too Long!').required('Required'),
+  selectDepart: Yup.string().min(1, 'Too Short!').max(30, 'Too Long!').required('Required'),
+  //selectCompany: Yup.string().min(1, 'Required!').max(30, 'Too Long!').required('Required'),
+  cnic: Yup.string().min(10, 'Too Short!').max(30, 'Too Long!').required('Required'),
+  userName: Yup.string().min(3, 'Too Short!').max(30, 'Too Long!').required('Required'),
+  pass: Yup.string().min(5, 'Too Short!').max(30, 'Too Long!').required('Required'),
+  phone: Yup.string().min(11, 'Must be 11 Digits!').max(11, 'Must be 11 Digits!').required('Required'),
+  code: Yup.string().min(1, 'Must be 11 Digits!').max(20, 'Must be 11 Digits!').required('Required'),
 });
 
 const MyField = () => {
   const [req, setReq] = useState(false);
   const [managers, setManagers] = useState([]);
   const { values: { selectDesignation }, touched, setFieldValue } = useFormikContext();
-
   useEffect(() => { getManagers() },[])
-
   const getManagers = async() => {
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_MANAGERS).then((x)=>{
       if(x.data.status=='success'){ setManagers(x.data.result) }
@@ -41,19 +41,11 @@ const MyField = () => {
 
   return (
     <>
-      <Select
-        name="selectManager"
-        style={{ width: "100%" }}
-        placeholder="Select Designation"
-        showSearch
-        disabled={req}
-      >
+      <Select name="selectManager" style={{ width: "100%" }} placeholder="Select Designation" showSearch disabled={req}>
         <Select.OptGroup label="Managers">
-          {
-            managers.map((x, index)=>{
-              return(<Select.Option value={x.name} key={index}>{x.name}</Select.Option>)
-            })
-          }
+          {managers.map((x, index)=>{
+            return(<Select.Option value={x.name} key={index}>{x.name}</Select.Option>)
+          })}
         </Select.OptGroup>
       </Select>
     </>
@@ -63,7 +55,10 @@ const MyField = () => {
 const CreateOrEdit = ({appendClient, edit, setVisible, setEdit, selectedEmployee, updateUser, company}) => {
 
   const formikRef = useRef(null);
-
+  const { refetch } = useQuery({
+    queryKey:['values'],
+    queryFn:getJobValues
+  });
   const [values, setValues] = useState({
     selectDesignation:'', selectManager: '', //selectCompany:'',
     accessLevels:[], selectDepart:'', fatherName: '',
@@ -119,8 +114,7 @@ const CreateOrEdit = ({appendClient, edit, setVisible, setEdit, selectedEmployee
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_VOUCHERS_BY_EPMLOYEE,{
       headers:{'id':`${selectedEmployee.id}`}
     })
-    .then((x)=>{
-      console.log(x.data);
+    .then((x) => {
       setVoucherList(x.data.result)
       setVouchers(true);
       setLoad(false);
@@ -134,7 +128,6 @@ return(
       setLoad(true);
       setTimeout(() => {
         setSubmitting(false);
-        console.log(values);
         let tempValues = values
         tempValues.represent = tempValues.represent.toString();
         let Username = Cookies.get('username')
@@ -171,17 +164,18 @@ return(
               setEdit(false);
               setVisible(false);
               setLoad(false);
+              refetch();
             })
         }else{
           axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_EMPLOYEE,{
             values:values, createdBy:Username
           }).then((x)=>{
-            console.log(x.data)
             if(x.data.status=='exists'){
               alert("User Code or Username Already Exists!");
             }else if(x.data.status=='success'){
-              appendClient(x.data.result, x.data.resultTwo)
-              setVisible(false)
+              appendClient(x.data.result, x.data.resultTwo);
+              setVisible(false);
+              refetch();
             }
             setLoad(false);
           })

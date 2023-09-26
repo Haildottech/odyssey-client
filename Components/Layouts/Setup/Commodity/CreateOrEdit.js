@@ -2,19 +2,22 @@ import { useForm, useWatch, useFormContext } from "react-hook-form";
 import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 import openNotification from '/Components/Shared/Notification';
 import SelectComp from '/Components/Shared/Form/SelectComp';
-import { useJobValuesQuery } from '/redux/apis/seJobValues';
 import InputComp from '/Components/Shared/Form/InputComp';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Row, Col, Spinner } from 'react-bootstrap';
 import React, { useEffect } from 'react';
-import Cookies from 'js-cookie';
-import moment from 'moment';
 import * as yup from "yup";
 import axios from 'axios';
+import { getJobValues } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
 
 const CreateOrEdit = ({state, dispatch, baseValues}) => {
 
-    const { refetch } = useJobValuesQuery();
+    const { refetch } = useQuery({
+        queryKey:['values'],
+        queryFn:getJobValues
+    });
+
     const SignupSchema = yup.object().shape({
         name: yup.string().required('Required')
     });
@@ -59,9 +62,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
     };
 
     const onEdit = async(data) => {
-        console.log('edit')
         dispatch({type:'toggle', fieldName:'load', payload:true});
-        //console.log(data);
         setTimeout(async() => {             
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_COMMODITY,{data})
             .then(async(x)=>{

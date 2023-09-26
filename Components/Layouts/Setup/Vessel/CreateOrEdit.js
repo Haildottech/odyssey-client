@@ -10,6 +10,8 @@ import * as yup from "yup";
 import axios from 'axios';
 import RadioComp from "/Components/Shared/Form/RadioComp";
 import { CloseCircleOutlined } from '@ant-design/icons';
+import { getJobValues } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
 
 const CreateOrEdit = ({state, dispatch, baseValues}) => {
 
@@ -19,6 +21,10 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
         //carrier: yup.string().required('Required'),
         type: yup.string().required('Atleast Check 1'),
         // loading: yup.string().required('Atleast Check 1'),
+    });
+    const { refetch } = useQuery({
+        queryKey:['values'],
+        queryFn:getJobValues
     });
 
     const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
@@ -62,6 +68,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                     openNotification('Success', `Vessel Created!`, 'green');
                     tempRecord = [...state.records];
                     tempRecord.unshift(x.data.result);
+                    refetch();
                 }else{
                     openNotification('Error', `An Error Occured Please Try Again`, 'red')
                 }
@@ -87,6 +94,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 if(x.data.status=='exists'){
                     openNotification('Error', `Another Vessel With Same Name or Code Already Exists!`, 'red')
                 }else{
+                    refetch();
                     openNotification('Success', `Vessel Updated!`, 'green');
                     tempRecords = [...state.records];
                     let i = tempRecords.findIndex((y=>data.id==y.id));

@@ -8,6 +8,8 @@ import moment from 'moment';
 import openNotification from '../../../Shared/Notification';
 import { delay } from "/functions/delay";
 import Router from 'next/router';
+import { getJobValues } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
 
 function recordsReducer(state, action){
     switch (action.type) {
@@ -80,6 +82,10 @@ const Voyage = ({vesselsData}) => {
 
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
   const set = (a, b) => dispatch({type:'toggle', fieldName:a, payload:b});
+  const { refetch } = useQuery({
+    queryKey:['values'],
+    queryFn:getJobValues
+  });
 
   const{ register, control, handleSubmit, reset, formState:{errors} } = useForm({defaultValues:state.values});
 
@@ -104,14 +110,15 @@ const Voyage = ({vesselsData}) => {
   
   const onSubmit = async(data) => {
     set('submitLoad', true);
-
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_VOYAGE,{...data, VesselId:state.selectedRecord.id})
     .then((x)=>{
-      x.data.status=="success"?
-      openNotification("Success", "Voyage Created", "green"):
-      openNotification("Error", "Something Went Wrong", "red")
+      if(x.data.status=="success"){
+        openNotification("Success", "Voyage Created", "green");
+        refetch();
+      }else{
+        openNotification("Error", "Something Went Wrong", "red")
+      }
     }); 
-
     await delay(200);
     set('submitLoad', false);
     dispatch({ type: 'modalOff' })
@@ -120,12 +127,14 @@ const Voyage = ({vesselsData}) => {
 
   const onEdit = async(data) => {
     set('submitLoad', true);
-
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_VOYAGE,{...data, VesselId:state.selectedRecord.id})
     .then((x)=>{
-      x.data.status=="success"?
-      openNotification("Success", "Voyage Updated", "green"):
-      openNotification("Error", "Something Went Wrong", "red")
+      if(x.data.status=="success"){
+        openNotification("Success", "Voyage Updated", "green");
+        refetch();
+      }else{
+        openNotification("Error", "Something Went Wrong", "red")
+      }
     }); 
 
     await delay(200);
