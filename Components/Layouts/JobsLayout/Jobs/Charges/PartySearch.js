@@ -128,4 +128,5 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
     </>
   )
 }
+
 export default React.memo(PartySearch)
