@@ -3,6 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import AccountSelection from './AccountSelection';
 import { getCompanyName, getAccounts } from './states';
 import { Radio, Select, Input, DatePicker, InputNumber } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 const TransactionInfo = ({state, dispatch, payType, companyId}) => {
 
@@ -13,8 +14,7 @@ const TransactionInfo = ({state, dispatch, payType, companyId}) => {
     <Row>
         <Col md={5}>
             <div className='grey-txt mb-1 fs-14'>Transaction Mode</div>
-            <Radio.Group 
-                value={state.transaction} 
+            <Radio.Group value={state.transaction} 
                 onChange={(e)=>{set('payAccountRecord', {}); set('transaction', e.target.value);}} 
             >
                 <Radio value={"Cash"}>Cash</Radio>
@@ -28,12 +28,8 @@ const TransactionInfo = ({state, dispatch, payType, companyId}) => {
         </Col>
         <Col md={4} className="">
             <div className='grey-txt fs-14'>Sub Type</div>
-            <Select size='small'
-                defaultValue={state.subType}
-                onChange={(e)=> set('subType', e)}
-                style={{
-                    width:'100%',
-                }}
+            <Select size='small' defaultValue={state.subType} onChange={(e)=> set('subType', e)}
+                style={{ width:'100%'}}
                 options={[
                     { value:'Cheque', label:'Cheque' },
                     { value:'Credit Cart', label:'Credit Cart' },
@@ -48,10 +44,14 @@ const TransactionInfo = ({state, dispatch, payType, companyId}) => {
             <Input size='small' value={state.checkNo} disabled={state.transaction=="Cash"?true:false} onChange={(e)=>set('checkNo',e.target.value)} />
         </Col>
         <Col className="mt-3" md={4}>
-            <div className="grey-txt fs-14">{payType=="Recievable"?"Recieving":"Paying"} Account #</div>
+            <span className="grey-txt fs-14">{payType=="Recievable"?"Recieving":"Paying"} Account #</span>
+            <span style={{marginLeft:6, position:'relative', bottom:2}} className='close-btn'>
+                <CloseCircleOutlined onClick={()=>{
+                    set('payAccountRecord', {});
+                }} />
+            </span>
             <div className="custom-select-input-small" 
                 onClick={async()=>{
-                    //set('accountsLoader', true);
                     dispatch({type:'setAll', payload:{
                         visible:true,
                         accountsLoader:true
@@ -59,18 +59,9 @@ const TransactionInfo = ({state, dispatch, payType, companyId}) => {
                     let resutlVal = await getAccounts(state.transaction,companyId, 'accounts');
                     dispatch({type:'setAll', payload:{
                         variable:'payAccountRecord',
-                        
                         accounts:resutlVal,
                         accountsLoader:false
                     }})
-
-                    // set('accountsLoader', true);
-                    // set('variable', 'payAccountRecord');
-                    // set('visible', true);
-                    // let resutlVal = await getAccounts(state.transaction,companyId, 'accounts');
-                    // set('accountsLoader', false);
-                    // set('accounts', resutlVal);
-                    
                 }}
             >
             {
@@ -82,12 +73,8 @@ const TransactionInfo = ({state, dispatch, payType, companyId}) => {
         </Col>
         <Col md={4} className="mt-3">
             <div className='grey-txt fs-14'>On Account</div>
-            <Select size='small' 
-                defaultValue={state.onAccount}
-                onChange={(e)=> set('onAccount', e)}
-                style={{
-                    width:'100%',
-                }}
+            <Select size='small' defaultValue={state.onAccount} onChange={(e)=> set('onAccount', e)}
+                style={{ width:'100%'}}
                 options={[
                     { value:'Client', label:'Client' },
                     { value:'Importer', label:'Importer' },
@@ -106,10 +93,14 @@ const TransactionInfo = ({state, dispatch, payType, companyId}) => {
             <InputNumber size='small' style={{width:'90%'}} value={state.bankCharges} min="0.0" onChange={(e)=>set('bankCharges', e)} />
         </Col>
         <Col className="mt-3" md={6}>
-            <div className="grey-txt fs-14">Bank Charges Account</div>
+            <span className="grey-txt fs-14">Bank Charges Account</span>
+            <span style={{marginLeft:6, position:'relative', bottom:2}} className='close-btn'>
+                <CloseCircleOutlined onClick={()=>{
+                    set('bankChargesAccountRecord', {});
+                }} />
+            </span>
             <div className="custom-select-input-small" 
                 onClick={async()=>{
-                    //set('accountsLoader', true);
                     dispatch({type:'setAll', payload:{
                         visible:true,
                         accountsLoader:true
@@ -120,15 +111,6 @@ const TransactionInfo = ({state, dispatch, payType, companyId}) => {
                         accounts:resutlVal,
                         accountsLoader:false
                     }})
-
-
-                    // set('accountsLoader', true);
-                    // set('variable', 'bankChargesAccountRecord');
-                    // set('visible', true);
-
-                    // let resutlVal = await getAccounts('Charges', companyId);
-                    // set('accounts', resutlVal);
-                    // set('accountsLoader', false);
                 }}
             >
             {

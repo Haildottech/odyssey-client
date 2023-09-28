@@ -91,13 +91,15 @@ const companies = [
             }
           })
           y.gainLoss = y.gainLoss*-1;
+          
           y.pnl = y.revenue-y.cost
           totalRevenue  = totalRevenue + y.revenue;
           totalCost     = totalCost + y.cost;
           totalPnl      = totalPnl + y.pnl;
-          totalActual   = totalActual + y.actual;
+          totalActual   = totalActual - totalCost;
           totalgainLoss = totalgainLoss + y.gainLoss;
           y.after = y.actual + y.gainLoss;
+          y.actual = y.revenue - y.cost
           totalAfter = totalAfter + y.after
         })
       }

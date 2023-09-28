@@ -19,6 +19,7 @@ const InvoiceBalaincing = () => {
     const [ load, setLoad ] = useState(false);
     const [ records, setRecords ] = useState([]);
     const [ values, setValues ] = useState();
+    const [ payType, setPayType ] = useState("Payble");
     const { data, status } = useQuery({ queryKey:['values'], queryFn:getJobValues });
     const commas=(a) => a? parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,", ") : '0.0';
     
@@ -41,6 +42,7 @@ const InvoiceBalaincing = () => {
                 "currency":currency,
                 "from":from,
                 "to":to,
+                "paytype":payType,
             }
         }).then(async(x)=>{
             if(x.data.status=="success"){
@@ -122,7 +124,17 @@ const InvoiceBalaincing = () => {
                 ]}
             />
             <Row>
-                <Col md={7}>
+                <Col md={3}>
+                    Pay Type
+                    <Select defaultValue="" style={{width:'100%', marginBottom:5}} size='small' 
+                        onChange={(e)=>{setPayType(e) }} value={payType}
+                        options={[
+                            {value:"Recievable", label:"Recievable"},
+                            {value:"Payble", label:"Payble"}
+                        ]}
+                    />
+                </Col>
+                <Col md={4}>
                     Job #
                     <Input style={{marginBottom:10}} size='small' />
                 </Col>
@@ -248,14 +260,14 @@ const InvoiceBalaincing = () => {
                     <th className='text-center' style={{}}>Invoice No</th>
                     <th className='text-center' style={{}}>Date</th>
                     <th className='text-center' style={{}}>HBL/HAWB</th>
-                    <th className='text-center' style={{minWidth:260}}>Name</th>
-                    <th className='text-center' style={{width:30}}>Final Dest</th>
+                    <th className='text-center' style={{width:250}}>Name</th>
+                    <th className='text-center' style={{width:30}}>F. Dest</th>
                     <th className='text-center' style={{width:10}}>F/Tp</th>
                     <th className='text-center' style={{width:10}}>Curr</th>
-                    <th className='text-center' style={{width:90}}>Debit</th>
-                    <th className='text-center' style={{width:90}}>Credit</th>
-                    <th className='text-center' style={{width:90}}>Paid/Received</th>
-                    <th className='text-center' style={{width:90}}>Balance</th>
+                    <th className='text-center' style={{width:110}}>Debit</th>
+                    <th className='text-center' style={{width:110}}>Credit</th>
+                    <th className='text-center' style={{width:110}}>Paid/Received</th>
+                    <th className='text-center' style={{width:110}}>Balance</th>
                     <th className='text-center' style={{width:10}}>Age</th>
                 </tr>
             </thead>

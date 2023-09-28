@@ -25,22 +25,22 @@ const Main = ({sessionData}) => {
   }, [sessionData]);
 
   useEffect(() => {
-    // console.log(`Consigner: ${dataz[11][0]}`)
-    // console.log(`Consignee: ${dataz[19][0]}`)
     // console.log(`POL: ${dataz[51][4]}`)
-    // console.log(`PODischarge: ${dataz[54][0]}`)
-    // console.log(`PODelivery: ${dataz[54][4]}`)
-    // console.log(`Item Goods Detail: ${dataz[72][0]}`)
-    // console.log(`Declarent: ${dataz[20][18]}`)
     // console.log(`Pkgs: ${dataz[57][0]}`)
-    // console.log(`Pkg Type: ${dataz[57][5]}`)
-    // console.log(`Gross Wt: ${dataz[57][9]}`)
     // console.log(`Net Wt: ${dataz[60][9]}`)
-    // console.log(`BL.AWl.CON.NO / Inv No.: ${dataz[49][4]}`)
-    // console.log(`Currency: ${dataz[42][8]}`)
     // console.log(`Ex.Rate: ${dataz[49][9]}`)
+    // console.log(`Gross Wt: ${dataz[57][9]}`)
+    // console.log(`Currency: ${dataz[42][8]}`)
+    // console.log(`Pkg Type: ${dataz[57][5]}`)
+    // console.log(`Consignee: ${dataz[19][0]}`)
+    // console.log(`Consigner: ${dataz[11][0]}`)
     // console.log(`Inv Value: ${dataz[34][9]}`)
+    // console.log(`PODelivery: ${dataz[54][4]}`)
+    // console.log(`Declarent: ${dataz[20][18]}`)
+    // console.log(`PODischarge: ${dataz[54][0]}`)
     // console.log(`GD/Machinee: ${dataz[108][0]}`)
+    // console.log(`Item Goods Detail: ${dataz[72][0]}`)
+    // console.log(`BL.AWl.CON.NO / Inv No.: ${dataz[49][4]}`)
   }, []);
 
   const handleImport = ($event) => {

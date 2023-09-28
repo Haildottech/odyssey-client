@@ -124,8 +124,8 @@ function setAccesLevels(dispatch, collapsed){
         key: '5-5',
         children: `Content of Tab Pane 3`,
       }),
-      getItem('Invoice Balancing', '5-6',<></>, null, {
-        label: `Invoice Balancing`,
+      getItem('Agent Inv. Balance', '5-6',<></>, null, {
+        label: `Agent Invoice Balancing`,
         key: '5-6',
         children: `Content of Tab Pane 3`,
       }),

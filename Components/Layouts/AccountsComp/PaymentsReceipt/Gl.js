@@ -108,9 +108,9 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
       onOk={()=>set('glVisible', false)}
       onCancel={()=>set('glVisible', false)}
       footer={false} maskClosable={false}
-      width={'75%'}
+      width={'80%'}
     >
-    <div style={{minHeight:330}}>
+    <div style={{minHeight:330, fontSize:12}}>
       <h4 className='grey-txt'>Proceed with following transaction?</h4>
       <div className='table-sm-1 mt-3' style={{maxHeight:330, overflowY:'auto'}}>
         <Table className='tableFixHead' bordered>
@@ -134,11 +134,11 @@ const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invo
           return (
               <tr key={index}>
                 <td>{x.particular?.title}</td>
-                {invoiceCurrency!="PKR" &&<td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>}
-                {invoiceCurrency!="PKR" &&<td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>}
+                {invoiceCurrency!="PKR" &&<td className='text-end' style={{minWidth:90}}>{x.tran.type!="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>}
+                {invoiceCurrency!="PKR" &&<td className='text-end' style={{minWidth:90}}>{x.tran.type=="credit"?<><span className='gl-curr-rep'>{invoiceCurrency+". "}</span>{commas(x.tran.defaultAmount)}</>:''}</td>}
                 <td className='px-0' style={{width:"1px"}}></td>
-                <td className='text-end'>{x.tran.type!="credit"?<><span className='gl-curr-rep'>PKR.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
-                <td className='text-end'>{x.tran.type=="credit"?<><span className='gl-curr-rep'>PKR.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
+                <td className='text-end' style={{minWidth:90}}>{x.tran.type!="credit"?<><span className='gl-curr-rep'>PKR.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
+                <td className='text-end' style={{minWidth:90}}>{x.tran.type=="credit"?<><span className='gl-curr-rep'>PKR.{" "}</span>{commas(x.tran.amount)}</>:''}</td>
               </tr>
             )})}
             <tr>

@@ -7,6 +7,7 @@ import { getNetInvoicesAmount } from '../../../../functions/amountCalculations';
 import { recordsReducer, initialState, getAccounts, totalRecieveCalc, getInvoices } from './states';
 import { useSelector } from 'react-redux';
 import moment from "moment";
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 import TransactionInfo from './TransactionInfo';
 import Gl from './Gl';
@@ -208,7 +209,12 @@ const BillComp = ({partytype, selectedParty, payType, companyId, invoiceCurrency
                     <InputNumber size='small'  value={state.taxPerc} disabled={!state.isPerc?true:false} onChange={(e)=>set('taxPerc',e)} min="0.0" />
                 </Col>
                 <Col className="mt-3" md={5}>
-                    <div className="grey-txt fs-14">Tax Account #</div>
+                    <span className="grey-txt fs-14">Tax Account #</span>
+                    <span style={{marginLeft:6, position:'relative', bottom:2}} className='close-btn'>
+                        <CloseCircleOutlined onClick={()=>{
+                            set('taxAccountRecord', {});
+                        }} />
+                    </span>
                     <div className="custom-select-input-small" 
                         onClick={async()=>{
                             dispatch({type:'setAll', payload:{
@@ -221,13 +227,6 @@ const BillComp = ({partytype, selectedParty, payType, companyId, invoiceCurrency
                                 accounts:resutlVal,
                                 accountsLoader:false
                             }})
-                            // set('accountsLoader', true);
-                            // set('variable', 'taxAccountRecord');
-                            // set('visible', true);
-
-                            // let resutlVal = await getAccounts('Taxes', companyId);
-                            // set('accounts', resutlVal);
-                            // set('accountsLoader', false);
                         }}
                     >{
                         Object.keys(state.taxAccountRecord).length==0?

@@ -4,9 +4,11 @@ import openNotification from '../../../Shared/Notification';
 import { Empty, InputNumber, Checkbox, Radio } from 'antd';
 import { Spinner, Table, Col, Row } from 'react-bootstrap';
 import AgentTransactionInfo from './AgentTransactionInfo';
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import moment from "moment";
 import Gl from './Gl';
+import axios from 'axios';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, companyId}) => {
 
@@ -190,156 +192,212 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
 
   return (
     <>
-    <div>
-        <Row>
-            <Col md={7}>
-                <AgentTransactionInfo state={state} dispatch={dispatch} payType={payType} invoiceCurrency={invoiceCurrency} />
-            </Col>
-            <Col md={5} className="">
-                <div className="mb-2 "
-                    onClick={async()=>{
-                        let tempReset = await resetAll();
-                        dispatch({type:'setAll', payload:{
-                            autoOn:!state.autoOn,
-                            invoices:tempReset,
-                            exRate:'1',
-                            gainLossAmount:0.00,
-                            auto:'0',
-                        }})
-                        // set('autoOn', !state.autoOn);
-                        // set('invoices', resetAll());
-                        // set('exRate', '1');
-                        // set('gainLossAmount', 0.00);
-                        // set('auto', '0');
-                    }}
-                    style={{cursor:'pointer', borderBottom:'1px solid silver', paddingBottom:2}}
-                >
-                    <span><Checkbox checked={state.autoOn} style={{position:'relative', bottom:1}} /></span>
-                    <span className='mx-2'>Auto Knock Off</span>
-                </div>
-                <Row>
-                    <Col md={5}>
-                        <span className='grey-txt'>Amount</span>
-                        <InputNumber 
-                            size='small'
-                            min="0" stringMode 
-                            style={{width:'100%', paddingRight:10}} 
-                            disabled={!state.autoOn} value={state.auto} 
-                            onChange={(e)=>set('auto', e)} 
-                        />
-                    </Col>
-                    <Col md={4}>
-                        <span className='grey-txt'>Ex. Rate</span>
-                        <InputNumber size='small'
-                            min="0.00" stringMode 
-                            style={{width:'100%', paddingRight:20}} 
-                            disabled={!state.autoOn} value={state.exRate} 
-                            onChange={(e)=>set('exRate', e)} 
-                        />
-                    </Col>
-                    <Col md={3}>
-                        <br/>
-                        <button className={state.autoOn?'btn-custom':'btn-custom-disabled'}
-                            style={{fontSize:10}}
-                            disabled={!state.autoOn}
-                            onClick={()=>autoKnocking()}
-                        >Set</button>
-                    </Col>
-                    {!state.autoOn &&
-                    <Col md={12}>
-                    <div style={{maxWidth:100}}>
+    <Row>
+        <Col md={7}>
+            <AgentTransactionInfo state={state} dispatch={dispatch} payType={payType} invoiceCurrency={invoiceCurrency} />
+        </Col>
+        <Col md={5} className="">
+            <div className="mb-2 pb-2 cur" style={{borderBottom:'1px solid silver'}} onClick={async()=>{
+                    let tempReset = await resetAll();
+                    dispatch({type:'setAll', payload:{
+                        autoOn:!state.autoOn, invoices:tempReset,
+                        exRate:'1', gainLossAmount:0.00, auto:'0'
+                    }})
+                }}>
+                <span><Checkbox checked={state.autoOn} style={{position:'relative', bottom:1}} /></span>
+                <span className='mx-2'>Auto Knock Off</span>
+            </div>
+            <Row>
+                <Col md={5}>
+                    <span className='grey-txt'>Amount</span>
+                    <InputNumber 
+                        size='small'
+                        min="0" stringMode 
+                        style={{width:'100%', paddingRight:10}} 
+                        disabled={!state.autoOn} value={state.auto} 
+                        onChange={(e)=>set('auto', e)} 
+                    />
+                </Col>
+                <Col md={4}>
                     <span className='grey-txt'>Ex. Rate</span>
-                        <InputNumber size='small'
-                            min="0.00" stringMode 
-                            style={{width:'100%', paddingRight:20}} 
-                            value={state.manualExRate} 
-                            onChange={(e)=>set('manualExRate', e)} 
-                        />
-                    </div>
-                    </Col>
+                    <InputNumber size='small'
+                        min="0.00" stringMode 
+                        style={{width:'100%', paddingRight:20}} 
+                        disabled={!state.autoOn} value={state.exRate} 
+                        onChange={(e)=>set('exRate', e)} 
+                    />
+                </Col>
+                <Col md={3}>
+                    <br/>
+                    <button className={state.autoOn?'btn-custom':'btn-custom-disabled'}
+                        style={{fontSize:10}}
+                        disabled={!state.autoOn}
+                        onClick={()=>autoKnocking()}
+                    >Set</button>
+                </Col>
+                {!state.autoOn &&
+                <Col md={12}>
+                <div style={{maxWidth:100}}>
+                <span className='grey-txt'>Ex. Rate</span>
+                    <InputNumber size='small'
+                        min="0.00" stringMode 
+                        style={{width:'100%', paddingRight:20}} 
+                        value={state.manualExRate} 
+                        onChange={(e)=>set('manualExRate', e)} 
+                    />
+                </div>
+                </Col>
+                }
+                <Col md={3} className="mt-3">
+                    <div className='grey-txt fs-14'>Tax Amount</div>
+                    <InputNumber size='small'  value={state.taxAmount} disabled={state.isPerc?true:false} onChange={(e)=>set('taxAmount',e)} min="0.0" />
+                </Col>
+                <Col md={1} className="mt-3">
+                    <div className='grey-txt mb-1 fs-14'>%</div>
+                    <Checkbox size='small'  checked={state.isPerc} onChange={()=>set('isPerc',!state.isPerc)} />
+                </Col>
+                <Col md={3} className="mt-3">
+                    <div className='grey-txt fs-14'>Tax %</div>
+                    <InputNumber size='small'  value={state.taxPerc} disabled={!state.isPerc?true:false} onChange={(e)=>set('taxPerc',e)} min="0.0" />
+                </Col>
+                <Col className="mt-3" md={5}>
+                    <span className="grey-txt fs-14">Tax Account #</span>
+                    <span style={{marginLeft:6, position:'relative', bottom:2}} className='close-btn'>
+                        <CloseCircleOutlined onClick={()=>{
+                            set('taxAccountRecord', {});
+                        }} />
+                    </span>
+                    <div className="custom-select-input-small" 
+                        onClick={async()=>{
+                            dispatch({type:'setAll', payload:{
+                                visible:true,
+                                accountsLoader:true
+                            }})
+                            let resutlVal = await getAccounts('Adjust', companyId);
+                            dispatch({type:'setAll', payload:{
+                                variable:'taxAccountRecord',
+                                accounts:resutlVal,
+                                accountsLoader:false
+                            }})
+                            // set('variable', 'taxAccountRecord');
+                            // set('visible', true);
+                            // let resutlVal = await getAccounts('Adjust', companyId);
+                            // set('accounts', resutlVal);
+                        }}
+                    >{
+                        Object.keys(state.taxAccountRecord).length==0?
+                        <span style={{color:'silver'}}>Select Account</span>:
+                        <span style={{color:'black'}}>{state.taxAccountRecord.title}</span>
                     }
-                    <Col md={3} className="mt-3">
-                        <div className='grey-txt fs-14'>Tax Amount</div>
-                        <InputNumber size='small'  value={state.taxAmount} disabled={state.isPerc?true:false} onChange={(e)=>set('taxAmount',e)} min="0.0" />
-                    </Col>
-                    <Col md={1} className="mt-3">
-                        <div className='grey-txt mb-1 fs-14'>%</div>
-                        <Checkbox size='small'  checked={state.isPerc} onChange={()=>set('isPerc',!state.isPerc)} />
-                    </Col>
-                    <Col md={3} className="mt-3">
-                        <div className='grey-txt fs-14'>Tax %</div>
-                        <InputNumber size='small'  value={state.taxPerc} disabled={!state.isPerc?true:false} onChange={(e)=>set('taxPerc',e)} min="0.0" />
-                    </Col>
-                    <Col className="mt-3" md={5}>
-                        <div className="grey-txt fs-14">Tax Account #</div>
-                        <div className="custom-select-input-small" 
-                            onClick={async()=>{
-                                dispatch({type:'setAll', payload:{
-                                    visible:true,
-                                    accountsLoader:true
-                                }})
-                                let resutlVal = await getAccounts('Adjust', companyId);
-                                dispatch({type:'setAll', payload:{
-                                    variable:'taxAccountRecord',
-                                    accounts:resutlVal,
-                                    accountsLoader:false
-                                }})
-                                // set('variable', 'taxAccountRecord');
-                                // set('visible', true);
-                                // let resutlVal = await getAccounts('Adjust', companyId);
-                                // set('accounts', resutlVal);
-                            }}
-                        >{
-                            Object.keys(state.taxAccountRecord).length==0?
-                            <span style={{color:'silver'}}>Select Account</span>:
-                            <span style={{color:'black'}}>{state.taxAccountRecord.title}</span>
-                        }
-                        </div>
-                    </Col>
-                    <Col md={4} className="mt-3">
-                        <div className='grey-txt fs-14'>
-                            {state.gainLossAmount==0.00 && <br/>}
-                            {(state.gainLossAmount>0 && payType!="Recievable") && <span style={{color:'red'}}><b>Loss</b></span>}
-                            {(state.gainLossAmount>0 && payType=="Recievable") && <span style={{color:'green'}}><b>Gain</b></span>}
-                            {(state.gainLossAmount<0 && payType!="Recievable") && <span style={{color:'green'}}><b>Gain</b></span>}
-                            {(state.gainLossAmount<0 && payType=="Recievable") && <span style={{color:'red'}}><b>Loss</b></span>}
-                        </div>
-                        <div className="custom-select-input-small" >{Math.abs(state.gainLossAmount)}</div>
-                    </Col>
-                    <Col className="mt-3" md={8}>
-                        <div className="grey-txt fs-14">Gain / Loss Account</div>
-                        <div className="custom-select-input-small"
-                            onClick={async()=>{
-                                // set('variable', 'gainLossAccountRecord');
-                                // set('visible', true);
-                                // let resutlVal = await getAccounts('Adjust', companyId);
-                                // set('accounts', resutlVal);
-                                dispatch({type:'setAll', payload:{
-                                    accountsLoader:true,
-                                    visible:true
-                                }})
-                                let resutlVal = await getAccounts('Adjust', companyId);
-                                dispatch({type:'setAll', payload:{
-                                    variable:'gainLossAccountRecord',
-                                    accounts:resutlVal,
-                                    accountsLoader:false
-                                }})
+                    </div>
+                </Col>
+                <Col md={4} className="mt-3">
+                    <div className='grey-txt fs-14'>
+                        {state.gainLossAmount==0.00 && <br/>}
+                        {(state.gainLossAmount>0 && payType!="Recievable") && <span style={{color:'red'}}><b>Loss</b></span>}
+                        {(state.gainLossAmount>0 && payType=="Recievable") && <span style={{color:'green'}}><b>Gain</b></span>}
+                        {(state.gainLossAmount<0 && payType!="Recievable") && <span style={{color:'green'}}><b>Gain</b></span>}
+                        {(state.gainLossAmount<0 && payType=="Recievable") && <span style={{color:'red'}}><b>Loss</b></span>}
+                    </div>
+                    <div className="custom-select-input-small" >{Math.abs(state.gainLossAmount)}</div>
+                </Col>
+                <Col className="mt-3" md={8}>
+                    <span className="grey-txt fs-14">Gain / Loss Account</span>
+                    <span style={{marginLeft:7, position:'relative', bottom:2}} className='close-btn'>
+                        <CloseCircleOutlined onClick={()=>{
+                            set('gainLossAccountRecord', {});
+                        }} />
+                    </span>
+                    <div className="custom-select-input-small"
+                        onClick={async()=>{
+                            // set('variable', 'gainLossAccountRecord');
+                            // set('visible', true);
+                            // let resutlVal = await getAccounts('Adjust', companyId);
+                            // set('accounts', resutlVal);
+                            dispatch({type:'setAll', payload:{
+                                accountsLoader:true,
+                                visible:true
+                            }})
+                            let resutlVal = await getAccounts('Adjust', companyId);
+                            dispatch({type:'setAll', payload:{
+                                variable:'gainLossAccountRecord',
+                                accounts:resutlVal,
+                                accountsLoader:false
+                            }})
 
-                            }}
-                        >{
-                            Object.keys(state.gainLossAccountRecord).length==0?
-                            <span style={{color:'silver'}}>Select Account</span>:
-                            <span style={{color:'black'}}>{state.gainLossAccountRecord.title}</span>
-                        }
-                        </div>
-                    </Col>
-                </Row>
-            </Col>
-        </Row>
-    </div>
+                        }}
+                    >{
+                        Object.keys(state.gainLossAccountRecord).length==0?
+                        <span style={{color:'silver'}}>Select Account</span>:
+                        <span style={{color:'black'}}>{state.gainLossAccountRecord.title}</span>
+                    }
+                    </div>
+                </Col>
+            </Row>
+        </Col>
+    </Row>
+    {!state.oldBills &&<Row>
+        <Col><button className='btn-custom'
+            onClick={()=>{
+            axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_OLD_INVOICE_BY_PARTY_ID,{
+                headers:{ id:selectedParty.id, pay:payType, invoicecurrency:invoiceCurrency, companyid:companyId}
+            }).then((x)=>{
+                dispatch({type:'setAll', payload:{
+                    oldrecords:x.data.result, oldBills:true
+                }})
+            })}}
+        >Old Bills</button></Col>
+    </Row>}
     {!state.load && 
-    <>
-        {state.invoices.length==0 && <Empty/>}
+    <>  
+        {(state.oldrecords.length>0 && state.oldBills) && <>
+        Old Bills
+        <div style={{minHeight:100, border:"1px solid silver"}} className='my-2 px-2'>
+        <div className='table-sm-1 mt-2' style={{maxHeight:300, overflowY:'auto'}}>
+        <Table className='tableFixHead' bordered>
+            <thead>
+                <tr className='fs-12'>
+                <th>Sr.</th>
+                <th>Job #</th>
+                <th>Inv/Bill #</th>
+                <th>HBL</th>
+                <th>MBL</th>
+                <th>Currency</th>
+                <th>Ex. Rate</th>
+                <th>{payType=="Recievable"? 'Inv':'Bill'} Bal</th>
+                <th>{payType=="Recievable"? 'Receiving Amount':'Paying Amount'}</th>
+                <th>Balance</th>
+                <th>Select</th>
+                <th>Container</th>
+                </tr>
+            </thead>
+            <tbody>
+            {state.oldrecords.map((x, index) => {
+            return (
+            <tr key={index} className='f fs-12'>
+                <td style={{width:30}}>{index + 1}</td>
+                <td style={{width:100}}>{x.SE_Job.jobNo}</td>
+                <td style={{width:100}}>{x.invoice_No}</td>
+                <td>HBL</td>
+                <td>MBL</td>
+                <td style={{width:100}}>{x.currency}</td>
+                <td style={{width:100}}>{x?.Charge_Heads[0]?.ex_rate}</td>
+                <td>{x.total}</td>
+                <td style={{padding:3, width:150}}><InputNumber style={{height:30, width:140}} disabled /></td>
+                <td>0.00</td>
+                <td style={{ width:50}} className='px-3 py-2'><input type='checkbox' disabled /></td>
+                <td></td>
+            </tr>
+            )
+            })}
+            </tbody>
+        </Table>
+        </div>
+        </div>
+        </>
+        }
+        {(state.oldrecords.length==0 && state.oldBills) &&<>No Previous Bills</>}
+        {state.invoices.length==0 && <Empty  />}
         {state.invoices.length>0 &&
         <div>
         <div style={{minHeight:300}}>
@@ -395,6 +453,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                             let tempState = [...state.invoices];
                             tempState[index].check = !tempState[index].check;
                             payType=="Recievable"?(tempState[index].receiving = tempState[index].check?(x.inVbalance-x.recieved):0.00):(tempState[index].receiving = tempState[index].check?(x.inVbalance-x.paid):0.00)
+                            console.log(tempState)
                             set('invoices', tempState);
                         }}
                     />
