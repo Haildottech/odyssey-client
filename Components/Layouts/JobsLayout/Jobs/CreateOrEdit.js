@@ -15,13 +15,14 @@ import Charges from './Charges';
 import LoadingProgram from './Loading Program';
 import DelieveryOrder from './Delievery Order';
 import { useForm, useWatch } from "react-hook-form";
-import { incrementTab } from '/redux/tabs/tabSlice';
+import { incrementTab, removeTab } from '/redux/tabs/tabSlice';
 import { SignupSchema, getInvoices, baseValues } from './states';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createNotification } from '/functions/notifications';
 import openNotification from '/Components/Shared/Notification';
 import FullScreenLoader from '/Components/Shared/FullScreenLoader';
 import { useQueryClient } from '@tanstack/react-query';
+import PopConfirm from '/Components/Shared/PopConfirm';
 
 const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) => {
   const queryClient = useQueryClient();
@@ -32,6 +33,7 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
   const subType = useWatch({control, name:"subType"});
   const allValues = useWatch({control});
   const dispatchNew = useDispatch();
+  const tabs = useSelector((state)=>state.tabs.tabs)
   
   useEffect(() => {
     //if(state.edit){
@@ -240,6 +242,27 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
       <>
         <button type="submit" disabled={state.load?true:false} className='btn-custom mt-3'>
           {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Save Job'}
+        </button>
+        <button type="button" disabled={allValues.approved==1?true:false} 
+        className={allValues.approved==1?"btn-red-disabled mt-3 mx-3":"btn-red mt-3 mx-3"}
+          onClick={()=>{
+            PopConfirm("Confirmation", "Are You Sure You Want To Delete This Job?",
+                () => {
+                  console.log("Delete");
+                  axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_DELETE_JOBS,{
+                    id:allValues.id
+                  }).then(async(x)=>{
+                    let oldTabs = await type=="SE"?tabs.filter((x)=> {return x.key!="4-3" }):
+                    await type=="SI"?tabs.filter((x)=> {return x.key!="4-6" }):
+                    await type=="AE"?tabs.filter((x)=> {return x.key!="7-2" }):
+                    await tabs.filter((x)=> {return x.key!="7-5" })
+                    dispatchNew(await removeTab(oldTabs)); // First deleting Job Tab
+                    Router.push(type=="SE"?"/seaJobs/seJobList":type=="SI"?"/seaJobs/siJobList":type=="AE"?"/airJobs/aeJobList":"/airJobs/aiJobList")
+                  })
+              })
+          }}
+        >
+          Delete Job {allValues.approved}
         </button>
       </>
       }

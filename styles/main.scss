@@ -135,6 +135,22 @@
   border: none;
   cursor:not-allowed
 }
+.btn-red{
+  background-color: rgb(146, 26, 18)!important;
+  color: white;
+  padding: 5px 20px 5px 20px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+}
+.btn-red-disabled{
+  background-color: rgb(103, 57, 54)!important;;
+  color: white;
+  padding: 5px 20px 5px 20px;
+  border-radius: 15px;
+  border: none;
+  cursor:not-allowed
+}
 .btn-orange{
   background-color: rgb(194, 105, 22)!important;
   color: white;
