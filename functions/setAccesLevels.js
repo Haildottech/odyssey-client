@@ -95,6 +95,11 @@ function setAccesLevels(dispatch, collapsed){
         key: '3-9',
         children: `Content of Tab Pane 3-7`,
       }),
+      getItem('Opening Invoices', '3-11',<></>, null, {
+        label: `Opening Invoices`,
+        key: '3-11',
+        children: `Content of Tab Pane 3-11`,
+      }),
     ]
     )
     const reports = getParentItem('Reports', '5', <HiOutlineDocumentSearch/>,

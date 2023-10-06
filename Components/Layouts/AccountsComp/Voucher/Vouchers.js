@@ -53,6 +53,7 @@ const Vouchers=({
     });
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {headers:{CompanyId:CompanyId}})
     .then((x)=>{
+      console.log(x.data.result)
       setChild(x.data.result);
     })
   }
@@ -199,16 +200,15 @@ const Vouchers=({
           <tr className="f table-row-center-singleLine" key={index}>
             <td style={{padding:3, minWidth:500}}>
               <SelectSearchComp className="form-select" name={`Voucher_Heads.${index}.ChildAccountId`} register={register} 
-                control={control} width={"100%"} 
-                options={ child.length>0?child.map((x) => { return{ id: x?.id, name: x?.title }}):[]}
+                control={control} width={"100%"}
+                options={ child.length>0?child.map((x) => { return{ id: x?.id, name: x?.title }}) : [] }
               />
             </td>
             <td style={{padding:3, width:90}}>
               <SelectComp className="form-select" name={`Voucher_Heads.${index}.type`} register={register} control={control} 
                 width={"100%"}
                 options={[
-                  { id: "debit", name: "Debit" },
-                  { id: "credit", name: "Credit" },
+                  { id: "debit", name: "Debit" }, { id: "credit", name: "Credit" },
                 ]}
               />
             </td>

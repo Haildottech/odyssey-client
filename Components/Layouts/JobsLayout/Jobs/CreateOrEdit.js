@@ -18,13 +18,14 @@ import { useForm, useWatch } from "react-hook-form";
 import { incrementTab, removeTab } from '/redux/tabs/tabSlice';
 import { SignupSchema, getInvoices, baseValues } from './states';
 import { yupResolver } from "@hookform/resolvers/yup";
+import PopConfirm from '/Components/Shared/PopConfirm';
 import { createNotification } from '/functions/notifications';
 import openNotification from '/Components/Shared/Notification';
 import FullScreenLoader from '/Components/Shared/FullScreenLoader';
 import { useQueryClient } from '@tanstack/react-query';
-import PopConfirm from '/Components/Shared/PopConfirm';
 
 const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) => {
+
   const queryClient = useQueryClient();
   const {register, control, handleSubmit, reset, formState:{errors}, watch } = useForm({
     resolver:yupResolver(SignupSchema), defaultValues:state.values
@@ -34,7 +35,7 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
   const allValues = useWatch({control});
   const dispatchNew = useDispatch();
   const tabs = useSelector((state)=>state.tabs.tabs)
-  
+
   useEffect(() => {
     //if(state.edit){
       let tempState = {...baseValues, ...jobData};
@@ -183,7 +184,7 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
         })
     }, 3000);
   };
-  
+
   const onError = (errors) => console.log(errors);
 
   useEffect(() => {

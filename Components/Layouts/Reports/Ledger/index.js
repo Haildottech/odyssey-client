@@ -228,9 +228,9 @@ import axios from 'axios';
 import MainTable from './MainTable';
 
 const Ledger = () => {
-
-  const [ to, setTo ] = useState(moment().format("YYYY-MM-DD"));
-  const [ from, setFrom ] = useState(moment().format("YYYY-MM-DD"));
+  
+  const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
+  const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
   const [ company, setCompany ] = useState("");
   const [ label, setLabel ] = useState("");
   const [ account, setAccount ] = useState("");

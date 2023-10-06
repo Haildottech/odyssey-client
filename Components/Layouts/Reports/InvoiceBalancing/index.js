@@ -8,8 +8,8 @@ import axios from 'axios';
 
 const InvoiceBalaincing = () => {
     
-    const [ from, setFrom ] = useState("2023-01-01");
-    const [ to, setTo ] = useState(moment().format("YYYY-MM-DD"));
+    const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
+    const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
     const [ company, setCompany ] = useState("");
     const [ overseasAgent, setOverseasAgent ] = useState("");
     const [ representator, setRepresentator ] = useState("");
@@ -130,7 +130,8 @@ const InvoiceBalaincing = () => {
                         onChange={(e)=>{setPayType(e) }} value={payType}
                         options={[
                             {value:"Recievable", label:"Recievable"},
-                            {value:"Payble", label:"Payble"}
+                            {value:"Payble", label:"Payble"},
+                            {value:"All", label:"All"},
                         ]}
                     />
                 </Col>

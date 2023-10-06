@@ -1,12 +1,12 @@
 import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
-import React, { useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getChargeHeads } from "/apis/jobs";
 import { Row, Col } from 'react-bootstrap';
-import { Tabs } from 'antd';
-import Charges from './Charges';
 import { setHeadsCache } from '../states';
 import { useSelector } from 'react-redux';
-import { getChargeHeads } from "/apis/jobs";
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect } from 'react';
+import Charges from './Charges';
+import { Tabs } from 'antd';
 
 const ChargesComp = ({state, dispatch, type, allValues}) => {
 

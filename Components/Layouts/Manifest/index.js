@@ -15,7 +15,7 @@ const Index = ({manifest}) => {
   const [pol, setPol] = useState("");
   const [pod, setPod] = useState("");
   const [visible, setVisible] = useState(false);
-  const [from, setFrom] = useState(moment().format("YYYY-MM-DD"));
+  const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
   const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
   const dispatch = useDispatch();
   const comma=(a)=>a==0?'':parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,", ");

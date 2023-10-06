@@ -1,6 +1,7 @@
 import axios from "axios";
 import { delay } from '/functions/delay';
 import openNotification from "/Components/Shared/Notification";
+import moment from "moment";
 
 function recordsReducer(state, action){
     switch (action.type) {
@@ -18,8 +19,10 @@ function recordsReducer(state, action){
 const initialState = {
   load:false,
   visible:false,
-  to:'',
-  from:'',
+  to:moment().format("YYYY-MM-DD"),
+  from:moment("2023-07-01").format("YYYY-MM-DD"),
+  // const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
+  // const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
   client:'',
   records:[],
   subType:'',
@@ -72,11 +75,11 @@ const companies = [
           y.gainLoss = 0.00;
           y.after = 0.00;
           y.Invoices.forEach((z) => {
-            if(z.payType=="Recievable"){
+            if(z.payType=="Recievable") {
               y.revenue = y.revenue + parseFloat(z.total);  //total will not be multiplied by Ex.Rate
-              y.actual = y.actual + parseFloat(z.recieved)  //This will be multiplied by Ex.Rate
-              if(z.Invoice_Losses?.length>0){
-                z.Invoice_Losses.forEach((i)=>{
+              y.actual = y.actual + parseFloat(z.recieved);  //This will be multiplied by Ex.Rate
+              if(z.Invoice_Losses?.length>0) {
+                z.Invoice_Losses.forEach((i) => {
                   y.gainLoss = y.gainLoss + parseFloat(i.gainLoss)
                 })
               }
@@ -98,12 +101,11 @@ const companies = [
           totalPnl      = totalPnl + y.pnl;
           totalActual   = totalActual - totalCost;
           totalgainLoss = totalgainLoss + y.gainLoss;
-          y.after = y.actual + y.gainLoss;
+          y.after = y.revenue - y.cost + y.gainLoss
           y.actual = y.revenue - y.cost
           totalAfter = totalAfter + y.after
         })
       }
-      console.log(result)
       await set({
         visible:x.data.status=="success"?
           x.data.result.length>0?
@@ -137,6 +139,11 @@ const companies = [
     }
   }
 
-  const plainOptions = ['Sea Export', 'Sea Import', 'Air Export', 'Air Import'];
+  const plainOptions = [
+    {label:'Sea Export', value:'SE'},
+    {label:'Sea Import', value:"SI"},
+    {label:'Air Export', value:"AE"},
+    {label:'Air Import', value:"AI"},
+  ];
 
 export { recordsReducer, initialState, companies, handleSubmit, plainOptions }

@@ -10,8 +10,8 @@ const JobBalancing = () => {
 
     const [visible, setVisible] = useState(false);
     const [load, setLoad] = useState(true);
-    const [from, setFrom] = useState(`${new Date()}`);
-    const [to, setTo] = useState(`${new Date()}`);
+    const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
+    const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
     const [type, setType] = useState("client");
     const [payType, setPayType] = useState("Recievable");
     const [selectedCompany, setSelectedCompany] = useState("");

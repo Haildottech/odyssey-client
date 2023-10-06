@@ -61,7 +61,7 @@ const VoucherList = ({ voucherData }) => {
               dispatch(incrementTab({"label":"Voucher","key":"3-5","id":`${x.id}`}));
               Router.push(`/accounts/vouchers/${x.id}`);
           }}>
-          <td>{x?.voucher_No}</td>
+          <td>{index+1}</td>
           <td>{x?.voucher_Id}</td>
           <td>{x?.type}      </td>
           <td>{x?.chequeDate?.substr(0, 10)}</td>

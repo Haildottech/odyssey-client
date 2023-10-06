@@ -14,8 +14,8 @@ const AccountActivity = () => {
     const [debitAccount, setDebitAccount] = useState("");
     const [creditAccount, setCreditAccount] = useState("");
     const [company, setCompany] = useState(1);
-    const [from, setFrom] = useState(`${new Date()}`);
-    const [to, setTo] = useState(`${new Date()}`);
+    const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
+    const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
 
     const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
 
