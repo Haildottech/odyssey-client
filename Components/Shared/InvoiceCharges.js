@@ -64,7 +64,6 @@ const InvoiceCharges = ({data, companyId}) => {
 
   useEffect(()=>{
     if(Object.keys(data).length>0){
-        console.log(data.resultOne)
         setInvoice(data.resultOne);
         setRecords(data.resultOne?.Charge_Heads);
         setInvoiceData(!invoiceData)
@@ -125,7 +124,6 @@ const InvoiceCharges = ({data, companyId}) => {
         Voucher_Heads:[]
     }
     let tempRoundOff = parseFloat(tempInv.roundOff);
-    console.log(invoice)
     let narration = `${tempInv.payType} Against Invoice ${invoice.invoice_No} For Job# ${invoice.SE_Job.jobNo} From ${invoice.party_Name}`
     if(tempRoundOff==0){
         vouchers.Voucher_Heads.push({
@@ -230,11 +228,12 @@ const InvoiceCharges = ({data, companyId}) => {
     }).then(async(x)=>{
         if(x.data.status=="success"){
             openNotification("Success", "Invoice Successfully Approved!", "green")
-            //setInvoice(tempInv);
             if(tempInv.approved=="1"){
                 await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, vouchers);
             }else{
+                console.log("Here")
                 await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_DELETE_VOUCHER, {id:tempInv.id})
+                .then((x)=>console.log(x.data))
             }
         }else{
             openNotification("Ops", "An Error Occured!", "red")

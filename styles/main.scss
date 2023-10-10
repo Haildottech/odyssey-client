@@ -590,3 +590,20 @@ div.rc-virtual-list > div.rc-virtual-list-holder > div > div{
 .ant-select-item {
   font-size: 12px!important;
 }
+
+.round-icon-cont{
+  background-color: rgb(40, 179, 179);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  color: rgb(238, 238, 238);
+  cursor: pointer;
+}
+.round-icon-cont:hover{
+  transition-duration: 300ms;
+  background-color: rgb(16, 132, 132);
+  color: rgb(255, 255, 255);
+}

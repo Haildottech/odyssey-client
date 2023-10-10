@@ -11,7 +11,7 @@ const VoucherList = ({ voucherData }) => {
 
     useEffect(() => {
     const getVoucherList = async () =>{
-      if (voucherData && Array.isArray(voucherData.result)) {
+      if (voucherData?.status=="success") {
         const filtered = voucherData.result.filter((x) => {
           return x.CompanyId === companyId && x;
         });

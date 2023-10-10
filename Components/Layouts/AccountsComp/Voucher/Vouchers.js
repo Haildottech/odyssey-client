@@ -49,13 +49,10 @@ const Vouchers=({
     reset({ 
       CompanyId, vType, chequeDate, chequeNo, payTo, type,
       Voucher_Heads, exRate, currency:currency==undefined?"PKR":currency,
-      ChildAccountId, settleId, id 
+      ChildAccountId, settleId, id
     });
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {headers:{CompanyId:CompanyId}})
-    .then((x)=>{
-      console.log(x.data.result)
-      setChild(x.data.result);
-    })
+    .then((x)=>setChild(x.data.result))
   }
 
   const getAccounts = async () => {
@@ -84,9 +81,7 @@ const Vouchers=({
             x.amount = parseFloat(x.amount).toFixed(2)
           })
           reset({
-            ...allValues, 
-            type:allValues.vType === "BPV" || allValues.vType === "CPV" ? "Payble" :"Recievable", 
-            Voucher_Heads:tempHeads
+            ...allValues, type:allValues.vType === "BPV" || allValues.vType === "CPV" ? "Payble" :"Recievable", Voucher_Heads:tempHeads
           });
         })
       }
@@ -129,20 +124,9 @@ const Vouchers=({
           </Col>
           <Col md={12}>
             <SelectSearchComp className="form-select" name="ChildAccountId" label="Settlement Account" register={register} control={control} width={"100%"}
-              options={
-                settlement.length>0?settlement.map((x)=>{
-                  return { id: x?.id, name: x?.title };
-                }):[]
-              }
-              disabled={
-                (
-                  allValues.vType=="CPV"||allValues.vType=="CRV"||
-                  allValues.vType=="BRV"||allValues.vType=="BPV"||
-                  allValues.vType=="TV"
-                )?false:true
-              }
+              options={settlement.length>0?settlement.map((x)=>{ return { id:x?.id, name:x?.title }}):[]}
+              disabled={(allValues.vType=="CPV"||allValues.vType=="CRV"||allValues.vType=="BRV"||allValues.vType=="BPV"||allValues.vType=="TV")?false:true}
             />
-            {/* <p className="error-line">{errors?.ChildAccountId?.message}</p> */}
           </Col>
           <Col md={5} className="my-2">
             <InputComp className="form-control" name={"chequeNo"} label="Cheque No" placeholder="Cheque No" register={register} control={control} />
@@ -179,9 +163,7 @@ const Vouchers=({
           narration:"",
           amount:0,
           defaultAmount:0
-        })}
-      >Add
-      </button>
+        })}>Add</button>
       <div className="table-sm-1 col-12" style={{ maxHeight: 300, overflowY: "auto" }} >
       <Table className="tableFixHead" bordered>
         <thead>
@@ -206,23 +188,19 @@ const Vouchers=({
             </td>
             <td style={{padding:3, width:90}}>
               <SelectComp className="form-select" name={`Voucher_Heads.${index}.type`} register={register} control={control} 
-                width={"100%"}
-                options={[
-                  { id: "debit", name: "Debit" }, { id: "credit", name: "Credit" },
-                ]}
+                width={"100%"} options={[{ id:"debit", name:"Debit" }, { id:"credit", name:"Credit" }]}
               />
             </td>
             {allValues.currency!="PKR" &&
             <td style={{padding:3, width:90}}>
-              {/* <InputNumComp name={`Voucher_Heads.${index}.defaultAmount`} register={register} control={control} width={"100%"} /> */}
-                <InputNumber value={field.defaultAmount} style={{width:'100%'}} 
-                  onChange={(e)=>{
-                    let tempRecords = [...Voucher_Heads];
-                    tempRecords[index].defaultAmount = e;
-                    tempRecords[index].amount =e? (parseFloat(e)*parseFloat(allValues.exRate)).toFixed(2):tempRecords[index].amount;
-                    reset({...allValues, Voucher_Heads:tempRecords})
-                  }}
-                />
+              <InputNumber value={field.defaultAmount} style={{width:'100%'}} 
+                onChange={(e)=>{
+                  let tempRecords = [...Voucher_Heads];
+                  tempRecords[index].defaultAmount = e;
+                  tempRecords[index].amount=e?(parseFloat(e)*parseFloat(allValues.exRate)).toFixed(2):tempRecords[index].amount;
+                  reset({...allValues, Voucher_Heads:tempRecords});
+                }}
+              />
             </td>}
             <td style={{padding:3, width:90}}>
               <InputNumComp name={`Voucher_Heads.${index}.amount`} register={register} control={control} width={"100%"} />
@@ -243,7 +221,7 @@ const Vouchers=({
       </button>
     </form>
   </div>
-  );
+  )
 };
 
 export default Vouchers;

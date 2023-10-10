@@ -6,11 +6,10 @@ import { Radio, Select, Input, DatePicker, InputNumber } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 
 const TransactionInfo = ({state, dispatch, payType, companyId}) => {
-
   const set = (a, b) => dispatch({ type:'set', var:a, pay:b });
-
   return (
     <>
+
     <Row>
         <Col md={5}>
             <div className='grey-txt mb-1 fs-14'>Transaction Mode</div>

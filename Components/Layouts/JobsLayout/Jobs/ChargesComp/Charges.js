@@ -62,13 +62,13 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                   if((x.Invoice==null || x.Invoice?.status==null || x.Invoice?.approved=="0") 
                       //&& (permissions.admin || x.new)
                   ){PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
-                      () => {
-                          let tempState = [...chargeList];
-                          let tempDeleteList = [...state.deleteList];
-                          tempDeleteList.push(tempState[index].id);
-                          tempState.splice(index, 1);
-                          reset({ chargeList: tempState });
-                          dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
+                    () => {
+                        let tempState = [...chargeList];
+                        let tempDeleteList = [...state.deleteList];
+                        tempDeleteList.push(tempState[index].id);
+                        tempState.splice(index, 1);
+                        reset({ chargeList: tempState });
+                        dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
                   })}}}
               />
           </td>
@@ -242,7 +242,6 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             onClick={()=>{
             if(!state.chargeLoad){
                 append({
-                    id:crypto.randomUUID(),
                     type:type, description:'', basis:'', 
                     new:true,  ex_rate: parseFloat(state.exRate), pp_cc:state.selectedRecord.freightType=="Prepaid"?'PP':'CC', 
                     local_amount: 0,  size_type:'40HC', dg_type:state.selectedRecord.dg=="Mix"?"DG":state.selectedRecord.dg, 

@@ -11,7 +11,6 @@ import ChargesComp from './ChargesComp/';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
 import EquipmentInfo from './EquipmentInfo';
-import Charges from './Charges';
 import LoadingProgram from './Loading Program';
 import DelieveryOrder from './Delievery Order';
 import { useForm, useWatch } from "react-hook-form";

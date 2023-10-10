@@ -141,7 +141,7 @@ const getInvoices = async(id, dispatch, partytype, selectedParty, payType, compa
               (parseFloat(y.total)/ parseFloat(y.Charge_Heads[0].ex_rate) - (parseFloat(y.paid==null?0:y.paid)/ parseFloat(y.Charge_Heads[0].ex_rate)) - parseFloat(y.receiving==null?0:y.receiving))).toFixed(2):
             (payType=="Recievable"?
               (parseFloat(y.total) - parseFloat(y.recieved==null?0:y.recieved)-parseFloat(y.receiving==null?0:y.receiving)).toFixed(2):
-              (parseFloat(y.total) - parseFloat(y.paid==null?0:y.paid)-parseFloat(y.receiving==null?0:y.receiving))).toFixed(2),
+              (parseFloat(y.total) - parseFloat(y.paid==null?0:y.paid) - parseFloat(y.receiving==null?0:y.receiving)).toFixed(2)),
             //inVbalance:(parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2)//getNetInvoicesAmount(y.Charge_Heads).localAmount
           }));
       }

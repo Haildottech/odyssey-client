@@ -37,11 +37,6 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
     const heading = { lineHeight:1, fontSize:11, fontWeight:'800', paddingBottom:5 };
     const Line = () => <div style={{backgroundColor:"black", height:3, position:'relative', top:12}}></div>
     const border = "1px solid black";
-
-    useEffect(() => {
-      console.log(invoice)
-      console.log(airports)
-    }, [])
     
   return (
     <div className='pb-5 px-5 pt-4'>

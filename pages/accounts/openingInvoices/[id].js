@@ -2,10 +2,10 @@ import openingInvoice from '/Components/Layouts/AccountsComp/OpeningBalance';
 import React from 'react';
 import axios from 'axios';
 
-const openingInvoice = ({id, voucherData}) => {
-  return <OpeningBalance id={id} voucherData={voucherData} />
+const openingInvoicePage = ({id, voucherData}) => {
+  return <>Hello</>
 }
-export default openingInvoice;
+export default openingInvoicePage;
 
 export async function getServerSideProps(context) {
     const { params } = context
