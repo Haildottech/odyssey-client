@@ -74,9 +74,7 @@ const MainLayout = ({children}) => {
     if(newRouter.pathname.includes("/airJobs/export/bl/[id]")){
       setToggleState('7-3');
     }
-    if(newRouter.pathname.includes("/seaJobs/import/[id]") 
-        //&& !newRouter.pathname.includes("/seaJobs/import/bl")
-      ){
+    if(newRouter.pathname.includes("/seaJobs/import/[id]")){
       setToggleState('4-6');
     }
     if(newRouter.pathname.includes("seaJobs/import/bl/[id]")){

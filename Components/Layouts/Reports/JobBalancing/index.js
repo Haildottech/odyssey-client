@@ -113,6 +113,7 @@ const JobBalancing = () => {
                 >
                     <Radio value={"Recievable"}>Recievable</Radio>
                     <Radio value={"Payble"}>Payble</Radio>
+                    <Radio value={"Both"}>Both</Radio>
                 </Radio.Group>
             </Col>
             <Col md={2} className="mt-3">
