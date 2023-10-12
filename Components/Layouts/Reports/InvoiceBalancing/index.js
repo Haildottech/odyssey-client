@@ -223,7 +223,7 @@ const InvoiceBalaincing = () => {
             <Row>
                 <Col md={3} style={{border:'1px solid silver', marginLeft:12}} className='py-1'>
                     Job Types
-                    <Checkbox.Group options={plainOptions} defaultValue={['Apple']} 
+                    <Checkbox.Group options={plainOptions} defaultValue={['SE']} 
                         onChange={(e)=>setJobTypes(e)} 
                     />
                 </Col>

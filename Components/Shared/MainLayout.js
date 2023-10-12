@@ -80,10 +80,11 @@ const MainLayout = ({children}) => {
     if(newRouter.pathname.includes("seaJobs/import/bl/[id]")){
       setToggleState('4-7');
     }
-    if( newRouter.pathname.includes("seaJobs/export/[id]") 
-        //&& !newRouter.pathname.includes("seaJobs/export/bl")
-      ){
+    if( newRouter.pathname.includes("seaJobs/export/[id]")){
       setToggleState('4-3');
+    }
+    if( newRouter.pathname.includes("/accounts/openingInvoices/[id]") && !newRouter.pathname.includes("/accounts/openingInvoices/list")){
+      setToggleState('3-12');
     }
     if(newRouter.pathname.includes("/seaJobs/export/bl/[id]")){
       setToggleState('4-4');
@@ -139,6 +140,8 @@ const MainLayout = ({children}) => {
     officeVoucher:false,
     openingBalanceList:false,
     openingBalance:false,
+    openingInvoicesList:false,
+    openingInvoice:false,
     jobPlReport:false,
     riders:false,
     riderAssign:false,
@@ -166,6 +169,7 @@ const MainLayout = ({children}) => {
       })
       if(cancel==false){
         tempTabs.push(tabs);
+        console.log("here")
         let tempTabActive = {...tabActive};
         if(tabs.key=='1-1'){ tempTabActive.home=true }
         else if(tabs.key=='1-2'){ tempTabActive.requests=true }
@@ -187,6 +191,8 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='3-8'){ tempTabActive.officeVoucher=true }
         else if(tabs.key=='3-9'){ tempTabActive.openingBalanceList=true }
         else if(tabs.key=='3-10'){ tempTabActive.openingBalance=true }
+        else if(tabs.key=='3-11'){ tempTabActive.openingInvoicesList=true }
+        else if(tabs.key=='3-12'){ tempTabActive.openingInvoice=true }
         else if(tabs.key=='4-1'){ tempTabActive.seJobList=true }
         else if(tabs.key=='4-2'){ tempTabActive.seBl=true }
         else if(tabs.key=='4-3'){ tempTabActive.seJob=true }
@@ -264,6 +270,8 @@ const MainLayout = ({children}) => {
     else if(x.key=='3-8'){ Router.push(`/accounts/officeVouchers/${setKey(x)}`) }
     else if(x.key=='3-9'){ Router.push(`/accounts/openingBalance/list`) }
     else if(x.key=='3-10'){ Router.push(`/accounts/openingBalance/${setKey(x)}`) }
+    else if(x.key=='3-11'){ Router.push(`/accounts/openingInvoices/list`) }
+    else if(x.key=='3-12'){ Router.push(`/accounts/openingInvoices/${setKey(x)}`) }
     else if(x.key=='4-1'){ Router.push('/seaJobs/seJobList') }
     else if(x.key=='4-2'){ Router.push('/seaJobs/export/blList') }
     else if(x.key=='4-3'){ Router.push(`/seaJobs/export/${setKey(x)}`) } //these routes are also settled in 2nd useEffect

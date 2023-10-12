@@ -1,8 +1,9 @@
 import React from 'react'
+import List from '/Components/Layouts/AccountsComp/OpeningInvoices/List'
 
 const openingInvoices = () => {
   return (
-    <div>list</div>
+    <List/>
   )
 }
 

@@ -52,7 +52,10 @@ const Vouchers=({
       ChildAccountId, settleId, id
     });
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {headers:{CompanyId:CompanyId}})
-    .then((x)=>setChild(x.data.result))
+    .then((x)=>{
+      console.log(x.data.result);
+      setChild(x.data.result);
+    })
   }
 
   const getAccounts = async () => {

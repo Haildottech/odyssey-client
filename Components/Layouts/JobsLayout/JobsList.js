@@ -25,7 +25,11 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
     {companyId!='' &&
     <div className='base-page-layout'>
       <Row>
-      <Col md={10}><h5>{type=="SE"?"SEA Export":type=="SI"?"SEA Import":type=="AE"?"AIR Export":type=="AI"?"AIR Import":""} Job List</h5></Col>
+      <Col md={10}>
+        <h5>
+          {type=="SE"?"SEA Export":type=="SI"?"SEA Import":type=="AE"?"AIR Export":type=="AI"?"AIR Import":""} Job List
+        </h5>
+        </Col>
       <Col md={1}>
         <button className='btn-custom right'
           onClick={()=>{
