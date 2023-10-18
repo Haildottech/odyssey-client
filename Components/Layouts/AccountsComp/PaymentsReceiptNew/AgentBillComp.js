@@ -1,28 +1,34 @@
 import { getNetInvoicesAmount } from '../../../../functions/amountCalculations';
-import { recordsReducer, initialState, getAccounts, totalRecieveCalc, getInvoices } from './states';
+import { getAccounts, totalRecieveCalc, getInvoices } from './states';
 import openNotification from '../../../Shared/Notification';
 import { Empty, InputNumber, Checkbox, Radio } from 'antd';
 import { Spinner, Table, Col, Row } from 'react-bootstrap';
 import AgentTransactionInfo from './AgentTransactionInfo';
 import React, { useEffect, useReducer, useState } from 'react';
-import moment from "moment";
-import Gl from './Gl';
-import axios from 'axios';
 import { CloseCircleOutlined } from '@ant-design/icons';
+import { incrementTab } from '/redux/tabs/tabSlice';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import Gl from './Gl';
 
-const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, companyId}) => {
+const AgentBillComp = ({companyId, state, dispatch}) => {
 
-    const [ state, dispatch ] = useReducer(recordsReducer, initialState);
-    const set = (a, b) => dispatch({type:'set', var:a, pay:b});
+    const router = useRouter();
+    const dispatchNew = useDispatch();
+    const { payType } = state;
+    const set = (a, b) => { dispatch({type:'set', var:a, pay:b}) }
+    const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")};
 
     useEffect(() => {
-        getInvoices(selectedParty.id, dispatch, partytype, selectedParty, payType, companyId, invoiceCurrency); 
-    }, [selectedParty, payType]);
-    useEffect(() => { if(state.invoices.length>0){set('totalrecieving', totalRecieveCalc(state.invoices));} }, [state.invoices]);
+        getInvoices(state, companyId, dispatch);
+    }, [state.selectedParty, state.payType]);
 
-    useEffect(() => {
-        if(!state.autoOn){ calculateGainLoss(); }
-    }, [state.invoices, state.manualExRate]);
+    useEffect(() => { if(state.invoices.length>0){
+        set('totalrecieving', totalRecieveCalc(state.invoices));
+        //if(!state.autoOn){
+            calculateTransactions(); 
+        //}
+    } }, [state.invoices, state.manualExRate, state.exRate, state.autoOn]);
 
     useEffect(() => {
         calculateTax();
@@ -38,24 +44,33 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
         }
     }
     
-    const calculateGainLoss = () => {
+    const calculateTransactions = () => {
         let tempGainLoss = 0.00;
         let tempInvoiceLosses = [];
         state.invoices.forEach((x)=>{
-            if(x.receiving && x.receiving!=0){
+            if(x.receiving && (x.receiving!=0|| state.edit)){
                 tempGainLoss = tempGainLoss + parseFloat(state.manualExRate)*(x.receiving===null?0:parseFloat(x.receiving)) - parseFloat(x.ex_rate)*(x.receiving===null?0:parseFloat(x.receiving))
                 let tempAmount = (parseFloat(state.manualExRate)*(x.receiving===null?0:parseFloat(x.receiving)) - parseFloat(x.ex_rate)*(x.receiving===null?0:parseFloat(x.receiving))).toFixed(2)
-                tempInvoiceLosses.push({
+                let invoieLossValue = {}
+                invoieLossValue = {
+                    amount:x.receiving,
                     InvoiceId:x.id,
-                    gainLoss:payType=="Recievable"? parseFloat(tempAmount)*(-1):tempAmount, 
-                })
+                    gainLoss:payType=="Recievable"?
+                        parseFloat(tempAmount)==0?
+                            0:parseFloat(tempAmount)*(-1)
+                        :
+                        tempAmount, 
+                }
+                if(x.Invoice_Transactions){
+                    invoieLossValue.id = x.Invoice_Transactions[0].id
+                }
+                tempInvoiceLosses.push(invoieLossValue)
             }
         });
         dispatch({type:'setAll', payload:{
             gainLossAmount:tempGainLoss.toFixed(2),
             invoiceLosses:tempInvoiceLosses
         }})
-        //set('gainLossAmount', tempGainLoss.toFixed(2));
     }
 
     const resetAll = () => {
@@ -90,7 +105,6 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                 }
                 pendingFund = 0.00;
             })
-
             val.forEach((x)=>{
                 newExAmount = parseFloat(newExAmount) + (parseFloat(x.receiving)*parseFloat(state.exRate));
                 oldExAmount = parseFloat(oldExAmount) + (parseFloat(x.receiving)*parseFloat(x.ex_rate));
@@ -98,14 +112,10 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
             dispatch({type:'setAll', payload:{
                 gainLossAmount:(newExAmount-oldExAmount).toFixed(2),
                 invoices:val,
-                //taxAmount:0.0,
-                //isPerc:false,
-                //taxPerc:0.0
             }})
-            // set('gainLossAmount', (newExAmount-oldExAmount).toFixed(2));
-            // set('invoices', val);
         }
         calculateTax();
+        calculateTransactions();
     }
 
     const submitPrices = async() => {
@@ -118,11 +128,11 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                 invNarration = invNarration + `Inv# ${x.invoice_No} for Job# ${x.jobId},`
             }
         });
-        invNarration = invNarration + ` For ${selectedParty.name}`;
+        invNarration = invNarration + ` For ${state.selectedParty.name}`;
         //Create Account Transactions
         if((Object.keys(state.payAccountRecord).length!=0) && (state.totalrecieving!=0)){ // <- Checks if The Recieving Account is Selected
             if((Object.keys(state.taxAccountRecord).length!=0) && (state.finalTax!=0) && (state.finalTax!=null) && (state.totalrecieving!=0)){
-                removing = state.finalTax;
+                removing = parseFloat(state.finalTax);
                 transTwo.push({
                     particular:state.taxAccountRecord,
                     tran:{
@@ -135,7 +145,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                 })
             }
             if((Object.keys(state.bankChargesAccountRecord).length!=0) && (state.bankCharges!=0) && (state.bankCharges!=null) && (state.totalrecieving!=0)){
-                removing = removing + state.bankCharges;
+                removing = removing + parseFloat(state.bankCharges);
                 transTwo.push({
                     particular:state.bankChargesAccountRecord,
                     tran:{
@@ -164,7 +174,6 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
             let payAmount = payType=="Recievable"? 
                 (state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) - removing:
                 (state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) + removing; 
-            
             transTwo.push({
                 particular:state.partyAccountRecord,
                 tran:{
@@ -199,7 +208,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
     <>
     <Row>
         <Col md={7}>
-            <AgentTransactionInfo state={state} dispatch={dispatch} payType={payType} invoiceCurrency={invoiceCurrency} />
+            <AgentTransactionInfo state={state} dispatch={dispatch} />
         </Col>
         <Col md={5} className="">
             <div className="mb-2 pb-2 cur" style={{borderBottom:'1px solid silver'}} onClick={async()=>{
@@ -220,7 +229,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                         min="0" stringMode 
                         style={{width:'100%', paddingRight:10}} 
                         disabled={!state.autoOn} value={state.auto} 
-                        onChange={(e)=>set('auto', e)} 
+                        onChange={(e)=>set('auto', e)}
                     />
                 </Col>
                 <Col md={4}>
@@ -228,8 +237,8 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                     <InputNumber size='small'
                         min="0.00" stringMode 
                         style={{width:'100%', paddingRight:20}} 
-                        disabled={!state.autoOn} value={state.exRate} 
-                        onChange={(e)=>set('exRate', e)} 
+                        disabled={state.partytype!="agent"?true:!state.autoOn} value={state.exRate} 
+                        onChange={(e)=>set('exRate', e)}
                     />
                 </Col>
                 <Col md={3}>
@@ -245,9 +254,10 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                 <div style={{maxWidth:100}}>
                 <span className='grey-txt'>Ex. Rate</span>
                     <InputNumber size='small'
+                        disabled={state.partytype!="agent"}
                         min="0.00" stringMode 
                         style={{width:'100%', paddingRight:20}} 
-                        value={state.manualExRate} 
+                        value={state.partytype!="agent"?'1.00':state.manualExRate} 
                         onChange={(e)=>set('manualExRate', e)} 
                     />
                 </div>
@@ -255,11 +265,21 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                 }
                 <Col md={3} className="mt-3">
                     <div className='grey-txt fs-14'>Tax Amount</div>
-                    <InputNumber size='small'  value={state.taxAmount} disabled={state.isPerc?true:false} onChange={(e)=>set('taxAmount',e)} min="0.0" />
+                    <InputNumber size='small' value={state.taxAmount} disabled={state.isPerc?true:false} 
+                    onChange={(e)=>set('taxAmount',e)} min="0.0" />
                 </Col>
                 <Col md={1} className="mt-3">
                     <div className='grey-txt mb-1 fs-14'>%</div>
-                    <Checkbox size='small'  checked={state.isPerc} onChange={()=>set('isPerc',!state.isPerc)} />
+                    <Checkbox size='small'  checked={state.isPerc} 
+                        onChange={()=>{
+                            set('isPerc',!state.isPerc);
+                            dispatch({type:'setAll', payload:{
+                                isPerc:!state.isPerc,
+                                taxAmount:0,
+                                taxPerc:0
+                            }})
+                        }} 
+                    />
                 </Col>
                 <Col md={3} className="mt-3">
                     <div className='grey-txt fs-14'>Tax %</div>
@@ -284,10 +304,6 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                                 accounts:resutlVal,
                                 accountsLoader:false
                             }})
-                            // set('variable', 'taxAccountRecord');
-                            // set('visible', true);
-                            // let resutlVal = await getAccounts('Adjust', companyId);
-                            // set('accounts', resutlVal);
                         }}
                     >{
                         Object.keys(state.taxAccountRecord).length==0?
@@ -315,10 +331,6 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                     </span>
                     <div className="custom-select-input-small"
                         onClick={async()=>{
-                            // set('variable', 'gainLossAccountRecord');
-                            // set('visible', true);
-                            // let resutlVal = await getAccounts('Adjust', companyId);
-                            // set('accounts', resutlVal);
                             dispatch({type:'setAll', payload:{
                                 accountsLoader:true,
                                 visible:true
@@ -331,11 +343,12 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
                             }})
 
                         }}
-                    >{
-                        Object.keys(state.gainLossAccountRecord).length==0?
-                        <span style={{color:'silver'}}>Select Account</span>:
-                        <span style={{color:'black'}}>{state.gainLossAccountRecord.title}</span>
-                    }
+                    >
+                        {
+                            Object.keys(state?.gainLossAccountRecord).length==0?
+                            <span style={{color:'silver'}}>Select Account</span>:
+                            <span style={{color:'black'}}>{state.gainLossAccountRecord.title}</span>
+                        }
                     </div>
                 </Col>
             </Row>
@@ -343,123 +356,91 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
     </Row>
     {!state.load && 
     <>  
-        {(state.oldrecords.length>0 && state.oldBills) && <>
-        Old Bills
-        <div style={{minHeight:100, border:"1px solid silver"}} className='my-2 px-2'>
-        <div className='table-sm-1 mt-2' style={{maxHeight:300, overflowY:'auto'}}>
-        <Table className='tableFixHead' bordered>
-            <thead>
-                <tr className='fs-12'>
-                <th>Sr.</th>
-                <th>Job #</th>
-                <th>Inv/Bill #</th>
-                <th>HBL</th>
-                <th>MBL</th>
-                <th>Currency</th>
-                <th>Ex. Rate</th>
-                <th>{payType=="Recievable"? 'Inv':'Bill'} Bal</th>
-                <th>{payType=="Recievable"? 'Receiving Amount':'Paying Amount'}</th>
-                <th>Balance</th>
-                <th>Select</th>
-                <th>Container</th>
-                </tr>
-            </thead>
-            <tbody>
-            {state.oldrecords.map((x, index) => {
-            return (
-            <tr key={index} className='f fs-12'>
-                <td style={{width:30}}>{index + 1}</td>
-                <td style={{width:100}}>{x.SE_Job.jobNo}</td>
-                <td style={{width:100}}>{x.invoice_No}</td>
-                <td>HBL</td>
-                <td>MBL</td>
-                <td style={{width:100}}>{x.currency}</td>
-                <td style={{width:100}}>{x?.Charge_Heads[0]?.ex_rate}</td>
-                <td>{x.total}</td>
-                <td style={{padding:3, width:150}}><InputNumber style={{height:30, width:140}} disabled /></td>
-                <td>0.00</td>
-                <td style={{ width:50}} className='px-3 py-2'><input type='checkbox' disabled /></td>
-                <td></td>
-            </tr>
-            )
-            })}
-            </tbody>
-        </Table>
-        </div>
-        </div>
-        </>
-        }
         {state.invoices.length==0 && <Empty  />}
         {state.invoices.length>0 &&
         <div>
         <div style={{minHeight:300}}>
         <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto'}}>
         <Table className='tableFixHead' bordered>
-            <thead>
-                <tr className='fs-12'>
-                <th>Sr.</th>
-                <th>Job #</th>
-                <th>Inv/Bill #</th>
-                <th>HBL</th>
-                <th>MBL</th>
-                <th>Currency</th>
-                <th>Ex. Rate</th>
-                <th>{payType=="Recievable"? 'Inv':'Bill'} Bal</th>
-                <th>{payType=="Recievable"? 'Receiving Amount':'Paying Amount'}</th>
-                <th>Balance</th>
-                <th>Select</th>
-                <th>Container</th>
-                </tr>
-            </thead>
-            <tbody>
-            {state.invoices.map((x, index) => {
-            return (
-            <tr key={index} className='f fs-12'>
-                <td style={{width:30}}>{index + 1}</td>
-                <td style={{width:100}}>{x.SE_Job.jobNo}</td>
-                <td style={{width:100}}>{x.invoice_No}</td>
-                <td>HBL</td>
-                <td>MBL</td>
-                <td style={{width:100}}>{x.currency}</td>
-                <td style={{width:100}}>{x.ex_rate}</td>
-                <td>{x.inVbalance}</td>
-                <td style={{padding:3, width:150}}>
-                    <InputNumber style={{height:30, width:140, fontSize:12}} value={x.receiving} min="0.00" max={`${x.remBalance}`} stringMode  disabled={state.autoOn}
-                        onChange={(e)=>{
-                            let tempState = [...state.invoices];
-                            tempState[index].receiving = e;
-                            set('invoices', tempState);
-                        }}
-                    />
-                </td>
-                <td>
-                {(x.remBalance - x.receiving).toFixed(2)}
-                </td>
-                <td style={{ width:50}} className='px-3 py-2'>
-                    <input type='checkbox' style={{cursor:'pointer'}} checked={x.check} disabled={state.autoOn}
-                        onChange={()=>{
-                            // let tempState = [...state.invoices];
-                            // tempState[index].check = !tempState[index].check;
-                            // tempState[index].receiving = tempState[index].check?x.inVbalance:0.00
-                            // set('invoices', tempState);
-                            let tempState = [...state.invoices];
-                            tempState[index].check = !tempState[index].check;
-                            payType=="Recievable"?(tempState[index].receiving = tempState[index].check?(x.inVbalance-x.recieved):0.00):(tempState[index].receiving = tempState[index].check?(x.inVbalance-x.paid):0.00)
-                            console.log(tempState)
-                            set('invoices', tempState);
-                        }}
-                    />
-                </td>
-                <td></td>
+        <thead>
+            <tr className='fs-12'>
+            <th>Sr.</th>
+            <th>Job #</th>
+            <th>Inv/Bill #</th>
+            <th>HBL</th>
+            <th>MBL</th>
+            <th>Currency</th>
+            <th>Ex. Rate</th>
+            <th>{state.payType=="Recievable"? 'Inv':'Bill'} Bal</th>
+            <th>{state.payType=="Recievable"? 'Receiving Amount':'Paying Amount'}</th>
+            <th>Balance</th>
+            <th>Select</th>
+            <th>Container</th>
             </tr>
-            )
-            })}
-            </tbody>
+        </thead>
+        <tbody>
+        {state.invoices.map((x, index) => {
+        return (
+        <tr key={index} className='f fs-12' style={{backgroundColor:state.edit?'#E4EEF6':'white'}}>
+            <td style={{width:30}}>{index + 1}</td>
+            <td style={{width:100}} className='row-hov blue-txt' onClick={()=>{
+                let type = x.operation;
+                dispatchNew(incrementTab({
+                "label":type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
+                "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
+                "id":x.SE_Job.id
+                }))
+                router.push(
+                    type=="SE"?`/seaJobs/export/${x.SE_Job.id}`:
+                    type=="SI"?`/seaJobs/import/${x.SE_Job.id}`:
+                    type=="AE"?`/airJobs/export/${x.SE_Job.id}`:
+                    `/airJobs/import/${x.SE_Job.id}`
+                )}
+            }> <b>{x.SE_Job.jobNo}</b> </td>
+            <td style={{width:100}}>{x.invoice_No}</td>
+            <td>HBL</td>
+            <td>MBL</td>
+            <td style={{width:100}}>{x.currency}</td>
+            <td style={{width:100}}>{x.ex_rate}</td>
+            <td>{commas(x.inVbalance)}</td>
+            <td style={{padding:3, width:150}}>
+                <InputNumber style={{height:30, width:140, fontSize:12}} value={x.receiving} min="0.00" max={`${x.remBalance}`} stringMode  disabled={state.autoOn}
+                    onChange={(e)=>{
+                        let tempState = [...state.invoices];
+                        tempState[index].receiving = e;
+                        set('invoices', tempState);
+                    }}
+                />
+            </td>
+            <td>
+            {commas(x.remBalance - x.receiving)}
+            </td>
+            <td style={{ width:50}} className='px-3 py-2'>
+            <input type='checkbox' style={{cursor:'pointer'}} checked={x.check} disabled={state.autoOn}
+                onChange={()=>{
+                    let tempState = [...state.invoices];
+                    tempState[index].check = !tempState[index].check;
+                    state.payType=="Recievable"?
+                        (tempState[index].receiving = tempState[index].check?
+                            (x.inVbalance-x.recieved + parseFloat(state.edit?x.Invoice_Transactions[0].amount:0) /*<-this adds the current tran amoun previously received */ ):
+                            0.00
+                        ):
+                        (tempState[index].receiving = tempState[index].check?
+                            (x.inVbalance-x.paid + parseFloat(state.edit?x.Invoice_Transactions[0].amount:0) /*<-this adds the current tran amoun previously received */ ):
+                            0.00
+                        );
+                set('invoices', tempState);
+            }}/>
+            </td>
+            <td></td>
+        </tr>
+        )})}
+        </tbody>
         </Table>
         </div>
         </div>
             <div className=''>
-                Total {payType} Amount:{" "}
+                Total {state.payType} Amount:{" "}
                 <div style={{padding:3, border:'1px solid silver', minWidth:100, display:'inline-block', textAlign:'right'}}>
                     {state.totalrecieving.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
                 </div>
@@ -472,16 +453,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
     </>
     }
     {state.load && <div className='text-center' ><Spinner /></div>}
-    {state.glVisible && 
-        <Gl state={state} 
-            dispatch={dispatch} 
-            selectedParty={selectedParty} 
-            partytype={partytype} 
-            payType={payType} 
-            companyId={companyId}
-            invoiceCurrency={invoiceCurrency}
-        />
-    }
+    {state.glVisible && <Gl state={state} dispatch={dispatch} companyId={companyId} />}
     </>
   )
 }

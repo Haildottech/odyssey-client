@@ -12,15 +12,15 @@ const voucherList = ({ sessionData, voucherData }) => {
 export default voucherList
 
 export async function getServerSideProps({req, res}) {
-    const cookies = new Cookies(req, res)
-    const sessionData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_LOGIN_VERIFICATION,{
-      headers:{"x-access-token": `${cookies.get('token')}`}
-    }).then((x)=>x.data);
-  
-    const voucherData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_VOUCHERS)
-    .then((x)=>x.data);
-  
-    return{ 
-      props: { sessionData, voucherData }
-    }
+  const cookies = new Cookies(req, res)
+  const sessionData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_LOGIN_VERIFICATION,{
+    headers:{"x-access-token": `${cookies.get('token')}`}
+  }).then((x)=>x.data);
+
+  const voucherData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_VOUCHERS)
+  .then((x)=>x.data);
+
+  return{ 
+    props: { sessionData, voucherData }
+  }
 }

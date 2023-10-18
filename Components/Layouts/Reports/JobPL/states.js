@@ -78,16 +78,16 @@ const companies = [
             if(z.payType=="Recievable") {
               y.revenue = y.revenue + parseFloat(z.total);  //total will not be multiplied by Ex.Rate
               y.actual = y.actual + parseFloat(z.recieved);  //This will be multiplied by Ex.Rate
-              if(z.Invoice_Losses?.length>0) {
-                z.Invoice_Losses.forEach((i) => {
+              if(z.Invoice_Transactions?.length>0) {
+                z.Invoice_Transactions.forEach((i) => {
                   y.gainLoss = y.gainLoss + parseFloat(i.gainLoss)
                 })
               }
             } else {
               y.cost = y.cost + parseFloat(z.total);  //total will not be multiplied by Ex.Rate
               y.actual = y.actual - parseFloat(z.paid)  //This will be multiplied by Ex.Rate
-              if(z.Invoice_Losses?.length>0){
-                z.Invoice_Losses.forEach((i)=>{
+              if(z.Invoice_Transactions?.length>0){
+                z.Invoice_Transactions.forEach((i)=>{
                   y.gainLoss = y.gainLoss + parseFloat(i.gainLoss)
                 })
               }

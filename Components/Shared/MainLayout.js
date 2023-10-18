@@ -263,7 +263,7 @@ const MainLayout = ({children}) => {
     else if(x.key=='3-1'){ Router.push('/accounts/chartOfAccount') }
     else if(x.key=='3-2'){ Router.push('/accounts/accountActivity') }
     else if(x.key=='3-3'){ Router.push('/accounts/invoiceAndBills') }
-    else if(x.key=='3-4'){ Router.push('/accounts/paymentReceipt') }
+    else if(x.key=='3-4'){ Router.push(`/accounts/paymentReceipt/${setKey(x)}`) }
     else if(x.key=='3-5'){ Router.push(`/accounts/vouchers/${setKey(x)}`)} //these routes are also settled in 2nd useEffect
     else if(x.key=='3-6'){ Router.push('/accounts/voucherList') }
     else if(x.key=='3-7'){ Router.push('/accounts/officeVouchers/list') }

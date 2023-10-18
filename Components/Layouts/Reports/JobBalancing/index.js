@@ -158,15 +158,11 @@ export default JobBalancing
 //     const [visible, setVisible] = useState(false);
 //     const [load, setLoad] = useState(true);
 //     const [selectedParty, setSelectedParty] = useState([]);
+//     const [records, setRecords] = useState([]);
     
 //     const [values, setValues] = useState({});
 //     const [comapnies, setCompanies] = useState([]);
-//     const [selectedCompany, setSelectedCompany] = useState("");
-//     const [type, setType] = useState("client");
 //     const [payType, setPayType] = useState("Recievable");
-//     const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
-//     const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
-
 //     const [filters, setFilters] = useState({
 //         client:'',
 //         vendor:'',
@@ -177,6 +173,11 @@ export default JobBalancing
 //         airline:'',
 //         consignee:'',
 //         forwarder:'',
+//         companyId:'1',
+//         operation:['SE', "SI", "AE", "AI"],
+//         payType:'Recievable',
+//         to:moment().format("YYYY-MM-DD"),
+//         from:moment("2023-07-01").format("YYYY-MM-DD")
 //     })
 //     const operations = [
 //         { label: 'Sea Export', value: 'SE' },
@@ -187,7 +188,6 @@ export default JobBalancing
 //     useEffect(() => { getCompanies() }, []);
 //     useEffect(() => { 
 //       if(status=="success") {
-//         console.log(data.result);
 //         setValues(data.result);
 //       }
 //     }, [status]);
@@ -231,39 +231,51 @@ export default JobBalancing
 //     <Row>
 //     <Col md={5}>
 //     <Row>
-//     <Col md={12}>
+//         <Col md={12}>
 //         <div>Company</div>
-//         <Select defaultValue="" style={{ width: 170 }} 
+//         <Select defaultValue="" style={{ width: 170 }}
+//             value={filters.companyId}
 //             options={comapnies} 
-//             onChange={(e)=>setSelectedCompany(e)} 
+//             onChange={(e)=>{
+//                 setFilters({...filters, companyId:e})
+//             }} 
 //         />
 //         </Col>
 //         <Col md={12} className="mt-3">
 //             <div>Pay Type</div>
-//             <Radio.Group className='mt-1' 
-//                 value={payType}
-//                 onChange={(e)=>{
-//                     setPayType(e.target.value);
-//                 }} 
-//             >
+//             <Radio.Group className='mt-1' value={filters.payType} onChange={(e)=>setFilters({...filters, payType:e.target.value})} >
 //                 <Radio value={"Recievable"}>Recievable</Radio>
 //                 <Radio value={"Payble"}>Payble</Radio>
 //                 <Radio value={"Both"}>Both</Radio>
 //             </Radio.Group>
 //         </Col>
-//         <Col md={4} className="mt-3">
+//         <Col md={5} className="mt-3">
 //             <div>From</div>
-//             <Form.Control type={"date"} size="sm" value={from} onChange={(e)=>setFrom(e.target.value)} />
+//             <Form.Control type={"date"} size="sm" value={filters.from} onChange={(e)=>setFilters({...filters, from:e.target.value})} />
 //         </Col>
-//         <Col md={4} className="mt-3 mb-2">
+//         <Col md={5} className="mt-3 mb-2">
 //             <div>To</div>
-//             <Form.Control type={"date"} size="sm" value={to} onChange={(e)=>setTo(e.target.value)} />
+//             <Form.Control type={"date"} size="sm" value={filters.to} onChange={(e)=>setFilters({...filters, to:e.target.value})} />
 //         </Col>
-//         <Col md={6} className='mb-2'>
+//         <Col md={5} className='mb-2'>
 //             <div>Job Types</div>
-//             <Checkbox.Group options={operations} defaultValue={['SE']} style={{border:'1px solid silver'}} className='p-2'
-//                 onChange={(e)=>setJobTypes(e)} 
+//             <Checkbox.Group options={operations} value={filters.operation} style={{border:'1px solid silver'}} className='p-2'
+//                 onChange={(e)=>setFilters({...filters, operation:e})} 
 //             />
+//         </Col>
+//         <Col md={12}>
+//             <button className='btn-custom'
+//                 onClick={()=>{
+//                     axios.post(process.env.NEXT_PUBLIC_CLIMAX_MISC_GET_INVOICE_BALANCING,{
+//                         filters
+//                     }).then((x)=>{
+//                         console.log(x.data);
+//                         setRecords(x.data.result)
+//                     })
+//                 }}
+//             >
+//                 Go
+//             </button>
 //         </Col>
 //     </Row>
 //     </Col>
@@ -280,7 +292,7 @@ export default JobBalancing
 //         open={visible} onOk={()=>setVisible(false)} onCancel={()=>setVisible(false)}
 //         footer={false} maskClosable={false} width={'100%'}
 //     >
-//         {selectedParty.length>0 && <Sheet data={selectedParty} payType={payType} />}
+//         {selectedParty.length>0 && <Sheet data={result} filters={filters} />}
 //     </Modal>
 //     </div>
 //   )

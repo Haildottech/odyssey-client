@@ -7,7 +7,7 @@ import Router from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
 
 const SEJobList = ({ jobsData, sessionData, type }) => {
-  
+
   const queryClient = useQueryClient();
   const changedValues = useSelector((state)=>state.persistValues);
   const companyId = useSelector((state) => state.company.value);
@@ -48,13 +48,13 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
               "label":type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
               "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
               "id":"new"
-            }))
+            }));
             Router.push(
               type=="SE"?`/seaJobs/export/new`:
               type=="SI"?`/seaJobs/import/new`:
               type=="AE"?`/airJobs/export/new`:
               `/airJobs/import/new`
-              )
+            )
           }}
         >Create</button>
       </Col>

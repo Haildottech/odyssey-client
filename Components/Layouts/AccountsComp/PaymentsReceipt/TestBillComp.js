@@ -3,7 +3,7 @@ import { recordsReducer, initialState, getAccounts, totalRecieveCalc, getInvoice
 import openNotification from '../../../Shared/Notification';
 import { Empty, InputNumber, Checkbox, Radio } from 'antd';
 import { Spinner, Table, Col, Row } from 'react-bootstrap';
-import AgentTransactionInfo from './AgentTransactionInfo';
+import AgentTransactionInfo from './TestTranComp';
 import React, { useEffect, useReducer, useState } from 'react';
 import moment from "moment";
 import Gl from './Gl';
@@ -16,7 +16,7 @@ const AgentBillComp = ({selectedParty, partytype, payType, invoiceCurrency, comp
     const set = (a, b) => dispatch({type:'set', var:a, pay:b});
 
     useEffect(() => {
-        getInvoices(selectedParty.id, dispatch, partytype, selectedParty, payType, companyId, invoiceCurrency); 
+        getInvoices(selectedParty?.id, dispatch, partytype, selectedParty, payType, companyId, invoiceCurrency); 
     }, [selectedParty, payType]);
     useEffect(() => { if(state.invoices.length>0){set('totalrecieving', totalRecieveCalc(state.invoices));} }, [state.invoices]);
 
