@@ -1,8 +1,8 @@
 import { SearchOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import React, { useEffect, useReducer } from 'react';
 import { Input, List, Radio, Modal, Select } from 'antd';
 import { recordsReducer, initialState } from './states';
 import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useReducer } from 'react';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import { Row, Col, Table } from 'react-bootstrap';
 import Router, { useRouter } from 'next/router';
@@ -149,7 +149,7 @@ const PaymentsReceipt = ({id, voucherData}) => {
             }}>
                 <Radio value={"client"}>Client</Radio>
                 <Radio value={"vendor"}>Vendor</Radio>
-                <Radio value={"agent"}>Agent</Radio>
+                <Radio value={"agent"} >Agent </Radio>
             </Radio.Group>
         </Col>
         <Col md={4}>

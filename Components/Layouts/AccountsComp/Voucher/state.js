@@ -10,7 +10,7 @@ export const defaultValues = {
   payTo:"",
   type:"",
   vType:"",
-  Voucher_Heads: [{ type: "", ChildAccountId: "", narration: "", amount: 0 }]
+  Voucher_Heads: []
 }
 
 export const validationSchema = yup.object().shape({

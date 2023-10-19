@@ -390,11 +390,8 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
                 "key":type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
                 "id":x.SE_Job.id
                 }))
-                router.push(
-                    type=="SE"?`/seaJobs/export/${x.SE_Job.id}`:
-                    type=="SI"?`/seaJobs/import/${x.SE_Job.id}`:
-                    type=="AE"?`/airJobs/export/${x.SE_Job.id}`:
-                    `/airJobs/import/${x.SE_Job.id}`
+                router.push(type=="SE"?`/seaJobs/export/${x.SE_Job.id}`:type=="SI"?`/seaJobs/import/${x.SE_Job.id}`:
+                    type=="AE"?`/airJobs/export/${x.SE_Job.id}`:`/airJobs/import/${x.SE_Job.id}`
                 )}
             }> <b>{x.SE_Job.jobNo}</b> </td>
             <td style={{width:100}}>{x.invoice_No}</td>
@@ -417,7 +414,7 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
             </td>
             <td style={{ width:50}} className='px-3 py-2'>
             <input type='checkbox' style={{cursor:'pointer'}} checked={x.check} disabled={state.autoOn}
-                onChange={()=>{
+                onChange={() => {
                     let tempState = [...state.invoices];
                     tempState[index].check = !tempState[index].check;
                     state.payType=="Recievable"?

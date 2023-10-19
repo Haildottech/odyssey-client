@@ -169,8 +169,8 @@ const AccountActivity = () => {
                   <tr key={index}>
                       <td>{x.Child_Account?.title}</td>
                       {/* <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{z.currency}.{" "}</span>{commas(x.defaultAmount)}</>:''}</td> */}
-                      <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{x.defaultAmount?`${z.currency}. `:''}</span>{x.defaultAmount?`${commas(x.defaultAmount)}`:''}</>:''}</td>
-                      <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>{x.defaultAmount?`${z.currency}. `:''}</span>{x.defaultAmount?`${commas(x.defaultAmount)}`:''}</>:''}</td>
+                      <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
+                      <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
                       <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
                       <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
                   </tr>
