@@ -52,187 +52,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         reset({ chargeList: tempChargeList });
     }
 
-    const permissionAssign=(perm, x)=>x.Invoice?.approved=="1"?true:false
-    const tableComp = fields.map((x, index) => <>
-          {x.type==type && 
-          <tr key={index} className='f table-row-center-singleLine'>
-          <td className='text-center'>
-              <CloseCircleOutlined className='cross-icon' style={{ position: 'relative', bottom: 3 }}
-                  onClick={() => {
-                  if((x.Invoice==null || x.Invoice?.status==null || x.Invoice?.approved=="0") 
-                      //&& (permissions.admin || x.new)
-                  ){PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
-                    () => {
-                        let tempState = [...chargeList];
-                        let tempDeleteList = [...state.deleteList];
-                        tempDeleteList.push(tempState[index].id);
-                        tempState.splice(index, 1);
-                        reset({ chargeList: tempState });
-                        dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
-                  })}}}
-              />
-          </td>
-          <td className='text-center'>
-              {(x.InvoiceId==null && x.new!=true)  &&
-              <input type="checkbox" {...register(`chargeList.${index}.check`)}
-                  style={{ cursor: 'pointer' }} 
-                  disabled={x.partyId==state.selection.partyId?false:state.selection.partyId==null?false:true}
-              />}
-          </td>
-          <td className='text-center'>{/* Invoice Number */}
-              {x.invoice_id != null &&
-                  <Tag color="geekblue" style={{ fontSize:15, cursor:"pointer" }}
-                      onClick={()=>dispatch({type:'set',payload:{selectedInvoice:x.invoice_id,tabState:"5"}})}
-                  >{x.invoice_id}</Tag>
-              }
-          </td>
-          <td style={{ padding: 3, minWidth: 100 }}> {/* charge selection */}
-              <Select className='table-dropdown' showSearch value={x.charge} style={{ paddingLeft: 0 }}
-              disabled={permissionAssign(permissions, x)}
-              onChange={(e) => {
-                let tempChargeList = [...chargeList];
-                state.fields.chargeList.forEach(async (y, i) => {
-                if (y.code == e) {
-                    tempChargeList[index] = {
-                        ...tempChargeList[index],
-                        charge: e,
-                        particular: y.name,
-                        basis: y.calculationType,
-                        taxPerc: y.taxApply == "Yes" ? parseFloat(y.taxPerc) : 0.00,
-                        qty:(y.calculationType!="Per Unit"||allValues.cwtClient=="")?1:allValues.cwtClient
-                    }
-                    let partyType = "";
-                    let choiceArr = ['', 'defaultRecivableParty', 'defaultPaybleParty'];// 0=null, 1=recivable, 2=payble
-                    partyType = y[choiceArr[parseInt(state.chargesTab)]];
-                    let searchPartyId;
-                    switch (partyType) {
-                        case "Client":
-                        searchPartyId = state.selectedRecord.ClientId;
-                        break;
-                        case "Local-Agent":
-                        searchPartyId = state.selectedRecord.localVendorId;
-                        break;
-                        case "Custom-Agent":
-                        searchPartyId = state.selectedRecord.customAgentId;
-                        break;
-                        case "Transport-Agent":
-                        searchPartyId = state.selectedRecord.transporterId;
-                        break;
-                        case "Forwarding-Agent":
-                        searchPartyId = state.selectedRecord.forwarderId;
-                        break;
-                        case "Overseas-Agent":
-                        searchPartyId = state.selectedRecord.overseasAgentId;
-                        break;
-                        case "Shipping-Line":
-                        searchPartyId = state.selectedRecord.shippingLineId;
-                        break;
-                        default:
-                        searchPartyId = state.selectedRecord.localVendorId;
-                        break;
-                    }
-
-                    let partyData = partyType == "Client" ? await getClients(searchPartyId) : await getVendors(searchPartyId);
-                    if (state.chargesTab == '1') {
-                        tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Bill" : "Job Invoice";
-                    } else {
-                        tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Invoice" : "Job Bill";
-                    }
-                    tempChargeList[index].name = partyData[0].name;
-                    tempChargeList[index].partyId = partyData[0].id;
-                    tempChargeList[index].partyType = partyType == "Client" ? "client" : "vendor";
-                    reset({ chargeList: tempChargeList })
-                }
-                })}}
-              optionFilterProp="children"
-              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={state.fields.chargeList}
-              />
-          </td>
-          <td>{x.particular}</td>
-          <td>{x.basis} {/* Basis */}
-          </td>
-          <td style={{ padding: 3, minWidth: 50 }}> {/* PP?CC */}
-              <SelectComp register={register} name={`chargeList.${index}.pp_cc`} control={control} width={60} font={13} 
-                  disabled={permissionAssign(permissions, x)}
-                  options={[
-                      { id: 'PP', name: 'PP' },
-                      { id: 'CC', name: 'CC' }
-                  ]}
-              />
-          </td>
-          {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* Size/Type */}
-              <SelectSearchComp register={register} name={`chargeList.${index}.size_type`} control={control} width={100} font={13} 
-              disabled={permissionAssign(permissions, x)}
-                  options={[
-                      { id: '40HC', name: '40HC' },
-                      { id: '20HC', name: '20HC' }
-                  ]}
-              />
-          </td>}
-          {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* DG */}
-              <SelectSearchComp register={register} name={`chargeList.${index}.dg_type`} control={control} width={95} font={13} disabled={permissions.admin?false:x.InvoiceId!=null?true:false}
-                  options={[
-                      { id: 'DG', name: 'DG' },
-                      { id: 'non-DG', name: 'non-DG' }
-                  ]}
-              />
-          </td>}
-          <td style={{ padding: 3 }}>{/* QTY */}
-              <InputNumComp register={register} name={`chargeList.${index}.qty`} control={control} width={30} font={13} 
-              disabled={permissionAssign(permissions, x)}/>
-          </td> 
-          {(operationType=="AI"||operationType=="AE") &&<td style={{ padding: 3 }}>{/* rate_charge */}
-              <InputNumComp register={register} name={`chargeList.${index}.rate_charge`} control={control} width={30} font={13} 
-              disabled={permissionAssign(permissions, x)}/>
-          </td> }
-          <td style={{ padding: 3 }} > {/* Currency */}
-              <SelectSearchComp register={register} name={`chargeList.${index}.currency`} control={control} width={100} font={13} 
-              disabled={permissionAssign(permissions, x)}
-                  options={[
-                      { id: 'PKR', name: 'PKR' },
-                      { id: 'USD', name: 'USD' },
-                      { id: 'EUR', name: 'EUR' },
-                      { id: 'GBP', name: 'GBP' },
-                      { id: 'AED', name: 'AED' }
-                  ]}
-              />
-          </td>
-          <td style={{ padding: 3 }}> {/* Amount */}
-              <InputNumComp register={register} name={`chargeList.${index}.amount`} control={control} label='' width={20} 
-              disabled={(operationType=="AI"||operationType=="AE")?true:permissionAssign(permissions, x)} />
-          </td>
-          <td style={{ padding: 3 }}>  {/* Discount */}
-              <InputNumComp register={register} name={`chargeList.${index}.discount`} control={control} width={30} font={13} 
-              disabled={permissionAssign(permissions, x)} />
-          </td>
-          <td style={{ textAlign: 'center' }}> {/* Tax Apply */}
-              <input type="checkbox" {...register(`chargeList.${index}.tax_apply`)} style={{ cursor: 'pointer' }} 
-              disabled={permissionAssign(permissions, x)} />
-          </td>
-          <td>{x.tax_amount}</td> {/* Tax Amount */}
-          <td>{x.net_amount}</td>
-          <td style={{ padding: 3 }}> {/* Ex. Rate */}
-              {chargeList[index]?.currency!="PKR" && <InputNumComp register={register} name={`chargeList.${index}.ex_rate`}  control={control} label='' width={10} 
-                  disabled={permissionAssign(permissions, x)} 
-              />}
-              {chargeList[index]?.currency=="PKR" && 
-              <InputNumber value={1.00}
-              />}
-          </td>
-          <td>{x.local_amount}</td>
-          <td className='text-center'>{/* Party Selection */}
-                  {x.new == true && <RightCircleOutlined style={{ position: 'relative', bottom: 3 }}
-                      onClick={() => {
-                          dispatch({ type: 'set', payload: { headIndex: index, headVisible: true } }); //<--Identifies the Head with there Index sent to modal
-                      }}
-                  />
-                  }{x.name != "" ? <span className='m-2 '><Tag color="geekblue" style={{ fontSize: 15 }}>{x.name}</Tag></span> : ""}
-          </td>
-          <td>Un-Approved</td><td></td><td></td>
-          </tr>
-          }
-        </>)
+    const permissionAssign=(perm, x)=>x.Invoice?.approved=="1"?true:false;
 
   return(
     <>
@@ -323,7 +143,190 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
           <th style={{minWidth:120}}>Approval Date</th>
         </tr>
       </thead>
-      <tbody>{tableComp}</tbody>
+      <tbody>
+        {fields.map((x, index) => {
+        return(
+          <>
+            {x.type==type && 
+            <tr key={index} className='f table-row-center-singleLine'>
+            <td className='text-center'>
+                <CloseCircleOutlined className='cross-icon' style={{ position: 'relative', bottom: 3 }}
+                    onClick={() => {
+                    if((x.Invoice==null || x.Invoice?.status==null || x.Invoice?.approved=="0")) {
+                        PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
+                        () => {
+                            let tempState = [...chargeList];
+                            let tempDeleteList = [...state.deleteList];
+                            tempDeleteList.push(tempState[index].id);
+                            tempState.splice(index, 1);
+                            reset({ chargeList: tempState });
+                            dispatch({ type: 'toggle', fieldName: 'deleteList', payload: tempDeleteList });
+                    })}}}
+                />
+            </td>
+            <td className='text-center'>
+                {(x.InvoiceId==null && x.new!=true)  &&
+                <input type="checkbox" {...register(`chargeList.${index}.check`)}
+                    style={{ cursor: 'pointer' }} 
+                    disabled={x.partyId==state.selection.partyId?false:state.selection.partyId==null?false:true}
+                />}
+            </td>
+            <td className='text-center'>{/* Invoice Number */}
+                {x.invoice_id != null &&
+                    <Tag color="geekblue" style={{ fontSize:15, cursor:"pointer" }}
+                        onClick={()=>dispatch({type:'set',payload:{selectedInvoice:x.invoice_id,tabState:"5"}})}
+                    >{x.invoice_id}</Tag>
+                }
+            </td>
+            <td style={{ padding: 3, minWidth: 100 }}> {/* charge selection */}
+                <Select className='table-dropdown' showSearch value={x.charge} style={{ paddingLeft: 0 }}
+                disabled={permissionAssign(permissions, x)}
+                onChange={(e) => {
+                    let tempChargeList = [...chargeList];
+                    state.fields.chargeList.forEach(async (y, i) => {
+                    if (y.code == e) {
+                        tempChargeList[index] = {
+                            ...tempChargeList[index],
+                            charge: e,
+                            particular: y.name,
+                            basis: y.calculationType,
+                            taxPerc: y.taxApply == "Yes" ? parseFloat(y.taxPerc) : 0.00,
+                            qty:(y.calculationType!="Per Unit"||allValues.cwtClient=="")?1:allValues.cwtClient
+                        }
+                        let partyType = "";
+                        let choiceArr = ['', 'defaultRecivableParty', 'defaultPaybleParty'];// 0=null, 1=recivable, 2=payble
+                        partyType = y[choiceArr[parseInt(state.chargesTab)]];
+                        let searchPartyId;
+                        switch (partyType) {
+                            case "Client":
+                            searchPartyId = state.selectedRecord.ClientId;
+                            break;
+                            case "Local-Agent":
+                            searchPartyId = state.selectedRecord.localVendorId;
+                            break;
+                            case "Custom-Agent":
+                            searchPartyId = state.selectedRecord.customAgentId;
+                            break;
+                            case "Transport-Agent":
+                            searchPartyId = state.selectedRecord.transporterId;
+                            break;
+                            case "Forwarding-Agent":
+                            searchPartyId = state.selectedRecord.forwarderId;
+                            break;
+                            case "Overseas-Agent":
+                            searchPartyId = state.selectedRecord.overseasAgentId;
+                            break;
+                            case "Shipping-Line":
+                            searchPartyId = state.selectedRecord.shippingLineId;
+                            break;
+                            default:
+                            searchPartyId = state.selectedRecord.localVendorId;
+                            break;
+                        }
+                        let partyData = partyType == "Client" ? await getClients(searchPartyId) : await getVendors(searchPartyId);
+                        if (state.chargesTab == '1') {
+                            tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Bill" : "Job Invoice";
+                        } else {
+                            tempChargeList[index].invoiceType = partyData[0].types.includes("Overseas Agent") ? "Agent Invoice" : "Job Bill";
+                        }
+                        tempChargeList[index].name = partyData[0].name;
+                        tempChargeList[index].partyId = partyData[0].id;
+                        tempChargeList[index].partyType = partyType == "Client" ? "client" : "vendor";
+                        reset({ chargeList: tempChargeList })
+                    }
+                })}}
+                optionFilterProp="children"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+                options={state.fields.chargeList}
+                />
+            </td>
+            <td>{x.particular}</td>
+            <td>{x.basis} {/* Basis */}
+            </td>
+            <td style={{ padding: 3, minWidth: 50 }}> {/* PP?CC */}
+                <SelectComp register={register} name={`chargeList.${index}.pp_cc`} control={control} width={60} font={13} 
+                    disabled={permissionAssign(permissions, x)}
+                    options={[
+                        { id: 'PP', name: 'PP' },
+                        { id: 'CC', name: 'CC' }
+                    ]}
+                />
+            </td>
+            {(operationType=="SE"||operationType=="SI") &&<td style={{ padding: 3 }}> {/* Size/Type */}
+                <SelectSearchComp register={register} name={`chargeList.${index}.size_type`} control={control} width={100} font={13} 
+                disabled={permissionAssign(permissions, x)}
+                    options={[
+                        { id: '40HC', name: '40HC' },
+                        { id: '20HC', name: '20HC' }
+                    ]}
+                />
+            </td>}
+            {(operationType=="SE"||operationType=="SI") &&
+            <td style={{ padding: 3 }}> {/* DG */}
+                <SelectSearchComp register={register} name={`chargeList.${index}.dg_type`} control={control} width={95} font={13} disabled={permissions.admin?false:x.InvoiceId!=null?true:false}
+                    options={[
+                        { id: 'DG', name: 'DG' },
+                        { id: 'non-DG', name: 'non-DG' }
+                    ]}
+                />
+            </td>}
+            <td style={{ padding: 3 }}>{/* QTY */}
+                <InputNumComp register={register} name={`chargeList.${index}.qty`} control={control} width={30} font={13} 
+                disabled={permissionAssign(permissions, x)}/>
+            </td> 
+            {(operationType=="AI"||operationType=="AE") &&<td style={{ padding: 3 }}>{/* rate_charge */}
+                <InputNumComp register={register} name={`chargeList.${index}.rate_charge`} control={control} width={30} font={13} 
+                disabled={permissionAssign(permissions, x)}/>
+            </td> }
+            <td style={{ padding: 3 }} > {/* Currency */}
+                <SelectSearchComp register={register} name={`chargeList.${index}.currency`} control={control} width={100} font={13} 
+                disabled={permissionAssign(permissions, x)}
+                    options={[
+                        { id: 'PKR', name: 'PKR' },
+                        { id: 'USD', name: 'USD' },
+                        { id: 'EUR', name: 'EUR' },
+                        { id: 'GBP', name: 'GBP' },
+                        { id: 'AED', name: 'AED' }
+                    ]}
+                />
+            </td>
+            <td style={{ padding: 3 }}> {/* Amount */}
+                <InputNumComp register={register} name={`chargeList.${index}.amount`} control={control} label='' width={20} 
+                disabled={(operationType=="AI"||operationType=="AE")?true:permissionAssign(permissions, x)} />
+            </td>
+            <td style={{ padding: 3 }}>  {/* Discount */}
+                <InputNumComp register={register} name={`chargeList.${index}.discount`} control={control} width={30} font={13} 
+                disabled={permissionAssign(permissions, x)} />
+            </td>
+            <td style={{ textAlign: 'center' }}> {/* Tax Apply */}
+                <input type="checkbox" {...register(`chargeList.${index}.tax_apply`)} style={{ cursor: 'pointer' }} 
+                disabled={permissionAssign(permissions, x)} />
+            </td>
+            <td>{x.tax_amount}</td> {/* Tax Amount */}
+            <td>{x.net_amount}</td>
+            <td style={{ padding: 3 }}> {/* Ex. Rate */}
+                {chargeList[index]?.currency!="PKR" && <InputNumComp register={register} name={`chargeList.${index}.ex_rate`}  control={control} label='' width={10} 
+                    disabled={permissionAssign(permissions, x)} 
+                />}
+                {chargeList[index]?.currency=="PKR" && 
+                <InputNumber value={1.00}
+                />}
+            </td>
+            <td>{x.local_amount}</td>
+            <td className='text-center'>{/* Party Selection */}
+                    {x.new == true && <RightCircleOutlined style={{ position: 'relative', bottom: 3 }}
+                        onClick={() => {
+                            dispatch({ type: 'set', payload: { headIndex: index, headVisible: true } }); //<--Identifies the Head with there Index sent to modal
+                        }}
+                    />
+                    }{x.name != "" ? <span className='m-2 '><Tag color="geekblue" style={{ fontSize: 15 }}>{x.name}</Tag></span> : ""}
+            </td>
+            <td>Un-Approved</td><td></td><td></td>
+            </tr>
+            }
+          </>
+        )})}
+      </tbody>
       </Table>
       }
       {(chargesData.status!="success" || state.chargeLoad) && 

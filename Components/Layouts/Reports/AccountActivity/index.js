@@ -7,60 +7,57 @@ import moment from "moment";
 
 const AccountActivity = () => {
 
-    const [visible, setVisible] = useState(false);
-    const [load, setLoad] = useState(false);
-    const [records, setRecords] = useState([]);
-    const [voucherRecords, setVoucherRecords] = useState([]);
-    const [debitAccount, setDebitAccount] = useState("");
-    const [creditAccount, setCreditAccount] = useState("");
-    const [company, setCompany] = useState(1);
-    const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
-    const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
+  const [visible, setVisible] = useState(false);
+  const [load, setLoad] = useState(false);
+  const [records, setRecords] = useState([]);
+  const [voucherRecords, setVoucherRecords] = useState([]);
+  const [debitAccount, setDebitAccount] = useState("");
+  const [creditAccount, setCreditAccount] = useState("");
+  const [company, setCompany] = useState(1);
+  const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
+  const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
 
-    const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
+  const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
 
-    const getTotal = (type, list) => {
-      let result = 0.00;
-      list.forEach((x)=>{
-        if(type==x.type){
-          result = result + parseFloat(x.amount)
-        }
+  const getTotal = (type, list) => {
+    let result = 0.00;
+    list.forEach((x)=>{
+      if(type==x.type){
+        result = result + parseFloat(x.amount)
+      }
+    })
+    return result;
+  }
+
+  useEffect(() => { getRecords(); }, [company])
+
+  const getRecords = async() => {
+    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {
+      headers:{ companyid:company }
+    }).then((x)=>{
+      let temprecords = [];
+      x.data.result.forEach((x)=>{
+        temprecords.push({value:x.id, label:x.title});
       })
-      return result;
-    }
+      setRecords(temprecords);
+    })
+  }
 
-    useEffect(() => {
-      getRecords();
-    }, [company])
-
-    const getRecords = async() => {
-      await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {
-        headers:{ companyid:company }
-      }).then((x)=>{
-        let temprecords = [];
-        x.data.result.forEach((x)=>{
-          temprecords.push({value:x.id, label:x.title});
-        })
-        setRecords(temprecords);
-      })
-    }
-    
-    const handleSubmit = async() => {
-      setLoad(true);
-      await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ACCOUNT_ACTIVITY,{
-        headers:{
-          debitAccount,
-          creditAccount,
-          from,
-          to
-        }
-      }).then((x)=>{
-        setVoucherRecords(x.data.result);
-        setLoad(false);
-        setVisible(true);
-        console.log(x.data.result)
-      })
-    }
+  const handleSubmit = async() => {
+    setLoad(true);
+    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ACCOUNT_ACTIVITY,{
+      headers:{
+        debitAccount,
+        creditAccount,
+        from,
+        to
+      }
+    }).then((x)=>{
+      setVoucherRecords(x.data.result);
+      setLoad(false);
+      setVisible(true);
+    })
+  }
 
   return (
   <div className='base-page-layout'>
@@ -69,8 +66,8 @@ const AccountActivity = () => {
       </h4></Col>
       <Col md={12}><hr/></Col>
       <Col md={3} className="mt-3">
-          <div>From</div>
-          <Form.Control type={"date"} size="sm" value={from} onChange={(e)=>setFrom(e.target.value)} />
+        <div>From</div>
+        <Form.Control type={"date"} size="sm" value={from} onChange={(e)=>setFrom(e.target.value)} />
       </Col>
       <Col md={3} className="mt-3">
           <div>To</div>
@@ -135,63 +132,60 @@ const AccountActivity = () => {
     >
     {voucherRecords.length>0 &&
       <div style={{maxHeight:660, overflowY:'auto', overflowX:'hidden'}}>
-      {
-        voucherRecords.map((z, i)=>{
-          return(
-          <div className='table-sm-1' key={i}>
-            <Row style={{fontSize:15}} className="mb-2">
-              <Col md={4}>
-                <span>Voucher No:</span> <span className='grey-txt'>{z.voucher_Id}</span>
-              </Col>
-              <Col md={2}>
-                <span>Currency:</span> <span className='grey-txt'>{z.currency}</span>
-              </Col>
-              <Col md={2} className="text-end">
-                <span>Ex Rate:</span> <span className='grey-txt'>{z.exRate}</span>
-              </Col>
-              <Col md={4} className="text-end px-4">
-                <span>Dated:</span> <span className='grey-txt'>{moment(z.createdAt).format("DD-MM-YYYY")}</span>
-              </Col>
-            </Row>
-            <Table className='tableFixHead' bordered style={{fontSize:14}}>
-              <thead>
-                  <tr>
-                      <th className='' style={{width:260}}>Particular</th>
-                      <th className='text-center' style={{width:25}}>Debit</th>
-                      <th className='text-center' style={{width:25}}>Credit</th>
-                      <th className='text-center' style={{width:25}}>Debit</th>
-                      <th className='text-center' style={{width:25}}>Credit</th>
-                  </tr>
-              </thead>
-              <tbody>
-              {z.Voucher_Heads.length>0 && z.Voucher_Heads.map((x, index) => {
-              return (
-                  <tr key={index}>
-                      <td>{x.Child_Account?.title}</td>
-                      {/* <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{z.currency}.{" "}</span>{commas(x.defaultAmount)}</>:''}</td> */}
-                      <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
-                      <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
-                      <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
-                      <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
-                  </tr>
-                  )
-              })}
-                <tr>
-                    <td>Balance</td>
-                    {/* <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td> */}
-                    {/* <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td> */}
-                    <td></td>
-                    <td></td>
-                    <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td>
-                    <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td>
-                </tr>
-              </tbody>
-            </Table>
-            {voucherRecords.length-1 > i && <hr/>}
-          </div>
-          )
-        })
-      }
+      {voucherRecords.map((z, i)=>{
+        return(
+        <div className='table-sm-1' key={i}>
+          <Row style={{fontSize:15}} className="mb-2">
+            <Col md={4}>
+              <span>Voucher No:</span> <span className='grey-txt'>{z.voucher_Id}</span>
+            </Col>
+            <Col md={2}>
+              <span>Currency:</span> <span className='grey-txt'>{z.currency}</span>
+            </Col>
+            <Col md={2} className="text-end">
+              <span>Ex Rate:</span> <span className='grey-txt'>{z.exRate}</span>
+            </Col>
+            <Col md={4} className="text-end px-4">
+              <span>Dated:</span> <span className='grey-txt'>{moment(z.createdAt).format("DD-MM-YYYY")}</span>
+            </Col>
+          </Row>
+          <Table className='tableFixHead' bordered style={{fontSize:14}}>
+            <thead>
+            <tr>
+              <th className='' style={{width:260}}>Particular</th>
+              <th className='text-center' style={{width:25}}>Debit</th>
+              <th className='text-center' style={{width:25}}>Credit</th>
+              <th className='text-center' style={{width:25}}>Debit</th>
+              <th className='text-center' style={{width:25}}>Credit</th>
+            </tr>
+            </thead>
+            <tbody>
+            {z.Voucher_Heads.length>0 && z.Voucher_Heads.map((x, index) => {
+            return (
+              <tr key={index}>
+                <td>{x.Child_Account?.title}</td>
+                {/* <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{z.currency}.{" "}</span>{commas(x.defaultAmount)}</>:''}</td> */}
+                <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
+                <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
+                <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
+                <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
+              </tr>
+                )
+            })}
+              <tr>
+                <td>Balance</td>
+                {/* <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td> */}
+                {/* <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td> */}
+                <td></td>
+                <td></td>
+                <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td>
+                <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td>
+              </tr>
+            </tbody>
+          </Table>
+          {voucherRecords.length-1 > i && <hr/>}
+        </div>
+      )})}
       </div>
     }
     </Modal>

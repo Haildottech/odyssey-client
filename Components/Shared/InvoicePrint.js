@@ -33,6 +33,11 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         return value
     }
 
+    useEffect(() => {
+      //cwtClient
+      console.log(invoice)
+    }, [invoice])
+    
     const paraStyles = { lineHeight:1.2, fontSize:11 }
     const heading = { lineHeight:1, fontSize:11, fontWeight:'800', paddingBottom:5 };
     const Line = () => <div style={{backgroundColor:"black", height:3, position:'relative', top:12}}></div>
@@ -107,7 +112,7 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
                     <div style={paraStyles}>{invoice.SE_Job?.Bl?.mbl}</div>
                 </Col>
                 <Col md={5}>
-                    <div style={heading}>Bill of Lading</div>
+                    <div style={heading}>{(invoice.operation=="SE"||invoice.operation=="SI")?"Bill of Lading":"HAWB No."} </div>
                     <div style={paraStyles}>{invoice.SE_Job?.Bl?.hbl}</div>
                 </Col>
             </Row>
@@ -213,12 +218,23 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         <Col md={6} style={{borderRight:border, borderLeft:border, borderBottom:border}} className='p-1'>
             <Row>
                 <Col md={4}>
-                    <div style={heading}>Volume</div>
-                    <div style={paraStyles}>{parseFloat(invoice.SE_Job.vol).toFixed(2)}</div>
+                    <div style={heading}>{(invoice.operation=="SE"||invoice.operation=="SI")?"Volume":"Ch. Weight"}</div>
+                    <div style={paraStyles}>
+                        {invoice?.payType=="Recievable" &&<>
+                            {
+                            (invoice.operation=="SE"||invoice.operation=="SI")?
+                                parseFloat(invoice?.SE_Job?.vol).toFixed(2):
+                                parseFloat(invoice?.SE_Job?.cwtClient).toFixed(2)
+                            }
+                        </>}
+                        {invoice?.payType!="Recievable" && <>0.00</>}
+                    </div>
                 </Col>
                 <Col md={4}>
                     <div style={heading}>Weight</div>
-                    <div style={paraStyles}>{invoice.SE_Job.weight?parseFloat(invoice.SE_Job.weight).toFixed(2):"0.00"}</div>
+                    <div style={paraStyles}>
+                        {invoice.SE_Job.weight?parseFloat(invoice.SE_Job.weight).toFixed(2):"0.00"}
+                    </div>
                 </Col>
                 <Col md={4}>
                     <div style={heading}>PCS</div>
@@ -268,7 +284,8 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
                                 <span className='mx-1' style={paraStyles} key={i}>{z.no}, </span>
                             )
                         })}
-                        </>}
+                        </>
+                        }
                     </>
                 </Col>
             </Row>
@@ -295,7 +312,7 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         <td className='text-center p-0'>{index + 1}</td>
         <td className='text-center p-0'>{x.particular}</td>
         <td className='text-center p-0'>{x.qty}</td>
-        <td className='text-center p-0'>{x.amount}</td>
+        <td className='text-center p-0'>{x.rate_charge}</td>
         <td className='text-center p-0'>{x.currency}</td>
         <td className='text-center p-0'>{x.amount}</td>
         <td className='text-center p-0'>{x.discount}</td>

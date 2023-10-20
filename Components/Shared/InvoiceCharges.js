@@ -231,9 +231,9 @@ const InvoiceCharges = ({data, companyId}) => {
             if(tempInv.approved=="1"){
                 await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, vouchers);
             }else{
-                console.log("Here")
+                //console.log("Here")
                 await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_DELETE_VOUCHER, {id:tempInv.id})
-                .then((x)=>console.log(x.data))
+                //.then((x)=>console.log(x.data))
             }
         }else{
             openNotification("Ops", "An Error Occured!", "red")
@@ -264,23 +264,9 @@ const InvoiceCharges = ({data, companyId}) => {
         <Checkbox onChange={()=>setLogo(!logo)} checked={logo} className='mb-2'>Hide Logo</Checkbox><br/>
         <Checkbox onChange={()=>setBalance(!balance)} checked={balance} className='mb-2'>Hide Balance</Checkbox><br/>
         Logo: {" "}
-        <Radio.Group
-            options={
-                [
-                    {
-                      label: 'SNS',
-                      value: '1',
-                    },
-                    {
-                      label: 'ACS',
-                      value: '2',
-                    }
-                  ]
-            }
+        <Radio.Group optionType="button" buttonStyle="solid" value={compLogo}
+            options={[{ label: 'SNS', value: '1' }, { label: 'ACS', value: '2' }]}
             onChange={(e)=>setCompLogo(e.target.value)}
-            value={compLogo}
-            optionType="button"
-            buttonStyle="solid"
         />
         <br/>
         <div className='mt-3'></div>

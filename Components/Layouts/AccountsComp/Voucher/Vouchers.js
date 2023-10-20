@@ -5,9 +5,10 @@ import InputComp from "/Components/Shared/Form/InputComp";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import DateComp from "/Components/Shared/Form/DateComp";
+import React, { useEffect, useState } from "react";
+import { AiFillRightCircle } from "react-icons/ai"
 import { Spinner, Table } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
 import { InputNumber } from "antd";
 import moment from "moment";
 import axios from "axios";
@@ -22,6 +23,7 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
     },
   });
   const [ accountLoad, setAccountLoad ] = useState(true);
+  const [ invoiceId, setInvoiceId ] = useState("");
   const box = {border:'1px solid silver', paddingLeft:10, paddingTop:5, paddingBottom:3, minHeight:31}
   const allValues = useWatch({ control });
   useEffect(() => { getValues(); }, []);
@@ -29,6 +31,9 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
 
   async function getValues(){
     if(id!="new"){
+      voucherData.invoice_Voucher=="1"?
+        setInvoiceId(voucherData.invoice_Id):
+        setInvoiceId("");
       const { chequeNo,  payTo, vType, type, exRate, currency } = voucherData;
       let iD="";
       let settleId="";
@@ -47,8 +52,6 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
         Voucher_Heads, exRate, currency:currency==undefined?"PKR":currency,
         ChildAccountId, settleId, id:iD
       });
-    }else{
-      
     }
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {headers:{CompanyId:CompanyId}})
     .then((x)=>{
@@ -90,7 +93,6 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
     }
     setAccountLoad(false)
   };
-
   
   return (
   <>
@@ -155,6 +157,11 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
           <p className="error-line">{errors?.payTo?.message}</p>
         </Col>
         </Row>
+      </Col>
+      <Col className="p-3" md={2}>
+      <h6 className="blue-txt cur border p-2" onClick={()=>console.log(invoiceId)}> 
+        <b>Go To Invoice <AiFillRightCircle style={{position:'relative', bottom:1}} /></b>
+      </h6>
       </Col>
     </Row>
     <button type="button" className="btn-custom mb-3" style={{width:"110px", float:'right'}}
