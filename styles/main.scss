@@ -6,11 +6,14 @@
 @import 'invoiceLayout.scss';
 @import 'dashboard-home-styles.scss';
 @import 'sideMenuStyles.scss';
+@import 'Home-styles.scss';
 
 .wh-txt{ color: white!important; }
 .grey-txt{ color: grey!important; }
 .silver-txt{ color: silver!important; }
 .blue-txt{ color: rgb(45, 148, 176)!important; }
+.red-txt{ color: rgb(215, 71, 31)!important; }
+.green-txt{ color: rgb(76, 227, 136)!important; }
 
 .fs-10 { font-size: 10px!important; }
 .fs-11 { font-size: 11px!important; }
@@ -50,6 +53,23 @@
 .fw-7{ font-weight: 700!important; }
 .fw-8{ font-weight: 800!important; }
 .fw-9{ font-weight: 900!important; }
+
+
+.ag-theme-alpine {
+  
+  .ag-header-cell {
+    border-right: 1px solid rgb(219, 219, 219) !important;
+    color: rgb(94, 94, 94)!important;
+    background-color: #f3f3f3;
+    padding-left: 7px;
+    padding-right: 0px;
+  }
+  .ag-cell{
+    border-right:1px solid rgb(219, 219, 219) !important;
+    padding-left: 7px;
+    padding-right: 0px;
+  }
+}
 
 .bg-signin{
   background-image: url("../public/loginBg.png");
@@ -521,6 +541,7 @@
 .white-bg{ background-color: white; }
 .grey-bg{ background-color: rgb(161, 161, 161)!important; }
 .green-bg{ background-color: rgb(55, 183, 72)!important; }
+
 // Remove These
 
 .spinnerz {

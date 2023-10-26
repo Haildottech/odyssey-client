@@ -2,13 +2,14 @@ import { SearchOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Input, List, Radio, Modal, Select } from 'antd';
 import { recordsReducer, initialState } from './states';
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, useReducer } from 'react';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import { Row, Col, Table } from 'react-bootstrap';
 import Router, { useRouter } from 'next/router';
 import AgentBillComp from './AgentBillComp';
 import moment from 'moment';
 import axios from 'axios';
+import React, { useState, useRef, useEffect, useMemo, useCallback, useReducer} from 'react';
+import { AgGridReact } from 'ag-grid-react';
 
 const PaymentsReceipt = ({id, voucherData}) => {
 
@@ -124,6 +125,28 @@ const PaymentsReceipt = ({id, voucherData}) => {
         }}>{item.name}</List.Item>} 
     />)}
 
+    const gridRef = useRef(); 
+    const [columnDefs, setColumnDefs] = useState([
+        {headerName: '#', field:'no', width: 50 },
+        {headerName: 'Voucher No.', field:'voucher_Id', filter: true},
+        {headerName: 'Name', field:'partyName', filter: true},
+        {headerName: 'Party', field:'partyType', filter: true},
+        {headerName: 'Type', field:'vType', width:124, filter: true},
+        {headerName: 'Date', field:'tranDate', filter: true},
+    ]);
+    const defaultColDef = useMemo( ()=> ({
+        sortable: true
+    }));
+
+    const cellClickedListener = useCallback((e)=> {
+        dispatchNew(incrementTab({"label": "Payment / Receipt","key": "3-4","id":e.data.id}))
+        Router.push(`/accounts/paymentReceipt/${e.data.id}`)
+    }, []);
+
+    const getRowHeight = useCallback(() => {
+        return 38;
+    }, []);
+
   return (
     <div className='base-page-layout'>
     <Row>
@@ -165,7 +188,11 @@ const PaymentsReceipt = ({id, voucherData}) => {
                     axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_OLD_PAY_REC_VOUCHERS)
                     .then((x)=>{
                         console.log(x.data.result);
-                        setAll({oldVouchers:true, oldVouchersList:x.data.result});
+                        let tempData = []
+                        x.data.result.forEach((y, i)=>{
+                            tempData.push({...y, no:i+1})
+                        })
+                        setAll({oldVouchers:true, oldVouchersList:tempData});
                     })
                 }}
             >Show Old</button>
@@ -204,40 +231,17 @@ const PaymentsReceipt = ({id, voucherData}) => {
         title={ <>Old Vouchers</>}
     >   
     {state.oldVouchers &&
-    <div className='mt-3' style={{maxHeight:500, overflowY:'auto'}}>
-    <Table className='tableFixHead' bordered>
-        <thead>
-            <tr>
-                <th>Sr.</th>
-                <th>No.</th>
-                <th>Party Name</th>
-                <th>Type</th>
-                <th>Pay Type</th>
-                <th>Transaction Date</th>
-            </tr>
-        </thead>
-        <tbody>
-        {
-        state.oldVouchersList.map((x, index) => {
-        return (
-        <tr key={index} className='f row-hov' onClick={()=>{
-            dispatchNew(incrementTab({
-                "label": "Payment / Receipt",
-                "key": "3-4",
-                "id":x.id
-            }))
-            Router.push(`/accounts/paymentReceipt/${x.id}`)
-        }}>
-            <td>{index + 1}</td>
-            <td>{x.voucher_Id}</td>
-            <td>{x.partyName}</td>
-            <td>{x.partyType}</td>
-            <td>{x.vType}</td>
-            <td>{x.tranDate}</td>
-        </tr>
-        )})}
-        </tbody>
-    </Table>
+    <div className="ag-theme-alpine" style={{width:"100%", height:'72vh'}}>
+        <AgGridReact
+          ref={gridRef} // Ref for accessing Grid's API
+          rowData={state.oldVouchersList} // Row Data for Rows
+          columnDefs={columnDefs} // Column Defs for Columns
+          defaultColDef={defaultColDef} // Default Column Properties
+          animateRows={true} // Optional - set to 'true' to have rows animate when sorted
+          rowSelection='multiple' // Options - allows click selection of rows
+          onCellClicked={cellClickedListener} 
+          getRowHeight={getRowHeight}
+        />
     </div>
     }
     </Modal>

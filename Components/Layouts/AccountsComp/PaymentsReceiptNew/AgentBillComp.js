@@ -123,6 +123,7 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
         let removing = 0;
         let tempInvoices = [...state.invoices];
         let invNarration = "";
+        let gainAndLossAmount = 0
         tempInvoices.forEach((x)=>{
             if(x.check){
                 invNarration = invNarration + `Inv# ${x.invoice_No} for Job# ${x.jobId},`
@@ -158,7 +159,7 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
                 })
             }
             if((Object.keys(state.gainLossAccountRecord).length!=0) && (state.gainLossAmount!=0) && (state.gainLossAmount!=null) && (state.totalrecieving!=0)){
-            let gainAndLossAmount = state.gainLossAmount>0?parseFloat(state.gainLossAmount):(-1*parseFloat(state.gainLossAmount))
+            gainAndLossAmount = state.gainLossAmount>0?parseFloat(state.gainLossAmount):(-1*parseFloat(state.gainLossAmount))
                 transTwo.push({
                     particular:state.gainLossAccountRecord,
                     tran:{
@@ -170,7 +171,7 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
                     }
                 })
             }
-            let partyAmount = state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate) - parseFloat(state.gainLossAmount)
+            let partyAmount = state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate) //- parseFloat(state.gainLossAmount)
             let payAmount = payType=="Recievable"? 
                 (state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) - removing:
                 (state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) + removing; 
@@ -184,14 +185,15 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
                     accountType:'partyAccount'
                 }
             })
+            console.log(state.finalTax + state.bankCharges + - parseFloat(state.gainLossAmount))
             transTwo.push({
                 particular:state.payAccountRecord,  
                 tran:{ 
                     type:state.payAccountRecord.Parent_Account.Account[payType=="Recievable"?'inc':'dec'],// <-Checks the account type to make Debit or Credit
-                    amount:payAmount,//payType=="Recievable"? 
+                    amount:parseFloat(payAmount) + parseFloat(state.gainLossAmount),//payType=="Recievable"? 
                         //(state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) - removing:
                         //(state.totalrecieving * parseFloat(state.autoOn?state.exRate:state.manualExRate)) + removing,
-                    defaultAmount:parseFloat(payAmount)/parseFloat(state.autoOn?state.exRate:state.manualExRate),//-removing
+                    defaultAmount:(parseFloat(payAmount)+ parseFloat(state.gainLossAmount))/parseFloat(state.autoOn?state.exRate:state.manualExRate),//-removing
                     narration:`${payType=="Payble"?"Paid":"Received"} Against ${invNarration}`,
                     accountType:'payAccount'
                 }
@@ -437,7 +439,7 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
         </div>
         </div>
             <div className=''>
-                Total {state.payType} Amount:{" "}
+                Total {state.payType=="Recievable"?"Receivable":"Payble"} Amount:{" "}
                 <div style={{padding:3, border:'1px solid silver', minWidth:100, display:'inline-block', textAlign:'right'}}>
                     {state.totalrecieving.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
                 </div>

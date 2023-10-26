@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Row } from "react-bootstrap";
+'use client'
+import React, { useEffect } from 'react';
+import { Row, Col, Container } from "react-bootstrap";
 import AWBCalculator from './AWBCalculator';
 import Router from 'next/router';
 import { useSelector } from 'react-redux';
-import CSVReader from 'react-csv-reader';
 import { getJobValues } from '/apis/jobs';
 import { useQuery } from '@tanstack/react-query';
-//import { read, utils, writeFile } from 'xlsx';
+import { RiShip2Fill } from "react-icons/ri"
+import { CgSandClock } from "react-icons/cg"
+import { AiFillCheckCircle } from "react-icons/ai"
+import { BsFillClockFill, BsGraphUpArrow, BsGraphDownArrow } from "react-icons/bs"
+import { FcSalesPerformance } from "react-icons/fc";
+import dynamic from 'next/dynamic';
+const DynamicComponent = dynamic(() => import("./ChartComp"));
 
-const Main = ({sessionData}) => {
+const Main = ({sessionData, chartData}) => {
 
-  const [movies, setMovies] = useState([]);
   const companyId = useSelector((state) => state.company.value);
   const { data, status, error, refetch } = useQuery({
     queryKey:['values'],
@@ -24,378 +29,106 @@ const Main = ({sessionData}) => {
     data;
   }, [sessionData]);
 
-  useEffect(() => {
-    // console.log(`POL: ${dataz[51][4]}`)
-    // console.log(`Pkgs: ${dataz[57][0]}`)
-    // console.log(`Net Wt: ${dataz[60][9]}`)
-    // console.log(`Ex.Rate: ${dataz[49][9]}`)
-    // console.log(`Gross Wt: ${dataz[57][9]}`)
-    // console.log(`Currency: ${dataz[42][8]}`)
-    // console.log(`Pkg Type: ${dataz[57][5]}`)
-    // console.log(`Consignee: ${dataz[19][0]}`)
-    // console.log(`Consigner: ${dataz[11][0]}`)
-    // console.log(`Inv Value: ${dataz[34][9]}`)
-    // console.log(`PODelivery: ${dataz[54][4]}`)
-    // console.log(`Declarent: ${dataz[20][18]}`)
-    // console.log(`PODischarge: ${dataz[54][0]}`)
-    // console.log(`GD/Machinee: ${dataz[108][0]}`)
-    // console.log(`Item Goods Detail: ${dataz[72][0]}`)
-    // console.log(`BL.AWl.CON.NO / Inv No.: ${dataz[49][4]}`)
-  }, []);
-
-  const handleImport = ($event) => {
-    const files = $event.target.files;
-    if (files.length) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const wb = read(event.target.result);
-        //console.log(wb)
-        const sheets = wb.SheetNames;
-        const rows = utils.sheet_to_slk(wb.Sheets[sheets]);
-        console.log(rows)
-        // if (sheets.length) {
-        // }
-      }
-      reader.readAsArrayBuffer(file);
-    }
-  }
-
   return (
-    <div className='base-page-layout'>
+  <div className='home-styles'>
+    <Row>
+      {companyId==3 && <AWBCalculator/>}
+    </Row>
+    {companyId==1 && 
+    <Container>
       <Row>
-        {companyId==2 &&
-          <>
-            {/* 
-            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required onChange={handleImport}
-              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            /> 
-            */}
-            <CSVReader
-              onFileLoaded={(dataz, fileInfo, originalFile) => {
-                console.log(`Consigner: ${dataz[11][0]}`)
-                console.log(`Consignee: ${dataz[19][0]}`)
-                console.log(`POL: ${dataz[51][4]}`)
-                console.log(`PODischarge: ${dataz[54][0]}`)
-                console.log(`PODelivery: ${dataz[54][4]}`)
-                console.log(`Item Goods Detail: ${dataz[72][0]}`)
-                console.log(`Declarent: ${dataz[20][18]}`)
-                console.log(`Pkgs: ${dataz[57][0]}`)
-                console.log(`Pkg Type: ${dataz[57][5]}`)
-                console.log(`Gross Wt: ${dataz[57][9]}`)
-                console.log(`Net Wt: ${dataz[60][9]}`)
-                console.log(`BL.AWl.CON.NO / Inv No.: ${dataz[49][4]}`)
-                console.log(`Currency: ${dataz[42][8]}`)
-                console.log(`Ex.Rate: ${dataz[49][9]}`)
-                console.log(`Inv Value: ${dataz[34][9]}`)
-                console.log(`GD/Machinee: ${dataz[108][0]}`)
-              }}
-            />
-          </>
-        }
-        {companyId==3 && <AWBCalculator/>}
-        {companyId==1 && 
-        <>
-          <div>
-              {/* 
-              <>
-              Account List Importer
-              <hr/>
-              <CSVReader 
-                  onFileLoaded={async(data, fileInfo, originalFile) => {
-                      let parentAccounts = [];
-                      let tempAccounts = [];
-                      await data.forEach((x,i)=>{
-                          if(i<1590){
-                              tempAccounts.push({
-                                  code:x[0]?.trim(),
-                                  title:x[2]?.trim(),
-                                  account:x[4]?.trim(),
-                                  group:x[3]?.trim(),
-                                  subCategory:x[5]?.trim()
-                              })
-                          }else{
-                              return;
-                          }
-                      })
-                      tempAccounts.forEach((x)=>{
-                          if(x.group=="Group" ){
-                              parentAccounts.push({
-                                  title:x.title,
-                                  editable:"1",
-                                  CompanyId:1,
-                                  subCategory:x.subCategory,
-                                  AccountId:
-                                      x.account=="Asset"?
-                                      3:
-                                      x.account=="Liability"?
-                                      4:
-                                      x.account=="Expense"?
-                                      1:
-                                      x.account=="Income"?
-                                      2:5,
-                                  childs:[],
-                              })
-                          }else if(x.group!="Group" && parentAccounts.length>0){
-                              parentAccounts[parentAccounts.length-1].childs.push({
-                                  title:x.title,
-                                  subCategory:x.subCategory,
-                                  editable:"1"
-                              });
-                          }
-                      })
-                      console.log(parentAccounts);
-                  }}
-              />
-              </> 
-              */}
+        <Col md={12} className='mt-4'>
+          <h3 className='top-section-heading'>Job Statistics</h3>
+          <hr className='mt-0' />
+        </Col>
+        <Col md={3} className='wh-bg-round mx-2'>
+          <div className='text-center mb-3'>
+            <img src='/seanet colored.png' height={50} />
           </div>
           <div>
-          {/* Client List Importer
-          <hr/>
-          <CSVReader 
-            onFileLoaded={async(data, fileInfo, originalFile) => {
-              let parentAccounts = [];
-              let tempAccounts = [];
-              await data.forEach((x,i) => {
-                if(i<2517 && i>0 && (x[0]=='1'||x[0]=='3')){
-                  tempAccounts.push({
-                    PartyTypeId:x[0]?.trim(),
-                    code:x[2]?.trim(),
-                    name:x[3]?.trim(),
-                    person1:x[5]?.trim(),
-                    zip:x[7]?.trim(),
-                    telephone1:x[8],
-                    telephone2:x[9],
-                    mobile1:x[11],
-                    mobile2:x[10],
-                    infoMail:x[12],
-                    website:x[13],
-                    operations:`${x[33]}, ${x[34]}, ${x[35]}, ${x[36]}`,
-                    types:`${x[17]}, ${x[18]}, ${x[19]}, ${x[26]}`,
-                    //types:`${x[20]}, ${x[21]}, ${x[22]}, ${x[24]}, ${x[25]}, ${x[27]}, ${x[28]}, ${x[29]}, ${x[30]}, ${x[31]}, ${x[32]}`,
-                  });
-                } else {
-                  return;
-                }
-              })
-              let newTemp = [...tempAccounts];
-              await newTemp.forEach((x, i) => {
-                let tempAr = [];
-                let tempTypeAr = [];
-                tempAr = x.operations.split(", ");
-                tempTypeAr = x.types.split(", ");
-
-                let tempOperation = '';
-                let tempTypes = '';
-
-                tempOperation = tempAr[0]=='1'?'Sea Export':'';
-                tempOperation = `${tempOperation}${((tempAr[0]=='1')&&tempAr[1]=='1')?', ':''}`;
-                tempOperation = `${tempOperation}${tempAr[1]=='1'?'Sea Import':''}`;
-                tempOperation = `${tempOperation}${((tempAr[0]=='1'||tempAr[1]=='1')&&(tempAr[2]=='1'))?', ':''}`;
-                tempOperation = `${tempOperation}${tempAr[2]=='1'?'Air Export':''}`;
-                tempOperation = `${tempOperation}${((tempAr[0]=='1'||tempAr[1]=='1'||tempAr[2]=='1')&&tempAr[3]=='1')?', ':''}`;
-                tempOperation = `${tempOperation}${tempAr[3]=='1'?'Air Import':''}`;
-                x.operations = tempOperation;
-                
-                tempTypes = tempTypeAr[0]=='1'?'Shipper':''
-                tempTypes = `${tempTypes}${((tempTypeAr[0]=='1')&&tempTypeAr[1]=='1')?', ':''}`;
-                tempTypes = `${tempTypes}${tempTypeAr[1]=='1'?'Consignee':''}`;
-                tempTypes = `${tempTypes}${((tempTypeAr[0]=='1'||tempTypeAr[1]=='1')&&tempTypeAr[2]=='1')?', ':''}`;
-                tempTypes = `${tempTypes}${tempTypeAr[2]=='1'?'Notify':''}`;
-                tempTypes = `${tempTypes}${((tempTypeAr[0]=='1'||tempTypeAr[1]=='1'||tempTypeAr[2]=='1')&&tempTypeAr[3]=='1')?', ':''}`;
-                tempTypes = `${tempTypes}${tempTypeAr[3]=='1'?'Potential Customer':''}`;
-                tempTypes = `${tempTypes}${((tempTypeAr[0]=='1'||tempTypeAr[1]=='1'||tempTypeAr[2]=='1'||tempTypeAr[3]=='1')&&tempTypeAr[4]=='1')?', ':''}`;
-                tempTypes = `${tempTypes}${tempTypeAr[4]=='1'?'Invoice Party':''}`;
-                tempTypes = `${tempTypes}${((tempTypeAr[0]=='1'||tempTypeAr[1]=='1'||tempTypeAr[2]=='1'||tempTypeAr[3]=='1'||tempTypeAr[4]=='1')&&tempTypeAr[5]=='1')?', ':''}`;
-                tempTypes = `${tempTypes}${tempTypeAr[4]=='1'?'Non operational Party':''}`;
-                x.types = tempTypes;
-              })
-              newTemp = newTemp.filter((x)=>{return x.types!=''});
-              console.log(newTemp);
-            }}
-          /> */}
+            <div className='line'>
+              <span className='line-heading-'>FCL</span>
+              <AiFillCheckCircle className='line-icon-green' />
+              <span className='line-value-blue'>56</span>
+            </div>
+            <div className='line'>
+              <span className='line-heading-'>LCL</span>
+              <AiFillCheckCircle className='line-icon-green' />
+              <span className='line-value-blue'>10</span>
+            </div>
+            <div className=''>
+              <span className='line-heading-'>Pending</span>
+              <CgSandClock className='line-icon-silver' />
+              <span className='line-value-blue'>23</span>
+            </div>
+          </div>
+        </Col>
+        <Col md={3} className='wh-bg-round mx-2'>
+          <div className='text-center mb-3'>
+            <img src='/acs colored.png' height={50} />
           </div>
           <div>
-          {/* <>
-          NonGL Parties List Importer
-          <hr/>
-          <CSVReader 
-            onFileLoaded={async(data, fileInfo, originalFile) => {
-              let parentAccounts = [];
-              let tempAccounts = [];
-              await data.forEach((x,i) => {
-                if(i<2517 && i>0 && (x[0]=='4')){
-                  tempAccounts.push({
-                    PartyTypeId:x[0]?.trim(),
-                    code:x[2]?.trim(),
-                    name:x[3]?.trim(),
-                    person1:x[5]?.trim(),
-                    zip:x[7]?.trim(),
-                    telephone1:x[8],
-                    telephone2:x[9],
-                    mobile1:x[11],
-                    mobile2:x[10],
-                    infoMail:x[12],
-                    website:x[13],
-                    operations:`${x[34]}, ${x[35]}, ${x[36]}, ${x[37]}`,
-                    types:`${x[16]}, ${x[17]}, ${x[18]}, ${x[19]}`,
-                    //types:`${x[20]}, ${x[21]}, ${x[22]}, ${x[24]}, ${x[25]}, ${x[27]}, ${x[28]}, ${x[29]}, ${x[30]}, ${x[31]}, ${x[32]}`,
-                  });
-                } else {
-                  return;
-                }
-              })
-              let newTemp = [...tempAccounts];
-
-              await newTemp.forEach((x, i) => {
-                let tempAr = [];
-                let tempTypeAr = [];
-                tempAr = x.operations.split(", ");
-                tempTypeAr = x.types.split(", ");
-
-                let tempOperation = '';
-                let tempTypes = '';
-
-                tempOperation = tempAr[0]=='1'?'Sea Export':'';
-                tempOperation = `${tempOperation}${((tempAr[0]=='1')&&tempAr[1]=='1')?', ':''}`;
-                tempOperation = `${tempOperation}${tempAr[1]=='1'?'Sea Import':''}`;
-                tempOperation = `${tempOperation}${((tempAr[0]=='1'||tempAr[1]=='1')&&(tempAr[2]=='1'))?', ':''}`;
-                tempOperation = `${tempOperation}${tempAr[2]=='1'?'Air Export':''}`;
-                tempOperation = `${tempOperation}${((tempAr[0]=='1'||tempAr[1]=='1'||tempAr[2]=='1')&&tempAr[3]=='1')?', ':''}`;
-                tempOperation = `${tempOperation}${tempAr[3]=='1'?'Air Import':''}`;
-                x.operations  = tempOperation;
-                
-                tempTypes = tempTypeAr[0]=='1'?'Shipper':''
-                tempTypes = `${tempTypes}${((tempTypeAr[0]=='1')&&tempTypeAr[1]=='1')?', ':''}`;
-                tempTypes = `${tempTypes}${tempTypeAr[1]=='1'?'Consignee':''}`;
-                tempTypes = `${tempTypes}${((tempTypeAr[0]=='1'||tempTypeAr[1]=='1')&&tempTypeAr[2]=='1')?', ':''}`;
-                tempTypes = `${tempTypes}${tempTypeAr[2]=='1'?'Notify':''}`;
-                tempTypes = `${tempTypes}${((tempTypeAr[0]=='1'||tempTypeAr[1]=='1'||tempTypeAr[2]=='1')&&tempTypeAr[3]=='1')?', ':''}`;
-                tempTypes = `${tempTypes}${tempTypeAr[3]=='1'?'Potential Customer':''}`;
-              //   tempTypes = `${tempTypes}${((tempTypeAr[0]=='1'||tempTypeAr[1]=='1'||tempTypeAr[2]=='1'||tempTypeAr[3]=='1')&&tempTypeAr[4]=='1')?', ':''}`;
-              //   tempTypes = `${tempTypes}${tempTypeAr[4]=='1'?'Invoice Party':''}`;
-              //   tempTypes = `${tempTypes}${((tempTypeAr[0]=='1'||tempTypeAr[1]=='1'||tempTypeAr[2]=='1'||tempTypeAr[3]=='1'||tempTypeAr[4]=='1')&&tempTypeAr[5]=='1')?', ':''}`;
-              //   tempTypes = `${tempTypes}${tempTypeAr[4]=='1'?'Non operational Party':''}`;
-                x.types   = tempTypes;
-              })
-              
-              //newTemp = newTemp.filter((x)=>{return x.types!=''});
-              
-              newTemp.forEach((x)=>{
-                  addresses.forEach((y)=>{
-                      if(y.code==x.code){
-                          x.address1=y.address1
-                          x.address2=y.address2
-                      }
-                  })
-              })
-              console.log(newTemp);
-            }}
-          />
-          </>   */}
+            <div className='line'>
+              <span className='line-heading-'>FCL</span>
+              <AiFillCheckCircle className='line-icon-green' />
+              <span className='line-value-blue'>23</span>
+            </div>
+            <div className='line'>
+              <span className='line-heading-'>LCL</span>
+              <AiFillCheckCircle className='line-icon-green' />
+              <span className='line-value-blue'>7</span>
+            </div>
+            <div className=''>
+              <span className='line-heading-'>Pending</span>
+              <CgSandClock className='line-icon-silver' />
+              <span className='line-value-blue'>15</span>
+            </div>
           </div>
-          <div>
-          {/* Parties List Importer
-          <hr/>
-          <CSVReader 
-            onFileLoaded={async(data, fileInfo, originalFile) => {
-              let parentAccounts = [];
-              let tempAccounts = [];
-              await data.forEach((x,i) => {
-                if(i<2517 && i>0 && (x[0]=='2'||x[0]=='3')){
-                  tempAccounts.push({
-                    PartyTypeId:x[0]?.trim(),
-                    code:x[2]?.trim(),
-                    name:x[3]?.trim(),
-                    person1:x[4]?.trim(),
-                    zip:x[6]?.trim(),
-                    telephone1:x[7],
-                    telephone2:x[8],
-                    mobile1:x[10],
-                    mobile2:x[9],
-                    infoMail:x[11],
-                    website:x[12],
-                    operations:`${x[34]}, ${x[35]}, ${x[36]}, ${x[37]}, ${x[39]}`,
-                    //types:`${x[16]}, ${x[17]}, ${x[18]}, ${x[19]}`,
-                    types:`${x[20]}, ${x[21]}, ${x[22]}, ${x[23]}, ${x[24]}, ${x[25]}, ${x[26]}, ${x[27]}, ${x[28]}, ${x[29]}, ${x[30]}, ${x[31]}, ${x[32]}, ${x[33]}`,
-                  });
-                } else {
-                  return;
-                }
-              })
-              let newTemp = [...tempAccounts];
-              await newTemp.forEach((x, i) => {
-                let tempAr = [];
-                let tempTypeAr = [];
-                tempAr = x.operations.split(", ");
-                tempTypeAr = x.types.split(", ");
-
-                let tempOperation = '';
-                let tempTypes = '';
-
-                tempOperation = tempAr[0]=='1'?'Sea Export':'';
-                tempOperation = `${tempOperation}${(tempOperation.length>1&& tempAr[1]=='1') ?', ':''}${tempAr[1]=='1'?'Sea Import':''}`;
-                tempOperation = `${tempOperation}${(tempOperation.length>1&& tempAr[2]=='1') ?', ':''}${tempAr[2]=='1'?'Air Export':''}`;
-                tempOperation = `${tempOperation}${(tempOperation.length>1&& tempAr[3]=='1') ?', ':''}${tempAr[3]=='1'?'Air Import':''}`;
-                tempOperation = `${tempOperation}${(tempOperation.length>1&& tempAr[4]=='1') ?', ':''}${tempAr[4]=='1'?'Logistic':''}`;
-                x.operations = tempOperation;
-                
-                
-              //   tempTypes = tempTypeAr[0]=='1'?'Shipper':''
-              //   tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[1]=='1') ?', ':''}${tempTypeAr[1]=='1'?'Consignee':''}`;
-              //   tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[2]=='1') ?', ':''}${tempTypeAr[2]=='1'?'Notify':''}`;
-              //   tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[3]=='1') ?', ':''}${tempTypeAr[3]=='1'?'Potential Customer':''}`;
-              
-              
-                tempTypes = tempTypeAr[0]=='1'?'Forwarder/Coloader':''
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[1]=='1') ?', ':''}${tempTypeAr[1]=='1'?'Local Vendor':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[2]=='1') ?', ':''}${tempTypeAr[2]=='1'?'Overseas Agent':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[3]=='1') ?', ':''}${tempTypeAr[3]=='1'?'Commission Agent':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[4]=='1') ?', ':''}${tempTypeAr[4]=='1'?'Indentor':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[5]=='1') ?', ':''}${tempTypeAr[5]=='1'?'Transporter':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[6]=='1') ?', ':''}${tempTypeAr[6]=='1'?'CHA/CHB':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[7]=='1') ?', ':''}${tempTypeAr[7]=='1'?'Shipping Line':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[8]=='1') ?', ':''}${tempTypeAr[8]=='1'?'Delivery Agent':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&& tempTypeAr[9]=='1') ?', ':''}${tempTypeAr[9]=='1'?'Warehouse':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&&tempTypeAr[10]=='1') ?', ':''}${tempTypeAr[10]=='1'?'Air Line':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&&tempTypeAr[11]=='1') ?', ':''}${tempTypeAr[11]=='1'?'Trucking':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&&tempTypeAr[12]=='1') ?', ':''}${tempTypeAr[12]=='1'?'Logistic':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&&tempTypeAr[12]=='1') ?', ':''}${tempTypeAr[12]=='1'?'Import Nomination':''}`;
-                tempTypes = `${tempTypes}${(tempTypes.length>1&&tempTypeAr[13]=='1') ?', ':''}${tempTypeAr[13]=='1'?'Export Nomination':''}`;
-
-                x.types = tempTypes;
-              })
-              newTemp = newTemp.filter((x)=>{return x.types!=''});
-              newTemp.forEach((x, i) => {
-                  addresses.forEach((y)=>{
-                      if(x.code==y.code){
-                          newTemp[i].address1=y.address1;
-                          newTemp[i].address2=y.address2;
-                      }
-                  })
-              })
-              console.log(newTemp)
-              // newTemp.forEach((x) => {
-              //     console.log(`${x.code} -> ${x.types}`)
-              // })
-            }}
-          /> */}
+        </Col>
+        <Col md={5} className='wh-bg-round mx-2'>
+          <span className='timeline blue-txt'>Timeline History <BsFillClockFill className='pl-b2' color='orange' /></span>
+          <hr className='my-1' />
+          <div className='timeline-container px-4 mt-4'>
+            <div className='timeline-value'>
+              <div className='time-value'>162</div>
+              <div className='time-heading'>365 Days</div>
+            </div>
+            <div className='timeline-value'>
+              <div className='time-value'>33</div>
+              <div className='time-heading'>30 Days</div>
+            </div>
+            <div className='timeline-value'>
+              <div className='time-value'>12</div>
+              <div className='time-heading'>7 Days</div>
+            </div>
           </div>
-        </>
-        }
-        {/* <button onClick={()=>{
-            queryClient.setQueryData(['values'],
-            (oldData) => oldData ? {...oldData,result: []} : oldData)
-          }}
-        >
-          Test
-        </button>
-        <button onClick={()=>refetch()}>
-        Refetch
-        </button> */}
+        </Col>
+        <Col md={12} className='mt-4'>
+          <h3 className='top-section-heading'>Sales Statistics</h3>
+          <hr className='mt-0' />
+        </Col>
+        <Col md={3} className='wh-bg-round mx-2'>
+          <span className='timeline blue-txt mb-3'>Projected Sales <FcSalesPerformance className='pl-b2' /></span>
+          <hr className='my-1' />
+          <div className='sales'> <span className='amount'>123,456,23.00</span> <span className='mx-1'>PKR</span></div>
+        </Col>
+        <Col md={3} className='wh-bg-round mx-2'>
+          <span className='timeline green-txt mb-3'>Ex. Rate Profits <BsGraphUpArrow className='pl-b2' color='orange' /></span>
+          <hr className='my-1' />
+          <div className='sales'> <span className='amount-2'>759,71.00</span> <span className='mx-1'>PKR</span></div>
+        </Col>
+        <Col md={3} className='wh-bg-round mx-2'>
+          <span className='timeline red-txt mb-3'>Ex. Rate Losses <BsGraphDownArrow className='pl-b2' color='orange' /></span>
+          <hr className='my-1' />
+          <div className='sales'> <span className='amount-2'>3,155,93.00</span> <span className='mx-1'>PKR</span></div>
+        </Col>
+        <Col md={9} className='wh-bg-round mx-2 mt-4'>
+          <DynamicComponent chartData={chartData} />
+        </Col>
       </Row>
-    </div>
+    </Container>
+    }
+  </div>
   )
 }
 

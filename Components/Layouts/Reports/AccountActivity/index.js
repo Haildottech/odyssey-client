@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Row, Col, Table, Spinner, Form } from 'react-bootstrap';
 import axios from 'axios';
-import { Select, Radio, Modal } from 'antd';
-import { CloseCircleOutlined } from '@ant-design/icons';
 import moment from "moment";
+import { Select, Radio, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { CloseCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Table, Spinner, Form } from 'react-bootstrap';
 
 const AccountActivity = () => {
 
@@ -128,7 +128,7 @@ const AccountActivity = () => {
     <Modal open={visible} width={"80%"} onOk={()=>setVisible(false)} 
       onCancel={()=> {setVisible(false); setVoucherRecords([]);}}
       footer={false} maskClosable={false}
-      title={`Vouchers`}
+      title={`Account Activity`}
     >
     {voucherRecords.length>0 &&
       <div style={{maxHeight:660, overflowY:'auto', overflowX:'hidden'}}>
@@ -152,34 +152,30 @@ const AccountActivity = () => {
           <Table className='tableFixHead' bordered style={{fontSize:14}}>
             <thead>
             <tr>
-              <th className='' style={{width:260}}>Particular</th>
-              <th className='text-center' style={{width:25}}>Debit</th>
-              <th className='text-center' style={{width:25}}>Credit</th>
-              <th className='text-center' style={{width:25}}>Debit</th>
-              <th className='text-center' style={{width:25}}>Credit</th>
+              <th className='' style={{width:220}}>Particular</th>
+              <th className='text-center' style={{width:35}}>Debit</th>
+              <th className='text-center' style={{width:35}}>Credit</th>
+              <th className='text-center' style={{width:35}}>Debit</th>
+              <th className='text-center' style={{width:35}}>Credit</th>
             </tr>
             </thead>
             <tbody>
             {z.Voucher_Heads.length>0 && z.Voucher_Heads.map((x, index) => {
             return (
               <tr key={index}>
-                <td>{x.Child_Account?.title}</td>
-                {/* <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{z.currency}.{" "}</span>{commas(x.defaultAmount)}</>:''}</td> */}
-                <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
-                <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
-                <td className='text-end'>{x.type!="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
-                <td className='text-end'>{x.type=="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
+                <td className='fs-13'>{x.Child_Account?.title}</td>
+                <td className='text-end fs-13'>{x.type!="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
+                <td className='text-end fs-13'>{x.type=="credit"?<><span className='gl-curr-rep'>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${z.currency}. `:''}</span>{(x.defaultAmount && x.defaultAmount!=0 && z.currency!="PKR")?`${commas(x.defaultAmount)}`:''}</>:''}</td>
+                <td className='text-end fs-13'>{x.type!="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
+                <td className='text-end fs-13'>{x.type=="credit"?<><span className='gl-curr-rep'>Rs.{" "}</span>{commas(x.amount)}</>:''}</td>
               </tr>
-                )
-            })}
+            )})}
               <tr>
                 <td>Balance</td>
-                {/* <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td> */}
-                {/* <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td> */}
                 <td></td>
                 <td></td>
-                <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td>
-                <td className='text-end'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td>
+                <td className='text-end fs-13'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('debit', z.Voucher_Heads))}</td>
+                <td className='text-end fs-13'><span className='gl-curr-rep'>Rs.{" "}</span>{commas(getTotal('credit', z.Voucher_Heads))}</td>
               </tr>
             </tbody>
           </Table>

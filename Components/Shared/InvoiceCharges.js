@@ -19,6 +19,7 @@ const InvoiceCharges = ({data, companyId}) => {
   const [records, setRecords] = useState([]);
   const [invoice, setInvoice] = useState({
     Charge_Heads:[],
+
     SE_Job:{
         Client:{},
         shipper:{},

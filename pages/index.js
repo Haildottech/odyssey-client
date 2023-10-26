@@ -3,9 +3,9 @@ import axios from 'axios';
 import Cookies from 'cookies';
 import Main from '/Components/Layouts/Main/';
 
-const index = ({sessionData}) => {
+const index = ({sessionData, chartData}) => {
   return (
-    <Main sessionData={sessionData} />
+    <Main sessionData={sessionData} chartData={chartData} />
   )
 }
 
@@ -18,7 +18,13 @@ export async function getServerSideProps({req,res}){
     headers:{"x-access-token": `${cookies.get('token')}`}
   }).then((x)=>x.data);
 
+  const chartData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_DASHBOARD_DATA)
+  .then((x)=>x.data)
+
   return{
-    props: { sessionData:sessionRequest }
+    props: { 
+      sessionData:sessionRequest,
+      chartData:chartData
+    }
   }
 }

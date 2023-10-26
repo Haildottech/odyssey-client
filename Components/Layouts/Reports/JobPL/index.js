@@ -5,9 +5,13 @@ import React, { useReducer } from 'react';
 import Search from './Search';
 import Sheet from './Sheet';
 import AdvanceSearch from './AdvanceSearch';
+import { incrementTab } from '/redux/tabs/tabSlice';
+import { useDispatch } from 'react-redux';
+import Router from "next/router";
 
 const JobPL = () => {
 
+  const dispatchNew = useDispatch();
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
   const set = (obj) => dispatch({type:'set', payload:obj});
 
@@ -48,19 +52,34 @@ const JobPL = () => {
           <Search getChild={(value)=>set({overseasagent:value})} placeholder={"Search"} style={{width:"100%"}} type={"agent"} />
         </Col>
       </Row>
-      {/* <Row className='mt-3'>
-        <Col md={3}>
-          <div>Client</div>
-          <Search getChild={(value)=>set({client:value})}  placeholder={"Search"} style={{width:"100%"}} type={"client"} />
-        </Col>
-      </Row> */}
       <Row className='mt-3'>
         <Col md={3}>
           <div>Client</div>
           <AdvanceSearch getChild={(value)=>set({client:value})}  placeholder={"Search"} style={{width:"100%"}} type={"client"} />
         </Col>
       </Row>
-      <button className='btn-custom right' onClick={()=>handleSubmit(set,state)} disabled={state.load}>
+      <button className='btn-custom right' 
+        onClick={()=>{
+          //handleSubmit(set,state)
+          const { to, from, client, company, jobType, overseasagent, salesrepresentative } = state 
+          Router.push({
+            pathname:`/reports/jobPLReport/report`, 
+            query:{ 
+              to:to, 
+              from:from, 
+              client:client, 
+              company:company, 
+              jobtype:jobType, 
+              overseasagent:overseasagent, 
+              salesrepresentative:salesrepresentative 
+            }
+          });
+          dispatchNew(incrementTab({
+            "label": "Agt Inovice Bal Report", "key": "5-4-1",
+            "id":`?to=${to}&from=${from}&client=${client}&company=${company}&jobtype=${jobType}&overseasagent=${overseasagent}&salesrepresentative=${salesrepresentative}`
+          }));
+        }} disabled={state.load}
+      >
         {state.load?<Spinner size='sm' />:"Go"}
       </button>
     </div>

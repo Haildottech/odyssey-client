@@ -59,6 +59,16 @@ const MainLayout = ({children}) => {
 
   useEffect(() => {
     // When visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
+    
+    if(newRouter.pathname.includes("/reports/invoiceBalancing/[id]")){
+      setToggleState('5-8');
+    }
+    if(newRouter.pathname.includes("/reports/ledgerReport/[id]")){
+      setToggleState('5-7');
+    }
+    if(newRouter.pathname.includes("/reports/jobPLReport/report")){
+      setToggleState('5-4-1');
+    }
     if(newRouter.pathname.includes("/airJobs/manifest/[id]")){
       setToggleState('7-8');
     }
@@ -80,10 +90,10 @@ const MainLayout = ({children}) => {
     if(newRouter.pathname.includes("seaJobs/import/bl/[id]")){
       setToggleState('4-7');
     }
-    if( newRouter.pathname.includes("seaJobs/export/[id]")){
+    if(newRouter.pathname.includes("seaJobs/export/[id]")){
       setToggleState('4-3');
     }
-    if( newRouter.pathname.includes("/accounts/openingInvoices/[id]") && !newRouter.pathname.includes("/accounts/openingInvoices/list")){
+    if(newRouter.pathname.includes("/accounts/openingInvoices/[id]") && !newRouter.pathname.includes("/accounts/openingInvoices/list")){
       setToggleState('3-12');
     }
     if(newRouter.pathname.includes("/seaJobs/export/bl/[id]")){
@@ -143,10 +153,13 @@ const MainLayout = ({children}) => {
     openingInvoicesList:false,
     openingInvoice:false,
     jobPlReport:false,
+    jobPlReportPage:false,
     riders:false,
     riderAssign:false,
     ledger:false,
+    ledgerReport:false,
     invoiceBalancing:false,
+    invoiceBalancingReport:false,
     nonGlParties:false,
     aeJobList:false,
     aeJob:false,
@@ -169,7 +182,6 @@ const MainLayout = ({children}) => {
       })
       if(cancel==false){
         tempTabs.push(tabs);
-        console.log("here")
         let tempTabActive = {...tabActive};
         if(tabs.key=='1-1'){ tempTabActive.home=true }
         else if(tabs.key=='1-2'){ tempTabActive.requests=true }
@@ -204,8 +216,11 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='5-2'){ tempTabActive.accountActivity=true }
         else if(tabs.key=='5-3'){ tempTabActive.balanceSheet=true }
         else if(tabs.key=='5-4'){ tempTabActive.jobPlReport=true }
+        else if(tabs.key=='5-4-1'){ tempTabActive.jobPlReportPage=true }
         else if(tabs.key=='5-5'){ tempTabActive.ledger=true }
         else if(tabs.key=='5-6'){ tempTabActive.invoiceBalancing=true }
+        else if(tabs.key=='5-8'){ tempTabActive.invoiceBalancingReport=true }
+        else if(tabs.key=='5-7'){ tempTabActive.ledgerReport=true }
         else if(tabs.key=='6-1'){ tempTabActive.riders=true }
         else if(tabs.key=='6-1'){ tempTabActive.riderAssign=true }
         else if(tabs.key=='7-1'){ tempTabActive.aeJobList=true }
@@ -283,8 +298,11 @@ const MainLayout = ({children}) => {
     else if(x.key=='5-2'){ Router.push('/reports/accountActivity') }
     else if(x.key=='5-3'){ Router.push('/reports/balanceSheet') }
     else if(x.key=='5-4'){ Router.push('/reports/jobPLReport') }
+    else if(x.key=='5-4-1'){ Router.push(`/reports/jobPLReport/report${setKey(x)}`) }
     else if(x.key=='5-5'){ Router.push('/reports/ledger') }
     else if(x.key=='5-6'){ Router.push('/reports/invoiceBalancing') }
+    else if(x.key=='5-8'){ Router.push(`/reports/invoiceBalancing/${setKey(x)}`) }
+    else if(x.key=='5-7'){ Router.push(`/reports/ledgerReport/${setKey(x)}`) }
     else if(x.key=='6-1'){ Router.push('/tasks/riders') }
     else if(x.key=='6-2'){ Router.push(`/tasks/riders/riderAssign/${setKey(x)}`) }
     else if(x.key=='7-1'){ Router.push('/airJobs/aeJobList') }
