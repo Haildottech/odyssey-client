@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Container } from "react-bootstrap";
 import AWBCalculator from './AWBCalculator';
@@ -12,7 +12,9 @@ import { AiFillCheckCircle } from "react-icons/ai"
 import { BsFillClockFill, BsGraphUpArrow, BsGraphDownArrow } from "react-icons/bs"
 import { FcSalesPerformance } from "react-icons/fc";
 import dynamic from 'next/dynamic';
-const DynamicComponent = dynamic(() => import("./ChartComp"));
+const DynamicComponent = dynamic(() => import("./ChartComp"), {
+  loading: () => <p>Loading...</p>,
+});
 
 const Main = ({sessionData, chartData}) => {
 
@@ -27,15 +29,8 @@ const Main = ({sessionData, chartData}) => {
     if(sessionData.isLoggedIn==false){
       Router.push('/login');
     }
+    data;
   }, [sessionData]);
-
-  useEffect(() => {
-    if (typeof window === "undefined"){
-      setLoadGraph(false)
-    }else{
-      setLoadGraph(true)
-    }
-  }, [])
   
   return (
   <div className='home-styles'>
@@ -131,7 +126,9 @@ const Main = ({sessionData, chartData}) => {
           <div className='sales'> <span className='amount-2'>3,155,93.00</span> <span className='mx-1'>PKR</span></div>
         </Col>
         <Col md={9} className='wh-bg-round mx-2 mt-4'>
-          {loadGraph && <DynamicComponent chartData={chartData} />}
+          {(typeof window !== 'undefined') &&
+            <DynamicComponent chartData={chartData} />
+          }
         </Col>
       </Row>
     </Container>

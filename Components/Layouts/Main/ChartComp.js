@@ -1,5 +1,7 @@
+"use client"
 import React, { useEffect } from 'react';
-import Chart from "react-apexcharts";
+import dynamic from 'next/dynamic';
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 import moment from "moment";
 
 const ChartComp = ({chartData}) => {
