@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Container } from "react-bootstrap";
 import AWBCalculator from './AWBCalculator';
 import Router from 'next/router';
@@ -16,6 +16,7 @@ const DynamicComponent = dynamic(() => import("./ChartComp"));
 
 const Main = ({sessionData, chartData}) => {
 
+  const [loadGraph, setLoadGraph] = useState(false)
   const companyId = useSelector((state) => state.company.value);
   const { data, status, error, refetch } = useQuery({
     queryKey:['values'],
@@ -26,9 +27,16 @@ const Main = ({sessionData, chartData}) => {
     if(sessionData.isLoggedIn==false){
       Router.push('/login');
     }
-    data;
   }, [sessionData]);
 
+  useEffect(() => {
+    if (typeof window === "undefined"){
+      setLoadGraph(false)
+    }else{
+      setLoadGraph(true)
+    }
+  }, [])
+  
   return (
   <div className='home-styles'>
     <Row>
@@ -113,17 +121,17 @@ const Main = ({sessionData, chartData}) => {
           <div className='sales'> <span className='amount'>123,456,23.00</span> <span className='mx-1'>PKR</span></div>
         </Col>
         <Col md={3} className='wh-bg-round mx-2'>
-          <span className='timeline green-txt mb-3'>Ex. Rate Profits <BsGraphUpArrow className='pl-b2' color='orange' /></span>
+          <span className='timeline blue-txt mb-3'>Ex. Rate Profits <BsGraphUpArrow className='pl-b2' color='orange' /></span>
           <hr className='my-1' />
           <div className='sales'> <span className='amount-2'>759,71.00</span> <span className='mx-1'>PKR</span></div>
         </Col>
         <Col md={3} className='wh-bg-round mx-2'>
-          <span className='timeline red-txt mb-3'>Ex. Rate Losses <BsGraphDownArrow className='pl-b2' color='orange' /></span>
+          <span className='timeline blue-txt mb-3'>Ex. Rate Losses <BsGraphDownArrow className='pl-b2' color='orange' /></span>
           <hr className='my-1' />
           <div className='sales'> <span className='amount-2'>3,155,93.00</span> <span className='mx-1'>PKR</span></div>
         </Col>
         <Col md={9} className='wh-bg-round mx-2 mt-4'>
-          <DynamicComponent chartData={chartData} />
+          {loadGraph && <DynamicComponent chartData={chartData} />}
         </Col>
       </Row>
     </Container>
