@@ -39,7 +39,7 @@ const Main = ({sessionData, chartData}) => {
     </Row>
     {companyId==1 && 
     <Container>
-      <Row>
+      <Row style={{maxHeight:"85vh", overflowY:'auto'}}>
         <Col md={12} className='mt-4'>
           <h3 className='top-section-heading'>Job Statistics</h3>
           <hr className='mt-0' />
@@ -110,24 +110,29 @@ const Main = ({sessionData, chartData}) => {
           <h3 className='top-section-heading'>Sales Statistics</h3>
           <hr className='mt-0' />
         </Col>
-        <Col md={3} className='wh-bg-round mx-2'>
+        <Col md={2} className='wh-bg-round mx-2'>
           <span className='timeline blue-txt mb-3'>Projected Sales <FcSalesPerformance className='pl-b2' /></span>
           <hr className='my-1' />
           <div className='sales'> <span className='amount'>123,456,23.00</span> <span className='mx-1'>PKR</span></div>
         </Col>
-        <Col md={3} className='wh-bg-round mx-2'>
+        <Col md={2} className='wh-bg-round mx-2'>
           <span className='timeline blue-txt mb-3'>Ex. Rate Profits <BsGraphUpArrow className='pl-b2' color='orange' /></span>
           <hr className='my-1' />
           <div className='sales'> <span className='amount-2'>759,71.00</span> <span className='mx-1'>PKR</span></div>
         </Col>
-        <Col md={3} className='wh-bg-round mx-2'>
+        <Col md={2} className='wh-bg-round mx-2'>
           <span className='timeline blue-txt mb-3'>Ex. Rate Losses <BsGraphDownArrow className='pl-b2' color='orange' /></span>
           <hr className='my-1' />
           <div className='sales'> <span className='amount-2'>3,155,93.00</span> <span className='mx-1'>PKR</span></div>
         </Col>
         <Col md={9} className='wh-bg-round mx-2 mt-4'>
           {(typeof window !== 'undefined') &&
-            <DynamicComponent chartData={chartData} />
+            <DynamicComponent chartData={chartData} type={"One"} />
+          }
+        </Col>
+        <Col md={9} className='wh-bg-round mx-2 mt-4'>
+          {(typeof window !== 'undefined') &&
+            <DynamicComponent chartData={chartData} type={"Two"} />
           }
         </Col>
       </Row>
