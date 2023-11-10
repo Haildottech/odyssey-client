@@ -34,8 +34,6 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
     }
 
     useEffect(() => {
-      //cwtClient
-      console.log(invoice)
     }, [invoice])
     
     const paraStyles = { lineHeight:1.2, fontSize:11 }

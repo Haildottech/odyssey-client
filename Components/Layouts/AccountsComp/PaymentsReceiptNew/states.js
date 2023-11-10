@@ -47,6 +47,7 @@ const initialState = {
   partyType:'client',
   invoiceCurrency:'USD',
   partyOptions:[],
+  createdAt:'',
 
   invoices: [],
   load: false,

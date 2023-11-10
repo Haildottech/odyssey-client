@@ -238,9 +238,12 @@ const setJob = (set, x, state, reset, allValues, dispatch, id) => {
     allValues.shipper =      x.shipper?.name;            
     allValues.overseas_agent=x.overseas_agent?.name;
     allValues.air_line      =x.air_line?.name;
-    allValues.pol =          x.pol;                
+    allValues.pol =          x.pol;           
+    allValues.polTwo =       x.pol;         
     allValues.pofd =         x.pod;                
+    allValues.podTwo =       x.pod;                
     allValues.fd =           x.fd;                 
+    allValues.poDeliveryTwo =x.fd;                
     allValues.vessel =       x.vessel?.name;             
     allValues.shipDate =     x.shipDate;
     allValues.commodity =    x.commodity?.name; 
@@ -295,49 +298,41 @@ const calculateItemInfos=(state, set, reset, allValues)=>{
 }
 
 const setAndFetchBlData = async(reset, state, allValues, set, dispatch, blData) => {
-  //const setAll = (obj) => dispatch({type:'set', payload:obj});
   let result = {...blData};
   set("load", true);
   result.equip = [{}];
   const fetchedResult = await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_FIND_JOB_BY_NO,{ no:result.SE_Job.jobNo }).then((x)=>x.data.result)
-  allValues.SEJobId =        fetchedResult[0].id;
-  allValues.jobNo =          fetchedResult[0].jobNo;
-  allValues.consignee =      fetchedResult[0].consignee?.name;
-  allValues.shipper =        fetchedResult[0].shipper?.name;
-  allValues.overseas_agent = fetchedResult[0].overseas_agent?.name;
-  allValues.pol =            fetchedResult[0].pol;
-  allValues.pofd =           fetchedResult[0].pod;
-  allValues.fd =             fetchedResult[0].fd;
-  allValues.vessel =         fetchedResult[0].vessel?.name;
-  allValues.voyage =         fetchedResult[0].Voyage?.voyage;
-  allValues.shipDate =       fetchedResult[0].shipDate;
-  allValues.commodity =      fetchedResult[0].commodity?.name;
-  allValues.equip =          fetchedResult[0].SE_Equipments;
-  allValues.freightType =    fetchedResult[0].freightType;
-  allValues.freightPaybleAt =fetchedResult[0].freightPaybleAt;
-  allValues.delivery =       fetchedResult[0].delivery;
-  allValues.operation =      fetchedResult[0].operation;      
-  allValues.flightNo =       fetchedResult[0].flightNo; 
-  allValues.shipping_line =  fetchedResult[0].shipping_line?.name;
-  allValues.air_line      =  fetchedResult[0].air_line?.name;
-  
-  //console.log(fetchedResult);
+  allValues.SEJobId =         fetchedResult[0].id;
+  allValues.jobNo =           fetchedResult[0].jobNo;
+  allValues.consignee =       fetchedResult[0].consignee?.name;
+  allValues.shipper =         fetchedResult[0].shipper?.name;
+  allValues.overseas_agent =  fetchedResult[0].overseas_agent?.name;
+  allValues.pol =             fetchedResult[0].pol;
+  allValues.pofd =            fetchedResult[0].pod;
+  allValues.fd =              fetchedResult[0].fd;
+  allValues.vessel =          fetchedResult[0].vessel?.name;
+  allValues.voyage =          fetchedResult[0].Voyage?.voyage;
+  allValues.shipDate =        fetchedResult[0].shipDate;
+  allValues.commodity =       fetchedResult[0].commodity?.name;
+  allValues.equip =           fetchedResult[0].SE_Equipments;
+  allValues.freightType =     fetchedResult[0].freightType;
+  allValues.freightPaybleAt = fetchedResult[0].freightPaybleAt;
+  allValues.delivery =        fetchedResult[0].delivery;
+  allValues.operation =       fetchedResult[0].operation;      
+  allValues.flightNo =        fetchedResult[0].flightNo; 
+  allValues.shipping_line =   fetchedResult[0].shipping_line?.name;
+  allValues.air_line      =   fetchedResult[0].air_line?.name;
 
-  // result.Container_Infos.forEach((x, i)=>{
-  //   result.Container_Infos[i].date = x.date!=""?moment(x.date):""
-  // })
   let cbm = 0.0, tare = 0.0, net = 0.0, gross = 0.0, pkgs = 0, unit = "", wtUnit = "";
 
   result.Container_Infos.forEach((x,i) => {
-    //x.Container_Infos[i].date = x.date!=""?moment(x.date):""
     if(i==0){ 
       unit= x.unit; wtUnit= x.wtUnit; 
     }
     cbm = cbm + parseFloat(x.cbm||0); tare = tare + parseFloat(x.tare||0); net = net + parseFloat(x.net||0); gross = gross + parseFloat(x.gross||0); pkgs = pkgs + parseInt(x.pkgs||0);
   })
 
-  allValues = {...allValues, gross:""+gross, net:""+net, tare:""+tare, wtUnit, pkgs:""+pkgs, unit, cbm:""+cbm}
-
+  allValues = { ...allValues, gross:"" + gross, net:"" + net, tare:"" + tare, wtUnit, pkgs:"" + pkgs, unit, cbm:"" + cbm }
   let contInfos = result.Container_Infos;
   result = {
     ...allValues,

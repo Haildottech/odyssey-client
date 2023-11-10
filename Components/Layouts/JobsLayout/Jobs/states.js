@@ -5,30 +5,29 @@ import moment from "moment";
 const SignupSchema = yup.object().shape({  });
 
 function recordsReducer(state, action){
-    switch (action.type) {
-
-      case 'toggle': {
-        return { ...state, [action.fieldName]: action.payload } 
-      }
-      case 'set': {
-        return {
-            ...state, ...action.payload
-        }
-      }
-      case 'voyageSelection': {
-        let temp = state.fields.vessel.filter((x)=> x.id == action.payload)[0].Voyages;
-        let newTemp = [];
-        temp.forEach((x)=> {
-          newTemp.push({...x, check:false})
-        });
-        return {
-            ...state,
-            voyageVisible: true,
-            voyageList:newTemp,
-        }
-      }
-      default: return state 
+  switch (action.type) {
+    case 'toggle': {
+      return { ...state, [action.fieldName]: action.payload } 
     }
+    case 'set': {
+      return {
+          ...state, ...action.payload
+      }
+    }
+    case 'voyageSelection': {
+      let temp = state.fields.vessel.filter((x)=> x.id == action.payload)[0].Voyages;
+      let newTemp = [];
+      temp.forEach((x)=> {
+        newTemp.push({...x, check:false})
+      });
+      return {
+        ...state,
+        voyageVisible: true,
+        voyageList:newTemp,
+      }
+    }
+    default: return state 
+  }
 };
 
 const baseValues = {

@@ -1,24 +1,23 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import { BsFillClockFill, BsGraphUpArrow, BsGraphDownArrow } from "react-icons/bs";
 import { Row, Col, Container } from "react-bootstrap";
+import { FcSalesPerformance } from "react-icons/fc";
+import { AiFillCheckCircle } from "react-icons/ai";
+import { useQuery } from '@tanstack/react-query';
+import { CgSandClock } from "react-icons/cg";
 import AWBCalculator from './AWBCalculator';
-import Router from 'next/router';
 import { useSelector } from 'react-redux';
 import { getJobValues } from '/apis/jobs';
-import { useQuery } from '@tanstack/react-query';
-import { RiShip2Fill } from "react-icons/ri"
-import { CgSandClock } from "react-icons/cg"
-import { AiFillCheckCircle } from "react-icons/ai"
-import { BsFillClockFill, BsGraphUpArrow, BsGraphDownArrow } from "react-icons/bs"
-import { FcSalesPerformance } from "react-icons/fc";
+import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import Router from 'next/router';
+import Uploader from "./Uploader";
 const DynamicComponent = dynamic(() => import("./ChartComp"), {
   loading: () => <p>Loading...</p>,
 });
 
 const Main = ({sessionData, chartData}) => {
 
-  const [loadGraph, setLoadGraph] = useState(false)
   const companyId = useSelector((state) => state.company.value);
   const { data, status, error, refetch } = useQuery({
     queryKey:['values'],
@@ -27,14 +26,14 @@ const Main = ({sessionData, chartData}) => {
 
   useEffect(() => {
     if(sessionData.isLoggedIn==false){
-      Router.push('/login');
+      Router.push('/login')
     }
     data;
   }, [sessionData]);
-  
+
   return (
   <div className='home-styles'>
-    <Row>
+    {/* <Row>
       {companyId==3 && <AWBCalculator/>}
     </Row>
     {companyId==1 && 
@@ -131,13 +130,12 @@ const Main = ({sessionData, chartData}) => {
           }
         </Col>
         <Col md={9} className='wh-bg-round mx-2 mt-4'>
-          {(typeof window !== 'undefined') &&
-            <DynamicComponent chartData={chartData} type={"Two"} />
-          }
+          {(typeof window !== 'undefined') && <DynamicComponent chartData={chartData} type={"Two"} /> }
         </Col>
       </Row>
     </Container>
-    }
+    } */}
+    {/* <Uploader/> */}
   </div>
   )
 }

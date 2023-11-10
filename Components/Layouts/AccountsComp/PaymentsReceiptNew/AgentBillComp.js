@@ -185,7 +185,7 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
                     accountType:'partyAccount'
                 }
             })
-            console.log(state.finalTax + state.bankCharges + - parseFloat(state.gainLossAmount))
+            //console.log(state.finalTax + state.bankCharges + - parseFloat(state.gainLossAmount))
             transTwo.push({
                 particular:state.payAccountRecord,  
                 tran:{ 
@@ -395,7 +395,7 @@ const AgentBillComp = ({companyId, state, dispatch}) => {
                 router.push(type=="SE"?`/seaJobs/export/${x.SE_Job.id}`:type=="SI"?`/seaJobs/import/${x.SE_Job.id}`:
                     type=="AE"?`/airJobs/export/${x.SE_Job.id}`:`/airJobs/import/${x.SE_Job.id}`
                 )}
-            }> <b>{x.SE_Job.jobNo}</b> </td>
+            }> <b>{x?.SE_Job?.jobNo}</b> </td>
             <td style={{width:100}}>{x.invoice_No}</td>
             <td>HBL</td>
             <td>MBL</td>

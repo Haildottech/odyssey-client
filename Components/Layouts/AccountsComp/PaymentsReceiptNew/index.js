@@ -55,10 +55,11 @@ const PaymentsReceipt = ({id, voucherData}) => {
                 if(x.accountType=="gainLoss"){
                     gainLoss.acc = x.Child_Account
                 }
-            })
+            });
             setAll({
                 voucherHeads:voucherData.Voucher_Heads,
                 id:id,
+                createdAt:voucherData.createdAt,
                 edit:true,
                 oldInvoices:voucherData.invoices,
                 selectedParty:{id:voucherData.partyId, name:voucherData.partyName}, 
@@ -187,7 +188,6 @@ const PaymentsReceipt = ({id, voucherData}) => {
                 onClick={()=>{
                     axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_OLD_PAY_REC_VOUCHERS)
                     .then((x)=>{
-                        console.log(x.data.result);
                         let tempData = []
                         x.data.result.forEach((y, i)=>{
                             tempData.push({...y, no:i+1})

@@ -101,8 +101,23 @@ const InvoiceCharges = ({data, companyId}) => {
             })
         }
     });
-    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_SE_JOB_CLIENT_CHILDS,{
-        headers:{ title:tempInv.payType=="Recievable"?"ACCOUNT RECEIVABLE":"ACCOUNT PAYABLE", companyid:companyId, clientid:tempInv.party_Id, partytype:tempInv.partyType }
+    // await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_SE_JOB_CLIENT_CHILDS,{
+    //     headers:{ 
+    //         title:tempInv.payType=="Recievable"?"ACCOUNT RECEIVABLE":"ACCOUNT PAYABLE", 
+    //         companyid:companyId, 
+    //         clientid:tempInv.party_Id, 
+    //         partytype:tempInv.partyType 
+    //     }
+    // }).then((x)=>{
+    //     party = x.data.result
+    // });
+    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ACCOUNTS_FOR_APPROVAL,{
+        headers:{
+            title:tempInv.payType=="Recievable"?"ACCOUNT RECEIVABLE":"ACCOUNT PAYABLE", 
+            companyid:companyId,
+            clientid:tempInv.party_Id,
+            partytype:tempInv.partyType
+        }
     }).then((x)=>{
         party = x.data.result
     });
@@ -220,6 +235,7 @@ const InvoiceCharges = ({data, companyId}) => {
             ChildAccountId:income.id
         })
     }
+    console.log(vouchers)
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_INVOICE_APPROVE_DISAPPROVE,{
         id:tempInv.id,
         total:tempInv.total,

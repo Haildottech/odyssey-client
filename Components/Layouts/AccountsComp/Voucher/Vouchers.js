@@ -159,7 +159,7 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
         </Row>
       </Col>
       <Col className="p-3" md={2}>
-      <h6 className="blue-txt cur border p-2" onClick={()=>console.log(invoiceId)}> 
+      <h6 className="blue-txt cur border p-2"> 
         <b>Go To Invoice <AiFillRightCircle style={{position:'relative', bottom:1}} /></b>
       </h6>
       </Col>

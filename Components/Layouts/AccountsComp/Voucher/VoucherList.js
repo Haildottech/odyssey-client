@@ -20,6 +20,7 @@ const App = ({voucherData}) => {
       <span className='blue-txt fw-6'>{commas(props.data.amount)}</span>
     </>
   };
+
   const genderDetails = {
     component: (props)=> <>
       <span className='blue-txt fw-6 fs-12'>{props.data.voucher_Id}</span>
@@ -35,7 +36,7 @@ const App = ({voucherData}) => {
     {headerName: 'Amount', field:'amount', filter: true, cellRendererSelector: () => amountDetails, filter: true},
   ]);
 
-  const defaultColDef = useMemo( ()=> ({
+  const defaultColDef = useMemo(()=> ({
     sortable: true
   }));
 

@@ -111,9 +111,8 @@ const Gl = ({state, dispatch, companyId}) => {
     voucher.partyType = state.partytype;
     voucher.tranDate = moment(state.date).format("yyyy-MM-DD");
     state.edit?voucher.id = state.id : null;
-    console.log(state.invoiceLosses)
-    console.log(voucher)
-    console.log(tempInvoices)
+    voucher.createdAt = state.createdAt;
+    
     await axios.post(state.edit?process.env.NEXT_PUBLIC_CLIMAX_UPDATE_VOUCEHR:process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, voucher)
     .then(async(x)=>{
       let newInvoices = state.invoiceLosses.map((y)=>{
@@ -131,9 +130,8 @@ const Gl = ({state, dispatch, companyId}) => {
   }
 
   return (
-  <Modal title={`Transaction General Journal`} open={state.glVisible}
-    onOk={()=>set('glVisible', false)} onCancel={()=>set('glVisible', false)}
-    footer={false} maskClosable={false} width={'80%'}
+  <Modal title={`Transaction General Journal`} open={state.glVisible} onOk={()=>set('glVisible', false)} 
+    onCancel={()=>set('glVisible', false)} footer={false} maskClosable={false} width={'80%'}
   >
   <div style={{minHeight:330, fontSize:12}}>
     <h4 className='grey-txt'>Proceed with following transaction?</h4>

@@ -5,7 +5,6 @@ import { useForm, useWatch } from "react-hook-form";
 import { Spinner } from "react-bootstrap";
 import React, { useState } from "react";
 import Vouchers from "./Vouchers";
-import moment from "moment";
 import axios from "axios";
 import { delay } from "/functions/delay"
 import { useSelector, useDispatch } from 'react-redux';
@@ -54,6 +53,8 @@ const Voucher = ({id, voucherData}) => {
     }
     voucher.CompanyId=CompanyId?CompanyId:1;
     voucher.type = (voucher.vType=="BPV"||voucher.vType=="CPV")?"Payble":(voucher.vType=="BRV"||voucher.vType=="CRV")?"Recievable":voucher.vType=="TV"?"Trasnfer Voucher":"General Voucher"
+    voucher.createdAt = voucherData.createdAt
+    
     if(id=="new"){
       delete voucher.id;
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, voucher).then((x)=>{
@@ -66,18 +67,16 @@ const Voucher = ({id, voucherData}) => {
         }
       })
     } else {
-      console.log(voucher)
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_UPDATE_VOUCEHR, {...voucher, id:id}).then((x)=>{
         x.data.status == "success"
         ? openNotification("Success", `Voucher Updated Successfully!`, "green")
         : openNotification( "Error", `An Error occured Please Try Again!`, "red");
       })
     }
-    console.log(voucher)
     await delay(1000);
     setLoad(false)
   };
-
+  
   return (
   <div className="base-page-layout fs-11">
   <form onSubmit={handleSubmit(onSubmit)}>

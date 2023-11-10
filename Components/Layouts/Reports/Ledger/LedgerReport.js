@@ -11,9 +11,10 @@ const LedgerReport = ({voucherData, from, to, name, company, currency}) => {
   useEffect(() => {
     if(voucherData.status=="success") {
       let openingBalance = 0.00, closingBalance = 0.00, tempArray = [];
+      console.log(voucherData.result)
       voucherData.result.forEach((y)=>{
         closingBalance = y.type=="debit"? closingBalance + parseFloat(y.amount)/parseFloat(y['Voucher.exRate']) : closingBalance - parseFloat(y.amount)/parseFloat(y['Voucher.exRate']);
-        if(moment(y.createdAt)<moment(from)){
+        if(y['Voucher.vType']=="OP"){
           openingBalance = y.type=="debit"? openingBalance + parseFloat(y.amount)/parseFloat(y['Voucher.exRate']) : openingBalance - parseFloat(y.amount)/parseFloat(y['Voucher.exRate']);
         } else {
           tempArray.push({
