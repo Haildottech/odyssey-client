@@ -33,9 +33,10 @@ const Main = ({sessionData, chartData}) => {
 
   return (
   <div className='home-styles'>
-    {/* <Row>
+    <Row>
       {companyId==3 && <AWBCalculator/>}
     </Row>
+    {/* 
     {companyId==1 && 
     <Container>
       <Row style={{maxHeight:"85vh", overflowY:'auto'}}>
