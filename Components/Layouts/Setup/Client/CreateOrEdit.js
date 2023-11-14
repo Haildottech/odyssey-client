@@ -12,9 +12,10 @@ import { createHistory } from './historyCreation';
 import { Row, Col, Spinner } from 'react-bootstrap';
 import { yupResolver } from "@hookform/resolvers/yup";
 import DateComp from '/Components/Shared/Form/DateComp';
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm, useFormContext, useWatch } from "react-hook-form";
 import InputComp from '/Components/Shared/Form/InputComp';
 import SelectComp from '/Components/Shared/Form/SelectComp';
+import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
 import openNotification from '/Components/Shared/Notification';
 import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 
@@ -42,7 +43,7 @@ const SignupSchema = yup.object().shape({
 });
 
 const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
-  
+
     const company = useSelector((state) => state.company.companies);
     const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: yupResolver(SignupSchema),
@@ -54,40 +55,54 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
         queryFn:getJobValues
     });
 
-    useEffect(() => {
-        if(id!="new"){
-            let tempState = {...clientData};
-            let tempCompanyList = [...state.editCompanyList];
-            tempState.operations = tempState.operations.split(', ');
-            tempState.types = tempState.types.split(', ');
-            tempState.registerDate = moment(tempState.registerDate);
-            tempState.bankAuthorizeDate = moment(tempState.bankAuthorizeDate);
-            tempState.companies = [];
-            clientData.Client_Associations.forEach((x)=>{ tempState.companies.push(x.CompanyId) })
-            tempCompanyList.forEach((x, i)=>{
-                for(let j=0; j<tempState.Client_Associations.length; j++){
-                    if(tempState.Client_Associations[j].CompanyId==x.value){
-                        tempCompanyList[i].disabled=true;
-                        break;
-                    }else{
-                        tempCompanyList[i].disabled=false;
-                    }
-                }
-            })
-            dispatch({type:'toggle', fieldName:'editCompanyList', payload:tempCompanyList});
-            dispatch({type:'toggle', fieldName:'oldRecord', payload:tempState});
-            reset(tempState);
-        }
-        if(id=="new"){ reset(baseValues) }
-    }, [])
+    //const values = useWatch({control})
 
+    useEffect(() => {
+    if(id!="new") {
+        let tempState = {...clientData};
+        let tempCompanyList = [...state.editCompanyList];
+        tempState.operations = tempState.operations.split(', ');
+        tempState.types = tempState.types.split(', ');
+        tempState.registerDate = moment(tempState.registerDate);
+        tempState.bankAuthorizeDate = moment(tempState.bankAuthorizeDate);
+        tempState.companies = [];
+        clientData.Client_Associations.forEach((x)=>{ tempState.companies.push(x.CompanyId) })
+        tempCompanyList.forEach((x, i)=>{
+            for(let j=0; j<tempState.Client_Associations.length; j++){
+                if(tempState.Client_Associations[j].CompanyId==x.value){
+                    tempCompanyList[i].disabled=true;
+                    break;
+                }else{
+                    tempCompanyList[i].disabled=false;
+                }
+            }
+        })
+        // dispatch({type:'set', payload:{
+        //     editCompanyList:tempCompanyList,
+        //     oldRecord:tempState
+        // }});
+        dispatch({type:'toggle', fieldName:'editCompanyList', payload:tempCompanyList});
+        dispatch({type:'toggle', fieldName:'oldRecord', payload:tempState});
+        reset({...tempState, parentAccount:state.parentAccount});
+    }
+    if(id=="new") { 
+        reset({...baseValues, parentAccount:state.parentAccount}) 
+    }
+    }, [state.parentAccount])
+    
     const onSubmit = async(data) => {
         let Username = Cookies.get('username')
-        data.createdBy = Username
+        data.createdBy = Username;
+        let pAccountName = ''
         dispatch({type:'toggle', fieldName:'load', payload:true});
+        state.accountList.forEach((x)=>{
+            if(x.id==data.parentAccount){
+                pAccountName =x.title
+            }
+        });
         setTimeout(async() => {
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_CLIENT,{
-                data
+                ...data, pAccountName
             }).then((x)=>{
                 if(x.data.status=='success'){
                     openNotification('Success', `Client ${x.data.result.name} Created!`, 'green');
@@ -103,6 +118,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
 
     const onEdit = async(data) => {
         let history = "";
+        let pAccountName = ''
         let tempAssociations = [];
         let EmployeeId = Cookies.get('loginId');
         let updateDate = moment().format('MMM Do YY, h:mm:ss a');
@@ -110,9 +126,14 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
         data.Client_Associations.forEach((x)=> { tempAssociations.push(x.CompanyId) })
         data.companies = [ ...getDifference(data.companies, tempAssociations), ...getDifference(tempAssociations, data.companies)];
         dispatch({type:'toggle', fieldName:'load', payload:true});
+        state.accountList.forEach((x)=>{
+            if(x.id==data.parentAccount){
+                pAccountName =x.title
+            }
+        });
         setTimeout(async() => {
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_CLIENT,{
-                data, history, EmployeeId, updateDate
+                data, history, EmployeeId, updateDate, pAccountName
             }).then((x)=>{
                 if(x.data.status=='success'){
                     openNotification('Success', `Client ${data.name} Updated!`, 'green');
@@ -122,6 +143,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             })
         }, 3000);
     };
+
     const onError = (errors) => console.log(errors);
 
     function getDifference(array1, array2){
@@ -131,10 +153,9 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             });
         });
     }
-
+    
     return (
     <div className='client-styles' style={{maxHeight:720, overflowY:'auto', overflowX:'hidden'}}>
-      <h5>{state.edit?'Edit Client':'Create Client'}</h5>
       <form onSubmit={handleSubmit(id!="new"?onEdit:onSubmit, onError)}>
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="Basic Info" key="1">
@@ -224,6 +245,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             </Col>
         </Row>
         </Tabs.TabPane>
+
         <Tabs.TabPane tab="Bank Info" key="2">
         <Row>
             <Col md={3} className='py-1'>
@@ -263,22 +285,43 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             <div style={{height:185}}></div>
         </Row>
         </Tabs.TabPane>
+
         <Tabs.TabPane tab="Account Info" key="3">
         <Row>
+            <Col md={6}>
+             <SelectSearchComp width={"100%"} register={register} name='parentAccount' 
+                control={control} label='Parent Account:' //disabled={id=="new"?false:true}
+                options={state?.accountList.map((x)=>{
+                    return {id:x.id, name:x.title}
+                })} 
+            />
+            </Col>
+            <Col></Col>
+            <Col md={6} className='pt-2'>
+                <InputComp register={register} name='name' control={control} label='Account Name' 
+                    width={"100%"} disabled={true} 
+                />
+            </Col>
+
+            <hr className='mt-4' />
+
             <Col md={12} className='py-1'>     
-                <SelectComp width={100} register={register} name='accountRepresentatorId' control={control} label='Account Representative:'
-                    options={state.Representatives[0].records} />
+                <SelectComp width={"50%"} register={register} name='accountRepresentatorId' control={control} 
+                    label='Account Representative:' options={state.Representatives[0].records} 
+                />
             </Col>
             <Col  md={12} className='py-1'>     
-                <SelectComp width={100} register={register} name='docRepresentatorId' control={control} label='Doc Representative:'
-                    options={state.Representatives[1].records} />
+                <SelectComp width={"50%"} register={register} name='docRepresentatorId' control={control} 
+                    label='Doc Representative:' options={state.Representatives[1].records} 
+                />
             </Col>
             <Col md={12} className='py-1'>     
-                <SelectComp width={100} register={register} name='salesRepresentatorId' control={control} label='Sales Representative:'
-                    options={state.Representatives[2].records} />
+                <SelectComp width={"50%"} register={register} name='salesRepresentatorId' control={control} 
+                    label='Sales Representative:' options={state.Representatives[2].records} 
+                />
             </Col>
             <Col md={12} className='py-1'>     
-                <SelectComp width={100} register={register} name='currency' control={control} label='Currency'
+                <SelectComp width={200} register={register} name='currency' control={control} label='Currency'
                     options={[  
                         {id:'USD', name:'USD'},
                         {id:'PKR', name:'PKR'},
@@ -286,14 +329,17 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
                         {id:'AED', name:'AED'},
                         {id:'AUD', name:'AUD'}
                 ]}/>
-            </Col><div style={{height:186}}></div>
+            </Col>
+            <div style={{height:186}}></div>
         </Row>
         </Tabs.TabPane>
+
         <Tabs.TabPane tab="Company Info" key="4">
         <Row>
             <Col md={12} className='py-1'>     
                 <CheckGroupComp register={register} name='companies' control={control} label='Comapnies'
-                    options={state.edit?state.editCompanyList:state.companyList} />
+                    options={state.edit?state.editCompanyList:state.companyList} 
+                />
             </Col>
             <div style={{height:383}}></div>
         </Row>
@@ -304,49 +350,8 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
         {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Submit'}
       </button>
       </form>
-      {/* <button className='btn-custom' onClick={()=>reset(
-        {
-            operations: ["Sea Import"],
-            types: ["Shipper"],
-            accountsMail: "Mehma@gmail.com",
-            infoMail: "hareem@gmail.com",
-            telephone2: "6635544",
-            telephone1: "6625544",
-            zip: "74800",
-            city: "Karachi",
-            address2: "Haseeb Flats Flats, no.15, Shah Faisal",
-            address1: "Sana Avenue Flats, no.35, North Nazimabad Block-D",
-            strn: "34572489932",
-            ntn: "123-635218-5",
-            mobile2: "03360222373",
-            mobile1: "03332209125",
-            person2: "Salik",
-            person1: "Abdullah",
-            bankAuthorizeDate: moment("Mon Dec 12 2022 14:44:19 GMT+0500"),
-            registerDate: moment("Mon Dec 12 2022 14:43:42 GMT+0500"),
-            name: "Changed Abdullah",
-            website: "www.infosys.com",
-            companies: [1, 2, 3 ],
-            bank: "Meezan",
-            branchName: "North Branch",
-            branchCode: "00000",
-            accountNo: "1234567890",
-            iban: "09068671839",
-            swiftCode: "BL-4123",
-            routingNo: "BDC-4827100",
-            ifscCode: "i73ddkaj",
-            micrCode: "u891729h",
-            authorizedById: "",//"60425aa7-cb85-4561-aec9-0fd426c7d2cb",
-            accountRepresentatorId: "",//"60425aa7-cb85-4561-aec9-0fd426c7d2cb",
-            docRepresentatorId: "",//"60425aa7-cb85-4561-aec9-0fd426c7d2cb",
-            salesRepresentatorId: "",//"60425aa7-cb85-4561-aec9-0fd426c7d2cb",
-            currency: "pkr"
-        }
-        )}>
-        reset
-      </button> */}
     </div>
     )
 }
 
-export default CreateOrEdit
+export default React.memo(CreateOrEdit)

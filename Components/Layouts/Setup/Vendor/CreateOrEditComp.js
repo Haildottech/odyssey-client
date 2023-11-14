@@ -1,25 +1,28 @@
-import { Row, Col } from 'react-bootstrap';
 import React, { useEffect, useReducer } from 'react';
-import Router from 'next/router';
 import CreateOrEdit from './CreateOrEdit';
 import { useSelector } from 'react-redux';
+import Router from 'next/router';
+import axios from 'axios';
 
 function recordsReducer(state, action){
-    switch (action.type) {
-      case 'toggle': { 
-        return { ...state, [action.fieldName]: action.payload } 
-      }
-
-      case 'history': {
-        return {
-            ...state,
-            edit: false,
-            viewHistory:true,
-            visible: true,
-        }
-      }
-      default: return state 
+  switch (action.type) {
+    case 'set': { 
+      return { ...state, ...action.payload } 
     }
+    case 'toggle': { 
+      return { ...state, [action.fieldName]: action.payload } 
+    }
+
+    case 'history': {
+      return {
+        ...state,
+        edit: false,
+        viewHistory:true,
+        visible: true,
+      }
+    }
+    default: return state 
+  }
 }
 
 const baseValues = {
@@ -58,59 +61,67 @@ const baseValues = {
   micrCode:"",
   bankAuthorizeDate:null,
   authorizedById : null,
-
   //Account Info
   accountRepresentatorId : "",
   currency:"",
+
+  parentAccount:'',
+  childAccount:'',
 }
 
 const initialState = {
-    load:false,
-    values:baseValues,
-    Representatives:[
-      {name:'Accounts', records:[]},
-      // {name:'Sales', records:[]},
-      // {name:'Doc', records:[]}
-    ],
-    Operations:[
-      { label: "Sea Import", value: "Sea Import" },
-      { label: "Sea Export", value: "Sea Export" },
-      { label: "Air Import", value: "Air Import" },
-      { label: "Air Export", value: "Air Export" }
-    ],
-    Types:[
-      { label: "Forwarder/Coloader", value: "Forwarder/Coloader" },
-      { label: "Local Vendor", value: "Local Vendor" },
-      { label: "Overseas Agent", value: "Overseas Agent" },
-      { label: "Commission Agent", value: "Commission Agent" },
-      { label: "Indentor", value: "Indentor" },
-      { label: "Transporter", value: "Transporter" },
-      { label: "CHA/CHB", value: "CHA/CHB" },
-      { label: "Shipping Line", value: "Shipping Line" },
-      { label: "Delivery Agent", value: "Delivery Agent" },
-      { label: "Warehouse", value: "Warehouse" },
-      { label: "Buying House", value: "Buying House" },
-      { label: "Air Line", value: "Air Line" },
-      { label: "Trucking", value: "Trucking" },
-      { label: "Drayman", value: "Drayman" },
-      { label: "Cartage", value: "Cartage" },
-      { label: "Stevedore", value: "Stevedore" },
-      { label: "Principal", value: "Principal" },
-      { label: "Depot", value: "Depot" },
-      { label: "Terminal", value: "Terminal" },
-      { label: "Buyer", value: "Buyer" },
-      { label: "Invoice Party", value: "Invoice Party" },
-      { label: "Slot Operator", value: "Slot Operator" },
-    ],
-    companyList:[
-      {id:1, name:''}
-    ],
-    editCompanyList:[
-      {id:1, name:''}
-    ],
-    history:[],
-    // Editing Records
-    oldRecord:{},
+  load:false,
+  values:baseValues,
+  Representatives:[
+    {name:'Accounts', records:[]},
+    // {name:'Sales', records:[]},
+    // {name:'Doc', records:[]}
+  ],
+  Operations:[
+    { label: "Sea Import", value: "Sea Import" },
+    { label: "Sea Export", value: "Sea Export" },
+    { label: "Air Import", value: "Air Import" },
+    { label: "Air Export", value: "Air Export" }
+  ],
+  Types:[
+    { label: "Shipper", value: "Shipper" },
+    { label: "Consignee", value: "Consignee" },
+    { label: "Notify", value: "Notify" },
+    { label: "Potential Customer", value: "Potential Customer" },
+    { label: "Invoice Party", value: "Invoice Party" },
+    { label: "Non operational Party", value: "Non operational Party" },
+    { label: "Forwarder/Coloader", value: "Forwarder/Coloader" },
+    { label: "Local Vendor", value: "Local Vendor" },
+    { label: "Overseas Agent", value: "Overseas Agent" },
+    { label: "Commission Agent", value: "Commission Agent" },
+    { label: "Indentor", value: "Indentor" },
+    { label: "Transporter", value: "Transporter" },
+    { label: "CHA/CHB", value: "CHA/CHB" },
+    { label: "Shipping Line", value: "Shipping Line" },
+    { label: "Delivery Agent", value: "Delivery Agent" },
+    { label: "Warehouse", value: "Warehouse" },
+    { label: "Buying House", value: "Buying House" },
+    { label: "Air Line", value: "Air Line" },
+    { label: "Trucking", value: "Trucking" },
+    { label: "Drayman", value: "Drayman" },
+    { label: "Cartage", value: "Cartage" },
+    { label: "Stevedore", value: "Stevedore" },
+    { label: "Principal", value: "Principal" },
+    { label: "Depot", value: "Depot" },
+    { label: "Terminal", value: "Terminal" },
+    { label: "Buyer", value: "Buyer" },
+    { label: "Slot Operator", value: "Slot Operator" },
+  ],
+  accountList:[],
+  companyList:[
+    {id:1, name:''}
+  ],
+  editCompanyList:[
+    {id:1, name:''}
+  ],
+  history:[],
+  // Editing Records
+  oldRecord:{},
 };
 
 const CreateOrEditComp = ({sessionData, representativeData, vendorData, id}) => {
@@ -121,8 +132,25 @@ const CreateOrEditComp = ({sessionData, representativeData, vendorData, id}) => 
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
 
   useEffect(() => {
-    dispatch({type:'toggle', fieldName:'companyList', payload:createCompanyList(companiesList)});
-    dispatch({type:'toggle', fieldName:'editCompanyList', payload:createCompanyList(companiesList)});
+    axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ACCOUNTS_FOR_PARTY_SETUP,{
+      headers:{"id": `1`}
+    }).then((x)=>{
+      let tempParentAccount = ''
+      x.data.result.forEach((x)=>{
+        if(x.title=="ACCOUNT PAYABLE "){
+          tempParentAccount = x.id
+        }
+      })
+      console.log(vendorData?.result?.Vendor_Associations[0]?.Parent_Account?.id)
+      dispatch({type:'set', payload:{
+        parentAccount:id=="new"?tempParentAccount:vendorData?.result?.Vendor_Associations[0]?.Parent_Account?.id,
+        accountList:x.data.result,
+        companyList:createCompanyList(companiesList),
+        editCompanyList:createCompanyList(companiesList)
+      }});
+    });
+    // dispatch({type:'toggle', fieldName:'companyList', payload:createCompanyList(companiesList)});
+    // dispatch({type:'toggle', fieldName:'editCompanyList', payload:createCompanyList(companiesList)});
     setRecords();
   }, [])
 

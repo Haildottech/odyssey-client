@@ -136,7 +136,7 @@ const Main = ({sessionData, chartData}) => {
       </Row>
     </Container>
     } */}
-    {/* <Uploader/> */}
+    <Uploader/>
   </div>
   )
 }

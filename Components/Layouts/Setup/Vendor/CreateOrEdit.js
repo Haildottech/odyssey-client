@@ -17,19 +17,20 @@ import SelectComp from '/Components/Shared/Form/SelectComp';
 import { useForm, useWatch, useFormContext } from "react-hook-form";
 import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 import openNotification from '/Components/Shared/Notification';
+import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
 
 const SignupSchema = yup.object().shape({
     // code: yup.string().required('Required'),
     name: yup.string().required('Required'),
     //registerDate: yup.string().required('Required'),
     //bankAuthorizeDate: yup.string(),
-    person1: yup.string().required('Required'),
+    //person1: yup.string().required('Required'),
     //person2: yup.string().required('Required'),
     //mobile1:yup.string().min(11, 'Must be 11 Digits!').max(11, 'Must be 11 Digits!').required('Required'),
     //mobile2:yup.string().min(11, 'Must be 11 Digits!').max(11, 'Must be 11 Digits!').required('Required'),
     //ntn: yup.string().required('Required'),
     //strn: yup.string().required('Required'),
-    address1: yup.string().required('Required'),
+    //address1: yup.string().required('Required'),
     //address2: yup.string().required('Required'),
     //city: yup.string().required('Required'),
     //zip: yup.string().required('Required'),
@@ -61,26 +62,35 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
             tempState.bankAuthorizeDate = moment(tempState.bankAuthorizeDate);
             tempState.companies = [1,2,3];
             //dispatch({type:'toggle', fieldName:'oldRecord', payload:tempState});
-            reset(tempState);
+            reset({...tempState, parentAccount:state.parentAccount});
         }
-        if(id==="new"){ reset(baseValues) }
-    }, [])
+        if(id==="new"){ 
+            reset({...baseValues, parentAccount:state.parentAccount}) 
+        }
+    }, [state.parentAccount])
 
     const onSubmit = async(data) => {
         let Username = Cookies.get('username')
-        data.createdBy = Username
+        data.createdBy = Username;
+        let pAccountName = '';
         dispatch({type:'toggle', fieldName:'load', payload:true});
+        state.accountList.forEach((x)=>{
+            if(x.id==data.parentAccount){
+                pAccountName =x.title
+            }
+        });
         setTimeout(async() => {
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_VENDOR, {
-                data
+                ...data, pAccountName
             }).then((x)=>{
-                if(x.data.status=='success'){
-                    openNotification('Success', `Vendor ${x.data.result.name} Created!`, 'green');
-                    refetch();
-                    Router.push(`/setup/vendor/${x.data.result.id}`);
-                }else{
-                    openNotification('Error', `An Error occured Please Try Again!`, 'red')
-                }
+                console.log(x.data)
+                // if(x.data.status=='success'){
+                //     openNotification('Success', `Vendor ${x.data.result.name} Created!`, 'green');
+                //     refetch();
+                //     Router.push(`/setup/vendor/${x.data.result.id}`);
+                // }else{
+                //     openNotification('Error', `An Error occured Please Try Again!`, 'red')
+                // }
                 dispatch({type:'toggle', fieldName:'load', payload:false});
             })
         }, 3000);
@@ -88,14 +98,20 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
 
     const onEdit = async(data) => {
         let history = "";
+        let pAccountName = ''
         let EmployeeId = Cookies.get('loginId');
         let updateDate = moment().format('MMM Do YY, h:mm:ss a');
         //history = await createHistory(Representatives, oldRecord, data, company);
         //console.log(history)
         dispatch({type:'toggle', fieldName:'load', payload:true});
+        state.accountList.forEach((x)=>{
+            if(x.id==data.parentAccount){
+                pAccountName =x.title
+            }
+        });
         setTimeout(async() => {
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_VENDOR, {
-                data, history, EmployeeId, updateDate
+                data, history, EmployeeId, updateDate, pAccountName
             }).then((x)=>{
                 if(x.data.status=='success'){
                     openNotification('Success', `Vendor ${data.name} Updated!`, 'green');
@@ -242,6 +258,22 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
         </Tabs.TabPane>
         <Tabs.TabPane tab="Account Info" key="3">
         <Row>
+            <Col md={6}>
+             <SelectSearchComp width={"100%"} register={register} name='parentAccount' 
+                control={control} label='Parent Account:' //disabled={id=="new"?false:true}
+                options={state?.accountList.map((x)=>{
+                    return {id:x.id, name:x.title}
+                })} 
+            />
+            </Col>
+            <Col></Col>
+            <Col md={6} className='pt-2'>
+                <InputComp register={register} name='name' control={control} label='Account Name' 
+                    width={"100%"} disabled={true} 
+                />
+            </Col>
+            <hr className='mt-4' />
+
             <Col md={12} className='py-1'>     
                 <SelectComp register={register} name='accountRepresentatorId' control={control} label='Account Representative:'
                     options={state.Representatives[0].records} width={200} />

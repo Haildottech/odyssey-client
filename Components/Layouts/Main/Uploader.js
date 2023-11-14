@@ -142,7 +142,7 @@ const Uploader = () => {
 
   return (
   <>
-    {false!=true && <>
+    {false==true && <>
     {/* <div className='mt-4'>
       <b>Chart Of Account Loader</b>
     </div>
@@ -161,7 +161,7 @@ const Uploader = () => {
 
     </>
     }
-    {/* <PartiesUploader/> */}
+    <PartiesUploader/>
     {/* <InvoicedUploader/> */}
     {/* <AgentInvoice /> */}
   </>

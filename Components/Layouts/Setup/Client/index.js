@@ -52,14 +52,18 @@ const initialState = {
 };
 
 const Client = ({sessionData, clientData}) => {
-  const dispatchNew = useDispatch();
-  
-  useEffect(()=>{ if(sessionData.isLoggedIn==false){Router.push('/login');} setRecords(); }, [sessionData]);
 
+  const dispatchNew = useDispatch();
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
   const { records, allClients } = state;
-  const [searchBy , setSearchBy] = useState()
+  const [searchBy , setSearchBy] = useState("name");
 
+  useEffect(()=>{ 
+    if(sessionData.isLoggedIn==false){
+      Router.push('/login');
+    } 
+    setRecords(); 
+  }, [sessionData]);
 
   const getHistory = async(recordid,type) => {
     dispatch({type:'toggle', fieldName:'load', payload:true});
@@ -75,50 +79,40 @@ const Client = ({sessionData, clientData}) => {
   }
 
   const setRecords = () => {
-    
     dispatch({type:'toggle', fieldName:'records', payload:clientData.result});
     dispatch({type:'toggle', fieldName:'allClients', payload:clientData.result});
-
   }
 
 
-const onSearch = (event) => {
-  const data = searchBy == 'name' ? allClients.filter((x) => x.name.toLowerCase().includes(event.target.value.toLowerCase())) : allClients .filter((x) => x.code.includes(event.target.value))
-  dispatch({type:'toggle', fieldName:'records', payload:data});
-}
+  const onSearch = (event) => {
+    const data = searchBy == 'name' ? allClients.filter((x) => x.name.toLowerCase().includes(event.target.value.toLowerCase())) : allClients .filter((x) => x.code.includes(event.target.value))
+    dispatch({type:'toggle', fieldName:'records', payload:data});
+  }
 
   return (
-    <div className='base-page-layout'>
+  <div className='base-page-layout'>
     <Row>
     <Col md={3}><h5>Clients</h5></Col>
-        <Col md={7} style={{display:"inline-block"}}><span>Search By :</span>
-        <Select placeholder="Search"
-    onChange={(e) => setSearchBy(e)}
-    style={{width:"150px", marginLeft:"5px"}}
-    options={[{value : "code", label:"Code"},{value : "name", label:"Name"}]}/>
-
-    <Input
-    style={{width:"290px", marginLeft:"5px"}}
-    placeholder={searchBy == 'name' ? "Type Name" : "Type Code"}
-    onChange={(e) => 
-      onSearch(e)}
+    <Col md={7} style={{display:"inline-block"}}><span>Search By :</span>
+      <Select placeholder="Search" onChange={(e) => setSearchBy(e)} style={{width:"150px", marginLeft:"5px"}}
+        options={[{value : "name", label:"Name"}]} defaultValue={"name"}
       />
-       
-        </Col>
-
-        <Col md={2}>
-        <button className='btn-custom right' 
-          onClick={()=>{
-            dispatchNew(incrementTab({"label":"Client","key":"2-7","id":"new"}));
-            Router.push(`/setup/client/new`);
-        }}>Create</button>
-        </Col>
+      <Input style={{width:"290px", marginLeft:"5px"}} placeholder={searchBy == 'name' ? "Type Name" : "Type Code"}
+        onChange={(e) => onSearch(e)}
+      />
+    </Col>
+    <Col md={2}>
+      <button className='btn-custom right' onClick={()=>{
+          dispatchNew(incrementTab({"label":"Client","key":"2-7","id":"new"}));
+          Router.push(`/setup/client/new`);
+      }}>Create</button>
+    </Col>
     </Row>
     <hr className='my-2' />
     <Row style={{maxHeight:'69vh',overflowY:'auto', overflowX:'hidden'}}>
     <Col md={12}>
       <div className='table-sm-1 mt-3' style={{maxHeight:500, overflowY:'auto'}}>
-        <Table className='tableFixHead'>
+      <Table className='tableFixHead'>
         <thead>
           <tr>
           <th>Code</th>
@@ -143,21 +137,15 @@ const onSearch = (event) => {
             <td> {x.person1} {x.mobile1}<br/> {x.person2} {x.mobile2}<br/> </td>
             <td> {x.telephone1}<br/>{x.telephone2}</td>
             <td> {x.address1?.slice(0,30)}<br/> {x.address2?.slice(0,30)}<br/> </td>
-            {/* <td>
-              Created By: <span className='blue-txt fw-5'>{x.createdBy}</span> <br/>
-              <span className='' style={{position:'relative', top:2}}>Load History</span>
-              <HistoryOutlined onClick={()=>getHistory(x.id,'client')} className='modify-edit mx-2' />
-            </td> */}
           </tr>
-          )
-        })}
+        )})}
         </tbody>
-        </Table>
+      </Table>
       </div>
     </Col>
     </Row>
-    </div>
+  </div>
   )
 }
 
-export default Client
+export default React.memo(Client)
