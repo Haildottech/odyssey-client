@@ -59,7 +59,10 @@ const MainLayout = ({children}) => {
 
   useEffect(() => {
     // When visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
-    
+    console.log(newRouter.pathname)
+    if(newRouter.pathname.includes("/reports/jobBalancing/[id]")){
+      setToggleState('5-1-1');
+    }
     if(newRouter.pathname.includes("/reports/invoiceBalancing/[id]")){
       setToggleState('5-8');
     }
@@ -142,6 +145,7 @@ const MainLayout = ({children}) => {
     invoiceBills:false,
     paymentReceipt:false,
     jobBalancing:false,
+    jobBalancingReport:false,
     accountActivity:false,
     balanceSheet:false,
     voucherSys:false,
@@ -213,6 +217,7 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='4-6'){ tempTabActive.siJob=true }
         else if(tabs.key=='4-7'){ tempTabActive.siBl=true }
         else if(tabs.key=='5-1'){ tempTabActive.jobBalancing=true }
+        else if(tabs.key=='5-1-1'){ tempTabActive.jobBalancingReport=true }
         else if(tabs.key=='5-2'){ tempTabActive.accountActivity=true }
         else if(tabs.key=='5-3'){ tempTabActive.balanceSheet=true }
         else if(tabs.key=='5-4'){ tempTabActive.jobPlReport=true }
@@ -295,6 +300,7 @@ const MainLayout = ({children}) => {
     else if(x.key=='4-6'){ Router.push(`/seaJobs/import/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='4-7'){ Router.push(`/seaJobs/import/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='5-1'){ Router.push('/reports/jobBalancing') }
+    else if(x.key=='5-1-1'){ Router.push(`/reports/jobBalancing/${setKey(x)}`) }
     else if(x.key=='5-2'){ Router.push('/reports/accountActivity') }
     else if(x.key=='5-3'){ Router.push('/reports/balanceSheet') }
     else if(x.key=='5-4'){ Router.push('/reports/jobPLReport') }

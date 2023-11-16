@@ -161,8 +161,8 @@ const Uploader = () => {
 
     </>
     }
-    <PartiesUploader/>
-    {/* <InvoicedUploader/> */}
+    {/* <PartiesUploader/> */}
+    <InvoicedUploader />
     {/* <AgentInvoice /> */}
   </>
   )

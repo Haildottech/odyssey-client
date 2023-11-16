@@ -10,10 +10,11 @@ const Sheet = ({data, payType}) => {
         paid:0.00,
         total:0.00,
         balance:0.00
-    })
+    });
+
     useEffect(() => {
         let tempData = [];
-        data.forEach((x)=>{
+        data.forEach((x) => {
             tempData.push({
                 ...x,
                 roundOff:parseFloat(x.roundOff),
@@ -23,7 +24,7 @@ const Sheet = ({data, payType}) => {
                 balance:payType=="Recievable"? 
                 (parseFloat(x.total) - parseFloat(x.recieved) + parseFloat(x.roundOff)):
                 (parseFloat(x.total) - parseFloat(x.paid) + parseFloat(x.roundOff))
-            })
+            });
         });
         setRecords(tempData)
         let sum = tempData.reduce((accumulator, x) => {
@@ -39,7 +40,7 @@ const Sheet = ({data, payType}) => {
             return accumulator + x.balance;
         }, 0);
         setTotal({total:sum, recieved:recieved, paid:paid, balance:balance})
-    }, [data])
+    }, [data]);
 
     const getAge = (date) => {
         let date1 = new Date(date);
@@ -49,8 +50,6 @@ const Sheet = ({data, payType}) => {
     }
 
     const setCommas = (val) => {
-        let result = 0.00;
-        console.log(val)
         if(val){
             return val.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
         }else{
@@ -88,13 +87,13 @@ const Sheet = ({data, payType}) => {
             <tr key={index} className='f fs-12 text-center'>
                 <td>{index + 1}</td>
                 <td>{x.invoice_No}</td>
-                <td>{x.SE_Job.jobNo}</td>
+                <td>{x?.SE_Job?.jobNo}</td>
                 <td>{moment(x.createdAt).format("MM/DD/YY")}</td>
-                <td>{x.SE_Job.fd}</td>
-                <td>{x.SE_Job.subType}</td>
-                <td>{x.SE_Job.freightType=="Collect"?"CC":"PP"}</td>
+                <td>{x?.SE_Job?.fd}</td>
+                <td>{x?.SE_Job?.subType}</td>
+                <td>{x?.SE_Job?.freightType=="Collect"?"CC":"PP"}</td>
                 <td>
-                    {x.SE_Job.SE_Equipments.map((y, j)=>{
+                    {x?.SE_Job?.SE_Equipments.map((y, j)=>{
                         return(
                             <div key={j}>
                                 {y.qty}
@@ -104,9 +103,9 @@ const Sheet = ({data, payType}) => {
                         )
                     })}
                 </td>
-                <td>{x.SE_Job.weight}</td>
-                <td>{x.SE_Job.vol}</td>
-                <td>{setCommas(x.total + x.roundOff)}</td>
+                <td>{x?.SE_Job?.weight}</td>
+                <td>{x?.SE_Job?.vol}</td>
+                <td className=''>{setCommas(x.total + x.roundOff)}</td>
                 {payType=="Recievable" &&<td>{setCommas(x.recieved)}</td>}
                 {payType!="Recievable" &&<td>{x.payType=="Payble"?setCommas(x.paid):""}</td>}
                 <td>{x.balance.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}</td>
