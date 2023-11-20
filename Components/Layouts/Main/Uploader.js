@@ -82,15 +82,23 @@ const Uploader = () => {
       }
     });
 
-    axios.post('http://localhost:8081/accounts/accountCreate',[
-      ...Assets,
-      ...Liability,
-      ...Expense,
-      ...income,
-      ...Capital
-    ]).then((x)=>{
-      console.log(x.data)
+    console.log({
+        Assets,
+        Liability,
+        Expense,
+        income,
+        Capital
     })
+
+    // axios.post('http://localhost:8081/accounts/accountCreate',[
+    //   ...Assets,
+    //   ...Liability,
+    //   ...Expense,
+    //   ...income,
+    //   ...Capital
+    // ]).then((x)=>{
+    //   console.log(x.data)
+    // })
   }
 
   const handleOpeningBalances = (data) => {
@@ -104,7 +112,7 @@ const Uploader = () => {
     let newItem = [...list];                                                                          
     // PKR USD EUR GBP AED BDT OMR CHF
     axios.post("http://localhost:8081/voucher/getChildAccountIds", {
-        list:newItem, company:3, currency:"EUR"
+        list:newItem, company:1, currency:"PKR"
     }).then((x)=>{
         console.log(x.data.result.newList)
     })
@@ -134,6 +142,7 @@ const Uploader = () => {
             companyId:`${x.companyId}`,
         })
     })
+    console.log(values)
     axios.post("http://localhost:8081/invoice/createBulkInvoices", values)
     .then((x)=>{
         console.log(x.data)
@@ -142,14 +151,14 @@ const Uploader = () => {
 
   return (
   <>
-    {false==true && <>
+    {false!=true && <>
     {/* <div className='mt-4'>
       <b>Chart Of Account Loader</b>
     </div>
     <CSVReader cssClass="csv-reader-input" onFileLoaded={handleCA} parserOptions={parserOptions} 
       inputId="ObiWan" inputName="ObiWan"
-    /> */}
-    {/* <div className='mt-4'>
+    />
+    <div className='mt-4'>
       <b>Opening Balances Upload</b>
     </div>
     <CSVReader cssClass="csv-reader-input" onFileLoaded={handleOpeningBalances} parserOptions={parserOptions} 
@@ -157,12 +166,13 @@ const Uploader = () => {
     /> */}
 
     {/* <button onClick={uploadVouchers} className='btn-custom mt-5'>Upload Opening Balances</button> */}
+
     <button onClick={uploadInvoices} className='btn-custom mt-5'>Upload Invoices</button>
 
     </>
     }
     {/* <PartiesUploader/> */}
-    <InvoicedUploader />
+    {/* <InvoicedUploader /> */}
     {/* <AgentInvoice /> */}
   </>
   )

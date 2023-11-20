@@ -140,8 +140,7 @@ const CreateOrEditComp = ({sessionData, representativeData, vendorData, id}) => 
         if(x.title=="ACCOUNT PAYABLE "){
           tempParentAccount = x.id
         }
-      })
-      console.log(vendorData?.result?.Vendor_Associations[0]?.Parent_Account?.id)
+      });
       dispatch({type:'set', payload:{
         parentAccount:id=="new"?tempParentAccount:vendorData?.result?.Vendor_Associations[0]?.Parent_Account?.id,
         accountList:x.data.result,
@@ -149,8 +148,6 @@ const CreateOrEditComp = ({sessionData, representativeData, vendorData, id}) => 
         editCompanyList:createCompanyList(companiesList)
       }});
     });
-    // dispatch({type:'toggle', fieldName:'companyList', payload:createCompanyList(companiesList)});
-    // dispatch({type:'toggle', fieldName:'editCompanyList', payload:createCompanyList(companiesList)});
     setRecords();
   }, [])
 
@@ -179,4 +176,4 @@ const CreateOrEditComp = ({sessionData, representativeData, vendorData, id}) => 
   )
 }
 
-export default CreateOrEditComp
+export default React.memo(CreateOrEditComp)

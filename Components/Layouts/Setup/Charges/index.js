@@ -5,33 +5,33 @@ import CreateOrEdit from './CreateOrEdit';
 import { EditOutlined } from '@ant-design/icons';
 
 function recordsReducer(state, action){
-    switch (action.type) {
-      case 'toggle': { 
-        return { ...state, [action.fieldName]: action.payload } 
-      }
-      case 'create': {
-        return {
-            ...state,
-            edit: false,
-            visible: true,
-        }
-      }
-      case 'edit': {
-        return {
-            ...state,
-            selectedRecord:{},
-            edit: true,
-            visible: true,
-            selectedRecord:action.payload
-        }
-      }
-      case 'modalOff': {
-        let returnVal = { ...state, visible: false, edit: false, viewHistory:false };
-        state.edit?returnVal.selectedRecord={}:null
-        return returnVal
-      }
-      default: return state 
+  switch (action.type) {
+    case 'toggle': { 
+      return { ...state, [action.fieldName]: action.payload } 
     }
+    case 'create': {
+      return {
+        ...state,
+        edit: false,
+        visible: true,
+      }
+    }
+    case 'edit': {
+      return {
+        ...state,
+        selectedRecord:{},
+        edit: true,
+        visible: true,
+        selectedRecord:action.payload
+      }
+    }
+    case 'modalOff': {
+      let returnVal = { ...state, visible: false, edit: false, viewHistory:false };
+      state.edit?returnVal.selectedRecord={}:null
+      return returnVal
+    }
+    default: return state 
+  }
 }
 
 const baseValues = {
@@ -45,7 +45,7 @@ const baseValues = {
   defaultPaybleParty:"",
   defaultRecivableParty:"",
   taxApply:"No",
-  taxPerc:"",
+  taxPerc:""
 }
 
 const initialState = {
@@ -133,4 +133,4 @@ const Charges = ({chargeData}) => {
   )
 }
 
-export default Charges
+export default React.memo(Charges)

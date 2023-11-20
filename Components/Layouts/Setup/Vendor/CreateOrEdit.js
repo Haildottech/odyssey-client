@@ -14,7 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import DateComp from '/Components/Shared/Form/DateComp';
 import InputComp from '/Components/Shared/Form/InputComp';
 import SelectComp from '/Components/Shared/Form/SelectComp';
-import { useForm, useWatch, useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import CheckGroupComp from '/Components/Shared/Form/CheckGroupComp';
 import openNotification from '/Components/Shared/Notification';
 import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
@@ -48,6 +48,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
         resolver: yupResolver(SignupSchema),
         defaultValues:state.values
     });
+
     const { refetch } = useQuery({
         queryKey:['values'],
         queryFn:getJobValues
@@ -83,14 +84,13 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
             await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_VENDOR, {
                 ...data, pAccountName
             }).then((x)=>{
-                console.log(x.data)
-                // if(x.data.status=='success'){
-                //     openNotification('Success', `Vendor ${x.data.result.name} Created!`, 'green');
-                //     refetch();
-                //     Router.push(`/setup/vendor/${x.data.result.id}`);
-                // }else{
-                //     openNotification('Error', `An Error occured Please Try Again!`, 'red')
-                // }
+                if(x.data.status=='success'){
+                    openNotification('Success', `Vendor ${x.data.result.name} Created!`, 'green');
+                    refetch();
+                    Router.push(`/setup/vendor/${x.data.result.id}`);
+                }else{
+                    openNotification('Error', `An Error occured Please Try Again!`, 'red')
+                }
                 dispatch({type:'toggle', fieldName:'load', payload:false});
             })
         }, 3000);
@@ -102,7 +102,6 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
         let EmployeeId = Cookies.get('loginId');
         let updateDate = moment().format('MMM Do YY, h:mm:ss a');
         //history = await createHistory(Representatives, oldRecord, data, company);
-        //console.log(history)
         dispatch({type:'toggle', fieldName:'load', payload:true});
         state.accountList.forEach((x)=>{
             if(x.id==data.parentAccount){
@@ -123,7 +122,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
             })
         }, 3000);
     };
-    
+
     const onError = (errors) => console.log(errors);
 
     return (
@@ -296,49 +295,8 @@ const CreateOrEdit = ({state, dispatch, baseValues, vendorData, id}) => {
         {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Submit'}
       </button>
       </form>
-      {/* <button className='btn-custom' onClick={()=>reset(
-        {
-            operations: ["Sea Import"],
-            types: ["Shipper"],
-            accountsMail: "Mehma@gmail.com",
-            infoMail: "hareem@gmail.com",
-            telephone2: "6635544",
-            telephone1: "6625544",
-            zip: "74800",
-            city: "Karachi",
-            address2: "Haseeb Flats Flats, no.15, Shah Faisal",
-            address1: "Sana Avenue Flats, no.35, North Nazimabad Block-D",
-            strn: "34572489932",
-            ntn: "123-635218-5",
-            mobile2: "03360222373",
-            mobile1: "03332209125",
-            person2: "Salik",
-            person1: "Abdullah",
-            bankAuthorizeDate: moment("Mon Dec 12 2022 14:44:19 GMT+0500"),
-            registerDate: moment("Mon Dec 12 2022 14:43:42 GMT+0500"),
-            name: "Test Vendor",
-            website: "www.infosys.com",
-            companies: [1, 2, 3 ],
-            bank: "Meezan",
-            branchName: "North Branch",
-            branchCode: "00000",
-            accountNo: "1234567890",
-            iban: "09068671839",
-            swiftCode: "BL-4123",
-            routingNo: "BDC-4827100",
-            ifscCode: "i73ddkaj",
-            micrCode: "u891729h",
-            authorizedById: "60425aa7-cb85-4561-aec9-0fd426c7d2cb",
-            accountRepresentatorId: "60425aa7-cb85-4561-aec9-0fd426c7d2cb",
-            // docRepresentatorId: "60425aa7-cb85-4561-aec9-0fd426c7d2cb",
-            // salesRepresentatorId: "60425aa7-cb85-4561-aec9-0fd426c7d2cb",
-            currency: "pkr"
-        }
-        )}>
-        reset
-      </button> */}
     </div>
     )
 }
 
-export default CreateOrEdit
+export default React.memo(CreateOrEdit)

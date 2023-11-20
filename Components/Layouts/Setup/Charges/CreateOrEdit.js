@@ -184,4 +184,4 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
   )
 }
 
-export default CreateOrEdit
+export default React.memo(CreateOrEdit)

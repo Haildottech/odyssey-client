@@ -1,48 +1,50 @@
 import { Row, Col, Table } from 'react-bootstrap';
 import React, { useEffect, useReducer, useState } from 'react';
 import Router from 'next/router';
-import { HistoryOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import axios from 'axios';
 import {Input, Select} from 'antd'
 
 function recordsReducer(state, action){
-    switch (action.type) {
-      case 'toggle': { 
-        return { ...state, [action.fieldName]: action.payload } 
-      }
-      case 'create': {
-        return {
-            ...state,
-            edit: false,
-            visible: true,
-        }
-      }
-      case 'history': {
-        return {
-            ...state,
-            edit: false,
-            viewHistory:true,
-            visible: true,
-        }
-      }
-      case 'edit': {
-        return {
-            ...state,
-            selectedRecord:{},
-            edit: true,
-            visible: true,
-            selectedRecord:action.payload
-        }
-      }
-      case 'modalOff': {
-        let returnVal = { ...state, visible: false, edit: false, viewHistory:false };
-        state.edit?returnVal.selectedRecord={}:null
-        return returnVal
-      }
-      default: return state 
+  switch (action.type) {
+    case 'set': { 
+      return { ...state, ...action.payload } 
     }
+    case 'toggle': { 
+      return { ...state, [action.fieldName]: action.payload } 
+    }
+    case 'create': {
+      return {
+        ...state,
+        edit: false,
+        visible: true
+      }
+    }
+    case 'history': {
+      return {
+        ...state,
+        edit: false,
+        viewHistory:true,
+        visible: true,
+      }
+    }
+    case 'edit': {
+      return {
+        ...state,
+        selectedRecord:{},
+        edit: true,
+        visible: true,
+        selectedRecord:action.payload
+      }
+    }
+    case 'modalOff': {
+      let returnVal = { ...state, visible: false, edit: false, viewHistory:false };
+      state.edit?returnVal.selectedRecord={}:null
+      return returnVal
+    }
+    default: return state
+  }
 }
 
 const initialState = {
@@ -52,25 +54,25 @@ const initialState = {
 };
 
 const Index = ({ clientData, sessionData}) => {
+
   const dispatchNew = useDispatch();
   
   useEffect(()=>{
-     if(sessionData.isLoggedIn==false)
-     {Router.push('/login');} 
-     setRecords(); }, 
-     [sessionData]);
+    if(sessionData.isLoggedIn==false){
+      Router.push('/login');
+    } 
+    setRecords(); 
+  }, [sessionData]);
 
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
   const { records, allClients } = state;
-  const [searchBy , setSearchBy] = useState()
-
-
-  
+  const [ searchBy , setSearchBy ] = useState("name")
 
   const setRecords = () => {
-    dispatch({type:'toggle', fieldName:'records', payload:clientData.result});
-    dispatch({type:'toggle', fieldName:'allClients', payload:clientData.result});
-
+    dispatch({type:'set', payload:{
+      records:clientData.result,
+      allClients:clientData.result
+    }});
   }
 
 
@@ -83,26 +85,22 @@ const onSearch = (event) => {
     <div className='base-page-layout'>
     <Row>
     <Col md={3}><h5>Non Gl Parties</h5></Col>
-        <Col md={7} style={{display:"inline-block"}}><span>Search By :</span>
-        <Select placeholder="Search"
-    onChange={(e) => setSearchBy(e)}
-    style={{width:"150px", marginLeft:"5px"}}
-    options={[{value : "code", label:"Code"},{value : "name", label:"Name"}]}/>
+      <Col md={7} style={{display:"inline-block"}}><span>Search By :</span>
+        <Select placeholder="Search" onChange={(e) => setSearchBy(e)} style={{width:"150px", marginLeft:"5px"}}
+          options={[{value : "code", label:"Code"}, {value : "name", label:"Name"}]} defaultValue={"name"}
+        />
+        <Input style={{width:"290px", marginLeft:"5px"}} placeholder={searchBy == 'name' ? "Type Name" : "Type Code"}
+          onChange={(e) => onSearch(e)}
+        />
+      </Col>
 
-<Input
-    style={{width:"290px", marginLeft:"5px"}}
-    placeholder={searchBy == 'name' ? "Type Name" : "Type Code"}
-    onChange={(e) => 
-      onSearch(e)}/>
-        </Col>
-
-        <Col md={2}>
+      <Col md={2}>
         <button className='btn-custom right' 
           onClick={()=>{
             // dispatchNew(incrementTab({"label":"Client","key":"2-7","id":"new"}));
             Router.push(`/setup/nonGlParties/new`);
         }}>Create</button>
-        </Col>
+      </Col>
     </Row>
     <hr className='my-2' />
     <Row style={{maxHeight:'69vh',overflowY:'auto', overflowX:'hidden'}}>
