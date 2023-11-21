@@ -25,6 +25,7 @@ const AgentInvoice = () => {
 
   const handleOpeningInvoicesReceivable = async(data) => {
     let list = [];
+    console.log(data)
     await data.forEach(async(x, i) => {
         let title = x.agent_name;
         if(x.local_amount!=null){
@@ -50,24 +51,24 @@ const AgentInvoice = () => {
                 total:receivable,
                 createdAt:`${moment(x.invoice_date).format("YYYY-MM-DD")}`,
                 receivable: receivable,
-                received: received*x.exchange_rate,
+                received: received,//*x.exchange_rate,
                 balance: (receivable) - received
             })
         }
 
     });
     console.log(list)
-    // let tempreceivable = 0;
-    // let tempreceived = 0;
-    // let tempbalance = 0;
-    // list.forEach((x)=>{
-    //     tempreceivable = tempreceivable + x.receivable
-    //     tempreceived = tempreceived + x.received
-    //     tempbalance = tempbalance + x.balance
-    // })
-    // console.log("receivable", tempreceivable);
-    // console.log("received",tempreceived);
-    // console.log("balance",tempbalance);
+    let tempreceivable = 0;
+    let tempreceived = 0;
+    let tempbalance = 0;
+    list.forEach((x)=>{
+        tempreceivable = tempreceivable + x.receivable
+        tempreceived = tempreceived + x.received
+        tempbalance = tempbalance + x.balance
+    })
+    console.log("receivable", tempreceivable);
+    console.log("received",tempreceived);
+    console.log("balance",tempbalance);
   }
   const uploadRecivableInvoices = async() => {
     let finalInvoiceList = [];

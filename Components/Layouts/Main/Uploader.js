@@ -134,7 +134,7 @@ const Uploader = () => {
         values.push({
             ...x,
             total:`${x.total}`,
-            received:`${x.received}`,
+            recieved:`${x.received}`,
             paid:`${x.paid}`,
             roundOff:`${x.roundOff}`,
             approved:`${x.approved}`,
@@ -167,13 +167,13 @@ const Uploader = () => {
 
     {/* <button onClick={uploadVouchers} className='btn-custom mt-5'>Upload Opening Balances</button> */}
 
-    <button onClick={uploadInvoices} className='btn-custom mt-5'>Upload Invoices</button>
+    {/* <button onClick={uploadInvoices} className='btn-custom mt-5'>Upload Invoices</button> */}
 
     </>
     }
     {/* <PartiesUploader/> */}
     {/* <InvoicedUploader /> */}
-    {/* <AgentInvoice /> */}
+    <AgentInvoice />
   </>
   )
 }

@@ -198,7 +198,7 @@ const JobBalancing = () => {
         dispatch(incrementTab({
           "label": "Job Balancing Report",
           "key": "5-1-1",
-          "id":`report?company=${company}&overseasagent=${overseasAgent}&representator=${representator}&currency=${currency}&jobtypes=${jobTypes}&to=${to}&from=${from}&paytype=${payType}`
+          "id":`report?company=${company}&overseasagent=${overseasAgent}&representator=${representator}&currency=${currency}&jobtypes=${jobTypes}&to=${to}&from=${from}&paytype=${payType}&party=${party}`
         }))
     }
 

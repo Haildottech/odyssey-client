@@ -98,6 +98,7 @@ const JobBalancingReport = ({result, query}) => {
                 <Table className='tableFixHead' bordered style={{fontSize:12}}>
                     <thead>
                         <tr>
+                            <th className='text-center'>#</th>
                             <th className='text-center'>Inv. No</th>
                             <th className='text-center'>Date</th>
                             <th className='text-center'>HBL/HAWB</th>
@@ -116,6 +117,7 @@ const JobBalancingReport = ({result, query}) => {
                         {records.map((x, i) => {
                             return(
                             <tr key={i}>
+                                <td style={{}}>{i+1}</td>
                                 <td style={{}}>{x.invoice_No}</td>
                                 <td style={{}}>{moment(x.createdAt).format("DD-MMM-YYYY")}</td>
                                 <td style={{}}>{x?.SE_Job?.Bl?.hbl}</td>
@@ -131,7 +133,7 @@ const JobBalancingReport = ({result, query}) => {
                             </tr>
                         )})}
                         <tr>
-                            <td colSpan={7} style={{textAlign:'right'}}><b>Total</b></td>
+                            <td colSpan={8} style={{textAlign:'right'}}><b>Total</b></td>
                             <td style={{textAlign:'right'}}>{getTotal("Recievable", records)}</td>
                             <td style={{textAlign:'right'}}>{getTotal("Payble", records)}</td>
                             <td style={{textAlign:'right'}}>{paidReceivedTotal(records)}</td>
