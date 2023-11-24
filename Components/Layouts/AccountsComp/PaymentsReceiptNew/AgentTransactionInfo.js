@@ -64,9 +64,9 @@ const AgentTransactionInfo = ({state, dispatch}) => {
                       accounts:resutlVal
                     }});
                 }}
-            >{Object.keys(state.payAccountRecord).length==0?
+            >{state.payAccountRecord!=null && Object.keys(state.payAccountRecord).length==0?
                 <span style={{color:'silver'}}>Select Account</span>:
-                <span style={{color:'black'}}>{state.payAccountRecord.title} ~ {getCompanyName(state.payAccountRecord.Parent_Account.CompanyId)}</span>
+                <span style={{color:'black'}}>{state?.payAccountRecord?.title} ~ {getCompanyName(state?.payAccountRecord?.Parent_Account?.CompanyId)}</span>
              }
             </div>
         </Col>

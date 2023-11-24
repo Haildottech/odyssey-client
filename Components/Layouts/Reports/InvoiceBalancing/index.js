@@ -1,5 +1,5 @@
 import { Row, Col, Form } from "react-bootstrap";
-import { Select, Input, Checkbox } from 'antd';
+import { Select, Input, Checkbox, Radio } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getJobValues } from '/apis/jobs';
@@ -17,6 +17,7 @@ const InvoiceBalaincing = () => {
     const [ company, setCompany ] = useState(1);
     const [ overseasAgent, setOverseasAgent ] = useState("");
     const [ representator, setRepresentator ] = useState("");
+    const [ reportType, setReportType ] = useState("viewer");
     const [ currency, setCurrency ] = useState("");
     const [ jobTypes, setJobTypes ] = useState([]);
     const [ values, setValues ] = useState();
@@ -46,12 +47,13 @@ const InvoiceBalaincing = () => {
                 "from":from,
                 "to":to,
                 "paytype":payType,
+                "report":reportType
              }
         });
         dispatch(incrementTab({
           "label": "Agt Inovice Bal Report",
           "key": "5-8",
-          "id":`report?company=${company}&overseasagent=${overseasAgent}&representator=${representator}&currency=${currency}&jobtypes=${jobTypes}&to=${to}&from=${from}&paytype=${payType}`
+          "id":`report?company=${company}&overseasagent=${overseasAgent}&representator=${representator}&currency=${currency}&jobtypes=${jobTypes}&to=${to}&from=${from}&paytype=${payType}&report=${reportType}`
         }))
     }
 
@@ -173,8 +175,15 @@ const InvoiceBalaincing = () => {
                     Job Types
                     <Checkbox.Group options={plainOptions} defaultValue={['SE']} onChange={(e)=>setJobTypes(e)} />
                 </Col>
-                <Col md={6}></Col>
-                <Col md={2}><button className='btn-custom' onClick={()=>handleSearch()}>Go</button></Col>
+                <Col md={2} style={{border:'1px solid silver', marginLeft:12}} className='py-1'>
+                    Report Types
+                    <Radio.Group onChange={(e)=>setReportType(e.target.value)} value={reportType}>
+                        <Radio value={"viewer"}>Viewer</Radio>
+                        <Radio value={"grid"}>Grid</Radio>
+                    </Radio.Group>
+                </Col>
+                <Col md={5}></Col>
+                <Col md={1}><button className='btn-custom' onClick={()=>handleSearch()}>Go</button></Col>
             </Row>
             
         </Col>

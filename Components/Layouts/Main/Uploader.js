@@ -7,6 +7,7 @@ import InvoicedUploader from "./InvoicedUploader";
 import AgentInvoice from "./AgentInvoice";
 import PartiesUploader from "./PartiesUploader";
 import invoices from "../../../jsonData/invoices.json"
+import AgentInvoiceAdv from './AgentInvoiceAdvance';
 
 const Uploader = () => {
 
@@ -173,7 +174,8 @@ const Uploader = () => {
     }
     {/* <PartiesUploader/> */}
     {/* <InvoicedUploader /> */}
-    <AgentInvoice />
+    {/* <AgentInvoice /> */}
+    {/* <AgentInvoiceAdv/> */}
   </>
   )
 }

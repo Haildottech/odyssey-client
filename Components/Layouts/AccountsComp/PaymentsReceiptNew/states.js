@@ -140,10 +140,12 @@ const getInvoices = async(state, companyId, dispatch) => {
         }
       })
       temp = temp.map((y, index)=>{
+        // console.log(y.Charge_Heads[0].ex_rate)
+        // console.log(y.ex_rate)
         let tempRemBalance = state.partytype=="agent"?
         (state.payType=="Recievable"?
-          (parseFloat(y.total)/parseFloat(y.Charge_Heads[0].ex_rate) - (parseFloat(y.recieved==null?0:y.recieved)/parseFloat(y.Charge_Heads[0].ex_rate)) - parseFloat(y.receiving==null?0:y.receiving) + parseFloat(y.roundOff)).toFixed(2):
-          (parseFloat(y.total)/parseFloat(y.Charge_Heads[0].ex_rate) - (parseFloat(y.paid==null?0:y.paid)/parseFloat(y.Charge_Heads[0].ex_rate)) - parseFloat(y.receiving==null?0:y.receiving) + parseFloat(y.roundOff)).toFixed(2)):
+          (parseFloat(y.total)/parseFloat(y.ex_rate) - (parseFloat(y.recieved==null?0:y.recieved)/parseFloat(y.ex_rate)) - parseFloat(y.receiving==null?0:y.receiving) + parseFloat(y.roundOff)).toFixed(2):
+          (parseFloat(y.total)/parseFloat(y.ex_rate) - (parseFloat(y.paid==null?0:y.paid)/parseFloat(y.ex_rate)) - parseFloat(y.receiving==null?0:y.receiving) + parseFloat(y.roundOff)).toFixed(2)):
         (state.payType=="Recievable"?
           (parseFloat(y.total) - parseFloat(y.recieved==null?0:y.recieved) - parseFloat(y.receiving==null?0:y.receiving) + parseFloat(y.roundOff)).toFixed(2):
           (parseFloat(y.total) - parseFloat(y.paid==null?0:y.paid) - parseFloat(y.receiving==null?0:y.receiving) + parseFloat(y.roundOff)).toFixed(2))
@@ -152,11 +154,11 @@ const getInvoices = async(state, companyId, dispatch) => {
           check:false,
           jobId:y.SE_Job==null?'Old Job':y.SE_Job.jobNo,
           jobSubType:y.SE_Job==null?'Old':y.SE_Job.subType,
-          ex_rate:state.partytype=="agent"?y.Charge_Heads[0].ex_rate:1.00,
+          ex_rate:state.partytype=="agent"?y.ex_rate:1.00,
           receiving:state.edit? y.Invoice_Transactions[0].amount:0.00,
           //inVbalance:(parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2),
           inVbalance:state.partytype=="agent"?
-            ((parseFloat(y.total) / parseFloat(y.Charge_Heads[0].ex_rate)) + parseFloat(y.roundOff)).toFixed(2):
+            ((parseFloat(y.total) / parseFloat(y.ex_rate)) + parseFloat(y.roundOff)).toFixed(2):
             (parseFloat(y.total) + parseFloat(y.roundOff)).toFixed(2),
           remBalance:tempRemBalance=='0'?
             0:

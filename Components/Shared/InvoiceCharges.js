@@ -502,9 +502,20 @@ return (
     <hr/>
     <div>
         <Row>
-            <Col md={3} className=" py-3">
+            <Col md={4} className=" py-3">
             <div className=''>
-                <span className='inv-label mx-2'>Total Amount:</span>
+                {invoice.currency!="PKR" && 
+                <>
+                    
+                    <span className='inv-label mx-2'>Total Amount {`(${invoice.currency})`}: </span>
+                    <span className='inv-value charges-box p-2'> 
+                        {" "}
+                        {invoice.approved=="1"? (parseFloat(invoice.total)/parseFloat(invoice.ex_rate)).toFixed(2): "Not Approved" }
+                    </span>
+                    <span className='mx-4'></span>
+                </>
+                }
+                <span className='inv-label mx-2'>Total Amount {"(Local)"}:</span>
                 <span className='inv-value charges-box p-2'> 
                     {" "}
                     {invoice.approved=="1"? (parseFloat(invoice.total) + parseFloat(invoice.roundOff)).toFixed(2): "Not Approved" }

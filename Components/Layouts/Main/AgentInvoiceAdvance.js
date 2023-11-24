@@ -1,23 +1,1228 @@
-[
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import CSVReader from 'react-csv-reader';
+import moment from 'moment';
+import { delay } from "/functions/delay"
+
+const AgentInvoiceAdv = () => {
+
+    // For receivable invoices only
+    const [finalList, setFinalList] = useState([])
+    const [failedList, setFailedList] = useState([])
+    const [invoiceIndex, setInvoiceIndex] = useState(0)
+
+    // For payble invoices only
+    const [finalListPay, setFinalListPay] = useState([])
+    const [failedListPay, setFailedListPay] = useState([])
+    const [invoiceIndexPay, setInvoiceIndexPay] = useState(0)
+
+  const parserOptions = {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    transformHeader: header => header.toLowerCase().replace(/\W/g, '_')
+  }
+
+  const handleOpeningInvoicesReceivable = async(data) => {
+    let list = [];
+    console.log(data)
+    await data.forEach(async(x, i) => {
+      let title = x.agent_name;
+      if(x.local_amount!=null){
+
+        let receivable = `${x.local_amount}`?.replaceAll(',', '');
+        receivable = parseFloat(receivable[0]=="("?`-${receivable.slice(1, -1)}`:receivable);
+
+        let received = `${x.rcvd___paid}`?.replaceAll(',', '');
+        received = parseFloat(received[0]=="("?`-${received.slice(1, -1)}`:received);
+
+        let invNo = `${x.invoice_no!=null?x.invoice_no:''}${x.inv_no!=null?x.inv_no:''}${x.bill_no!=null?x.bill_no:''}`;
+        let newInvNo = "";
+
+        if(invNo.indexOf("SNS")==0){
+          newInvNo = invNo.slice(0, 4)+"O"+invNo.slice(4);
+        } else if(invNo.indexOf("ACS")==0){
+            newInvNo = invNo.slice(0, 4)+"O"+invNo.slice(4);
+        } else {
+            newInvNo = invNo;
+        }
+        console.log(newInvNo);
+
+        await list.push({
+          companyId:1,
+          party_Name:title, 
+          currency:x.currency, 
+          operation:x.operationcode,
+          ex_rate:x.exchange_rate,
+          type:"Old Agent Bill",
+          payType:"Recievable",
+          status:received>0?'3':'1',
+          //oldInvoiceNo:`${x.invoice_no}`,
+          invoice_No:newInvNo,
+          paid:0,
+          roundOff:0,
+          approved:1,
+          total:receivable,
+          createdAt:`${moment(x.invoice_date).format("YYYY-MM-DD")}`,
+          receivable: receivable/x.exchange_rate,
+          received: received,
+          balance: (receivable/x.exchange_rate) - received
+        })
+      }
+    });
+    console.log(list)
+    let tempreceivable = 0;
+    let tempreceived = 0;
+    let tempbalance = 0;
+    list.forEach((x) => {
+      tempreceivable = tempreceivable + x.receivable
+      tempreceived = tempreceived + x.received
+      tempbalance = tempbalance + x.balance
+    })
+    console.log("receivable", tempreceivable);
+    console.log("received",tempreceived);
+    console.log("balance",tempbalance);
+  }
+
+  const uploadRecivableInvoices = async() => {
+    let finalInvoiceList = [];
+    let failedList = [];
+    let index = 0
+    recivableInvoices.forEach(async(x, i)=>{
+      await delay(3000)
+      axios.post("http://localhost:8081/invoice/uploadbulkInvoicesTest",x)
+      .then((y)=>{
+        setInvoiceIndex(i)
+        if(y.data.status=="success"){
+          console.log(y.data.result)
+          if(y.data.result){
+            finalInvoiceList.push(y.data.result)
+            setFinalList((z)=>[...z, {...x, party_Id:y.data.result}])
+          }
+        } else {
+          failedList.push(x)
+          setFailedList((z)=>[...z, x])
+        }
+      })
+    })
+  }
+
+  const handleOpeningInvoicesPayble = async(data) => {
+    let list = [];
+    console.log(data)
+    await data.forEach(async(x, i) => {
+      let title = x.agent_name;
+      if(x.local_amount!=null){
+
+        let payble = `${x.local_amount}`?.replaceAll(',', '');
+        payble = parseFloat(payble[0]=="("?`-${payble.slice(1, -1)}`:payble);
+
+        let paid = `${x.rcvd___paid}`?.replaceAll(',', '');
+        paid = parseFloat(paid[0]=="("?`-${paid.slice(1, -1)}`:paid);
+
+        let invNo = `${x.invoice_no!=null?x.invoice_no:''}${x.inv_no!=null?x.inv_no:''}${x.bill_no!=null?x.bill_no:''}`;
+        let newInvNo = "";
+
+        if(invNo.indexOf("SNS")==0){
+            newInvNo = invNo.slice(0, 4)+"O"+invNo.slice(4);
+        } else if(invNo.indexOf("ACS")==0){
+            newInvNo = invNo.slice(0, 4)+"O"+invNo.slice(4);
+        } else {
+            newInvNo = invNo;
+        }
+        //  console.log(newInvNo);
+        await list.push({
+          companyId:1,
+          party_Name:title, 
+          currency:x.currency, 
+          operation:x.operationcode,
+          ex_rate:x.exchange_rate,
+          type:"Old Agent Invoice",
+          payType:"Payble",
+          status:paid>0?'3':'1',
+          //oldInvoiceNo:`${x.invoice_no}`,
+          invoice_No:newInvNo,
+          received:0,
+          roundOff:0,
+          approved:1,
+          total:payble*-1,
+          createdAt:`${moment(x.invoice_date).format("YYYY-MM-DD")}`,
+          paid:paid*-1,
+          payble: payble*-1/x.exchange_rate,
+          balance: (payble*-1/x.exchange_rate) - paid*-1
+        })
+      }
+    });
+    console.log(list)
+    let tempreceivable = 0;
+    let tempreceived = 0;
+    let tempbalance = 0;
+    list.forEach((x) => {
+      tempreceivable = tempreceivable + x.payble
+      tempreceived = tempreceived + x.paid
+      tempbalance = tempbalance + x.balance
+    })
+    console.log("payble", tempreceivable);
+    console.log("paid",tempreceived);
+    console.log("balance",tempbalance);
+  }
+
+  const uploadPaybleInvoices = async() => {
+    let finalInvoiceList = [];
+    let failedList = [];
+    let index = 0;
+    PaybleList.forEach(async(x, i)=>{
+      await delay(3000)
+      axios.post("http://localhost:8081/invoice/uploadbulkInvoicesTest",x)
+      .then((y)=>{
+        setInvoiceIndex(i)
+        if(y.data.status=="success"){
+          console.log(y.data.result)
+          if(y.data.result){
+            finalInvoiceList.push(y.data.result)
+            setFinalList((z)=>[...z, {...x, party_Id:y.data.result}])
+          }
+        } else {
+          failedList.push(x)
+          setFailedList((z)=>[...z, x])
+        }
+      })
+    })
+  }
+
+  useEffect(() => {
+    console.log(finalList)
+  }, [finalList])
+
+  useEffect(() => {
+    console.log(failedList)
+  }, [failedList])
+
+  return (
+  <>
+  <h6>Agents</h6>
+  <hr/>
+    <div className='mt-4'><b>Make Receivable Opening Invoices</b></div>
+    <CSVReader
+      cssClass="csv-reader-input" 
+      onFileLoaded={handleOpeningInvoicesReceivable} 
+      parserOptions={parserOptions} 
+      disabled={false} 
+      inputId="ObiWan" 
+      inputName="ObiWan"
+    />
+    <button onClick={uploadRecivableInvoices} className='btn-custom mt-3'>Upload</button>
+    <hr/>
+    <div className='mt-4'><b>Make Payble Opening Invoices</b></div>
+    <CSVReader
+      cssClass="csv-reader-input" 
+      onFileLoaded={handleOpeningInvoicesPayble} 
+      parserOptions={parserOptions} 
+      disabled={false} 
+      inputId="ObiWan" 
+      inputName="ObiWan"
+    />
+    <button onClick={uploadPaybleInvoices} className='btn-custom mt-3'>Upload</button>
+  </>
+  )
+}
+
+export default AgentInvoiceAdv;
+
+let recivableInvoices = [
+    {
+        "companyId": 1,
+        "party_Name": "Blue Whale Shipping Services Co",
+        "currency": "USD",
+        "ex_rate": 282.26911,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-47/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 21170.19,
+        "createdAt": "2023-07-10",
+        "receivable": 75.00002391334992,
+        "received": 0,
+        "balance": 75.00002391334992
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 290.8,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-31/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 298070,
+        "createdAt": "2023-07-21",
+        "receivable": 1025,
+        "received": 0,
+        "balance": 1025
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / LAX",
+        "currency": "USD",
+        "ex_rate": 277.590699,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-39/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 576100.63,
+        "createdAt": "2023-07-27",
+        "receivable": 2075.3599889166317,
+        "received": 0,
+        "balance": 2075.3599889166317
+    },
+    {
+        "companyId": 1,
+        "party_Name": "CARGO S.A",
+        "currency": "USD",
+        "ex_rate": 296,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-52/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 109520,
+        "createdAt": "2023-07-30",
+        "receivable": 370,
+        "received": 0,
+        "balance": 370
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / LAX",
+        "currency": "USD",
+        "ex_rate": 286.6416,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-53/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 1335190.9,
+        "createdAt": "2023-08-01",
+        "receivable": 4658.049982975255,
+        "received": 0,
+        "balance": 4658.049982975255
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 296.7,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-56/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 217481.1,
+        "createdAt": "2023-08-04",
+        "receivable": 733,
+        "received": 0,
+        "balance": 733
+    },
     {
         "companyId": 1,
         "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
         "currency": "USD",
-        "ex_rate": 293.25,
-        "type": "Old Agent Invoice",
-        "payType": "Payble",
+        "ex_rate": 291,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
         "status": "1",
-        "invoice_No": "SNS-OAI-3/24",
-        "received": 0,
+        "invoice_No": "SNS-OAI-67/24",
+        "paid": 0,
         "roundOff": 0,
         "approved": 1,
-        "total": 17595,
-        "createdAt": "2023-07-01",
-        "paid": 0,
-        "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "total": 873000,
+        "createdAt": "2023-08-11",
+        "receivable": 3000,
+        "received": 0,
+        "balance": 3000
     },
+    {
+        "companyId": 1,
+        "party_Name": "NNR GLOBAL LOGISTICS UK LIMITED",
+        "currency": "USD",
+        "ex_rate": 289,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-82/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 23120,
+        "createdAt": "2023-08-14",
+        "receivable": 80,
+        "received": 0,
+        "balance": 80
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
+        "currency": "USD",
+        "ex_rate": 302.95,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-86/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 87249.6,
+        "createdAt": "2023-08-18",
+        "receivable": 288.00000000000006,
+        "received": 0,
+        "balance": 288.00000000000006
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 307.2,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-108/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 284160,
+        "createdAt": "2023-08-25",
+        "receivable": 925,
+        "received": 0,
+        "balance": 925
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SURGEPORT LOGISTICS PRIVATE LIMITED",
+        "currency": "USD",
+        "ex_rate": 313.5,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-121/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 77121,
+        "createdAt": "2023-08-31",
+        "receivable": 246,
+        "received": 0,
+        "balance": 246
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 315.6,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-126/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 355050,
+        "createdAt": "2023-09-08",
+        "receivable": 1125,
+        "received": 0,
+        "balance": 1125
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / ATL",
+        "currency": "USD",
+        "ex_rate": 305.538099,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-125/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 955191.54,
+        "createdAt": "2023-09-08",
+        "receivable": 3126.2600085758863,
+        "received": 0,
+        "balance": 3126.2600085758863
+    },
+    {
+        "companyId": 1,
+        "party_Name": "PRIME TRANSPORT NY",
+        "currency": "USD",
+        "ex_rate": 313,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-144/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 205641,
+        "createdAt": "2023-09-10",
+        "receivable": 657,
+        "received": 0,
+        "balance": 657
+    },
+    {
+        "companyId": 1,
+        "party_Name": "LDP LOGISTICS.",
+        "currency": "USD",
+        "ex_rate": 308.03,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "3",
+        "invoice_No": "SNS-OAI-150/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 875113.23,
+        "createdAt": "2023-09-15",
+        "receivable": 2841,
+        "received": 113.72,
+        "balance": 2727.28
+    },
+    {
+        "companyId": 1,
+        "party_Name": "LDP LOGISTICS.",
+        "currency": "USD",
+        "ex_rate": 308.03,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-151/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 997863.19,
+        "createdAt": "2023-09-15",
+        "receivable": 3239.5000162321853,
+        "received": 0,
+        "balance": 3239.5000162321853
+    },
+    {
+        "companyId": 1,
+        "party_Name": "LDP LOGISTICS.",
+        "currency": "USD",
+        "ex_rate": 308.03,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-221/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 32189.14,
+        "createdAt": "2023-09-15",
+        "receivable": 104.50001623218519,
+        "received": 0,
+        "balance": 104.50001623218519
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ARABIAN CARGO LEBANON",
+        "currency": "USD",
+        "ex_rate": 301.95,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-162/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 107192.25,
+        "createdAt": "2023-09-18",
+        "receivable": 355,
+        "received": 0,
+        "balance": 355
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
+        "currency": "USD",
+        "ex_rate": 298.85,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-153/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 86068.8,
+        "createdAt": "2023-09-19",
+        "receivable": 288,
+        "received": 0,
+        "balance": 288
+    },
+    {
+        "companyId": 1,
+        "party_Name": "NNR GLOBAL LOGISTICS UK LIMITED",
+        "currency": "USD",
+        "ex_rate": 296.8491,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-164/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 134917.91,
+        "createdAt": "2023-09-20",
+        "receivable": 454.49997995614603,
+        "received": 0,
+        "balance": 454.49997995614603
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 298.85,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-154/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 336206.25,
+        "createdAt": "2023-09-22",
+        "receivable": 1125,
+        "received": 0,
+        "balance": 1125
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 298.85,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-155/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 336206.25,
+        "createdAt": "2023-09-22",
+        "receivable": 1125,
+        "received": 0,
+        "balance": 1125
+    },
+    {
+        "companyId": 1,
+        "party_Name": "NTZ TRANSPORT LTD.",
+        "currency": "USD",
+        "ex_rate": 290.9,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-171/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 37817,
+        "createdAt": "2023-09-27",
+        "receivable": 130,
+        "received": 0,
+        "balance": 130
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 287.738399,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-202/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 132972.54,
+        "createdAt": "2023-10-03",
+        "receivable": 462.1299780013025,
+        "received": 0,
+        "balance": 462.1299780013025
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
+        "currency": "USD",
+        "ex_rate": 287.7384,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-193/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 685565.52,
+        "createdAt": "2023-10-05",
+        "receivable": 2382.600028359093,
+        "received": 0,
+        "balance": 2382.600028359093
+    },
+    {
+        "companyId": 1,
+        "party_Name": "NTZ TRANSPORT LTD.",
+        "currency": "USD",
+        "ex_rate": 293,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-188/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 38090,
+        "createdAt": "2023-10-06",
+        "receivable": 130,
+        "received": 0,
+        "balance": 130
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 289.2,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-194/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 267510,
+        "createdAt": "2023-10-06",
+        "receivable": 925,
+        "received": 0,
+        "balance": 925
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 287.738399,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-201/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 176285.81,
+        "createdAt": "2023-10-06",
+        "receivable": 612.6600085795292,
+        "received": 0,
+        "balance": 612.6600085795292
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / ATL",
+        "currency": "USD",
+        "ex_rate": 287.738399,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-199/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 325973.08,
+        "createdAt": "2023-10-12",
+        "receivable": 1132.880008830521,
+        "received": 0,
+        "balance": 1132.880008830521
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 284.28,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-209/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 262959,
+        "createdAt": "2023-10-13",
+        "receivable": 925.0000000000001,
+        "received": 0,
+        "balance": 925.0000000000001
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 287.7384,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-203/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 216681.4,
+        "createdAt": "2023-10-14",
+        "receivable": 753.0499926321964,
+        "received": 0,
+        "balance": 753.0499926321964
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
+        "currency": "USD",
+        "ex_rate": 287.7384,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-200/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 745242.46,
+        "createdAt": "2023-10-15",
+        "receivable": 2590.000013901516,
+        "received": 0,
+        "balance": 2590.000013901516
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 277.620399,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-236/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 260041.46,
+        "createdAt": "2023-10-17",
+        "receivable": 936.6799447615518,
+        "received": 0,
+        "balance": 936.6799447615518
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 285,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-242/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 578493,
+        "createdAt": "2023-10-18",
+        "receivable": 2029.8,
+        "received": 0,
+        "balance": 2029.8
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 283.7,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-219/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 290792.5,
+        "createdAt": "2023-10-20",
+        "receivable": 1025,
+        "received": 0,
+        "balance": 1025
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 277.6204,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-235/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 179786.96,
+        "createdAt": "2023-10-21",
+        "receivable": 647.5999602334698,
+        "received": 0,
+        "balance": 647.5999602334698
+    },
+    {
+        "companyId": 1,
+        "party_Name": "NNR GLOBAL LOGISTICS UK LIMITED",
+        "currency": "USD",
+        "ex_rate": 280,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-261/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 85960,
+        "createdAt": "2023-10-22",
+        "receivable": 307,
+        "received": 0,
+        "balance": 307
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SKYWAYS AIR SERVICES (P) LTD.",
+        "currency": "USD",
+        "ex_rate": 284.25,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-240/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 17765.63,
+        "createdAt": "2023-10-24",
+        "receivable": 62.50001759014952,
+        "received": 0,
+        "balance": 62.50001759014952
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 277.620399,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-232/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 148882.26,
+        "createdAt": "2023-10-24",
+        "receivable": 536.2799727119476,
+        "received": 0,
+        "balance": 536.2799727119476
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 277.6204,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-237/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 170778.18,
+        "createdAt": "2023-10-28",
+        "receivable": 615.1499673655105,
+        "received": 0,
+        "balance": 615.1499673655105
+    },
+    {
+        "companyId": 1,
+        "party_Name": "EXIM CARGO URUGUAY",
+        "currency": "USD",
+        "ex_rate": 284.25,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-239/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 308411.25,
+        "createdAt": "2023-10-31",
+        "receivable": 1085,
+        "received": 0,
+        "balance": 1085
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 277.620399,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-233/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 205991.56,
+        "createdAt": "2023-10-31",
+        "receivable": 741.9900005258619,
+        "received": 0,
+        "balance": 741.9900005258619
+    },
+    {
+        "companyId": 1,
+        "party_Name": "CANWORLD LOGISTICS INC.,",
+        "currency": "USD",
+        "ex_rate": 290,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-277/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 364820,
+        "createdAt": "2023-11-01",
+        "receivable": 1258,
+        "received": 0,
+        "balance": 1258
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 281.4738,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-273/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 183501.23,
+        "createdAt": "2023-11-04",
+        "receivable": 651.9300553017724,
+        "received": 0,
+        "balance": 651.9300553017724
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 281.473799,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-270/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 392501.15,
+        "createdAt": "2023-11-07",
+        "receivable": 1394.4500390247692,
+        "received": 0,
+        "balance": 1394.4500390247692
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 281.473799,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-269/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 98065.48,
+        "createdAt": "2023-11-09",
+        "receivable": 348.4000299438173,
+        "received": 0,
+        "balance": 348.4000299438173
+    },
+    {
+        "companyId": 1,
+        "party_Name": "NTZ TRANSPORT LTD.",
+        "currency": "USD",
+        "ex_rate": 287.89,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-255/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 24470.65,
+        "createdAt": "2023-11-10",
+        "receivable": 85.00000000000001,
+        "received": 0,
+        "balance": 85.00000000000001
+    },
+    {
+        "companyId": 1,
+        "party_Name": "LDP LOGISTICS.",
+        "currency": "USD",
+        "ex_rate": 289.85,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-291/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 486948,
+        "createdAt": "2023-11-10",
+        "receivable": 1679.9999999999998,
+        "received": 0,
+        "balance": 1679.9999999999998
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 281.473799,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-271/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 124084.92,
+        "createdAt": "2023-11-10",
+        "receivable": 440.8400371218921,
+        "received": 0,
+        "balance": 440.8400371218921
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
+        "currency": "USD",
+        "ex_rate": 281.4738,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-256/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 1954554.07,
+        "createdAt": "2023-11-12",
+        "receivable": 6944.00000994764,
+        "received": 0,
+        "balance": 6944.00000994764
+    },
+    {
+        "companyId": 1,
+        "party_Name": "ALL POINTS UNLIMITED INC",
+        "currency": "USD",
+        "ex_rate": 289.5,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-265/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 169357.5,
+        "createdAt": "2023-11-14",
+        "receivable": 585,
+        "received": 0,
+        "balance": 585
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 281.473799,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-272/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 189817.5,
+        "createdAt": "2023-11-14",
+        "receivable": 674.3700503363725,
+        "received": 0,
+        "balance": 674.3700503363725
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SCS EXPRESS PVT LTD",
+        "currency": "USD",
+        "ex_rate": 281.473799,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-275/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 75952.89,
+        "createdAt": "2023-11-16",
+        "receivable": 269.8400002765444,
+        "received": 0,
+        "balance": 269.8400002765444
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / LAX",
+        "currency": "USD",
+        "ex_rate": 289.52917,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-284/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 28952.92,
+        "createdAt": "2023-11-20",
+        "receivable": 100.00001036165025,
+        "received": 0,
+        "balance": 100.00001036165025
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / LAX",
+        "currency": "USD",
+        "ex_rate": 288.1406,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "SNS-OAI-290/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 1063368.48,
+        "createdAt": "2023-11-22",
+        "receivable": 3690.4500094745413,
+        "received": 0,
+        "balance": 3690.4500094745413
+    }
+];
+
+let PaybleList = [
     {
         "companyId": 1,
         "party_Name": "SPEEDMARK TRANSPORTATION, INC / NYK",
@@ -34,84 +1239,25 @@
         "createdAt": "2023-07-01",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
-    },
-    {
-        "companyId": 1,
-        "party_Name": "EUR SERVICES (BD) LTD",
-        "currency": "USD",
-        "ex_rate": 290,
-        "type": "Old Agent Invoice",
-        "payType": "Payble",
-        "status": "1",
-        "invoice_No": "SNS-OAI-25/24",
-        "received": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 52200,
-        "createdAt": "2023-07-01",
-        "paid": 0,
-        "payble": 180,
-        "balance": 180,
-        "party_Id": "918858790560464897"
+        "balance": 60
     },
     {
         "companyId": 1,
         "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
         "currency": "USD",
-        "ex_rate": 287.7,
-        "type": "Old Agent Invoice",
-        "payType": "Payble",
-        "status": "1",
-        "invoice_No": "SNS-OAI-16/24",
-        "received": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 17262,
-        "createdAt": "2023-07-15",
-        "paid": 0,
-        "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
-    },
-    {
-        "companyId": 1,
-        "party_Name": "SPEEDMARK TRANSPORTATION, INC / ATL",
-        "currency": "USD",
         "ex_rate": 293.25,
         "type": "Old Agent Invoice",
         "payType": "Payble",
         "status": "1",
-        "invoice_No": "SNS-OAI-1/24",
+        "invoice_No": "SNS-OAI-3/24",
         "received": 0,
         "roundOff": 0,
         "approved": 1,
         "total": 17595,
-        "createdAt": "2023-07-02",
+        "createdAt": "2023-07-01",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
-    },
-    {
-        "companyId": 1,
-        "party_Name": "SPEEDMARK TRANSPORTATION, INC / LAX",
-        "currency": "USD",
-        "ex_rate": 277,
-        "type": "Old Agent Invoice",
-        "payType": "Payble",
-        "status": "1",
-        "invoice_No": "SNS-OAI-6/24",
-        "received": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 16620,
-        "createdAt": "2023-07-07",
-        "paid": 0,
-        "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -129,8 +1275,79 @@
         "createdAt": "2023-07-01",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
+    },
+    {
+        "companyId": 1,
+        "party_Name": "EUR SERVICES (BD) LTD",
+        "currency": "USD",
+        "ex_rate": 290,
+        "type": "Old Agent Invoice",
+        "payType": "Payble",
+        "status": "1",
+        "invoice_No": "SNS-OAI-25/24",
+        "received": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 52200,
+        "createdAt": "2023-07-01",
+        "paid": 0,
+        "payble": 180,
+        "balance": 180
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / ATL",
+        "currency": "USD",
+        "ex_rate": 293.25,
+        "type": "Old Agent Invoice",
+        "payType": "Payble",
+        "status": "1",
+        "invoice_No": "SNS-OAI-1/24",
+        "received": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 17595,
+        "createdAt": "2023-07-02",
+        "paid": 0,
+        "payble": 60,
+        "balance": 60
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / LAX",
+        "currency": "USD",
+        "ex_rate": 277,
+        "type": "Old Agent Invoice",
+        "payType": "Payble",
+        "status": "1",
+        "invoice_No": "SNS-OAI-6/24",
+        "received": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 16620,
+        "createdAt": "2023-07-07",
+        "paid": 0,
+        "payble": 60,
+        "balance": 60
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
+        "currency": "USD",
+        "ex_rate": 287.7,
+        "type": "Old Agent Invoice",
+        "payType": "Payble",
+        "status": "1",
+        "invoice_No": "SNS-OAI-16/24",
+        "received": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 17262,
+        "createdAt": "2023-07-15",
+        "paid": 0,
+        "payble": 60,
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -148,8 +1365,7 @@
         "createdAt": "2023-07-15",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -167,8 +1383,7 @@
         "createdAt": "2023-07-15",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -186,8 +1401,7 @@
         "createdAt": "2023-07-15",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -205,8 +1419,7 @@
         "createdAt": "2023-07-15",
         "paid": 0,
         "payble": 729.3300159489633,
-        "balance": 729.3300159489633,
-        "party_Id": "918858793924460545"
+        "balance": 729.3300159489633
     },
     {
         "companyId": 1,
@@ -224,8 +1437,7 @@
         "createdAt": "2023-07-16",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -243,8 +1455,7 @@
         "createdAt": "2023-07-16",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -262,8 +1473,7 @@
         "createdAt": "2023-07-16",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -281,8 +1491,7 @@
         "createdAt": "2023-07-17",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -300,8 +1509,7 @@
         "createdAt": "2023-07-21",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -319,8 +1527,7 @@
         "createdAt": "2023-07-21",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -338,8 +1545,7 @@
         "createdAt": "2023-07-21",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -357,8 +1563,7 @@
         "createdAt": "2023-07-21",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -376,8 +1581,7 @@
         "createdAt": "2023-07-21",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -395,8 +1599,7 @@
         "createdAt": "2023-07-21",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -414,8 +1617,7 @@
         "createdAt": "2023-07-22",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -433,8 +1635,7 @@
         "createdAt": "2023-07-22",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -452,8 +1653,7 @@
         "createdAt": "2023-07-22",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -471,8 +1671,7 @@
         "createdAt": "2023-07-28",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -490,8 +1689,7 @@
         "createdAt": "2023-07-29",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -509,8 +1707,7 @@
         "createdAt": "2023-07-29",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -528,8 +1725,7 @@
         "createdAt": "2023-07-29",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -547,8 +1743,7 @@
         "createdAt": "2023-08-04",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -566,8 +1761,7 @@
         "createdAt": "2023-08-04",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -585,8 +1779,7 @@
         "createdAt": "2023-08-06",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -604,8 +1797,7 @@
         "createdAt": "2023-08-08",
         "paid": 0,
         "payble": 59.999983488931804,
-        "balance": 59.999983488931804,
-        "party_Id": "918858791582728193"
+        "balance": 59.999983488931804
     },
     {
         "companyId": 1,
@@ -623,8 +1815,7 @@
         "createdAt": "2023-08-08",
         "paid": 0,
         "payble": 59.999983488931804,
-        "balance": 59.999983488931804,
-        "party_Id": "918858791582728193"
+        "balance": 59.999983488931804
     },
     {
         "companyId": 1,
@@ -642,8 +1833,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -661,8 +1851,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -680,8 +1869,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -699,8 +1887,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -718,8 +1905,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -737,8 +1923,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -756,8 +1941,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -775,8 +1959,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -794,8 +1977,7 @@
         "createdAt": "2023-08-11",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -813,8 +1995,7 @@
         "createdAt": "2023-08-13",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -832,8 +2013,7 @@
         "createdAt": "2023-08-15",
         "paid": 0,
         "payble": 180,
-        "balance": 180,
-        "party_Id": "918858790560464897"
+        "balance": 180
     },
     {
         "companyId": 1,
@@ -851,8 +2031,7 @@
         "createdAt": "2023-08-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -870,8 +2049,7 @@
         "createdAt": "2023-08-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -889,8 +2067,7 @@
         "createdAt": "2023-08-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -908,8 +2085,7 @@
         "createdAt": "2023-08-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -927,8 +2103,7 @@
         "createdAt": "2023-08-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -946,8 +2121,7 @@
         "createdAt": "2023-08-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -965,8 +2139,7 @@
         "createdAt": "2023-08-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -984,8 +2157,7 @@
         "createdAt": "2023-08-25",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1003,8 +2175,7 @@
         "createdAt": "2023-08-25",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1022,8 +2193,7 @@
         "createdAt": "2023-08-25",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1041,8 +2211,7 @@
         "createdAt": "2023-08-25",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1060,8 +2229,7 @@
         "createdAt": "2023-08-25",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1079,8 +2247,7 @@
         "createdAt": "2023-08-25",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1098,8 +2265,7 @@
         "createdAt": "2023-08-26",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858796104646657"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1117,8 +2283,7 @@
         "createdAt": "2023-08-26",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858796104646657"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1136,8 +2301,7 @@
         "createdAt": "2023-08-29",
         "paid": 0,
         "payble": 60.00001619465982,
-        "balance": 60.00001619465982,
-        "party_Id": "918858791582728193"
+        "balance": 60.00001619465982
     },
     {
         "companyId": 1,
@@ -1155,8 +2319,7 @@
         "createdAt": "2023-08-29",
         "paid": 0,
         "payble": 60.00001619465982,
-        "balance": 60.00001619465982,
-        "party_Id": "918858791582728193"
+        "balance": 60.00001619465982
     },
     {
         "companyId": 1,
@@ -1174,8 +2337,7 @@
         "createdAt": "2023-08-31",
         "paid": 0,
         "payble": 60.00001488167018,
-        "balance": 60.00001488167018,
-        "party_Id": "918858791582728193"
+        "balance": 60.00001488167018
     },
     {
         "companyId": 1,
@@ -1193,8 +2355,7 @@
         "createdAt": "2023-08-31",
         "paid": 0,
         "payble": 60.00001488167018,
-        "balance": 60.00001488167018,
-        "party_Id": "918858791582728193"
+        "balance": 60.00001488167018
     },
     {
         "companyId": 1,
@@ -1212,8 +2373,7 @@
         "createdAt": "2023-09-04",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1231,8 +2391,7 @@
         "createdAt": "2023-09-04",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1250,8 +2409,7 @@
         "createdAt": "2023-09-08",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797909114881"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1269,8 +2427,7 @@
         "createdAt": "2023-09-08",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797909114881"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1288,8 +2445,7 @@
         "createdAt": "2023-09-08",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797909114881"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1307,8 +2463,7 @@
         "createdAt": "2023-09-09",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1326,8 +2481,7 @@
         "createdAt": "2023-09-10",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1345,8 +2499,7 @@
         "createdAt": "2023-09-10",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1364,8 +2517,7 @@
         "createdAt": "2023-09-10",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1383,8 +2535,7 @@
         "createdAt": "2023-09-15",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1402,8 +2553,7 @@
         "createdAt": "2023-09-15",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1421,8 +2571,7 @@
         "createdAt": "2023-09-15",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1440,8 +2589,7 @@
         "createdAt": "2023-09-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1459,8 +2607,7 @@
         "createdAt": "2023-09-18",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1478,8 +2625,7 @@
         "createdAt": "2023-09-18",
         "paid": 0,
         "payble": 33.63,
-        "balance": 33.63,
-        "party_Id": "918858791183646721"
+        "balance": 33.63
     },
     {
         "companyId": 1,
@@ -1497,8 +2643,7 @@
         "createdAt": "2023-09-22",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858796104646657"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1516,8 +2661,7 @@
         "createdAt": "2023-09-22",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858796104646657"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1535,8 +2679,7 @@
         "createdAt": "2023-09-22",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797909114881"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1554,8 +2697,7 @@
         "createdAt": "2023-09-22",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797909114881"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1573,8 +2715,7 @@
         "createdAt": "2023-09-22",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797909114881"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1592,8 +2733,7 @@
         "createdAt": "2023-09-22",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797909114881"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -1611,8 +2751,7 @@
         "createdAt": "2023-09-25",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1630,8 +2769,7 @@
         "createdAt": "2023-09-25",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1649,8 +2787,7 @@
         "createdAt": "2023-09-26",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858792240939009"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1668,8 +2805,7 @@
         "createdAt": "2023-09-27",
         "paid": 0,
         "payble": 1635.0000000000002,
-        "balance": 1635.0000000000002,
-        "party_Id": "918858794339205121"
+        "balance": 1635.0000000000002
     },
     {
         "companyId": 1,
@@ -1687,8 +2823,7 @@
         "createdAt": "2023-09-29",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1706,8 +2841,7 @@
         "createdAt": "2023-09-29",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1725,8 +2859,7 @@
         "createdAt": "2023-09-29",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1744,8 +2877,7 @@
         "createdAt": "2023-10-02",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1763,8 +2895,7 @@
         "createdAt": "2023-10-02",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1782,8 +2913,7 @@
         "createdAt": "2023-10-03",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797926252545"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1801,8 +2931,7 @@
         "createdAt": "2023-10-03",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1820,8 +2949,7 @@
         "createdAt": "2023-10-03",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1839,8 +2967,7 @@
         "createdAt": "2023-10-06",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1858,8 +2985,7 @@
         "createdAt": "2023-10-06",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1877,8 +3003,7 @@
         "createdAt": "2023-10-06",
         "paid": 0,
         "payble": 1635,
-        "balance": 1635,
-        "party_Id": "918858794339205121"
+        "balance": 1635
     },
     {
         "companyId": 1,
@@ -1896,8 +3021,7 @@
         "createdAt": "2023-10-07",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1915,8 +3039,7 @@
         "createdAt": "2023-10-07",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1934,8 +3057,7 @@
         "createdAt": "2023-10-10",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1953,8 +3075,7 @@
         "createdAt": "2023-10-10",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1972,8 +3093,7 @@
         "createdAt": "2023-10-10",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858791582728193"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -1991,8 +3111,7 @@
         "createdAt": "2023-10-10",
         "paid": 0,
         "payble": 60.00000485433005,
-        "balance": 60.00000485433005,
-        "party_Id": "918858791582728193"
+        "balance": 60.00000485433005
     },
     {
         "companyId": 1,
@@ -2010,8 +3129,7 @@
         "createdAt": "2023-10-13",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2029,8 +3147,7 @@
         "createdAt": "2023-10-13",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2048,8 +3165,7 @@
         "createdAt": "2023-10-13",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2067,8 +3183,7 @@
         "createdAt": "2023-10-13",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2086,8 +3201,7 @@
         "createdAt": "2023-10-15",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858796104646657"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2105,8 +3219,7 @@
         "createdAt": "2023-10-17",
         "paid": 0,
         "payble": 0.8000132555100417,
-        "balance": 0.8000132555100417,
-        "party_Id": "918858776449351681"
+        "balance": 0.8000132555100417
     },
     {
         "companyId": 1,
@@ -2124,8 +3237,7 @@
         "createdAt": "2023-10-17",
         "paid": 0,
         "payble": 2175,
-        "balance": 2175,
-        "party_Id": "918858797496041473"
+        "balance": 2175
     },
     {
         "companyId": 1,
@@ -2143,8 +3255,7 @@
         "createdAt": "2023-10-18",
         "paid": 0,
         "payble": 59.999994346097154,
-        "balance": 59.999994346097154,
-        "party_Id": "918858791582728193"
+        "balance": 59.999994346097154
     },
     {
         "companyId": 1,
@@ -2162,8 +3273,7 @@
         "createdAt": "2023-10-18",
         "paid": 0,
         "payble": 59.999994346097154,
-        "balance": 59.999994346097154,
-        "party_Id": "918858791582728193"
+        "balance": 59.999994346097154
     },
     {
         "companyId": 1,
@@ -2181,8 +3291,7 @@
         "createdAt": "2023-10-18",
         "paid": 0,
         "payble": 59.99999443231074,
-        "balance": 59.99999443231074,
-        "party_Id": "918858797926252545"
+        "balance": 59.99999443231074
     },
     {
         "companyId": 1,
@@ -2200,8 +3309,7 @@
         "createdAt": "2023-10-18",
         "paid": 0,
         "payble": 1428.45,
-        "balance": 1428.45,
-        "party_Id": "918858798155005953"
+        "balance": 1428.45
     },
     {
         "companyId": 1,
@@ -2219,8 +3327,7 @@
         "createdAt": "2023-10-20",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2238,8 +3345,7 @@
         "createdAt": "2023-10-20",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797909114881"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2257,8 +3363,7 @@
         "createdAt": "2023-10-20",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2276,8 +3381,7 @@
         "createdAt": "2023-10-20",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2295,8 +3399,7 @@
         "createdAt": "2023-10-22",
         "paid": 0,
         "payble": 60.00000000000001,
-        "balance": 60.00000000000001,
-        "party_Id": "918858796104646657"
+        "balance": 60.00000000000001
     },
     {
         "companyId": 1,
@@ -2314,8 +3417,7 @@
         "createdAt": "2023-10-22",
         "paid": 0,
         "payble": 60.00000000000001,
-        "balance": 60.00000000000001,
-        "party_Id": "918858797909114881"
+        "balance": 60.00000000000001
     },
     {
         "companyId": 1,
@@ -2333,8 +3435,7 @@
         "createdAt": "2023-10-22",
         "paid": 0,
         "payble": 60.00000000000001,
-        "balance": 60.00000000000001,
-        "party_Id": "918858796104646657"
+        "balance": 60.00000000000001
     },
     {
         "companyId": 1,
@@ -2352,8 +3453,7 @@
         "createdAt": "2023-10-22",
         "paid": 0,
         "payble": 50.00000000000001,
-        "balance": 50.00000000000001,
-        "party_Id": "918858797516390401"
+        "balance": 50.00000000000001
     },
     {
         "companyId": 1,
@@ -2371,8 +3471,7 @@
         "createdAt": "2023-10-24",
         "paid": 0,
         "payble": 275,
-        "balance": 275,
-        "party_Id": "918858798541340673"
+        "balance": 275
     },
     {
         "companyId": 1,
@@ -2390,8 +3489,7 @@
         "createdAt": "2023-10-29",
         "paid": 0,
         "payble": 59.99998935058255,
-        "balance": 59.99998935058255,
-        "party_Id": "918858791582728193"
+        "balance": 59.99998935058255
     },
     {
         "companyId": 1,
@@ -2409,8 +3507,7 @@
         "createdAt": "2023-10-29",
         "paid": 0,
         "payble": 59.99998935058255,
-        "balance": 59.99998935058255,
-        "party_Id": "918858791582728193"
+        "balance": 59.99998935058255
     },
     {
         "companyId": 1,
@@ -2428,8 +3525,7 @@
         "createdAt": "2023-10-29",
         "paid": 0,
         "payble": 59.99998935058255,
-        "balance": 59.99998935058255,
-        "party_Id": "918858791582728193"
+        "balance": 59.99998935058255
     },
     {
         "companyId": 1,
@@ -2447,8 +3543,7 @@
         "createdAt": "2023-10-29",
         "paid": 0,
         "payble": 59.99998935058255,
-        "balance": 59.99998935058255,
-        "party_Id": "918858791582728193"
+        "balance": 59.99998935058255
     },
     {
         "companyId": 1,
@@ -2466,8 +3561,7 @@
         "createdAt": "2023-10-30",
         "paid": 0,
         "payble": 225.00000000000003,
-        "balance": 225.00000000000003,
-        "party_Id": "918858790108069889"
+        "balance": 225.00000000000003
     },
     {
         "companyId": 1,
@@ -2485,8 +3579,7 @@
         "createdAt": "2023-10-31",
         "paid": 0,
         "payble": 100,
-        "balance": 100,
-        "party_Id": "918858797926252545"
+        "balance": 100
     },
     {
         "companyId": 1,
@@ -2504,8 +3597,7 @@
         "createdAt": "2023-11-01",
         "paid": 0,
         "payble": 59.99999097497077,
-        "balance": 59.99999097497077,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999097497077
     },
     {
         "companyId": 1,
@@ -2523,8 +3615,7 @@
         "createdAt": "2023-11-01",
         "paid": 0,
         "payble": 59.99999378091253,
-        "balance": 59.99999378091253,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999378091253
     },
     {
         "companyId": 1,
@@ -2542,8 +3633,7 @@
         "createdAt": "2023-11-01",
         "paid": 0,
         "payble": 192,
-        "balance": 192,
-        "party_Id": "918858790560464897"
+        "balance": 192
     },
     {
         "companyId": 1,
@@ -2561,8 +3651,7 @@
         "createdAt": "2023-11-03",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797997719553"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -2580,8 +3669,7 @@
         "createdAt": "2023-11-03",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797909114881"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -2599,8 +3687,7 @@
         "createdAt": "2023-11-04",
         "paid": 0,
         "payble": 7.800015489896396,
-        "balance": 7.800015489896396,
-        "party_Id": "918858776449351681"
+        "balance": 7.800015489896396
     },
     {
         "companyId": 1,
@@ -2618,8 +3705,7 @@
         "createdAt": "2023-11-05",
         "paid": 0,
         "payble": 60.00001269821383,
-        "balance": 60.00001269821383,
-        "party_Id": "918858791582728193"
+        "balance": 60.00001269821383
     },
     {
         "companyId": 1,
@@ -2637,8 +3723,7 @@
         "createdAt": "2023-11-05",
         "paid": 0,
         "payble": 60.00001269821383,
-        "balance": 60.00001269821383,
-        "party_Id": "918858791582728193"
+        "balance": 60.00001269821383
     },
     {
         "companyId": 1,
@@ -2656,27 +3741,7 @@
         "createdAt": "2023-11-05",
         "paid": 0,
         "payble": 60.00001269821383,
-        "balance": 60.00001269821383,
-        "party_Id": "918858791582728193"
-    },
-    {
-        "companyId": 1,
-        "party_Name": "SPEEDMARK TRANSPORTATION, INC / LAX",
-        "currency": "USD",
-        "ex_rate": 289.43153,
-        "type": "Old Agent Invoice",
-        "payType": "Payble",
-        "status": "1",
-        "invoice_No": "SNS-OAI-252/24",
-        "received": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 17365.89,
-        "createdAt": "2023-11-07",
-        "paid": 0,
-        "payble": 59.99999378091253,
-        "balance": 59.99999378091253,
-        "party_Id": "918858791582728193"
+        "balance": 60.00001269821383
     },
     {
         "companyId": 1,
@@ -2694,8 +3759,25 @@
         "createdAt": "2023-11-05",
         "paid": 0,
         "payble": 60.00000000000001,
-        "balance": 60.00000000000001,
-        "party_Id": "918858796104646657"
+        "balance": 60.00000000000001
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC / LAX",
+        "currency": "USD",
+        "ex_rate": 289.43153,
+        "type": "Old Agent Invoice",
+        "payType": "Payble",
+        "status": "1",
+        "invoice_No": "SNS-OAI-252/24",
+        "received": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 17365.89,
+        "createdAt": "2023-11-07",
+        "paid": 0,
+        "payble": 59.99999378091253,
+        "balance": 59.99999378091253
     },
     {
         "companyId": 1,
@@ -2713,8 +3795,7 @@
         "createdAt": "2023-11-07",
         "paid": 0,
         "payble": 59.99999378091253,
-        "balance": 59.99999378091253,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999378091253
     },
     {
         "companyId": 1,
@@ -2732,8 +3813,7 @@
         "createdAt": "2023-11-07",
         "paid": 0,
         "payble": 7.800015489896396,
-        "balance": 7.800015489896396,
-        "party_Id": "918858776449351681"
+        "balance": 7.800015489896396
     },
     {
         "companyId": 1,
@@ -2751,8 +3831,7 @@
         "createdAt": "2023-11-08",
         "paid": 0,
         "payble": 60.00001236128152,
-        "balance": 60.00001236128152,
-        "party_Id": "918858797909114881"
+        "balance": 60.00001236128152
     },
     {
         "companyId": 1,
@@ -2770,8 +3849,7 @@
         "createdAt": "2023-11-08",
         "paid": 0,
         "payble": 60.00001236128152,
-        "balance": 60.00001236128152,
-        "party_Id": "918858797909114881"
+        "balance": 60.00001236128152
     },
     {
         "companyId": 1,
@@ -2789,8 +3867,7 @@
         "createdAt": "2023-11-10",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2808,8 +3885,7 @@
         "createdAt": "2023-11-10",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858797997719553"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -2827,8 +3903,7 @@
         "createdAt": "2023-11-11",
         "paid": 0,
         "payble": 59.99999999999999,
-        "balance": 59.99999999999999,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999999999999
     },
     {
         "companyId": 1,
@@ -2846,8 +3921,7 @@
         "createdAt": "2023-11-14",
         "paid": 0,
         "payble": 59.99998687671883,
-        "balance": 59.99998687671883,
-        "party_Id": "918858791582728193"
+        "balance": 59.99998687671883
     },
     {
         "companyId": 1,
@@ -2865,8 +3939,7 @@
         "createdAt": "2023-11-14",
         "paid": 0,
         "payble": 60,
-        "balance": 60,
-        "party_Id": "918858797997719553"
+        "balance": 60
     },
     {
         "companyId": 1,
@@ -2884,8 +3957,7 @@
         "createdAt": "2023-11-15",
         "paid": 0,
         "payble": 59.999985115611445,
-        "balance": 59.999985115611445,
-        "party_Id": "918858797909114881"
+        "balance": 59.999985115611445
     },
     {
         "companyId": 1,
@@ -2903,8 +3975,7 @@
         "createdAt": "2023-11-15",
         "paid": 0,
         "payble": 59.999985115611445,
-        "balance": 59.999985115611445,
-        "party_Id": "918858797909114881"
+        "balance": 59.999985115611445
     },
     {
         "companyId": 1,
@@ -2922,8 +3993,7 @@
         "createdAt": "2023-11-15",
         "paid": 0,
         "payble": 59.999985115611445,
-        "balance": 59.999985115611445,
-        "party_Id": "918858797909114881"
+        "balance": 59.999985115611445
     },
     {
         "companyId": 1,
@@ -2941,8 +4011,7 @@
         "createdAt": "2023-11-19",
         "paid": 0,
         "payble": 59.99999930922331,
-        "balance": 59.99999930922331,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999930922331
     },
     {
         "companyId": 1,
@@ -2960,8 +4029,7 @@
         "createdAt": "2023-11-19",
         "paid": 0,
         "payble": 59.99999930922331,
-        "balance": 59.99999930922331,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999930922331
     },
     {
         "companyId": 1,
@@ -2979,8 +4047,7 @@
         "createdAt": "2023-11-19",
         "paid": 0,
         "payble": 59.99999930922331,
-        "balance": 59.99999930922331,
-        "party_Id": "918858791582728193"
+        "balance": 59.99999930922331
     },
     {
         "companyId": 1,
@@ -2998,27 +4065,7 @@
         "createdAt": "2023-11-19",
         "paid": 0,
         "payble": 278.99999999999994,
-        "balance": 278.99999999999994,
-        "party_Id": "918858790231277569"
-    },
-    {
-        "companyId": 1,
-        "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
-        "currency": "USD",
-        "ex_rate": 296.38582,
-        "type": "Old Agent Invoice",
-        "payType": "Payble",
-        "status": "1",
-        "invoice_No": "SNS-OAI-285/24",
-        "received": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 17783.15,
-        "createdAt": "2023-11-22",
-        "paid": 0,
-        "payble": 60.00000269918446,
-        "balance": 60.00000269918446,
-        "party_Id": "918858797909114881"
+        "balance": 278.99999999999994
     },
     {
         "companyId": 1,
@@ -3036,8 +4083,25 @@
         "createdAt": "2023-11-21",
         "paid": 0,
         "payble": 3010.3000172920633,
-        "balance": 3010.3000172920633,
-        "party_Id": "919352771184295937"
+        "balance": 3010.3000172920633
+    },
+    {
+        "companyId": 1,
+        "party_Name": "SPEEDMARK TRANSPORTATION, INC.",
+        "currency": "USD",
+        "ex_rate": 296.38582,
+        "type": "Old Agent Invoice",
+        "payType": "Payble",
+        "status": "1",
+        "invoice_No": "SNS-OAI-285/24",
+        "received": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 17783.15,
+        "createdAt": "2023-11-22",
+        "paid": 0,
+        "payble": 60.00000269918446,
+        "balance": 60.00000269918446
     },
     {
         "companyId": 1,
@@ -3055,8 +4119,7 @@
         "createdAt": "2023-11-22",
         "paid": 0,
         "payble": 60.00000269918446,
-        "balance": 60.00000269918446,
-        "party_Id": "918858797909114881"
+        "balance": 60.00000269918446
     },
     {
         "companyId": 1,
@@ -3074,8 +4137,7 @@
         "createdAt": "2023-11-22",
         "paid": 0,
         "payble": 60.00000269918446,
-        "balance": 60.00000269918446,
-        "party_Id": "918858797909114881"
+        "balance": 60.00000269918446
     },
     {
         "companyId": 1,
@@ -3093,7 +4155,6 @@
         "createdAt": "2023-11-22",
         "paid": 0,
         "payble": 60.00000269918446,
-        "balance": 60.00000269918446,
-        "party_Id": "918858797997719553"
+        "balance": 60.00000269918446
     }
-]
+];

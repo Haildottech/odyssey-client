@@ -59,7 +59,6 @@ const MainLayout = ({children}) => {
 
   useEffect(() => {
     // When visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
-    console.log(newRouter.query)
     if(newRouter.pathname.includes("/reports/jobBalancing/[id]")){
       setToggleState('5-1-1');
     }

@@ -1,10 +1,11 @@
 import moment from 'moment';
 import ReactToPrint from 'react-to-print';
 import { Spinner, Table } from "react-bootstrap";
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import PrintTopHeader from '../../../Shared/PrintTopHeader';
 import Cookies from "js-cookie";
 import { AiFillPrinter } from "react-icons/ai";
+import { AgGridReact } from 'ag-grid-react';
 
 const InvoiceBalancingReport = ({result, query}) => {
 
@@ -69,14 +70,27 @@ const InvoiceBalancingReport = ({result, query}) => {
     async function getValues(value){
         if(value.status=="success") {
             let newArray = [...value.result];
-            await newArray.forEach((y)=>{
+            await newArray.forEach((y, i)=>{
+                y.no = i+1;
+
+                y.createdAt = moment(y.createdAt).format("DD-MMM-YYYY");
+                y.blHbl = y?.SE_Job?.Bl?.hbl||'';
+                y.fd = y?.SE_Job?.fd||'';
+                y.ppcc = y?.SE_Job?.freightType=="Prepaid"?"PP":"CC"||'';
+                
+                y.debit =  y.payType=="Recievable"?commas(y.total/y.ex_rate):"-";
+                y.credit = y.payType!="Recievable"?commas(y.total/y.ex_rate):"-";
+
+                y.paidRec = commas(y.payType=="Recievable"?y.recieved:y.paid)
+
                 y.balance = y.payType=="Recievable"?
                     (parseFloat(y.total) + parseFloat(y.roundOff) - parseFloat(y.recieved))/ parseFloat(y.ex_rate):
                     (parseFloat(y.total)+parseFloat(y.roundOff) - parseFloat(y.paid)) / parseFloat(y.ex_rate);
                 y.total = (parseFloat(y.total) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
                 y.paid = (parseFloat(y.paid) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
                 y.recieved = (parseFloat(y.recieved) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
-                y.age = getAge(y.createdAt)
+                y.age = getAge(y.createdAt);
+                y.balance = y.payType!="Recievable"?`(${commas(y.balance)})`:commas(y.balance)
             })
             setRecords(newArray);
         } else {
@@ -98,6 +112,7 @@ const InvoiceBalancingReport = ({result, query}) => {
                 <Table className='tableFixHead' bordered style={{fontSize:12}}>
                     <thead>
                         <tr>
+                            <th className='text-center'>#</th>
                             <th className='text-center'>Inv. No</th>
                             <th className='text-center'>Date</th>
                             <th className='text-center'>HBL/HAWB</th>
@@ -116,22 +131,23 @@ const InvoiceBalancingReport = ({result, query}) => {
                         {records.map((x, i) => {
                             return(
                             <tr key={i}>
+                                <td style={{}}>{i+1}</td>
                                 <td style={{}}>{x.invoice_No}</td>
-                                <td style={{}}>{moment(x.createdAt).format("DD-MMM-YYYY")}</td>
-                                <td style={{}}>{x?.SE_Job?.Bl?.hbl}</td>
+                                <td style={{}}>{x.createdAt}</td>
+                                <td style={{}}>{x.blHbl}</td>
                                 <td style={{}}>{x.party_Name}</td>
-                                <td style={{}}>{x?.SE_Job?.fd}</td>
-                                <td style={{}}>{x?.SE_Job?.freightType=="Prepaid"?"PP":"CC"}</td>
+                                <td style={{}}>{x.fd}</td>
+                                <td style={{}}>{x.ppcc}</td>
                                 <td style={{}}>{x.currency}</td>
-                                <td style={{}} >{x.payType=="Recievable"?commas(x.total):"-"}</td>
-                                <td style={{}} >{x.payType!="Recievable"?commas(x.total):"-"}</td>
-                                <td style={{}} >{commas(x.payType=="Recievable"?x.recieved:x.paid)}</td>
-                                <td style={{}} >{x.payType!="Recievable"?`(${commas(x.balance)})`:commas(x.balance)}</td>
+                                <td style={{}} >{x.debit}</td>
+                                <td style={{}} >{x.credit}</td>
+                                <td style={{}} >{x.paidRec}</td>
+                                <td style={{}} >{x.balance}</td>
                                 <td style={{}}>{x.age}</td>
                             </tr>
                         )})}
                         <tr>
-                            <td colSpan={7} style={{textAlign:'right'}}><b>Total</b></td>
+                            <td colSpan={8} style={{textAlign:'right'}}><b>Total</b></td>
                             <td style={{textAlign:'right'}}>{getTotal("Recievable", records)}</td>
                             <td style={{textAlign:'right'}}>{getTotal("Payble", records)}</td>
                             <td style={{textAlign:'right'}}>{paidReceivedTotal(records)}</td>
@@ -142,18 +158,53 @@ const InvoiceBalancingReport = ({result, query}) => {
                 </Table>
                 </div>
             </>
-            }
-            {records.length==0 && <>No Similar Record</>}
-        </div>
-        }
-        {load && <div className='text-center py-5 my-5'> <Spinner/> </div>}
+            }{records.length==0 && <>No Similar Record</>}
+        </div>} {load && <div className='text-center py-5 my-5'> <Spinner/> </div>}
       </>
     )}
+    const gridRef = useRef(); 
+    const [columnDefs, setColumnDefs] = useState([
+        {headerName: '#', field:'no', width: 50 },
+        {headerName: 'Inv. No', field:'invoice_No', filter: true},
+        {headerName: 'Date', field:'createdAt', filter: true},
+        {headerName: 'HBL/HAWB', field:'blHbl', filter: true},
+        {headerName: 'Name', field:'party_Name', width:224, filter: true},
+        {headerName: 'F. Dest', field:'fd', filter: true},
+        {headerName: 'F/Tp', field:'ppcc', filter: true},
+        {headerName: 'Curr', field:'currency', filter: true},
+        {headerName: 'Debit', field:'debit', filter: true},
+        {headerName: 'Credit', field:'credit', filter: true},
+        {headerName: 'Paid/Rcvd', field:'paidRec', filter: true},
+        {headerName: 'Balance', field:'balance', filter: true},
+        {headerName: 'Age', field:'age', filter: true},
+    ]);
+    const defaultColDef = useMemo( ()=> ({
+        sortable: true,
+        resizable: true,
+    }));
+
+    const getRowHeight = useCallback(() => {
+        return 38;
+    }, []);
 
   return (
     <div className='base-page-layout'>
-    <ReactToPrint content={()=>inputRef} trigger={()=><AiFillPrinter className="blue-txt cur fl-r" size={30} />} />
-    <TableComponent  />
+    {query.report=="viewer" &&<ReactToPrint content={()=>inputRef} trigger={()=><AiFillPrinter className="blue-txt cur fl-r" size={30} />} />}
+    {query.report=="viewer" && <TableComponent  />}
+    {query.report!="viewer" &&
+        <div className="ag-theme-alpine" style={{width:"100%", height:'72vh'}}>
+        <AgGridReact
+            ref={gridRef} // Ref for accessing Grid's API
+            rowData={records} // Row Data for Rows
+            columnDefs={columnDefs} // Column Defs for Columns
+            defaultColDef={defaultColDef} // Default Column Properties
+            animateRows={true} // Optional - set to 'true' to have rows animate when sorted
+            rowSelection='multiple' // Options - allows click selection of rows
+            getRowHeight={getRowHeight}
+        />
+    </div>
+    }
+
     <div style={{display:'none'}}>
       <div className="pt-5 px-3" ref={(response)=>(inputRef=response)}>
         <TableComponent size={'sm'} />
