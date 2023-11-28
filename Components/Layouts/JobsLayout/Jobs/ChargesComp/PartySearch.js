@@ -13,18 +13,18 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
   const getClients = async() => {
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CLIENTS)
     .then((x) => {
-        dispatch({type:'toggle', fieldName:'clientParties', payload:x.data.result});
+      dispatch({type:'toggle', fieldName:'clientParties', payload:x.data.result});
     })
   }
   
   const getVendors = async() => {
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_VENDOR_FOR_PARTY_SEARCH)
     .then((x) => {
-        let data = [];
-        x.data.result.forEach(x => {
-          data.push({...x, check:false})
-        });
-        dispatch({type:'toggle', fieldName:'vendorParties', payload:data});
+      let data = [];
+      x.data.result.forEach(x => {
+        data.push({...x, check:false})
+      });
+      dispatch({type:'toggle', fieldName:'vendorParties', payload:data});
     })
   }
 
@@ -34,7 +34,8 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
   }, [])
 
   const RenderData = ((props) => {
-    return(<>
+    return(
+    <>
       {props.data.filter((x)=>{
         if(
           x.name.toLowerCase().includes(searchTerm.toLowerCase())||
@@ -94,7 +95,9 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
         </td>
         <td className='pt-1 text-center'><Tag color="cyan" className='mb-1'>{x.mobile1}</Tag></td>
       </tr>
-      )})}</>)
+      )})}
+    </>
+    )
   })
 
   return(

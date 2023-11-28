@@ -32,8 +32,11 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         }
         return value
     }
+    const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
 
     useEffect(() => {
+        console.log(invoice.SE_Job)
+        console.log(invoice.operation)
     }, [invoice])
     
     const paraStyles = { lineHeight:1.2, fontSize:11 }
@@ -155,7 +158,13 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
                 </Col>
                 <Col md={5}>
                     <div style={heading}>{(invoice.operation=="SE"||invoice.operation=="SI")?"Sailing Date":"Departure Date"}</div>
-                    <div style={paraStyles}>{moment(invoice.SE_Job?.Voyage?.exportSailDate).format("DD-MMM-YYYY")}</div>
+                    <div style={paraStyles}>
+                        {
+                            (invoice.operation=="SE"||invoice.operation=="SI")?
+                            moment(invoice.SE_Job?.Voyage?.exportSailDate).format("DD-MMM-YYYY"):
+                            moment(invoice.SE_Job?.departureDate).format("DD-MMM-YYYY")
+                        }
+                    </div>
                 </Col>
             </Row>
         </Col>
@@ -328,9 +337,18 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
     <Col md={4} style={{fontSize:10}}><b className='fw-8'>Total Discount</b> <span style={{float:'right'}} className='px-3'>0.00</span></Col>
     <Col md={4} style={{fontSize:10}}><b className='fw-8'>Tax Amount</b>     <span style={{float:'right'}} className='px-3'>0.00</span></Col>
     <Col md={4} style={{fontSize:10}}>
-        <div><b className='fw-8'>Invoice Total {"("}PKR{")"}</b> <span style={{float:'right'}}>{(calculateTotal(records))}</span></div>
+        <div><b className='fw-8'>Invoice Total {"("}PKR{")"}</b>
+            <span style={{float:'right'}}>
+                {commas((calculateTotal(records)/invoice.ex_rate).toFixed(2))}
+            </span>
+        </div>
         <div><b className='fw-8'>Round Off </b> <span style={{float:'right'}} >{invoice.roundOff}</span></div>
-        <div><b className='fw-8'>Total Amount </b> <span style={{float:'right'}} >{((parseFloat(invoice.total) + parseFloat(invoice.roundOff)).toFixed(2))}</span></div>
+        <div>
+            <b className='fw-8'>Total Amount </b>
+            <span style={{float:'right'}}>
+                { commas(((parseFloat(invoice.total) + parseFloat(invoice.roundOff))/invoice.ex_rate).toFixed(2)) }
+            </span>
+        </div>
     </Col>
     </Row>
     <Row className='mx-0'>

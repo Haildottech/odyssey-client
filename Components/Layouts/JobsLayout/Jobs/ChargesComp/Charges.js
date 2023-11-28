@@ -11,6 +11,7 @@ import React, { useEffect } from 'react';
 import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
 import { useQueryClient } from '@tanstack/react-query';
+import { delay } from "/functions/delay";
 
 const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, remove, control, register, companyId, operationType, allValues, chargesData}) => {
     
@@ -73,12 +74,13 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <div className='div-btn-custom text-center mx-0 py-1 px-3' style={{float:'right'}} 
             onClick={async () => {
                 if(!state.chargeLoad){
-                    await dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+                    dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
                     await calculate();
                     await saveHeads(chargeList, state, dispatch, reset);
+                    await delay(1000)
                     await queryClient.removeQueries({ queryKey: ['charges'] })
                     await chargesData.refetch();
-                    await dispatch({type:'set', payload:{
+                    dispatch({type:'set', payload:{
                         chargeLoad:false,
                         selection:{InvoiceId:null, partyId:null}
                     }})

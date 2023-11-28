@@ -36,60 +36,50 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
   const tabs = useSelector((state)=>state.tabs.tabs)
 
   useEffect(() => {
-    //if(state.edit){
-      let tempState = {...baseValues, ...jobData};
-      let tempVoyageList = [...state.voyageList];
-      tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage);
-      tempState = {
-        ...tempState,
-        //customCheck: state.edit?tempState.customCheck!==""?tempState.customCheck.split(", "):"":[],
-        //transportCheck:state.edit?tempState.transportCheck!==""?tempState.transportCheck.split(", "):"":[] ,// tempState.transportCheck.split(", "),
-        eta: tempState.eta==""?"":moment(tempState.eta),
-        etd: tempState.etd==""?"":moment(tempState.etd),
-        approved: tempState.approved=="true"?["1"]:[],
-        arrivalDate: tempState.arrivalDate==""?"":moment(tempState.arrivalDate),
-        arrivalTime: tempState.arrivalTime==""?"":moment(tempState.arrivalTime),
-        departureDate: tempState.departureDate==""?"":moment(tempState.departureDate),
-        departureTime: tempState.departureTime==""?"":moment(tempState.departureTime),
-        polDate: tempState.polDate==""?"":moment(tempState.polDate),
-        podDate: tempState.podDate==""?"":moment(tempState.podDate),
-        aesDate: tempState.aesDate==""?"":moment(tempState.aesDate),
-        aesTime: tempState.aesTime==""?"":moment(tempState.aesTime),
-        eRcDate: tempState.eRcDate==""?"":moment(tempState.eRcDate),
-        eRcTime: tempState.eRcTime==""?"":moment(tempState.eRcTime),
-        eRlDate: tempState.eRlDate==""?"":moment(tempState.eRlDate),
-        eRlTime: tempState.eRlTime==""?"":moment(tempState.eRlTime),
-        jobDate: tempState.jobDate==""?"":moment(tempState.jobDate),
-        shipDate:tempState.shipDate==""?"":moment(tempState.shipDate),
-        doorMove:tempState.doorMove==""?"":moment(tempState.doorMove),
-        cutOffDate:tempState.cutOffDate==""?"":moment(tempState.cutOffDate),
-        cutOffTime:tempState.cutOffTime==""?"":moment(tempState.cutOffTime),
-        siCutOffDate:tempState.siCutOffDate==""?"":moment(tempState.siCutOffDate),
-        siCutOffTime:tempState.siCutOffTime==""?"":moment(tempState.siCutOffTime),
-        vgmCutOffDate:tempState.vgmCutOffDate==""?"":moment(tempState.vgmCutOffDate),
-        vgmCutOffTime:tempState.vgmCutOffTime==""?"":moment(tempState.vgmCutOffTime)
-      }
-      let tempEquipments = [];
-      if(tempState.SE_Equipments?.length>0){
-        tempEquipments = tempState.SE_Equipments
-      }else{
-        tempEquipments = [{id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''}]
-      }
-      dispatch({type:"set",payload:{
-        exRate:tempState.exRate,
-        equipments:tempEquipments,
-        voyageList:tempVoyageList,
-      }});
-      // (type=="SE"||type=="SI")?()=>{
-      //   dispatch({type:'voyageSelection', payload:tempState.vesselId});
-      //   dispatch({type:"set", payload:{voyageVisible:false}});
-      // }:null
-      getInvoices(tempState.id, dispatch);
-      reset(tempState);
-    // }
-    // if(!state.edit){
-    //   reset(baseValues);
-    // }
+    console.log(type)
+    let tempState = {...baseValues, ...jobData};
+    let tempVoyageList = [...state.voyageList];
+    tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage);
+    tempState = {
+      ...tempState,
+      eta: tempState.eta==""?"":moment(tempState.eta),
+      etd: tempState.etd==""?"":moment(tempState.etd),
+      approved: tempState.approved=="true"?["1"]:[],
+      arrivalDate: tempState.arrivalDate==""?"":moment(tempState.arrivalDate),
+      arrivalTime: tempState.arrivalTime==""?"":moment(tempState.arrivalTime),
+      departureDate: tempState.departureDate==""?"":moment(tempState.departureDate),
+      departureTime: tempState.departureTime==""?"":moment(tempState.departureTime),
+      polDate: tempState.polDate==""?"":moment(tempState.polDate),
+      podDate: tempState.podDate==""?"":moment(tempState.podDate),
+      aesDate: tempState.aesDate==""?"":moment(tempState.aesDate),
+      aesTime: tempState.aesTime==""?"":moment(tempState.aesTime),
+      eRcDate: tempState.eRcDate==""?"":moment(tempState.eRcDate),
+      eRcTime: tempState.eRcTime==""?"":moment(tempState.eRcTime),
+      eRlDate: tempState.eRlDate==""?"":moment(tempState.eRlDate),
+      eRlTime: tempState.eRlTime==""?"":moment(tempState.eRlTime),
+      jobDate: tempState.jobDate==""?"":moment(tempState.jobDate),
+      shipDate:tempState.shipDate==""?"":moment(tempState.shipDate),
+      doorMove:tempState.doorMove==""?"":moment(tempState.doorMove),
+      cutOffDate:tempState.cutOffDate==""?"":moment(tempState.cutOffDate),
+      cutOffTime:tempState.cutOffTime==""?"":moment(tempState.cutOffTime),
+      siCutOffDate:tempState.siCutOffDate==""?"":moment(tempState.siCutOffDate),
+      siCutOffTime:tempState.siCutOffTime==""?"":moment(tempState.siCutOffTime),
+      vgmCutOffDate:tempState.vgmCutOffDate==""?"":moment(tempState.vgmCutOffDate),
+      vgmCutOffTime:tempState.vgmCutOffTime==""?"":moment(tempState.vgmCutOffTime)
+    }
+    let tempEquipments = [];
+    if(tempState.SE_Equipments?.length>0){
+      tempEquipments = tempState.SE_Equipments
+    }else{
+      tempEquipments = [{id:'', size:'', qty:'', dg:tempState.dg=="Mix"?"DG":tempState.dg, gross:'', teu:''}]
+    }
+    dispatch({type:"set",payload:{
+      exRate:tempState.exRate,
+      equipments:tempEquipments,
+      voyageList:tempVoyageList,
+    }});
+    getInvoices(tempState.id, dispatch);
+    reset({...tempState, pol:type=="AE"?'KHI':""});
   }, [state.selectedRecord]);
 
   const onSubmit = async(data) => {

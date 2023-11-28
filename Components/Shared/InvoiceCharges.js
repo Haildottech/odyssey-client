@@ -6,11 +6,13 @@ import axios from 'axios';
 import openNotification from '../Shared/Notification';
 import FullScreenLoader from './FullScreenLoader';
 import InvoicePrint from './InvoicePrint';
-import { Checkbox, Popover, Input, Radio } from 'antd';
+import { Checkbox, Popover, Input, Radio, Select } from 'antd';
 import { useQueryClient } from '@tanstack/react-query';
 const { TextArea } = Input;
 
 const InvoiceCharges = ({data, companyId}) => {
+
+  const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
 
   let inputRef = useRef(null);
   const queryClient = useQueryClient();
@@ -235,7 +237,6 @@ const InvoiceCharges = ({data, companyId}) => {
             ChildAccountId:income.id
         })
     }
-    console.log(vouchers)
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_INVOICE_APPROVE_DISAPPROVE,{
         id:tempInv.id,
         total:tempInv.total,
@@ -293,7 +294,7 @@ const InvoiceCharges = ({data, companyId}) => {
 
   const updateNote = async() => {
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_INVOICE_NOTE_UPDATE,{
-        id:invoice.id, note:invoice.note
+        id:invoice.id, note:invoice.note, currency:invoice.currency
     }).then((x)=>{
         if(x.data.status=="success"){
             openNotification("Success", "Note Saved!", "green")
@@ -336,7 +337,23 @@ return (
         <Col md={3} className="mb-3">
             <div>
                 <span className='inv-label'>Currency:</span>
-                <span className='inv-value'>{" "}{invoice.currency}</span>
+                {" "}
+                {/* <span className='inv-value'>{" "}{invoice.currency}</span> */}
+                <Select
+                    size='small'
+                    value={invoice.currency} onChange={(e)=>setInvoice({...invoice, currency:e})}
+                    style={{
+                        width: 80,
+                    }}
+                    options={[
+                        {value: 'PKR', label: 'PKR'},
+                        {value: 'USD', label: 'USD'},
+                        {value: 'EUR', label: 'EUR'},
+                        {value: 'CHF', label: 'CHF'},
+                        {value: 'GBP', label: 'GBP'},
+                        {value: 'OMR', label: 'OMR'},
+                    ]}
+                />
             </div>
         </Col>
         <Col md={3} className="mb-3">
@@ -481,7 +498,7 @@ return (
             <div style={{border:"1px solid silver"}}>
                 <TextArea rows={4} value={invoice.note} onChange={(e)=>setInvoice({...invoice, note:e.target.value})} />
             </div>
-            <button className='btn-custom mt-3' onClick={updateNote} type='button'>Save Note</button>
+            <button className='btn-custom mt-3' onClick={updateNote} type='button'>Save</button>
         </Col>
         <Col md={4} className='mt-4'>
             <b>Bank Details</b>
@@ -491,7 +508,7 @@ return (
                 </div>
             </div>
         </Col>
-        <Col className='mt-5 p-0' md={1}>
+        <Col className='mt-5 p-0' md={2}>
             <Radio.Group onChange={(e)=>setBank(e.target.value)} value={bank}>
                 <Radio value={1}>BANK A</Radio>
                 <Radio value={2}>BANK B</Radio>
@@ -499,26 +516,25 @@ return (
             </Radio.Group>
         </Col>
     </Row>
-    <hr/>
+    <hr className='mb-1' />
     <div>
         <Row>
-            <Col md={4} className=" py-3">
+            <Col md={6} className=" ">
             <div className=''>
                 {invoice.currency!="PKR" && 
                 <>
-                    
                     <span className='inv-label mx-2'>Total Amount {`(${invoice.currency})`}: </span>
-                    <span className='inv-value charges-box p-2'> 
+                    <span className='inv-value charges-box'> 
                         {" "}
-                        {invoice.approved=="1"? (parseFloat(invoice.total)/parseFloat(invoice.ex_rate)).toFixed(2): "Not Approved" }
+                        {commas((parseFloat(invoice.total)/parseFloat(invoice.ex_rate)).toFixed(2))}
                     </span>
                     <span className='mx-4'></span>
                 </>
                 }
                 <span className='inv-label mx-2'>Total Amount {"(Local)"}:</span>
-                <span className='inv-value charges-box p-2'> 
+                <span className='inv-value charges-box'> 
                     {" "}
-                    {invoice.approved=="1"? (parseFloat(invoice.total) + parseFloat(invoice.roundOff)).toFixed(2): "Not Approved" }
+                    {commas((parseFloat(invoice.total) + parseFloat(invoice.roundOff)).toFixed(2))}
                 </span>
             </div>
             </Col>

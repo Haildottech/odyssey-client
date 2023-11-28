@@ -41,9 +41,17 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
   const shippingLineId = useWatch({control, name:"shippingLineId"});
   const localVendorId = useWatch({control, name:"localVendorId"});
   const approved = useWatch({control, name:"approved"});
-  let allValues = useWatch({control})
+  let allValues = useWatch({control});
   const Space = () => <div className='mt-2'/>
-   
+
+  useEffect(() => {
+    if(allValues.freightType=="Prepaid"){
+      reset({...allValues, freightPaybleAt:'Karachi, Pakistan'});
+    } else {
+      reset({...allValues, freightPaybleAt:'Destination'});
+    }
+  }, [allValues.freightType])
+  
   const handleOk = () => {
     allValues.approved = approved
     handleSubmit(onEdit(allValues))
@@ -81,16 +89,16 @@ const BookingInfo = ({handleSubmit, onEdit, companyId, register, control, errors
 
   const ShipperComp = () => {
     return(
-      <>
-        <div className='custom-link mt-2' onClick={()=>pageLinking("client",shipperId)}>
-          Shipper *
-        </div>
-        <SelectSearchComp register={register} name='shipperId' control={control} label='' 
-          disabled={getStatus(approved)} width={"100%"}
-          options={state.fields.party.shipper} 
-        />
-        <Space/>
-      </>
+    <>
+      <div className='custom-link mt-2' onClick={()=>pageLinking("client",shipperId)}>
+        Shipper *
+      </div>
+      <SelectSearchComp register={register} name='shipperId' control={control} label='' 
+        disabled={getStatus(approved)} width={"100%"}
+        options={state.fields.party.shipper} 
+      />
+      <Space/>
+    </>
     )
   }
   

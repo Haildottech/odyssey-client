@@ -48,6 +48,8 @@ const BlComp = ({id, blData, partiesData, type}) => {
     if (id != "new") {
       setAndFetchBlData(reset, state, allValues, set, dispatch, blData);
     } else {
+      // -------->>>>>>!!!!!    Important Note    !!!!!<<<<<<---------
+      // ----->>>>>> New Jab Values are set in Booking Info <<<<<-----
       reset(baseValues);
     }
   }, [id]);

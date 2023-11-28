@@ -254,7 +254,6 @@ const setJob = (set, x, state, reset, allValues, dispatch, id) => {
     allValues.flightNo =     x.flightNo;      
     allValues.shipping_line= x.shipping_line?.name;
     allValues.voyage =       x.Voyage?.voyage;
-
     dispatch({type:"set", payload:{
       deliveryContent:convetAsHtml(x.overseas_agent),
       consigneeContent:convetAsHtml(x.consignee),
@@ -262,7 +261,7 @@ const setJob = (set, x, state, reset, allValues, dispatch, id) => {
       partyVisible:false,
       updateContent:!state.updateContent,
       Item_Details:id=="new"?[{
-        id:null, noOfPcs:'0', unit:'',grossWt:'0', kh_lb:'', r_class:'', itemNo:'',
+        id:null, noOfPcs:x.pcs, unit:'',grossWt:x.weight, kh_lb:'', r_class:'', itemNo:'',
         chargableWt:x.cwtClient, rate_charge:'0', total:'0', lineWeight: x.cwtLine
     }]:[]
     }})
@@ -284,7 +283,6 @@ const calculateContainerInfos=(state, set, reset, allValues)=>{
 
 const calculateItemInfos=(state, set, reset, allValues)=>{
   let gross = 0.0, pkgs = 0, wtUnit = 0, chargableWt=0;
-  console.log(state.Item_Details)
   state.Item_Details.forEach((x,i)=>{
     if(i==0){
       wtUnit= x.kh_lb;

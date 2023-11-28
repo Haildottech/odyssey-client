@@ -62,7 +62,17 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
       <hr className='my-2' />
       <div className='mt-3' style={{maxHeight:500, overflowY:'auto'}}>
       <Table className='tableFixHead'>
-        <thead><tr><th>Sr.</th><th>Basic Info</th><th>Shipment Info</th><th>Container Info</th><th>Other Info</th><th>Status</th><th>Created By</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Sr.</th>
+            <th>Basic Info</th>
+            <th>Shipment Info</th>
+            <th>Weight Info</th>
+            <th>Other Info</th>
+            <th>Status</th>
+            <th>Created By</th>
+          </tr>
+        </thead>
         <tbody>
         {
         records.map((x, index) => {
@@ -91,6 +101,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
               <span className='blue-txt fw-7'>{x.jobNo}</span>
               <br/>Nomination: <span className='grey-txt'>{x.nomination}</span>
               <br/>Freight Type: <span className='grey-txt'>{x.freightType}</span>
+              <br/>Sub Type: <span className='grey-txt '>{x.subType}</span><br/>
             </td>
             <td>
               POL: <span className='grey-txt'>{x.pol}</span><br/>
@@ -98,7 +109,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
               FLD: <span className='grey-txt'> {x.fd}</span>
             </td>
             <td>
-              Container: <span className='grey-txt'>{x.container}</span><br/>
+              {/* Container: <span className='grey-txt'>{x.container}</span><br/> */}
               Weight: <span className='grey-txt'>{x.weight}</span>
             </td>
             <td>
