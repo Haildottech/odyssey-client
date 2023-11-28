@@ -71,7 +71,11 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
     </Row>
     <Row>
         <Col md={5}><Line/></Col>
-        <Col md={2}><p className='text-center fs-15' style={{lineHeight:0.2, position:'relative', top:6}}><strong>{invoice.type}</strong></p></Col>
+        <Col md={2}>
+            <div className='text-center fs-15' style={{whiteSpace:'nowrap'}}>
+                <strong>{invoice.type}</strong>
+            </div>
+        </Col>
         <Col md={5}><Line/></Col>
     </Row>
     <Row style={{paddingLeft:12, paddingRight:12}}>

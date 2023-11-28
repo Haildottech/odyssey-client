@@ -178,6 +178,7 @@ const InvoiceBalancingReport = ({result, query}) => {
         {headerName: 'Balance', field:'balance', filter: true},
         {headerName: 'Age', field:'age', filter: true},
     ]);
+    
     const defaultColDef = useMemo( ()=> ({
         sortable: true,
         resizable: true,
