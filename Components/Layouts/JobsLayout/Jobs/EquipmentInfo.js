@@ -8,14 +8,15 @@ const EquipmentInfo = ({state, dispatch}) => {
 
   const width = 162;
   
+  const addEquipment = () => {
+    let tempState = [...state.equipments];
+    tempState.push({size:'', qty:'', dg:'', gross:'', teu:''});
+    dispatch({type:'toggle', fieldName:'equipments', payload:tempState});
+  }
+
   return (
   <div style={{minHeight:630, maxHeight:630}}>
-    <button type='button' className='btn-custom fw-8'
-      onClick={()=>{
-        let tempState = [...state.equipments];
-        tempState.push({size:'', qty:'', dg:'', gross:'', teu:''});
-        dispatch({type:'toggle', fieldName:'equipments', payload:tempState});
-      }}>Add +</button>
+    <button type='button' className='btn-custom fw-8' onClick={addEquipment}>Add +</button>
     <Table className='mt-2'>
       <thead>
         <tr>

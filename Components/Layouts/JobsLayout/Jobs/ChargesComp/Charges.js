@@ -77,12 +77,18 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                     dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
                     await calculate();
                     await saveHeads(chargeList, state, dispatch, reset);
-                    await delay(1000)
+                    await queryClient.removeQueries({ queryKey: ['charges'] })
+                    await chargesData.refetch();
+                    dispatch({type:'set', payload:{
+                        //chargeLoad:false,
+                        selection:{InvoiceId:null, partyId:null}
+                    }})
+                    await delay(2000);
                     await queryClient.removeQueries({ queryKey: ['charges'] })
                     await chargesData.refetch();
                     dispatch({type:'set', payload:{
                         chargeLoad:false,
-                        selection:{InvoiceId:null, partyId:null}
+                        //selection:{InvoiceId:null, partyId:null}
                     }})
                 }
             }}
@@ -112,7 +118,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         </Col>
     </Row>
     <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto'}}>
-    {(chargesData.status=="success" || !state.chargeLoad) &&
+    {!state.chargeLoad &&
     <Table className='tableFixHead' bordered>
     <thead>
     <tr className='table-heading-center'>
@@ -165,8 +171,14 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <td className='text-center'>
             {(x.InvoiceId==null && x.new!=true)  &&
             <input type="checkbox" {...register(`chargeList.${index}.check`)}
-                style={{ cursor: 'pointer' }} 
-                disabled={x.partyId==state.selection.partyId?false:state.selection.partyId==null?false:true}
+                style={{ cursor: 'pointer' }}
+                disabled={
+                    x.partyId==state.selection.partyId?
+                        false:
+                        state.selection.partyId==null?
+                            false:
+                            true
+                }
             />}
         </td>
         <td className='text-center'>{/* Invoice Number */}
@@ -327,9 +339,9 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     </tbody>
     </Table>
     }
-    {(chargesData.status!="success" || state.chargeLoad) && 
+    {state.chargeLoad && 
     <div style={{textAlign:"center", paddingTop:'5%', paddingBottom:"5%"}}>
-    <Spinner/>
+        <Spinner/>
     </div>
     }
     <Modal
@@ -340,7 +352,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     >{state.headVisible && <PartySearch state={state} dispatch={dispatch} reset={reset} useWatch={useWatch} control={control} />}
     </Modal>
     </div>
-    <div className='div-btn-custom-green text-center py-1 px-3 mt-3' style={{float:'right'}}onClick={()=>{calculate(chargeList)}}>Calculate</div>
+    <div className='div-btn-custom-green text-center py-1 px-3 mt-3' style={{float:'right'}} onClick={()=>{calculate(chargeList)}}>Calculate</div>
     </>
   )
 }

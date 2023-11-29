@@ -18,7 +18,7 @@ const Sheet = ({state}) => {
         <Table className='tableFixHead vertical' bordered>
         <thead>
             <tr className='fs-11 text-center'>
-                <th>#</th>
+                {/* <th>#</th> */}
                 <th>Job No</th>
                 <th style={{width:45}}>Date</th>
                 <th style={{width:200}}>Client</th>
@@ -38,7 +38,7 @@ const Sheet = ({state}) => {
         {state.records.map((x,index)=>{
         return (
         <tr key={index} className='f fs-11 text-center'>
-            <td>{index + 1}</td>
+            {/* <td>{index + 1}</td> */}
             <td>{x.jobNo}</td>
             <td>{moment(x.createdAt).format("MM/DD/YY")}</td>
             <td>{x.Client.name}</td>

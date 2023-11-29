@@ -236,19 +236,11 @@ const getVendors = memoize(async(id) => {
 })
 
 const saveHeads = async(charges, state, dispatch, reset) => {
-  //dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
   await axios.post(process.env.NEXT_PUBLIC_CLIMAX_SAVE_SE_HEADS_NEW, 
-    {
-      charges, 
-      deleteList:state.deleteList, 
-      id:state.selectedRecord.id,
-      exRate:state.exRate
-    })
-    .then((x)=>{
+    { charges, deleteList:state.deleteList, id:state.selectedRecord.id, exRate:state.exRate }
+  ).then((x)=>{
     reset({chargeList:[]})
-    //dispatch({type:'toggle', fieldName:'chargeLoad', payload:false})
   })
-
 }
 
 const getHeadsNew = async(id, dispatch) => {

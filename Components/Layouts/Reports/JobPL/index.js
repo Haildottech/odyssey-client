@@ -1,6 +1,6 @@
 import { recordsReducer, initialState, companies, handleSubmit, plainOptions } from './states';
 import { Row, Col, Form, Spinner } from "react-bootstrap";
-import { Select, Checkbox, Modal } from 'antd';
+import { Select, Checkbox, Modal, Radio } from 'antd';
 import React, { useReducer } from 'react';
 import Search from './Search';
 import Sheet from './Sheet';
@@ -57,8 +57,16 @@ const JobPL = () => {
           <div>Client</div>
           <AdvanceSearch getChild={(value)=>set({client:value})}  placeholder={"Search"} style={{width:"100%"}} type={"client"} />
         </Col>
+        <Col md={8}></Col>
+        <Col md={2} style={{border:'1px solid silver', marginLeft:12, paddingRight:40}} className='py-1 mt-3'>
+          Report Types
+          <Radio.Group onChange={(e)=>set({reportType:e.target.value})} value={state.reportType}>
+              <Radio value={"viewer"}>Viewer</Radio>
+              <Radio value={"grid"}>Grid</Radio>
+          </Radio.Group>
+        </Col>
       </Row>
-      <button className='btn-custom right' 
+      <button className='btn-custom mt-3' 
         onClick={()=>{
           //handleSubmit(set,state)
           const { to, from, client, company, jobType, overseasagent, salesrepresentative } = state 
@@ -71,12 +79,13 @@ const JobPL = () => {
               company:company, 
               jobtype:jobType, 
               overseasagent:overseasagent, 
-              salesrepresentative:salesrepresentative 
+              salesrepresentative:salesrepresentative,
+              report:state.reportType
             }
           });
           dispatchNew(incrementTab({
-            "label": "Agt Inovice Bal Report", "key": "5-4-1",
-            "id":`?to=${to}&from=${from}&client=${client}&company=${company}&jobtype=${jobType}&overseasagent=${overseasagent}&salesrepresentative=${salesrepresentative}`
+            "label": "Job Profit & Loss", "key": "5-4-1",
+            "id":`?to=${to}&from=${from}&client=${client}&company=${company}&jobtype=${jobType}&overseasagent=${overseasagent}&salesrepresentative=${salesrepresentative}$report=${state.reportType}`
           }));
         }} disabled={state.load}
       >

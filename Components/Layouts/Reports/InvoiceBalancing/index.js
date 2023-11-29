@@ -198,4 +198,4 @@ const InvoiceBalaincing = () => {
     </div>
     );
 }
-export default InvoiceBalaincing;
+export default React.memo(InvoiceBalaincing);

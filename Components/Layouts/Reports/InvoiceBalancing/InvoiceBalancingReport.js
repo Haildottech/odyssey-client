@@ -13,7 +13,6 @@ const InvoiceBalancingReport = ({result, query}) => {
     const [ load, setLoad ] = useState(true);
     const [ records, setRecords ] = useState([]);
     const [username, setUserName] = useState("");
-
     const commas = (a) => a? parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,", ") : '0.0';
 
     const getTotal = (type, list) => {
@@ -194,16 +193,16 @@ const InvoiceBalancingReport = ({result, query}) => {
     {query.report=="viewer" && <TableComponent  />}
     {query.report!="viewer" &&
         <div className="ag-theme-alpine" style={{width:"100%", height:'72vh'}}>
-        <AgGridReact
-            ref={gridRef} // Ref for accessing Grid's API
-            rowData={records} // Row Data for Rows
-            columnDefs={columnDefs} // Column Defs for Columns
-            defaultColDef={defaultColDef} // Default Column Properties
-            animateRows={true} // Optional - set to 'true' to have rows animate when sorted
-            rowSelection='multiple' // Options - allows click selection of rows
-            getRowHeight={getRowHeight}
-        />
-    </div>
+            <AgGridReact
+                ref={gridRef} // Ref for accessing Grid's API
+                rowData={records} // Row Data for Rows
+                columnDefs={columnDefs} // Column Defs for Columns
+                defaultColDef={defaultColDef} // Default Column Properties
+                animateRows={true} // Optional - set to 'true' to have rows animate when sorted
+                rowSelection='multiple' // Options - allows click selection of rows
+                getRowHeight={getRowHeight}
+            />
+        </div>
     }
 
     <div style={{display:'none'}}>
@@ -217,4 +216,4 @@ const InvoiceBalancingReport = ({result, query}) => {
   )
 }
 
-export default InvoiceBalancingReport
+export default React.memo(InvoiceBalancingReport)

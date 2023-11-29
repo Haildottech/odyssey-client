@@ -19,10 +19,9 @@ function recordsReducer(state, action){
 const initialState = {
   load:false,
   visible:false,
+  reportType:'viewer',
   to:moment().format("YYYY-MM-DD"),
   from:moment("2023-07-01").format("YYYY-MM-DD"),
-  // const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
-  // const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
   client:'',
   records:[],
   subType:'',
