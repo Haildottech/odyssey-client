@@ -179,7 +179,7 @@ const Uploader = () => {
     </>
     }
     {/* <PartiesUploader/> */}
-    <InvoicedUploader />
+    {/* <InvoicedUploader /> */}
     {/* <AgentInvoice /> */}
     {/* <AgentInvoiceAdv/> */}
   </>

@@ -81,7 +81,6 @@ const JobBalancingReport = ({result, query}) => {
                 y.paid = (parseFloat(y.paid))+parseFloat(y.roundOff)
                 y.recieved = (parseFloat(y.recieved))+parseFloat(y.roundOff)
                 y.age = getAge(y.createdAt)
-                
                 // y.total =    commas(y.total)
                 // y.paid =     commas(y.paid)
                 // y.recieved = commas(y.recieved)
