@@ -24,10 +24,34 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
   });
   const [ accountLoad, setAccountLoad ] = useState(true);
   const [ invoiceId, setInvoiceId ] = useState("");
+
+  const [ totalDebit, setTotalDebit ] = useState(0);
+  const [ totalCredit, setTotalCredit ] = useState(0);
+
+  const commas = (a) => a==0?'0':parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ");
+
   const box = {border:'1px solid silver', paddingLeft:10, paddingTop:5, paddingBottom:3, minHeight:31}
   const allValues = useWatch({ control });
   useEffect(() => { getValues(); }, []);
-  useEffect(() => { (allValues.vType!="" && CompanyId!=NaN && allValues.vType)?getAccounts():null;  }, [allValues.vType]);
+  useEffect(() => { 
+    (allValues.vType!="" && CompanyId!=NaN && allValues.vType)?
+      getAccounts():
+      null;  
+  }, [allValues.vType]);
+
+  useEffect(() => {
+    let totalDebit = 0.00;
+    let totalCredit = 0.00;
+    allValues.Voucher_Heads.forEach((x)=>{
+      if(x.type=="debit" && x.amount!=0) {
+        totalDebit = totalDebit + parseFloat(x.amount);
+      } else if(x.type=="credit" && x.amount!=0) {
+        totalCredit = totalCredit + parseFloat(x.amount);
+      }
+    })
+    setTotalDebit(totalDebit);
+    setTotalCredit(totalCredit);
+  }, [allValues.Voucher_Heads]);
 
   async function getValues(){
     if(id!="new"){
@@ -93,7 +117,7 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
     }
     setAccountLoad(false)
   };
-  
+
   return (
   <>
     <Row>
@@ -162,6 +186,10 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
       <h6 className="blue-txt cur border p-2"> 
         <b>Go To Invoice <AiFillRightCircle style={{position:'relative', bottom:1}} /></b>
       </h6>
+      <div>Debit Total</div>
+      <div style={{color:'grey', paddingTop:3, paddingRight:6, border:'1px solid grey', fontSize:16, textAlign:'right'}}>{commas(totalDebit)}</div>
+      <div className="mt-2">Credit Total</div>
+      <div style={{color:'grey', paddingTop:3, paddingRight:6, border:'1px solid grey', fontSize:16, textAlign:'right'}}>{commas(totalCredit)}</div>
       </Col>
     </Row>
     <button type="button" className="btn-custom mb-3" style={{width:"110px", float:'right'}}

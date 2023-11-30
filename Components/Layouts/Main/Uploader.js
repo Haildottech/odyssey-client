@@ -110,12 +110,18 @@ const Uploader = () => {
         await list.push({title:title, amount:x.balance, type:x.type=="Dr"?"credit":'debit'})
       }
     });
-    let newItem = [...list];                                                                          
+    let newItem = [...list];
+    // Company Id Must to be set in backend API also !!!
     // PKR USD EUR GBP AED BDT OMR CHF
     axios.post("http://localhost:8081/voucher/getChildAccountIds", {
-        list:newItem, company:1, currency:"PKR"
+        list:newItem, company:3, currency:"EUR"
     }).then((x)=>{
-        console.log(x.data.result.newList)
+        console.log(x.data.result.newList);
+        let total = 0
+        x.data.result.newList.forEach((x)=>{
+            total = total + x.Voucher_Heads[0].amount;
+        })
+        console.log(total)
     })
   }
 
@@ -158,8 +164,8 @@ const Uploader = () => {
     </div>
     <CSVReader cssClass="csv-reader-input" onFileLoaded={handleCA} parserOptions={parserOptions} 
       inputId="ObiWan" inputName="ObiWan"
-    />
-    <div className='mt-4'>
+    /> */}
+    {/* <div className='mt-4'>
       <b>Opening Balances Upload</b>
     </div>
     <CSVReader cssClass="csv-reader-input" onFileLoaded={handleOpeningBalances} parserOptions={parserOptions} 
@@ -173,7 +179,7 @@ const Uploader = () => {
     </>
     }
     {/* <PartiesUploader/> */}
-    {/* <InvoicedUploader /> */}
+    <InvoicedUploader />
     {/* <AgentInvoice /> */}
     {/* <AgentInvoiceAdv/> */}
   </>
@@ -11815,38 +11821,14 @@ let vouchersList = [
         "Voucher_Heads": [
             {
                 "title": "CONTRA ACCOUNT OPENINIG",
-                "ChildAccountId": "916008266425696257",
-                "amount": 272.5,
-                "type": "debit",
-                "defaultAmount": 272.5
-            },
-            {
-                "title": "MAURICE WARD NETWORKS UK LTD",
-                "ChildAccountId": "916008269234700289",
-                "amount": 272.5,
-                "type": "credit",
-                "defaultAmount": 272.5
-            }
-        ]
-    },
-    {
-        "type": "Opening Balance",
-        "vType": "OP",
-        "currency": "EUR",
-        "exRate": "1",
-        "costCenter": "KHI",
-        "CompanyId": 3,
-        "Voucher_Heads": [
-            {
-                "title": "CONTRA ACCOUNT OPENINIG",
-                "ChildAccountId": "916008266425696257",
+                "ChildAccountId": "918857310742118401",
                 "amount": 336,
                 "type": "debit",
                 "defaultAmount": 336
             },
             {
                 "title": "ADVANCE A/C",
-                "ChildAccountId": "916008269318619137",
+                "ChildAccountId": "918857309730668545",
                 "amount": 336,
                 "type": "credit",
                 "defaultAmount": 336
@@ -11863,17 +11845,65 @@ let vouchersList = [
         "Voucher_Heads": [
             {
                 "title": "CONTRA ACCOUNT OPENINIG",
-                "ChildAccountId": "916008266425696257",
-                "amount": 608.5,
+                "ChildAccountId": "918857310742118401",
+                "amount": 911.55,
                 "type": "credit",
-                "defaultAmount": 608.5
+                "defaultAmount": 911.55
             },
             {
                 "title": "AIR FREIGHT EXPENSE",
-                "ChildAccountId": "916008269733527553",
-                "amount": 608.5,
+                "ChildAccountId": "918857310154817537",
+                "amount": 911.55,
                 "type": "debit",
-                "defaultAmount": 608.5
+                "defaultAmount": 911.55
+            }
+        ]
+    },
+    {
+        "type": "Opening Balance",
+        "vType": "OP",
+        "currency": "EUR",
+        "exRate": "1",
+        "costCenter": "KHI",
+        "CompanyId": 3,
+        "Voucher_Heads": [
+            {
+                "title": "CONTRA ACCOUNT OPENINIG",
+                "ChildAccountId": "918857310742118401",
+                "amount": 272.5,
+                "type": "debit",
+                "defaultAmount": 272.5
+            },
+            {
+                "title": "MAURICE WARD NETWORKS UK LTD",
+                "ChildAccountId": "918857309645602817",
+                "amount": 272.5,
+                "type": "credit",
+                "defaultAmount": 272.5
+            }
+        ]
+    },
+    {
+        "type": "Opening Balance",
+        "vType": "OP",
+        "currency": "EUR",
+        "exRate": "1",
+        "costCenter": "KHI",
+        "CompanyId": 3,
+        "Voucher_Heads": [
+            {
+                "title": "CONTRA ACCOUNT OPENINIG",
+                "ChildAccountId": "918857310742118401",
+                "amount": 303.05,
+                "type": "debit",
+                "defaultAmount": 303.05
+            },
+            {
+                "title": "MAURICE WARD GROUP",
+                "ChildAccountId": "918857309643407361",
+                "amount": 303.05,
+                "type": "credit",
+                "defaultAmount": 303.05
             }
         ]
     }

@@ -11,7 +11,7 @@ import { getInvoices } from './states';
 const Gl = ({state, dispatch, selectedParty, partytype, payType, companyId, invoiceCurrency}) => {
 
   const set = (a, b) => { dispatch({type:'set', var:a, pay:b}) }
-  const commas = (a) => a==0?'0':parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
+  const commas = (a) => a==0?'0':parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ");
 
   const getTotal = (type, list, curr) => {
     let result = 0.00;

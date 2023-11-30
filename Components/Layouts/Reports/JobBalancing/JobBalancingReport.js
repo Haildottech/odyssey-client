@@ -75,11 +75,11 @@ const JobBalancingReport = ({result, query}) => {
             await newArray.forEach((y, i)=>{
                 y.no = i + 1;
                 y.balance = y.payType=="Recievable"?
-                    (parseFloat(y.total) + parseFloat(y.roundOff) - parseFloat(y.recieved))/ parseFloat(y.ex_rate):
-                    (parseFloat(y.total)+parseFloat(y.roundOff) - parseFloat(y.paid)) / parseFloat(y.ex_rate);
-                y.total = (parseFloat(y.total) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
-                y.paid = (parseFloat(y.paid) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
-                y.recieved = (parseFloat(y.recieved) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
+                    (parseFloat(y.total) + parseFloat(y.roundOff) - parseFloat(y.recieved)):
+                    (parseFloat(y.total)+parseFloat(y.roundOff) - parseFloat(y.paid)) ;
+                y.total = (parseFloat(y.total))+parseFloat(y.roundOff)
+                y.paid = (parseFloat(y.paid))+parseFloat(y.roundOff)
+                y.recieved = (parseFloat(y.recieved))+parseFloat(y.roundOff)
                 y.age = getAge(y.createdAt)
                 
                 // y.total =    commas(y.total)
