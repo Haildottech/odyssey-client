@@ -19,7 +19,7 @@ const InvoiceBalancingReport = ({result, query}) => {
         let result = 0.00;
         list.forEach((x)=>{
           if(type==x.payType){
-            result = result + x.total
+            result = result + parseFloat(x.total)
          }
         })
         return commas(result);
@@ -66,31 +66,75 @@ const InvoiceBalancingReport = ({result, query}) => {
         }
     }, [])
 
+    // async function getValues(value){
+    //     if(value.status=="success") {
+    //         console.log(value.result)
+    //         let newArray = [...value.result];
+    //         await newArray.forEach((y, i)=>{
+    //             y.no = i+1;
+
+    //             y.createdAt = moment(y.createdAt).format("DD-MMM-YYYY");
+    //             y.blHbl = y?.SE_Job?.Bl?.hbl||'';
+    //             y.fd = y?.SE_Job?.fd||'';
+    //             y.ppcc = y?.SE_Job?.freightType=="Prepaid"?"PP":"CC"||'';
+                
+    //             y.debit =  y.payType=="Recievable"?commas(y.total/y.ex_rate):"-";
+    //             y.credit = y.payType!="Recievable"?commas(y.total/y.ex_rate):"-";
+
+    //             y.paidRec = commas(y.payType=="Recievable"?y.recieved:y.paid)
+
+    //             y.balance = y.payType=="Recievable"?
+    //                 (parseFloat(y.total) + parseFloat(y.roundOff) - parseFloat(y.recieved))/ parseFloat(y.ex_rate):
+    //                 (parseFloat(y.total)+parseFloat(y.roundOff) - parseFloat(y.paid)) / parseFloat(y.ex_rate);
+    //             y.total = (parseFloat(y.total) )+parseFloat(y.roundOff)
+    //             y.paid = (parseFloat(y.paid) )+parseFloat(y.roundOff)
+    //             y.recieved = (parseFloat(y.recieved) )+parseFloat(y.roundOff)
+    //             y.age = getAge(y.createdAt);
+    //             y.balance = y.payType!="Recievable"?`(${commas(y.balance)})`:commas(y.balance)
+    //         })
+    //         setRecords(newArray);
+    //     } else {
+                    
+    //     }
+    //     setLoad(false)
+    // }
     async function getValues(value){
         if(value.status=="success") {
             let newArray = [...value.result];
-            await newArray.forEach((y, i)=>{
-                y.no = i+1;
-
-                y.createdAt = moment(y.createdAt).format("DD-MMM-YYYY");
-                y.blHbl = y?.SE_Job?.Bl?.hbl||'';
-                y.fd = y?.SE_Job?.fd||'';
-                y.ppcc = y?.SE_Job?.freightType=="Prepaid"?"PP":"CC"||'';
-                
-                y.debit =  y.payType=="Recievable"?commas(y.total/y.ex_rate):"-";
-                y.credit = y.payType!="Recievable"?commas(y.total/y.ex_rate):"-";
-
-                y.paidRec = commas(y.payType=="Recievable"?y.recieved:y.paid)
-
-                y.balance = y.payType=="Recievable"?
-                    (parseFloat(y.total) + parseFloat(y.roundOff) - parseFloat(y.recieved))/ parseFloat(y.ex_rate):
-                    (parseFloat(y.total)+parseFloat(y.roundOff) - parseFloat(y.paid)) / parseFloat(y.ex_rate);
-                y.total = (parseFloat(y.total) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
-                y.paid = (parseFloat(y.paid) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
-                y.recieved = (parseFloat(y.recieved) / parseFloat(y.ex_rate))+parseFloat(y.roundOff)
-                y.age = getAge(y.createdAt);
-                y.balance = y.payType!="Recievable"?`(${commas(y.balance)})`:commas(y.balance)
+            newArray.forEach((x)=> {
+                let invAmount = 0;
+                invAmount = parseFloat(x.total) / parseFloat(x.ex_rate);
+                x.total = invAmount;
+                x.createdAt = moment(x.createdAt).format("DD-MMM-YYYY")
+                x.debit = x.payType=="Recievable"?invAmount:0
+                x.credit = x.payType!="Recievable"?invAmount:0
+                x.paidRec = x.payType=="Recievable"?parseFloat(x.recieved):parseFloat(x.paid)
+                x.balance = invAmount - x.paidRec
+                x.age = getAge(x.createdAt);
             })
+            //let newArray = [...value.result];
+            // await newArray.forEach((y, i)=>{
+            //     y.no = i+1;
+
+            //     y.createdAt = moment(y.createdAt).format("DD-MMM-YYYY");
+            //     y.blHbl = y?.SE_Job?.Bl?.hbl||'';
+            //     y.fd = y?.SE_Job?.fd||'';
+            //     y.ppcc = y?.SE_Job?.freightType=="Prepaid"?"PP":"CC"||'';
+                
+            //     y.debit =  y.payType=="Recievable"?commas(y.total/y.ex_rate):"-";
+            //     y.credit = y.payType!="Recievable"?commas(y.total/y.ex_rate):"-";
+
+            //     y.paidRec = commas(y.payType=="Recievable"?y.recieved:y.paid)
+
+            //     y.balance = y.payType=="Recievable"?
+            //         (parseFloat(y.total) + parseFloat(y.roundOff) - parseFloat(y.recieved))/ parseFloat(y.ex_rate):
+            //         (parseFloat(y.total)+parseFloat(y.roundOff) - parseFloat(y.paid)) / parseFloat(y.ex_rate);
+            //     y.total = (parseFloat(y.total) )+parseFloat(y.roundOff)
+            //     y.paid = (parseFloat(y.paid) )+parseFloat(y.roundOff)
+            //     y.recieved = (parseFloat(y.recieved) )+parseFloat(y.roundOff)
+            //     y.age = getAge(y.createdAt);
+            //     y.balance = y.payType!="Recievable"?`(${commas(y.balance)})`:commas(y.balance)
+            // })
             setRecords(newArray);
         } else {
                     
@@ -138,10 +182,10 @@ const InvoiceBalancingReport = ({result, query}) => {
                                 <td style={{}}>{x.fd}</td>
                                 <td style={{}}>{x.ppcc}</td>
                                 <td style={{}}>{x.currency}</td>
-                                <td style={{}} >{x.debit}</td>
-                                <td style={{}} >{x.credit}</td>
-                                <td style={{}} >{x.paidRec}</td>
-                                <td style={{}} >{x.balance}</td>
+                                <td style={{}}>{commas(x.debit)}</td>
+                                <td style={{}}>{commas(x.credit)}</td>
+                                <td style={{}}>{commas(x.paidRec)}</td>
+                                <td style={{}}>{commas(x.balance)}</td>
                                 <td style={{}}>{x.age}</td>
                             </tr>
                         )})}
