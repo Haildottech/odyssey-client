@@ -76,7 +76,7 @@ const Voucher = ({id, voucherData}) => {
     await delay(1000);
     setLoad(false)
   };
-  
+
   return (
   <div className="base-page-layout fs-11">
   <form onSubmit={handleSubmit(onSubmit)}>

@@ -11,7 +11,7 @@ import axios from 'axios';
 import React, { useState, useRef, useEffect, useMemo, useCallback, useReducer} from 'react';
 import { AgGridReact } from 'ag-grid-react';
 
-const PaymentsReceipt = ({id, voucherData}) => {
+const PaymentsReceiptNew = ({id, voucherData}) => {
 
     const dispatchNew = useDispatch();
     const [ state, dispatch ] = useReducer(recordsReducer, initialState);
@@ -249,4 +249,4 @@ const PaymentsReceipt = ({id, voucherData}) => {
   )
 }
 
-export default React.memo(PaymentsReceipt)
+export default React.memo(PaymentsReceiptNew)

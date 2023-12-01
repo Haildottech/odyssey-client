@@ -1,11 +1,10 @@
 import React from 'react';
-import PaymentsReceipt from '/Components/Layouts/AccountsComp/PaymentsReceiptNew';
+import PaymentsReceiptNew from '/Components/Layouts/AccountsComp/PaymentsReceiptNew';
 import axios from 'axios';
 
 const paymentReceipt = ({id, voucherData}) => {
-  return <PaymentsReceipt id={id} voucherData={voucherData} />
+  return <PaymentsReceiptNew id={id} voucherData={voucherData} />
 }
-
 export default paymentReceipt
 
 export async function getServerSideProps(context) {

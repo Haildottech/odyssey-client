@@ -98,9 +98,10 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
         break;
     }
     if(y!=""){
-      await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ACCOUNT_FOR_TRANSACTION,{
+      await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ACCOUNT_FOR_TRANSACTION_VOUCHER,{
         headers: { companyid:CompanyId, type:y }
       }).then((x)=>{
+        //console.log("settlements", x.data.result)
         setSettlement(x.data.result);
         let tempHeads = allValues.Voucher_Heads||[];
         tempHeads.forEach((x)=>{
