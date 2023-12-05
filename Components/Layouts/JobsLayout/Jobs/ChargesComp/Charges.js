@@ -83,7 +83,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                         //chargeLoad:false,
                         selection:{InvoiceId:null, partyId:null}
                     }})
-                    await delay(2000);
+                    await delay(1000);
                     await queryClient.removeQueries({ queryKey: ['charges'] })
                     await chargesData.refetch();
                     dispatch({type:'set', payload:{
@@ -103,8 +103,14 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                         await chargesData.refetch();
                     }  
                     await dispatch({type:'set', payload:{
-                        chargeLoad:false,
+                        //chargeLoad:false,
                         selection:{InvoiceId:null, partyId:null}
+                    }})
+                    await delay(1000);
+                    await chargesData.refetch();
+                    await dispatch({type:'set', payload:{
+                        chargeLoad:false,
+                        //selection:{InvoiceId:null, partyId:null}
                     }})
                 }
             }}
