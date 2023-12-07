@@ -17,7 +17,9 @@ export async function getServerSideProps({req, res}) {
     headers:{"x-access-token": `${cookies.get('token')}`}
   }).then((x)=>x.data);
 
-  const voucherData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_VOUCHERS)
+  const voucherData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_VOUCHERS,{
+    headers:{"id":`${cookies.get('companyId')}`}
+  })
   .then((x)=>x.data);
 
   return{ 

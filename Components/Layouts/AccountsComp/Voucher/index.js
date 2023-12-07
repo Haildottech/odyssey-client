@@ -46,7 +46,7 @@ const Voucher = ({id, voucherData}) => {
         amount:difference>0?difference:-1*(difference),
         type:difference>0?'credit':'debit', //voucher.vType==("CRV"||"BRV")?"debit":"credit",
         settlement:"1",
-        narration:"1",
+        narration:voucher.payTo,
         defaultAmount:voucher.currency=="PKR"?0:parseFloat(difference)/parseFloat(voucher.exRate)
       })
       voucher.Voucher_Heads = newHeads

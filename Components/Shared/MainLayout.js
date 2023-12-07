@@ -58,7 +58,21 @@ const MainLayout = ({children}) => {
   };
 
   useEffect(() => {
+    console.log(newRouter.pathname)
     // When visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
+    if(newRouter.pathname.includes("/clearanceJobs/import/sea/[id]")){
+      setToggleState('9-4');
+    }
+    if(newRouter.pathname.includes("/clearanceJobs/import/air/[id]")){
+      setToggleState('9-2');
+    }
+    
+    if(newRouter.pathname.includes("/clearanceJobs/export/sea/[id]")){
+      setToggleState('8-4');
+    }
+    if(newRouter.pathname.includes("/clearanceJobs/export/air/[id]")){
+      setToggleState('8-2');
+    }
     if(newRouter.pathname.includes("/reports/jobBalancing/[id]")){
       setToggleState('5-1-1');
     }
@@ -172,6 +186,18 @@ const MainLayout = ({children}) => {
     aiBl:false,
     manifestList:false,
     manifest:false,
+
+    aeClearanceJobList:false,
+    aeClearanceJob:false,
+    
+    seClearanceJobList:false,
+    seClearanceJob:false,
+    
+    aiClearanceJobList:false,
+    aiClearanceJob:false,
+
+    siClearanceJobList:false,
+    siClearanceJob:false,
   });
   
   const memoizedAlterTabs = () => {
@@ -235,6 +261,21 @@ const MainLayout = ({children}) => {
         else if(tabs.key=='7-6'){ tempTabActive.aiBl=true }
         else if(tabs.key=='7-7'){ tempTabActive.manifestList=true }
         else if(tabs.key=='7-8'){ tempTabActive.manifest=true }
+
+        else if(tabs.key=='8-1'){ tempTabActive.aeClearanceJobList=true }
+        else if(tabs.key=='8-2'){ tempTabActive.aeClearanceJob=true }
+
+        else if(tabs.key=='8-3'){ tempTabActive.seClearanceJobList=true }
+        else if(tabs.key=='8-4'){ tempTabActive.seClearanceJob=true }
+
+        else if(tabs.key=='9-1'){ tempTabActive.aiClearanceJobList=true }
+        else if(tabs.key=='9-2'){ tempTabActive.aiClearanceJob=true }
+
+        else if(tabs.key=='9-3'){ tempTabActive.siClearanceJobList=true }
+        else if(tabs.key=='9-4'){ tempTabActive.siClearanceJob=true }
+        // else if(tabs.key=='8-8'){ tempTabActive.aeClearanceJobList=true }
+        // else if(tabs.key=='8-8'){ tempTabActive.siClearanceJobList=true }
+        // else if(tabs.key=='8-8'){ tempTabActive.seClearanceJobList=true }
         
         dispatch(setTab(tempTabs))
         //setTabItems(tempTabs);
@@ -318,6 +359,18 @@ const MainLayout = ({children}) => {
     else if(x.key=='7-6'){ Router.push(`/airJobs/import/bl/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='7-7'){ Router.push(`/airJobs/manifestList/`) }
     else if(x.key=='7-8'){ Router.push(`/airJobs/manifest/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
+    
+    else if(x.key=='8-1'){ Router.push('/clearanceJobs/export/air/list') }
+    else if(x.key=='8-2'){ Router.push(`/clearanceJobs/export/air/${setKey(x)}`) } 
+    
+    else if(x.key=='8-3'){ Router.push('/clearanceJobs/export/sea/list') }
+    else if(x.key=='8-4'){ Router.push(`/clearanceJobs/export/sea/${setKey(x)}`) } 
+    
+    else if(x.key=='9-1'){ Router.push('/clearanceJobs/import/air/list') }
+    else if(x.key=='9-2'){ Router.push(`/clearanceJobs/import/air/${setKey(x)}`) } 
+
+    else if(x.key=='9-3'){ Router.push('/clearanceJobs/import/sea/list') }
+    else if(x.key=='9-4'){ Router.push(`/clearanceJobs/import/sea/${setKey(x)}`) } 
   };
 
   const removeTab = (index) => {
