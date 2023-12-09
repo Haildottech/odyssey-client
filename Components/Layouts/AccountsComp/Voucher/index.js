@@ -25,7 +25,8 @@ const Voucher = ({id, voucherData}) => {
   });
 
   const onSubmit = async(data) => {
-    setLoad(true)
+    //setLoad(true)
+    console.log(data)
     let settlementAmmount = 0.00;
     let debit = 0.00, credit = 0.00;
     let voucher = { ...data }
@@ -53,8 +54,8 @@ const Voucher = ({id, voucherData}) => {
     }
     voucher.CompanyId=CompanyId?CompanyId:1;
     voucher.type = (voucher.vType=="BPV"||voucher.vType=="CPV")?"Payble":(voucher.vType=="BRV"||voucher.vType=="CRV")?"Recievable":voucher.vType=="TV"?"Trasnfer Voucher":"General Voucher"
-    voucher.createdAt = voucherData.createdAt
-    
+    //voucher.createdAt = voucherData.createdAt
+
     if(id=="new"){
       delete voucher.id;
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, voucher).then((x)=>{

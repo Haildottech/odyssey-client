@@ -62,6 +62,7 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
       let iD="";
       let settleId="";
       let ChildAccountId = "";
+      let createdAt = voucherData.chequeDate?moment(voucherData.createdAt):"";
       let chequeDate = voucherData.chequeDate?moment(voucherData.chequeDate):"";
       let Voucher_Heads = voucherData.Voucher_Heads?.filter((x)=>x.settlement!=="1");
       voucherData?.Voucher_Heads?.filter((voucher) => {
@@ -72,7 +73,7 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
         }
       });
       reset({ 
-        CompanyId, vType, chequeDate, chequeNo, payTo, type,
+        CompanyId, vType, chequeDate, chequeNo, payTo, type, createdAt,
         Voucher_Heads, exRate, currency:currency==undefined?"PKR":currency,
         ChildAccountId, settleId, id:iD
       });
@@ -129,8 +130,7 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
           <div style={box}>{voucherData?.voucher_Id||""}</div>
         </Col>
         <Col md={3}>
-          <div>Date</div>
-          <div style={box}>{moment().format("YYYY-MM-DD")}</div>
+          <DateComp register={register} name="createdAt" label="Date" control={control} width={"100%"} />
         </Col>
         <Col md={3}>
           <SelectSearchComp label="Type" name="vType" register={register} control={control} width={"100%"}

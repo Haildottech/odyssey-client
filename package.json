@@ -63,6 +63,7 @@
     "redux-logger": "^3.0.6",
     "sass": "^1.56.0",
     "scss": "^0.2.4",
+    "uuid": "^9.0.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {

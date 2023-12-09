@@ -27,13 +27,20 @@ const App = ({voucherData}) => {
     </>
   };
 
+  const dateComp = {
+    component: (props)=> <>
+      <span className='fw-6 fs-12'>{moment(props.data.createdAt).format("YYYY-MM-DD")}</span>
+    </>
+  };
+
   const [columnDefs, setColumnDefs] = useState([
     {headerName: '#', field:'no', width: 40 },
     {headerName: 'Voucher No.', field:'voucher_Id', filter: true, cellRendererSelector: () => genderDetails, filter: true},
     {headerName: 'Type', field:'type',       filter: true},
-    {headerName: 'Cheque Date', field:'date', filter: true},
+    {headerName: 'Cheque Date', field:'date', filter: true, },
     {headerName: 'Paid To', field:'payTo',      filter: true},
     {headerName: 'Amount', field:'amount', filter: true, cellRendererSelector: () => amountDetails, filter: true},
+    {headerName: 'Voucher Date', field:'createdAt', filter: true, cellRendererSelector: () => dateComp, filter: true},
   ]);
 
   const defaultColDef = useMemo(()=> ({
@@ -53,7 +60,8 @@ const App = ({voucherData}) => {
         x.amount = x.Voucher_Heads?.reduce((x, cur) => x + Number(cur.amount), 0 ),
         x.date = moment(x.createdAt).format("YYYY-MM-DD")
       });
-      setRowData(tempData)
+      setRowData(tempData);
+      console.log(tempData)
     }
     setData();
   }, []);

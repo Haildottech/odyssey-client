@@ -125,10 +125,10 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
                 <InputComp  register={register} disabled name='code' control={control} label='Code' />
                 {errors.code && <div className='error-line'>{errors.code.message}</div>}
             </Col>
-            <Col md={7}>
+            {/* <Col md={7}>
                 <SelectComp register={register} name='carrier' control={control} label='Carriers' width={300}
                     options = {carriers}/>
-            </Col>
+            </Col> */}
             <Col md={7} className='py-1'>
                 <RadioComp register={register} name='type' control={control} label='Types'
                     options = {[

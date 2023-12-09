@@ -86,17 +86,18 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
             <div style={heading}>INVOICE TO</div>
             <div style={paraStyles}>{invoice.party_Name}</div>
             <div style={paraStyles}>{invoice.SE_Job.Client?.address1}</div>
-            <div style={paraStyles}>{invoice.SE_Job.Client?.infoMail}</div>
-            <div style={paraStyles}>{invoice.SE_Job.Client?.telephone1}</div>
-            <div style={paraStyles}>{invoice.SE_Job.Client?.mobile1}</div>
+            {/* <div style={paraStyles}>{invoice.SE_Job.Client?.infoMail}</div> */}
+            {/* <div style={paraStyles}>{invoice.SE_Job.Client?.telephone1}</div> */}
+            {/* <div style={paraStyles}>{invoice.SE_Job.Client?.mobile1}</div> */}
         </Col>
         <Col md={6} style={{  borderTop:border, borderBottom:border, borderRight:border, maxHeight:70, overflow:'hidden'}} className='p-0 px-1'>
         <div style={heading}>Shipper/Consignee</div>
+            <div style={paraStyles}>{invoice.SE_Job.shipper?.name} / </div>
             <div style={paraStyles}>{invoice.SE_Job.consignee?.name}</div>
-            <div style={paraStyles}>{invoice.SE_Job.Client?.address1}</div>
-            <div style={paraStyles}>{invoice.SE_Job.Client?.infoMail}</div>
-            <div style={paraStyles}>{invoice.SE_Job.Client?.telephone1}</div>
-            <div style={paraStyles}>{invoice.SE_Job.Client?.mobile1}</div>
+            <div style={paraStyles}>{invoice.SE_Job.consignee?.address1}</div>
+            {/* <div style={paraStyles}>{invoice.SE_Job.Client?.infoMail}</div> */}
+            {/* <div style={paraStyles}>{invoice.SE_Job.consignee?.telephone1}</div> */}
+            {/* <div style={paraStyles}>{invoice.SE_Job.consignee?.mobile1}</div> */}
         </Col>
     </Row>
     <Row style={{paddingLeft:12, paddingRight:12}}>
@@ -328,7 +329,7 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         <td className='text-center p-0'>{x.amount}</td>
         <td className='text-center p-0'>{x.discount}</td>
         <td className='text-center p-0'>{x.tax_amount}</td>
-        <td className='text-center p-0'>{x.local_amount}</td>
+        <td className='text-center p-0'>{(x.local_amount/invoice.ex_rate).toFixed(2)}</td>
     </tr>
     )})}
     </tbody>
@@ -362,7 +363,7 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         </Col>
         <Col md={6} className='p-1' style={{borderRight:border, borderBottom:border, fontSize:12}}>
             <b className='fw-8'>In-Words</b>
-            <p>{invoice.type=="Job Invoice"?"PKR":invoice.type=="Job Bill"?"PKR":"USD"} {inWords(parseFloat(calculateTotal(records)))}</p>
+            <p>{invoice.type=="Job Invoice"?"PKR":invoice.type=="Job Bill"?"PKR":"USD"} {inWords(parseFloat(calculateTotal(records)/invoice.ex_rate))}</p>
         </Col>
     </Row>
     <Row className='mx-0'>

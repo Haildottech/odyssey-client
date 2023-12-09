@@ -21,7 +21,6 @@ const InvoiceCharges = ({data, companyId}) => {
   const [records, setRecords] = useState([]);
   const [invoice, setInvoice] = useState({
     Charge_Heads:[],
-
     SE_Job:{
         Client:{},
         shipper:{},
@@ -142,7 +141,7 @@ const InvoiceCharges = ({data, companyId}) => {
         Voucher_Heads:[]
     }
     let tempRoundOff = parseFloat(tempInv.roundOff);
-    let narration = `${tempInv.payType} Against Invoice ${invoice.invoice_No} For Job# ${invoice.SE_Job.jobNo} From ${invoice.party_Name}`
+    let narration = `${tempInv.payType} Against Invoice ${invoice?.invoice_No} For Job# ${invoice?.SE_Job.jobNo} From ${invoice?.party_Name}`
     if(tempRoundOff==0){
         vouchers.Voucher_Heads.push({
             amount:parseFloat(amount),
@@ -264,13 +263,13 @@ const InvoiceCharges = ({data, companyId}) => {
 
   const checkApprovability = (x) => {
     let result = false;
-    if(x.payType=="Recievable" && x.recieved=="0"){
+    if(x?.payType=="Recievable" && x?.recieved=="0"){
         result = false;
-    }else if(x.payType=="Recievable" && x.recieved!="0"){
+    }else if(x?.payType=="Recievable" && x?.recieved!="0"){
         result = true;
-    }else if(x.payType!="Recievable" && x.paid=="0"){
+    }else if(x?.payType!="Recievable" && x?.paid=="0"){
         result = false;
-    }else if(x.payType!="Recievable" && x.paid!="0"){
+    }else if(x?.payType!="Recievable" && x?.paid!="0"){
         result = true;
     }
     return result
@@ -319,19 +318,19 @@ return (
         <Col md={3} className="mb-3">
             <div>
                 <span className='inv-label'>Invoice No#:</span>
-                <span className='inv-value'>{" "}{invoice.invoice_No}</span>
+                <span className='inv-value'>{" "}{invoice?.invoice_No}</span>
             </div>
         </Col>
         <Col md={3} className="mb-3">
             <div>
                 <span className='inv-label'>Party Name:</span>
-                <span className='inv-value'>{" "}{invoice.party_Name}</span>
+                <span className='inv-value'>{" "}{invoice?.party_Name}</span>
             </div>
         </Col>
         <Col md={3} className="mb-3">
             <div>
                 <span className='inv-label'>Pay Type:</span>
-                <span className='inv-value'>{" "}{invoice.payType}</span>
+                <span className='inv-value'>{" "}{invoice?.payType}</span>
             </div>
         </Col>
         <Col md={3} className="mb-3">
@@ -341,7 +340,7 @@ return (
                 {/* <span className='inv-value'>{" "}{invoice.currency}</span> */}
                 <Select
                     size='small'
-                    value={invoice.currency} onChange={(e)=>setInvoice({...invoice, currency:e})}
+                    value={invoice?.currency} onChange={(e)=>setInvoice({...invoice, currency:e})}
                     style={{
                         width: 80,
                     }}
@@ -359,13 +358,13 @@ return (
         <Col md={3} className="mb-3">
             <div>
                 <span className='inv-label'>Invoice/Bill:</span>
-                <span className='inv-value'>{" "}{invoice.type}</span>
+                <span className='inv-value'>{" "}{invoice?.type}</span>
             </div>
         </Col>
         <Col md={3} className="mb-3">
             <div>
                 <span className='inv-label'>Created:</span>
-                <span className='inv-value'>{" "}{ moment(invoice.createdAt).format("DD / MMM / YY")}</span>
+                <span className='inv-value'>{" "}{ moment(invoice?.createdAt).format("DD / MMM / YY")}</span>
             </div>
         </Col>
         <Col md={3} className="mb-3">
@@ -373,7 +372,7 @@ return (
                 <span className='inv-label'>Round Off:</span>
                 <span className='inv-value mx-2'>
                     <input className='cur' type={"checkbox"}
-                    disabled={invoice.type=="Agent Invoice"?true:invoice.type=="Agent Bill"?true:invoice.approved=="1"?true:false} checked={invoice.roundOff!="0"} 
+                    disabled={invoice?.type=="Agent Invoice"?true:invoice?.type=="Agent Bill"?true:invoice?.approved=="1"?true:false} checked={invoice?.roundOff!="0"} 
                     onChange={async () => {
                         setLoad(true);
                         let tempInv = {...invoice};
@@ -381,7 +380,7 @@ return (
                         let after = parseFloat(parseInt(before));
                         let remaining = before - after;
                         if(remaining>0){
-                            if(invoice.roundOff=="0"){
+                            if(invoice?.roundOff=="0"){
                                 if(remaining<=0.5 && remaining>0){
                                     tempInv.roundOff = `-${(remaining).toFixed(2)}`;
                                 }else{
@@ -414,7 +413,7 @@ return (
             <div>
                 <span className='inv-label'>Approved:</span>
                 <span className='inv-value mx-2'>
-                    <input className='cur' type={"checkbox"} checked={invoice.approved!="0"} 
+                    <input className='cur' type={"checkbox"} checked={invoice?.approved!="0"} 
                         disabled={checkApprovability(invoice)}
                         onChange={approve}
                     />
@@ -446,48 +445,55 @@ return (
             </tr>
         </thead>
         <tbody style={{fontSize:11}}>
-        {records.map((x, index) => {
-        return (
-        <tr key={index} className='f table-row-center-singleLine' style={{lineHeight:0.5}}>
-            <td>{index + 1}</td>
-            <td>{x.charge}</td>
-            <td>{x.particular}</td>
-            <td>{x.basis.slice(0, 8)}</td>
-            <td>{x.pp_cc}</td>
-            <td>{x.size_type}</td>
-            <td>{x.dg_type}</td>
-            <td>{x.qty}</td>
-            <td>{x.currency}</td>
-            <td>{x.amount}</td>
-            <td>{x.discount}</td>
-            <td>{x.tax_apply}</td>
-            <td>{x.tax_amount}</td>
-            <td>{x.net_amount}</td>
-            <td>{x.currency=="PKR"?"1.00":x.ex_rate}</td>
-            <td>{x.local_amount}</td>
-        </tr>
-            )
-        })}
-        {invoice.roundOff!="0" &&
-        <tr style={{lineHeight:0.5}}>
-            <td>{records.length+1}</td>
-            <td>ROFC</td>
-            <td>Round Off</td>
-            <td> - </td>
-            <td> - </td>
-            <td> - </td>
-            <td> - </td>
-            <td>1</td>
-            <td>PKR</td>
-            <td>{invoice.roundOff?.slice(1)}</td>
-            <td> 0 </td>
-            <td style={{textAlign:'center'}}>No</td>
-            <td>0.00</td>
-            <td>{invoice.roundOff?.slice(1)}</td>
-            <td>1.00</td>
-            <td>{invoice.roundOff}</td>
-        </tr>
-        }
+            {records?.length>0 &&
+            <>
+            {records?.map((x, index) => {
+            return (
+            <tr key={index} className='f table-row-center-singleLine' style={{lineHeight:0.5}}>
+                <td>{index + 1}</td>
+                <td>{x.charge}</td>
+                <td>{x.particular}</td>
+                <td>{x.basis.slice(0, 8)}</td>
+                <td>{x.pp_cc}</td>
+                <td>{x.size_type}</td>
+                <td>{x.dg_type}</td>
+                <td>{x.qty}</td>
+                <td>{x.currency}</td>
+                <td>{x.amount}</td>
+                <td>{x.discount}</td>
+                <td>{x.tax_apply}</td>
+                <td>{x.tax_amount}</td>
+                <td>{x.net_amount}</td>
+                <td>{x.currency=="PKR"?"1.00":x.ex_rate}</td>
+                <td>{x.local_amount}</td>
+            </tr>
+                )
+            })}
+            </>
+            }
+            {invoice!=null && <>
+                {invoice?.roundOff!="0" &&
+                <tr style={{lineHeight:0.5}}>
+                    <td>{records.length+1}</td>
+                    <td>ROFC</td>
+                    <td>Round Off</td>
+                    <td> - </td>
+                    <td> - </td>
+                    <td> - </td>
+                    <td> - </td>
+                    <td>1</td>
+                    <td>PKR</td>
+                    <td>{invoice?.roundOff?.slice(1)}</td>
+                    <td> 0 </td>
+                    <td style={{textAlign:'center'}}>No</td>
+                    <td>0.00</td>
+                    <td>{invoice?.roundOff?.slice(1)}</td>
+                    <td>1.00</td>
+                    <td>{invoice?.roundOff}</td>
+                </tr>
+                }
+            </>
+            }
         </tbody>
         </Table>
         </div>
@@ -496,7 +502,7 @@ return (
         <Col className='mx-2 pt-3' md={4}>
             <h5>Note</h5>
             <div style={{border:"1px solid silver"}}>
-                <TextArea rows={4} value={invoice.note} onChange={(e)=>setInvoice({...invoice, note:e.target.value})} />
+                <TextArea rows={4} value={invoice?.note} onChange={(e)=>setInvoice({...invoice, note:e.target.value})} />
             </div>
             <button className='btn-custom mt-3' onClick={updateNote} type='button'>Save</button>
         </Col>
@@ -521,12 +527,12 @@ return (
         <Row>
             <Col md={6} className=" ">
             <div className=''>
-                {invoice.currency!="PKR" && 
+                {invoice?.currency!="PKR" && 
                 <>
-                    <span className='inv-label mx-2'>Total Amount {`(${invoice.currency})`}: </span>
+                    <span className='inv-label mx-2'>Total Amount {`(${invoice?.currency})`}: </span>
                     <span className='inv-value charges-box'> 
                         {" "}
-                        {commas((parseFloat(invoice.total)/parseFloat(invoice.ex_rate)).toFixed(2))}
+                        {commas((parseFloat(invoice?.total)/parseFloat(invoice?.ex_rate)).toFixed(2))}
                     </span>
                     <span className='mx-4'></span>
                 </>
@@ -534,7 +540,7 @@ return (
                 <span className='inv-label mx-2'>Total Amount {"(Local)"}:</span>
                 <span className='inv-value charges-box'> 
                     {" "}
-                    {commas((parseFloat(invoice.total) + parseFloat(invoice.roundOff)).toFixed(2))}
+                    {commas((parseFloat(invoice?.total) + parseFloat(invoice?.roundOff)).toFixed(2))}
                 </span>
             </div>
             </Col>
@@ -544,7 +550,7 @@ return (
     }
     {/* Printing Component */}
     <div style={{
-            display:"none"
+            //display:"none"
         }}>
         <div ref={(response)=>(inputRef=response)}>
             {invoice && 

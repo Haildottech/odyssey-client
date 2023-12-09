@@ -79,7 +79,7 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
       voyageList:tempVoyageList,
     }});
     getInvoices(tempState.id, dispatch);
-    reset({...tempState, pol:type=="AE"?'KHI':""});
+    reset({...tempState});
   }, [state.selectedRecord]);
 
   const onSubmit = async(data) => {
@@ -104,28 +104,28 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
     data.createdById = loginId;
     dispatch({type:'toggle', fieldName:'load', payload:true});
     setTimeout(async() => {
-        await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_SEAJOB,{
-          data
-        }).then((x)=>{
-          if(x.data.status=='success'){
-              refetch()
-              openNotification('Success', `Job Created!`, 'green');
-              dispatchNew(incrementTab({
-                "label": type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
-                "key": type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
-                "id":x.data.result.id
-              }))
-              Router.push(
-                type=="SE"?`/seaJobs/export/${x.data.result.id}`:
-                type=="SI"?`/seaJobs/import/${x.data.result.id}`:
-                type=="AE"?`/airJobs/export/${x.data.result.id}`:
-                `/airJobs/import/${x.data.result.id}`
-                )
-          }else{
-              openNotification('Error', `An Error occured Please Try Again!`, 'red')
-          }
-          dispatch({type:'toggle', fieldName:'load', payload:false});
-        })
+      await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_SEAJOB,{
+        data
+      }).then((x)=>{
+        if(x.data.status=='success'){
+            refetch()
+            openNotification('Success', `Job Created!`, 'green');
+            dispatchNew(incrementTab({
+              "label": type=="SE"?"SE JOB":type=="SI"?"SI JOB":type=="AE"?"AE JOB":"AI JOB",
+              "key": type=="SE"?"4-3":type=="SI"?"4-6":type=="AE"?"7-2":"7-5",
+              "id":x.data.result.id
+            }))
+            Router.push(
+              type=="SE"?`/seaJobs/export/${x.data.result.id}`:
+              type=="SI"?`/seaJobs/import/${x.data.result.id}`:
+              type=="AE"?`/airJobs/export/${x.data.result.id}`:
+              `/airJobs/import/${x.data.result.id}`
+              )
+        }else{
+            openNotification('Error', `An Error occured Please Try Again!`, 'red')
+        }
+        dispatch({type:'toggle', fieldName:'load', payload:false});
+      })
     }, 3000);
   };
 
@@ -161,16 +161,16 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
     }
 
     setTimeout(async() => {
-        await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_SEAJOB,{data}).then((x)=>{
-          if(x.data.status=='success'){
-              openNotification('Success', `Job Updated!`, 'green')
-              createNotification(notification)
-              refetch();
-          }else{
-              openNotification('Error', `An Error occured Please Try Again!`, 'red')
-          }
-          dispatch({type:'toggle', fieldName:'load', payload:false});
-        })
+      await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_EDIT_SEAJOB,{data}).then((x)=>{
+        if(x.data.status=='success'){
+          openNotification('Success', `Job Updated!`, 'green')
+          createNotification(notification)
+          refetch();
+        }else{
+          openNotification('Error', `An Error occured Please Try Again!`, 'red')
+        }
+        dispatch({type:'toggle', fieldName:'load', payload:false});
+      })
     }, 3000);
   };
 
@@ -237,22 +237,20 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
         className={allValues.approved==1?"btn-red-disabled mt-3 mx-3":"btn-red mt-3 mx-3"}
           onClick={()=>{
             PopConfirm("Confirmation", "Are You Sure You Want To Delete This Job?",
-                () => {
-                  console.log("Delete");
-                  axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_DELETE_JOBS,{
-                    id:allValues.id
-                  }).then(async(x)=>{
-                    let oldTabs = await type=="SE"?tabs.filter((x)=> {return x.key!="4-3" }):
-                    await type=="SI"?tabs.filter((x)=> {return x.key!="4-6" }):
-                    await type=="AE"?tabs.filter((x)=> {return x.key!="7-2" }):
-                    await tabs.filter((x)=> {return x.key!="7-5" })
-                    dispatchNew(await removeTab(oldTabs)); // First deleting Job Tab
-                    Router.push(type=="SE"?"/seaJobs/seJobList":type=="SI"?"/seaJobs/siJobList":type=="AE"?"/airJobs/aeJobList":"/airJobs/aiJobList")
-                  })
-              })
+              () => {
+                axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_DELETE_JOBS,{
+                  id:allValues.id
+                }).then(async(x)=>{
+                  let oldTabs = await type=="SE"?tabs.filter((x)=> {return x.key!="4-3" }):
+                  await type=="SI"?tabs.filter((x)=> {return x.key!="4-6" }):
+                  await type=="AE"?tabs.filter((x)=> {return x.key!="7-2" }):
+                  await tabs.filter((x)=> {return x.key!="7-5" })
+                  dispatchNew(await removeTab(oldTabs)); // First deleting Job Tab
+                  Router.push(type=="SE"?"/seaJobs/seJobList":type=="SI"?"/seaJobs/siJobList":type=="AE"?"/airJobs/aeJobList":"/airJobs/aiJobList")
+                })
+            })
           }}
-        >
-          Delete Job {allValues.approved}
+        >Delete Job {allValues.approved}
         </button>
       </>
       }

@@ -12,6 +12,7 @@ import PartySearch from './PartySearch';
 import { saveHeads, calculateChargeHeadsTotal, makeInvoice, getHeadsNew } from "../states";
 import { useQueryClient } from '@tanstack/react-query';
 import { delay } from "/functions/delay";
+import { v4 as uuidv4 } from 'uuid';
 
 const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, remove, control, register, companyId, operationType, allValues, chargesData}) => {
     
@@ -59,7 +60,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             onClick={()=>{
             if(!state.chargeLoad){
                 append({
-                    type:type, description:'', basis:'', 
+                    type:type, description:'', basis:'', key_id:uuidv4(),
                     new:true,  ex_rate: parseFloat(state.exRate), pp_cc:state.selectedRecord.freightType=="Prepaid"?'PP':'CC', 
                     local_amount: 0,  size_type:'40HC', dg_type:state.selectedRecord.dg=="Mix"?"DG":state.selectedRecord.dg, 
                     qty:1, rate_charge:1, currency:'USD', amount:1, check: false, bill_invoice: '', charge: '', particular: '',
@@ -75,20 +76,13 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             onClick={async () => {
                 if(!state.chargeLoad){
                     dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-                    await calculate();
                     await saveHeads(chargeList, state, dispatch, reset);
-                    await queryClient.removeQueries({ queryKey: ['charges'] })
-                    await chargesData.refetch();
-                    dispatch({type:'set', payload:{
-                        //chargeLoad:false,
-                        selection:{InvoiceId:null, partyId:null}
-                    }})
                     await delay(1000);
                     await queryClient.removeQueries({ queryKey: ['charges'] })
                     await chargesData.refetch();
                     dispatch({type:'set', payload:{
                         chargeLoad:false,
-                        //selection:{InvoiceId:null, partyId:null}
+                        selection:{InvoiceId:null, partyId:null}
                     }})
                 }
             }}
@@ -96,21 +90,14 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <div className='div-btn-custom-green text-center py-1 mx-2 px-3' style={{float:'right'}}
             onClick={async () => {
                 if(!state.chargeLoad){
-                    await dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-                    let status = await  makeInvoice(chargeList, companyId, reset, operationType);
-                    if(status=="success"){
-                        await queryClient.removeQueries({ queryKey: ['charges'] })
-                        await chargesData.refetch();
-                    }  
-                    await dispatch({type:'set', payload:{
-                        //chargeLoad:false,
-                        selection:{InvoiceId:null, partyId:null}
-                    }})
-                    await delay(1000);
+                    dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+                    await  makeInvoice(chargeList, companyId, reset, operationType);
+                    await delay(1500);
+                    await queryClient.removeQueries({ queryKey: ['charges'] })
                     await chargesData.refetch();
-                    await dispatch({type:'set', payload:{
+                    dispatch({type:'set', payload:{
                         chargeLoad:false,
-                        //selection:{InvoiceId:null, partyId:null}
+                        selection:{InvoiceId:null, partyId:null}
                     }})
                 }
             }}
@@ -153,12 +140,12 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <th style={{minWidth:120}}>Approval Date</th>
     </tr>
     </thead>
-    <tbody>
+    {chargeList && <tbody>
     {fields.map((x, index) => {
     return(
         <>
         {x.type==type && 
-        <tr key={index} className='f table-row-center-singleLine'>
+        <tr key={x.key_id} className='f table-row-center-singleLine'>
         <td className='text-center'>
             <CloseCircleOutlined className='cross-icon' style={{ position: 'relative', bottom: 3 }}
                 onClick={() => {
@@ -175,7 +162,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             />
         </td>
         <td className='text-center'>
-            {(x.InvoiceId==null && x.new!=true)  &&
+            {(x.InvoiceId==null && x.new!=true) &&
             <input type="checkbox" {...register(`chargeList.${index}.check`)}
                 style={{ cursor: 'pointer' }}
                 disabled={
@@ -342,7 +329,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         }
         </>
     )})}
-    </tbody>
+    </tbody>}
     </Table>
     }
     {state.chargeLoad && 

@@ -54,7 +54,7 @@ const baseValues = {
   commodityId:'',
   overseasAgentId:'',
   salesRepresentatorId:'',
-  pol:'',
+  pol:'PKKHI',
   pod:'',
   fd:'',
   customCheck:[],
@@ -238,9 +238,8 @@ const getVendors = memoize(async(id) => {
 const saveHeads = async(charges, state, dispatch, reset) => {
   await axios.post(process.env.NEXT_PUBLIC_CLIMAX_SAVE_SE_HEADS_NEW, 
     { charges, deleteList:state.deleteList, id:state.selectedRecord.id, exRate:state.exRate }
-  ).then((x)=>{
-    reset({chargeList:[]})
-  })
+  );
+  //reset({chargeList:[]});
 }
 
 const getHeadsNew = async(id, dispatch) => {
@@ -248,27 +247,27 @@ const getHeadsNew = async(id, dispatch) => {
   let paybleCharges = [];
   let reciveableCharges = [];
   await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SE_HEADS_NEW,{
-      headers:{"id": `${id}`}
+    headers:{"id": `${id}`}
   }).then((x)=>{
-      if(x.data.status=="success"){
-        let tempCharge = [];
-        x.data.result.forEach((x)=>{
-            if(x.type!='Payble'){
-              tempCharge.push({...x, sep:false});
-            }
-        });
-        reciveableCharges = tempCharge;
-        tempCharge = [];
-        x.data.result.forEach((x)=>{
-            if(x.type=='Payble'){
-              tempCharge.push({...x, sep:false});
-            }
-        })
-        paybleCharges = tempCharge;
-      }
+    if(x.data.status=="success"){
+      let tempCharge = [];
+      x.data.result.forEach((x)=>{
+        if(x.type!='Payble'){
+          tempCharge.push({...x, sep:false});
+        }
+      });
+      reciveableCharges = tempCharge;
+      tempCharge = [];
+      x.data.result.forEach((x)=>{
+        if(x.type=='Payble'){
+          tempCharge.push({...x, sep:false});
+        }
+      })
+      paybleCharges = tempCharge;
+    }
   });
   let tempChargeHeadsArray = calculateChargeHeadsTotal([...reciveableCharges, ...paybleCharges], "full");    
-  console.log(tempChargeHeadsArray)
+  //console.log(tempChargeHeadsArray)
   dispatch({type:'set', 
   payload:{
     reciveableCharges,
@@ -324,17 +323,12 @@ const calculateChargeHeadsTotal = (chageHeads, type) => {
 }
 
 const makeInvoice = async(list, companyId, reset, type) => {
-  let status = "";
   let tempList = list.filter((x)=>x.check);
-  if(tempList.length>0){
+  tempList.length>0?
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_INVOICE_NEW,{
       chargeList:tempList, companyId, type:type
-    }).then((x)=>{
-      reset({chargeList:[]})
-      status = x.data.status
     })
-  }
-  return status
+  :null
 }
 
 const getInvoices = async(id, dispatch) => {
@@ -353,16 +347,16 @@ const getStatus = (val) => {
 };
 
 const setHeadsCache = (chargesData, dispatch, reset) => {
-  chargesData.status=="success"?
-  dispatch({type:'set', 
-  payload:{
-    reciveableCharges:chargesData.data.reciveableCharges,
-    paybleCharges:chargesData.data.paybleCharges,
-    ...chargesData.data
-    //...tempChargeHeadsArray
-  }}):null;
-  chargesData.status=="success"?
-  reset({chargeList:[ ...chargesData.data.charges ]}):
+  // chargesData.status=="success"?
+  // dispatch({type:'set', 
+  // payload:{
+  //   reciveableCharges:chargesData.data.reciveableCharges,
+  //   paybleCharges:chargesData.data.paybleCharges,
+  //   ...chargesData.data
+  //   //...tempChargeHeadsArray
+  // }}):null;
+  chargesData?.data?.charges?.length>0?
+    reset({chargeList:[ ...chargesData.data.charges ]}):
   null;
 }
 
