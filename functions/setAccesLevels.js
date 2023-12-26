@@ -75,11 +75,11 @@ function setAccesLevels(dispatch, collapsed){
         key: '3-4',
         children: `Content of Tab Pane 2`,
       }),
-      // getItem('Voucher', '3-5',<></>, null, {
-      //   label: `Voucher`,
-      //   key: '3-5',
-      //   children: `Content of Tab Pane 2`,
-      // }),
+      getItem('Voucher', '3-5',<></>, null, {
+        label: `Voucher`,
+        key: '3-5',
+        children: `Content of Tab Pane 2`,
+      }),
       getItem('Voucher List', '3-6',<></>, null, {
         label: `Voucher List`,
         key: '3-6',

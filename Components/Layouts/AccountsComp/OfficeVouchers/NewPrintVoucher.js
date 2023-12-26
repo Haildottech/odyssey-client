@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { Col, Row } from 'react-bootstrap';
-import ReactToPrint from 'react-to-print'
+import ReactToPrint from 'react-to-print';
 
 const NewPrintVoucehr = ({state, companyId}) => {
 

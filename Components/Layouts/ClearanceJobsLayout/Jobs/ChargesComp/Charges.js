@@ -115,12 +115,6 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                 }
             }}
         >Generate Invoice No</div>
-        <div className='mx-2' style={{float:'right'}}>
-        <InputNumber placeholder='Ex.Rate' size='small' className='my-1' min={"0.1"}  style={{position:'relative', bottom:2}}
-            value={state.exRate} onChange={(e)=>dispatch({type:'toggle',fieldName:'exRate',payload:e})} 
-        />
-        </div>
-        <div className='my-1' style={{float:'right'}}>Ex.Rate</div>
         </Col>
     </Row>
     <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto'}}>
@@ -206,6 +200,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
                         charge: e,
                         particular: y.name,
                         basis: y.calculationType,
+                        amount :y.fixAmount>0?y.fixAmount:1,
                         taxPerc: y.taxApply == "Yes" ? parseFloat(y.taxPerc) : 0.00,
                         qty:(y.calculationType!="Per Unit"||allValues.cwtClient=="")?1:allValues.cwtClient
                     }
@@ -330,7 +325,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         </td>
         <td>{x.local_amount}</td>
         <td className='text-center'>{/* Party Selection */}
-                {x.new == true && <RightCircleOutlined style={{ position: 'relative', bottom: 3 }}
+                {x.new == true && <RightCircleOutlined className="blue-hov" style={{fontSize:15}}
                     onClick={() => {
                         dispatch({ type: 'set', payload: { headIndex: index, headVisible: true } }); //<--Identifies the Head with there Index sent to modal
                     }}

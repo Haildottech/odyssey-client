@@ -1,20 +1,23 @@
 import SelectSearchComp from "/Components/Shared/Form/SelectSearchComp";
 import InputNumComp from "/Components/Shared/Form/InputNumComp";
 import SelectComp from "/Components/Shared/Form/SelectComp";
+import React, { useEffect, useState, useRef } from "react";
 import InputComp from "/Components/Shared/Form/InputComp";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import DateComp from "/Components/Shared/Form/DateComp";
-import React, { useEffect, useState } from "react";
-import { AiFillRightCircle } from "react-icons/ai"
+import { AiFillRightCircle } from "react-icons/ai";
 import { Spinner, Table } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
+import ReactToPrint from 'react-to-print';
+import VoucherPrint from "./VoucherPrint";
 import { InputNumber } from "antd";
 import moment from "moment";
 import axios from "axios";
 
 const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset, voucherData, setSettlement, setChild, id}) => {
 
+  let inputRef = useRef(null)
   const { fields, append, remove } = useFieldArray({
     name: "Voucher_Heads",
     control,
@@ -32,7 +35,9 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
 
   const box = {border:'1px solid silver', paddingLeft:10, paddingTop:5, paddingBottom:3, minHeight:31}
   const allValues = useWatch({ control });
+
   useEffect(() => { getValues(); }, []);
+  
   useEffect(() => { 
     (allValues.vType!="" && CompanyId!=NaN && allValues.vType)?
       getAccounts():
@@ -62,7 +67,7 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
       let iD="";
       let settleId="";
       let ChildAccountId = "";
-      let createdAt = voucherData.chequeDate?moment(voucherData.createdAt):"";
+      let createdAt = voucherData.createdAt?moment(voucherData.createdAt):"";
       let chequeDate = voucherData.chequeDate?moment(voucherData.chequeDate):"";
       let Voucher_Heads = voucherData.Voucher_Heads?.filter((x)=>x.settlement!=="1");
       voucherData?.Voucher_Heads?.filter((voucher) => {
@@ -78,8 +83,11 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
         ChildAccountId, settleId, id:iD
       });
     }
-    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {headers:{CompanyId:CompanyId}})
-    .then((x)=>{
+    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_CHILD_ACCOUNTS, {
+      headers:{
+        CompanyId:CompanyId
+      }
+    }).then((x)=>{
       setChild(x.data.result);
     })
   }
@@ -192,6 +200,14 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
       <div className="mt-2">Credit Total</div>
       <div style={{color:'grey', paddingTop:3, paddingRight:6, border:'1px solid grey', fontSize:16, textAlign:'right'}}>{commas(totalCredit)}</div>
       </Col>
+      <Col>
+        <ReactToPrint
+          content={() => inputRef}
+          trigger={() => (
+            <div className="div-btn-custom text-center p-1 px-5 fl-right">Print</div>
+          )}
+        />
+      </Col>
     </Row>
     <button type="button" className="btn-custom mb-3" style={{width:"110px", float:'right'}}
       onClick={()=>append({
@@ -255,8 +271,15 @@ const Vouchers=({register, control, errors,  CompanyId, child, settlement, reset
     </div>
     {(accountLoad && allValues.vType) && <Spinner size="sm" className="my-2" />}
     <br/>
+    <div style={{
+      display:'none'
+    }}>
+      <div ref={(response)=>(inputRef=response)}>
+        <VoucherPrint compLogo={CompanyId} voucherData={voucherData} />
+      </div>
+    </div>
   </>
   )
 };
 
-export default Vouchers;
+export default React.memo(Vouchers);

@@ -37,7 +37,7 @@ const MainTable = ({ledger, closing, opening, name, company, currency, from, to}
         </span>
       </div>
       <hr className="m-0" />
-      <div style={{ maxHeight: 760, overflowY: "auto", overflowX: "hidden" }}>
+      <div style={{maxHeight:"62vh", overflowY:"auto", overflowX:"hidden"}}>
         <div className="table-sm-1 mt-2">
         <Table className="tableFixHead" bordered>
           <thead>

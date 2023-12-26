@@ -550,7 +550,7 @@ return (
     }
     {/* Printing Component */}
     <div style={{
-            //display:"none"
+            display:"none"
         }}>
         <div ref={(response)=>(inputRef=response)}>
             {invoice && 

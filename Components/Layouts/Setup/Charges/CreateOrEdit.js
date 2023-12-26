@@ -70,7 +70,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
 
   const onEdit = async(data) => {
     dispatch({type:'toggle', fieldName:'load', payload:true});
-
+    // console.log(data)
     setTimeout(async() => {
         await axios.post(process.env.NEXT_PUBLIC_CLIMAX_EDIT_CHARGE,{
             data
@@ -97,7 +97,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
   const onError = (errors) => console.log(errors);
 
   return (
-    <div className='client-styles' style={{maxHeight:720, overflowY:'auto', overflowX:'hidden'}}>
+    <div className='client-styles' style={{maxHeight:620, overflowY:'auto', overflowX:'hidden'}}>
     <h6>{state.edit?'Edit':'Create'}</h6>
     <form onSubmit={handleSubmit(state.edit?onEdit:onSubmit, onError)}>
       <Row>
@@ -127,10 +127,13 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
         <Col md={12} className="my-2">
         <RadioComp register={register} name='calculationType' control={control} label='Calculation Type'
             options={[
-                { label: "Per Unit", value: "Per Unit" },
-                { label: "Per Shipment", value: "Per Shipment" },
+                { label: "P/Unit", value: "Per Unit" },
+                { label: "P/Shpt", value: "Per Shipment" },
             ]} />
             {errors.calculationType && <div className='error-line'>{errors.calculationType.message}*</div>}
+        </Col>
+        <Col md={4} className='my-2'>
+            <InputNumComp register={register} name='fixAmount' control={control} label='Fixed Charge Amount' />
         </Col>
         <Col md={12} className="my-2">
         <RadioComp register={register} name='taxApply' control={control} label='Tax'
@@ -174,7 +177,7 @@ const CreateOrEdit = ({state, dispatch, baseValues}) => {
             {errors.defaultPaybleParty && <div className='error-line'>{errors.defaultPaybleParty.message}*</div>}
         </Col>
       </Row>
-      <div style={{height:226}}></div>
+      <div style={{height:16}}></div>
     <hr/>
     <button type="submit" disabled={state.load?true:false} className='btn-custom'>
       {state.load?<Spinner animation="border" size='sm' className='mx-3' />:'Submit'}

@@ -15,6 +15,8 @@
 .red-txt{ color: rgb(215, 71, 31)!important; }
 .green-txt{ color: rgb(76, 227, 136)!important; }
 
+.light-blue-bg{ background-color: rgb(195, 16, 16)!important; }
+
 .fs-10 { font-size: 10px!important; }
 .fs-11 { font-size: 11px!important; }
 .fs-12 { font-size: 12px!important; }
@@ -143,6 +145,15 @@
   border: none;
   cursor: pointer;
 }
+.btn-custom-small{
+  background-color: rgb(6, 150, 172)!important;
+  color: white;
+  padding: 3px 15px 3px 15px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+}
+
 .btn-custom{
   background-color: rgb(6, 150, 172)!important;
   color: white;
@@ -167,8 +178,22 @@
   border: none;
   cursor: pointer;
 }
+.btn-red-two{
+  color: rgb(146, 26, 18)!important;
+  background-color: rgb(255, 255, 255);
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.btn-red-two:hover{
+  color: rgb(255, 255, 255)!important;
+  background-color: rgb(146, 26, 18)!important;
+}
 .btn-red-disabled{
-  background-color: rgb(103, 57, 54)!important;;
+  background-color: rgb(103, 57, 54)!important;
   color: white;
   padding: 5px 20px 5px 20px;
   border-radius: 15px;
@@ -183,6 +208,11 @@
   border: none;
   cursor: pointer;
 }
+
+.fl-right{
+  float: right;
+}
+
 .div-btn-custom{
   background-color: rgb(6, 150, 172)!important;
   color: white;
@@ -423,7 +453,9 @@
   font-weight: 100;
   font-size: 80%;
 }
-
+.blue-hov:hover{
+  color: rgb(23, 140, 153);
+}
 .row-hov{
   transition-duration: 300ms;
   background-color: white;

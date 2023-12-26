@@ -38,50 +38,51 @@ const PartySearch = ({state, dispatch, reset, useWatch, control}) => {
     <>
       {props.data.filter((x)=>{
         if(
-          x.name.toLowerCase().includes(searchTerm.toLowerCase())||
-          x.code.toLowerCase().includes(searchTerm.toLowerCase())||
-          x.types?.toLowerCase().includes(searchTerm.toLowerCase())
+          x?.name?.toLowerCase().includes(searchTerm.toLowerCase())||
+          x?.code?.toLowerCase().includes(searchTerm.toLowerCase())||
+          x?.types?.toLowerCase().includes(searchTerm.toLowerCase())
         ){ return x }
         if(searchTerm==""){ return x }
       }).map((x, i)=> {
       return(
-      <tr key={i} className={`${x.check?"table-select-list-selected":"table-select-list"}`}
-        onClick={()=>{
-          if(!x.check){
-            let temp = props.type=="vendors"?[...state.vendorParties]:[...state.clientParties];
-            temp.forEach((y, i2)=>{
-              if(y.id==x.id){ temp[i2].check=true
-              } else { temp[i2].check=false }
-            })
-            dispatch({type:'toggle', fieldName:props.type=="vendors"?'vendorParties':'clientParties', payload:temp});
-          } else {
-            let temp = [];
-            temp = chargeList;
-            if(state.chargesTab=='1'){
-              temp[state.headIndex].invoiceType = x.types?.includes("Overseas Agent")?"Agent Bill":"Job Invoice" ;
-            }
-            else {
-              temp[state.headIndex].invoiceType = x.types.includes("Overseas Agent")?"Agent Invoice":"Job Bill" ;
-            }
-            temp[state.headIndex] = {
-              ...temp[state.headIndex], 
-              name:x.name, 
-              partyId:x.id, 
-              partyType:partyType
-            }
-            reset({ chargeList: temp });
-            let tempOne = [...state.vendorParties];
-            let tempTwo = [...state.clientParties];
-            tempOne.forEach((y, i1)=>{
-              tempOne[i1].check=false
-            })
-            tempTwo.forEach((y, i1)=>{
-              tempTwo[i1].check=false
-            })
-            dispatch({ type:'set', payload:{headIndex:"", headVisible:false, vendorParties:tempOne, clientParties:tempTwo} })
+      <tr key={i} className={`${x.check?"table-select-list-selected":"table-select-list"}`} onClick={()=>{
+        if(!x.check){
+          let temp = props.type=="vendors"?[...state.vendorParties]:[...state.clientParties];
+          temp.forEach((y, i2)=>{
+            if(y.id==x.id){ temp[i2].check=true
+            } else { temp[i2].check=false }
+          })
+          dispatch({type:'toggle', fieldName:props.type=="vendors"?'vendorParties':'clientParties', payload:temp});
+        } else {
+          let temp = [];
+          temp = chargeList;
+          if(state.chargesTab=='1'){
+            temp[state.headIndex].invoiceType = x.types?.includes("Overseas Agent")?"Agent Bill":"Job Invoice" ;
           }
-        }}
-      >
+          else {
+            temp[state.headIndex].invoiceType = x.types.includes("Overseas Agent")?"Agent Invoice":"Job Bill" ;
+          }
+          temp[state.headIndex] = {
+            ...temp[state.headIndex], 
+            name:x.name, 
+            partyId:x.id, 
+            partyType:partyType
+          }
+          reset({ chargeList: temp });
+
+          let tempOne = [...state.vendorParties];
+          let tempTwo = [...state.clientParties];
+
+          tempOne.forEach((y, i1)=>{
+            tempOne[i1].check=false
+          });
+          tempTwo.forEach((y, i1)=>{
+            tempTwo[i1].check=false
+          });
+
+          dispatch({ type:'set', payload:{headIndex:"", headVisible:false, vendorParties:tempOne, clientParties:tempTwo} })
+        }
+      }}>
         <td className='pt-1 text-center px-3'> {x.check?<CheckCircleOutlined style={{color:'green', position:'relative', bottom:2}} />:i+1 } </td>
         <td className='pt-1' style={{whiteSpace:"nowrap"}}><strong>{x.name}</strong></td>
         <td className='pt-1 text-center'>

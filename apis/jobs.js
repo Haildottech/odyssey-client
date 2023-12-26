@@ -61,17 +61,17 @@ const calculateChargeHeadsTotal = (chageHeads, type) => {
 }
 
 export async function getChargeHeads ({id}) {
-    let charges = [];
-    await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SE_HEADS_NEW,{
-      headers:{"id": `${id}`}
-    }).then((x)=>{
-      if(x.data.status=="success"){
-        charges = x.data.result;
-      }
-    });
-    let tempChargeHeadsArray = await calculateChargeHeadsTotal([...charges], "full");    
-    return {
-      charges,
-      ...tempChargeHeadsArray
+  let charges = [];
+  await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SE_HEADS_NEW,{
+    headers:{"id": `${id}`}
+  }).then((x)=>{
+    if(x.data.status=="success"){
+      charges = x.data.result;
     }
+  });
+  let tempChargeHeadsArray = await calculateChargeHeadsTotal([...charges], "full");    
+  return {
+    charges,
+    ...tempChargeHeadsArray
   }
+}

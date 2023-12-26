@@ -18,7 +18,10 @@ export async function getServerSideProps({req, res}) {
   }).then((x)=>x.data);
 
   const voucherData = await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_VOUCHERS,{
-    headers:{"id":`${cookies.get('companyId')}`}
+    headers:{
+      "id":`${cookies.get('companyId')}`,
+      "offset":0
+    }
   })
   .then((x)=>x.data);
 

@@ -45,7 +45,8 @@ const baseValues = {
   defaultPaybleParty:"",
   defaultRecivableParty:"",
   taxApply:"No",
-  taxPerc:""
+  taxPerc:"",
+  fixAmount:0.00
 }
 
 const initialState = {
@@ -68,7 +69,7 @@ const Charges = ({chargeData}) => {
   return (
     <div className='base-page-layout'>
     <Row>
-        <Col><h5>Clients</h5></Col>
+        <Col><h5>Charges</h5></Col>
         <Col>
         <Row>
             <Col md={4}></Col>
@@ -97,13 +98,13 @@ const Charges = ({chargeData}) => {
         <tbody>
         {records.filter((x)=>{
             if(
-                x.code.toLowerCase()==state.search.toLowerCase() ||
-                x.name.toLowerCase()==state.search.toLowerCase() ||
-                x.short.toLowerCase()==state.search.toLowerCase()||
-                x.currency.toLowerCase()==state.search.toLowerCase()){
-                return x
-            }else if(state.search==""){
-                return x
+              x.code.toLowerCase()==state.search.toLowerCase() ||
+              x.name.toLowerCase()==state.search.toLowerCase() ||
+              x.short.toLowerCase()==state.search.toLowerCase()||
+              x.currency.toLowerCase()==state.search.toLowerCase()){
+              return x
+            } else if(state.search==""){
+              return x
             }
         }).map((x, index) => {
           return (

@@ -58,7 +58,6 @@ const MainLayout = ({children}) => {
   };
 
   useEffect(() => {
-    console.log(newRouter.pathname)
     // When visiting pages inside folders the initial path in url confilts, so to this is mandatory for resolving it
     if(newRouter.pathname.includes("/clearanceJobs/import/sea/[id]")){
       setToggleState('9-4');
@@ -201,6 +200,7 @@ const MainLayout = ({children}) => {
   });
   
   const memoizedAlterTabs = () => {
+    // console.log("Here")
     if(Object.keys(tabs).length>0){
       let tempTabs = [...tabItems];
       let cancel = false;
@@ -282,9 +282,11 @@ const MainLayout = ({children}) => {
         setTabActive(tempTabActive);
       }
     }
+    toggleTab(tabs)
   };
 
   useEffect(() => memoizedAlterTabs(), [tabs]);
+
   const setKey = (value) => {
     let result = "";
     let index = 0;
@@ -309,6 +311,7 @@ const MainLayout = ({children}) => {
 
   const toggleTab = (x) => {
     setToggleState(x.key);
+    //console.log(x.key)
     if(x.key=='1-1'){ Router.push('/dashboard/home') }
     else if(x.key=='1-2'){ Router.push('/dashboard/requests') }
     else if(x.key=='2-1'){ Router.push('/employees') }
@@ -324,7 +327,15 @@ const MainLayout = ({children}) => {
     else if(x.key=='3-2'){ Router.push('/accounts/accountActivity') }
     else if(x.key=='3-3'){ Router.push('/accounts/invoiceAndBills') }
     else if(x.key=='3-4'){ Router.push(`/accounts/paymentReceipt/${setKey(x)}`) }
-    else if(x.key=='3-5'){ Router.push(`/accounts/vouchers/${setKey(x)}`)} //these routes are also settled in 2nd useEffect
+    else if(x.key=='3-5'){ 
+      //console.log(x);
+      if(x.id){
+        Router.push(`/accounts/vouchers/${setKey(x)}`)
+      } else {
+        setKey({...x, id:'new'})
+        Router.push(`/accounts/vouchers/new`)
+      }
+    } //these routes are also settled in 2nd useEffect
     else if(x.key=='3-6'){ Router.push('/accounts/voucherList') }
     else if(x.key=='3-7'){ Router.push('/accounts/officeVouchers/list') }
     else if(x.key=='3-8'){ Router.push(`/accounts/officeVouchers/${setKey(x)}`) }
@@ -374,6 +385,7 @@ const MainLayout = ({children}) => {
   };
 
   const removeTab = (index) => {
+    
     let tempTabs = [...tabItems];
     tempTabs = tempTabs.filter((x)=>{
       return x.key!=index
@@ -390,11 +402,13 @@ const MainLayout = ({children}) => {
   return (
   <Layout className="main-dashboard-layout">
     {!load && 
-    <Sider trigger={null} collapsible collapsed={collapsed} className='side-menu-styles' style={{maxHeight:'100vh',overflowY:'auto'}}>
+    <Sider trigger={null} collapsible collapsed={collapsed} 
+      className='side-menu-styles' 
+      style={{maxHeight:'100vh',overflowY:'auto'}}>
       <div className={!collapsed?'big-logo':'small-logo'}>
         <span>
           <img src={company=='1'?'/seanet-logo.png':company=='3'?'/aircargo-logo.png':company=='2'?'/cargolinkers-logo.png':null}/>
-          <p>Dashboard</p>
+          {!collapsed && <p className='wh-txt'>Dashboard</p>}
         </span>
       </div>
       <Menu mode="inline" theme="dark" defaultSelectedKeys={['1']} items={!collapsed?items:[]} />
@@ -404,7 +418,7 @@ const MainLayout = ({children}) => {
     <Header className="site-layout-background" style={{padding:0}}>
     {collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)}><AiOutlineRight /></span>}
     {!collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)} ><AiOutlineLeft /></span>}
-    <Select style={{width: 155, opacity:0.7}} onChange={handleChange} options={companies} value={company} />
+    <Select style={{width: 155, opacity:0.9}} onChange={handleChange} options={companies} value={company} />
     {username=="Saad" &&<>
       <span className='mx-3'></span>
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/seaJobs/seJobList")}>SE</span>
@@ -412,7 +426,7 @@ const MainLayout = ({children}) => {
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aeJobList")}>AE</span>
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aiJobList")}>AI</span>
     </>}
-      <span style={{float:'right'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
+      <span style={{float:'right', color:'white'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
     </Header>
     <Content style={{ margin:'24px 16px', padding:0, minHeight:280}}> 
     <div className='dashboard-styles'>

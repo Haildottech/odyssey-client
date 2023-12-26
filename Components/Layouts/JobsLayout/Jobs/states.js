@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import axios from "axios";
 import moment from "moment";
+import { delay } from "/functions/delay";
 
 const SignupSchema = yup.object().shape({  });
 
@@ -207,11 +208,9 @@ const memoize = (fn) => {
   return (...args) => {
     let n = args[0];
     if (n in cache) {
-      //console.log('Fetching from cache', n);
       return cache[n];
     }
     else {
-      //console.log('Calculating result', n);
       let result = fn(n);
       cache[n] = result;
       return result;
@@ -235,46 +234,68 @@ const getVendors = memoize(async(id) => {
   return result;
 })
 
-const saveHeads = async(charges, state, dispatch, reset) => {
-  await axios.post(process.env.NEXT_PUBLIC_CLIMAX_SAVE_SE_HEADS_NEW, 
-    { charges, deleteList:state.deleteList, id:state.selectedRecord.id, exRate:state.exRate }
-  );
-  //reset({chargeList:[]});
-}
-
-const getHeadsNew = async(id, dispatch) => {
-  //dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+const getHeadsNew = async(id, dispatch, reset) => {
+  dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
   let paybleCharges = [];
   let reciveableCharges = [];
   await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SE_HEADS_NEW,{
     headers:{"id": `${id}`}
-  }).then((x)=>{
+  }).then(async(x)=>{
     if(x.data.status=="success"){
-      let tempCharge = [];
-      x.data.result.forEach((x)=>{
-        if(x.type!='Payble'){
-          tempCharge.push({...x, sep:false});
-        }
-      });
-      reciveableCharges = tempCharge;
-      tempCharge = [];
-      x.data.result.forEach((x)=>{
-        if(x.type=='Payble'){
-          tempCharge.push({...x, sep:false});
-        }
-      })
-      paybleCharges = tempCharge;
+      // let tempCharge = [];
+      // x.data.result.forEach((x)=>{
+      //   if(x.type!='Payble'){
+      //     tempCharge.push({...x, sep:false});
+      //   }
+      // });
+      // reciveableCharges = await tempCharge;
+      // tempCharge = [];
+      // x.data.result.forEach((x)=>{
+      //   if(x.type=='Payble'){
+      //     tempCharge.push({...x, sep:false});
+      //   }
+      // })
+      // paybleCharges = await tempCharge;
+
+      let tempChargeHeadsArray = await calculateChargeHeadsTotal([...reciveableCharges, ...paybleCharges], "full");    
+      await reset({chargeList:[...x.data.result]});
+      dispatch({type:'set', 
+      payload:{
+        // reciveableCharges,
+        // paybleCharges,
+        chargeLoad:false,
+        ...tempChargeHeadsArray
+      }})
     }
   });
-  let tempChargeHeadsArray = calculateChargeHeadsTotal([...reciveableCharges, ...paybleCharges], "full");    
-  //console.log(tempChargeHeadsArray)
-  dispatch({type:'set', 
-  payload:{
-    reciveableCharges,
-    paybleCharges,
-    chargeLoad:false,
+}
+
+const saveHeads = async(charges, state, dispatch, reset) => {
+  await axios.post(process.env.NEXT_PUBLIC_CLIMAX_SAVE_SE_HEADS_NEW, 
+    { charges, deleteList:state.deleteList, id:state.selectedRecord.id, exRate:state.exRate }
+  ).then(async(x)=>{
+    if(x.data.status=="success"){
+      await delay(500)
+      await getHeadsNew(state.selectedRecord.id, dispatch, reset)
+      await getHeadsNew(state.selectedRecord.id, dispatch, reset)
+    }
+  })
+}
+
+async function getChargeHeads (id) {
+  let charges = [];
+  await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_SE_HEADS_NEW,{
+    headers:{"id": `${id}`}
+  }).then((x)=>{
+    if(x.data.status=="success"){
+      charges = x.data.result;
+    }
+  });
+  let tempChargeHeadsArray = await calculateChargeHeadsTotal([...charges], "full");    
+  return {
+    charges,
     ...tempChargeHeadsArray
-  }})
+  }
 }
 
 const calculateChargeHeadsTotal = (chageHeads, type) => {
@@ -322,11 +343,17 @@ const calculateChargeHeadsTotal = (chageHeads, type) => {
   return obj
 }
 
-const makeInvoice = async(list, companyId, reset, type) => {
+const makeInvoice = async(list, companyId, reset, type, dispatch, state) => {
   let tempList = list.filter((x)=>x.check);
   tempList.length>0?
     await axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_CREATE_INVOICE_NEW,{
       chargeList:tempList, companyId, type:type
+    }).then(async(x)=>{
+      if(x.data.status=="success"){
+        await delay(500)
+        await getHeadsNew(state.selectedRecord.id, dispatch, reset)
+        await getHeadsNew(state.selectedRecord.id, dispatch, reset)
+      }
     })
   :null
 }
@@ -346,7 +373,7 @@ const getStatus = (val) => {
   return val[0]=="1"?true:false
 };
 
-const setHeadsCache = (chargesData, dispatch, reset) => {
+const setHeadsCache = async(chargesData, dispatch, reset) => {
   // chargesData.status=="success"?
   // dispatch({type:'set', 
   // payload:{
@@ -355,9 +382,13 @@ const setHeadsCache = (chargesData, dispatch, reset) => {
   //   ...chargesData.data
   //   //...tempChargeHeadsArray
   // }}):null;
-  chargesData?.data?.charges?.length>0?
+  await chargesData?.data?.charges?.length>0?
     reset({chargeList:[ ...chargesData.data.charges ]}):
-  null;
+    null;
+  dispatch({type:'set', payload:{
+    chargeLoad:false,
+    selection:{InvoiceId:null, partyId:null}
+  }})
 }
 
 export {

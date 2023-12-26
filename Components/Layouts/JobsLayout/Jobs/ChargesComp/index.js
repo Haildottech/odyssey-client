@@ -2,7 +2,7 @@ import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getChargeHeads } from "/apis/jobs";
 import { Row, Col } from 'react-bootstrap';
-import { setHeadsCache } from '../states';
+import { setHeadsCache, getHeadsNew } from '../states';
 import { useSelector } from 'react-redux';
 import React, { useEffect } from 'react';
 import Charges from './Charges';
@@ -21,14 +21,18 @@ const ChargesComp = ({state, dispatch, type, allValues}) => {
     queryFn: () => getChargeHeads({id:state.selectedRecord.id})
   });
 
-  useEffect(() => {
-    setHeadsCache(chargesData, dispatch, reset);
-  }, [chargesData.status])
+  // useEffect(() => {
+  //   setHeadsCache(chargesData, dispatch, reset);
+  // }, [chargesData.status])
 
   useEffect(() => {
-    let obj = { charges:chargeList, payble:state.payble, reciveable:state.reciveable };
-    queryClient.setQueryData(['charges', {id:state.selectedRecord.id}], (x)=>x?{...obj}:x);
-  }, [chargeList])
+    getHeadsNew(state.selectedRecord.id, dispatch, reset)
+  }, [])
+
+  // useEffect(() => {
+  //   let obj = { charges:chargeList, payble:state.payble, reciveable:state.reciveable };
+  //   queryClient.setQueryData(['charges', {id:state.selectedRecord.id}], (x)=>x?{...obj}:x);
+  // }, [chargeList])
 
   return (
     <>

@@ -202,11 +202,11 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
         <Tabs.TabPane tab="Routing" key="3">
           <Routing control={control} register={register} errors={errors} state={state} useWatch={useWatch} type={type} />
         </Tabs.TabPane>
-      {/* {state.edit &&
+      {state.edit &&
         <Tabs.TabPane tab="Charges" key="4">
           <ChargesComp state={state} dispatch={dispatch} type={type} allValues={allValues} />
         </Tabs.TabPane>
-      } */}
+      }
       {/* {state.edit &&
         <Tabs.TabPane tab="Charge" key="8">
           <Charges state={state} dispatch={dispatch} type={type} allValues={allValues} />

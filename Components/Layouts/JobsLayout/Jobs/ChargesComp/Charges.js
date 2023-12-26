@@ -22,8 +22,13 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     useEffect(() => {
         if(chargeList){
             let list = chargeList.filter((x)=>x.check);
-            list.length>0?
-            dispatch({ type:'set',payload:{selection:{InvoiceId:list[0].InvoiceId,partyId:list[0].partyId}}}):null
+            dispatch({
+                type:'set', payload:{
+                selection:{
+                    InvoiceId:list.length>0?list[0].InvoiceId:null,
+                    partyId:list.length>0? list[0].partyId:null
+                }}
+            })
         }
     }, [chargeList])
 
@@ -51,64 +56,51 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     }
 
     const permissionAssign=(perm, x)=>x.Invoice?.approved=="1"?true:false;
+    
+    const saveCharges = async () => {
+        if(!state.chargeLoad){
+            await dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+            await saveHeads(chargeList, state, dispatch, reset);
+            //chargesData.refetch();
+        }
+    }
+
+    const appendCharge = ()=>{
+        if(!state.chargeLoad){
+        append({
+            type:type, description:'', basis:'', key_id:uuidv4(),
+            new:true,  ex_rate: parseFloat(state.exRate), pp_cc:state.selectedRecord.freightType=="Prepaid"?'PP':'CC', 
+            local_amount: 0,  size_type:'40HC', dg_type:state.selectedRecord.dg=="Mix"?"DG":state.selectedRecord.dg, 
+            qty:1, rate_charge:1, currency:'USD', amount:1, check: false, bill_invoice: '', charge: '', particular: '',
+            discount:0, tax_apply:false, taxPerc:0.00, tax_amount:0, net_amount:0, invoiceType:"", name: "", 
+            partyId:"", sep:false, status:'', approved_by:'', approval_date:'', InvoiceId:null, 
+            SEJobId:state.selectedRecord.id
+        })}
+    }
+
+    const generateInvoice = async () => {
+        if(!state.chargeLoad){
+            dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
+            await makeInvoice(chargeList, companyId, reset, operationType, dispatch, state);
+        }
+    }
 
   return(
-    <>
+<>
     <Row>
-        <Col style={{maxWidth:150}} className="">
-        <div className='div-btn-custom text-center py-1 fw-8'
-            onClick={()=>{
-            if(!state.chargeLoad){
-                append({
-                    type:type, description:'', basis:'', key_id:uuidv4(),
-                    new:true,  ex_rate: parseFloat(state.exRate), pp_cc:state.selectedRecord.freightType=="Prepaid"?'PP':'CC', 
-                    local_amount: 0,  size_type:'40HC', dg_type:state.selectedRecord.dg=="Mix"?"DG":state.selectedRecord.dg, 
-                    qty:1, rate_charge:1, currency:'USD', amount:1, check: false, bill_invoice: '', charge: '', particular: '',
-                    discount:0, tax_apply:false, taxPerc:0.00, tax_amount:0, net_amount:0, invoiceType:"", name: "", 
-                    partyId:"", sep:false, status:'', approved_by:'', approval_date:'', InvoiceId:null, 
-                    SEJobId:state.selectedRecord.id
-                })}}
-            }
-        >Add +</div>
-        </Col>
-        <Col>
-        <div className='div-btn-custom text-center mx-0 py-1 px-3' style={{float:'right'}} 
-            onClick={async () => {
-                if(!state.chargeLoad){
-                    dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-                    await saveHeads(chargeList, state, dispatch, reset);
-                    await delay(1000);
-                    await queryClient.removeQueries({ queryKey: ['charges'] })
-                    await chargesData.refetch();
-                    dispatch({type:'set', payload:{
-                        chargeLoad:false,
-                        selection:{InvoiceId:null, partyId:null}
-                    }})
-                }
-            }}
-        >Save Charges</div>
-        <div className='div-btn-custom-green text-center py-1 mx-2 px-3' style={{float:'right'}}
-            onClick={async () => {
-                if(!state.chargeLoad){
-                    dispatch({type:'toggle', fieldName:'chargeLoad', payload:true})
-                    await  makeInvoice(chargeList, companyId, reset, operationType);
-                    await delay(1500);
-                    await queryClient.removeQueries({ queryKey: ['charges'] })
-                    await chargesData.refetch();
-                    dispatch({type:'set', payload:{
-                        chargeLoad:false,
-                        selection:{InvoiceId:null, partyId:null}
-                    }})
-                }
-            }}
-        >Generate Invoice No</div>
+    <Col style={{maxWidth:150}}>
+        <div className='div-btn-custom text-center py-1 fw-8' onClick={appendCharge}>Add +</div>
+    </Col>
+    <Col>
+        <div className='div-btn-custom mx-2 py-1 px-3 fl-right' onClick={saveCharges}>Save Charges</div>
+        <div className='div-btn-custom-green fl-right py-1 px-3' onClick={generateInvoice}>Generate Invoice No</div>
         <div className='mx-2' style={{float:'right'}}>
-        <InputNumber placeholder='Ex.Rate' size='small' className='my-1' min={"0.1"}  style={{position:'relative', bottom:2}}
-            value={state.exRate} onChange={(e)=>dispatch({type:'toggle',fieldName:'exRate',payload:e})} 
-        />
+            <InputNumber placeholder='Ex.Rate' size='small' className='my-1' min={"0.1"}  style={{position:'relative', bottom:2}}
+                value={state.exRate} onChange={(e)=>dispatch({type:'toggle',fieldName:'exRate',payload:e})} 
+            />
         </div>
         <div className='my-1' style={{float:'right'}}>Ex.Rate</div>
-        </Col>
+    </Col>
     </Row>
     <div className='table-sm-1 mt-3' style={{maxHeight:300, overflowY:'auto'}}>
     {!state.chargeLoad &&
@@ -119,12 +111,12 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <th>.</th>
         <th>Bill/Invoice</th>
         <th>Charge</th>
-        <th>Particular</th>
+        <th>Party</th>
         <th>Basis</th>
         <th>PP/CC</th>
         {(operationType=="SE"||operationType=="SI") &&<th>SizeType</th>}
         {(operationType=="SE"||operationType=="SI") &&<th style={{minWidth:95}}>DG Type</th>}
-        <th>Qty/Weight</th>
+        <th>Qty/Wt</th>
         {(operationType=="AI"||operationType=="AE")&&<th>Rate</th>}
         <th>Currency</th>
         <th>Amount</th>
@@ -134,7 +126,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
         <th style={{minWidth:100}}>Net Amount</th>
         <th>Ex.Rate</th>
         <th style={{minWidth:110}}>Local Amount</th>
-        <th>Name</th>
+        <th>Particular</th>
         <th>Status</th>
         <th style={{minWidth:110}}>Approved By</th>
         <th style={{minWidth:120}}>Approval Date</th>
@@ -243,8 +235,16 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             options={state.fields.chargeList}
             />
         </td>
-        <td>{x.particular}</td>
-        <td>{x.basis} {/* Basis */}
+        <td className='text-center'>{/* Party Selection */}
+                {!x.invoice_id && <RightCircleOutlined style={{ position: 'relative', bottom: 3 }}
+                    onClick={() => {
+                        dispatch({ type: 'set', payload: { headIndex: index, headVisible: true } }); //<--Identifies the Head with there Index sent to modal
+                    }}
+                />
+                }
+                {x.name != "" ? <span className='m-2 '><Tag color="geekblue" style={{ fontSize: 15 }}>{x.name}</Tag></span> : ""}
+        </td>
+        <td>{x.basis=="Per Shipment"?'P/Shp':'P/Unit'} {/* Basis */}
         </td>
         <td style={{ padding: 3, minWidth: 50 }}> {/* PP?CC */}
             <SelectComp register={register} name={`chargeList.${index}.pp_cc`} control={control} width={60} font={13} 
@@ -316,14 +316,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
             />}
         </td>
         <td>{x.local_amount}</td>
-        <td className='text-center'>{/* Party Selection */}
-                {x.new == true && <RightCircleOutlined style={{ position: 'relative', bottom: 3 }}
-                    onClick={() => {
-                        dispatch({ type: 'set', payload: { headIndex: index, headVisible: true } }); //<--Identifies the Head with there Index sent to modal
-                    }}
-                />
-                }{x.name != "" ? <span className='m-2 '><Tag color="geekblue" style={{ fontSize: 15 }}>{x.name}</Tag></span> : ""}
-        </td>
+        <td>{x.particular}</td>
         <td>Un-Approved</td><td></td><td></td>
         </tr>
         }
@@ -346,7 +339,7 @@ const ChargesList = ({state, dispatch, type, append, reset, fields, chargeList, 
     </Modal>
     </div>
     <div className='div-btn-custom-green text-center py-1 px-3 mt-3' style={{float:'right'}} onClick={()=>{calculate(chargeList)}}>Calculate</div>
-    </>
+</>
   )
 }
 export default React.memo(ChargesList)
