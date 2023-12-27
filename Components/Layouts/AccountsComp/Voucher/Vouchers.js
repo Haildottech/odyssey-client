@@ -278,7 +278,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
         <div ref={(response) => (inputRef = response)}>
           {
             id !== "new" ? (
-              <VoucherPrint compLogo={CompanyId} voucherData={id !== "new" ? voucherData : undefined} />
+              <VoucherPrint compLogo={CompanyId} voucherData={voucherData} />
             )
               :
               null

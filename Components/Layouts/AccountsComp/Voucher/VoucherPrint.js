@@ -1,8 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row, Table } from "react-bootstrap";
 import moment from 'moment';
+import numToWords from '../../../../functions/numToWords';
+import Cookies from 'js-cookie';
 
 const VoucherPrint = ({ compLogo, voucherData }) => {
+
+    const [debitTotal, setDebitTotal] = useState(null);
+    const [creditTotal, setCreditTotal] = useState(null);
 
     const paraStyles = { lineHeight: 1.2, fontSize: 11 }
     const heading = { lineHeight: 1, fontSize: 11, fontWeight: '800', paddingBottom: 5 };
@@ -10,11 +15,28 @@ const VoucherPrint = ({ compLogo, voucherData }) => {
     const border = "1px solid black";
     const fomratedDate = moment(voucherData.createdAt).format("yyyy-MM-DD");
     const commas = (a) => a < 1 ? '0' : parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
+    let debitSum = 0;
+    let creditSum = 0;
+    const calculateTotal = () => {
+        const { Voucher_Heads } = voucherData;
+        Voucher_Heads.forEach((x) => {
+            if (x.type == "debit") {
+                debitSum += parseFloat(x.amount);
+            } else {
+                creditSum += parseFloat(x.amount)
+            }
+            setDebitTotal(debitSum);
+            setCreditTotal(creditSum);
+        });
+    }
 
     useEffect(() => {
         console.log(voucherData)
     }, []);
 
+    useEffect(() => {
+        calculateTotal();
+    }, [voucherData])
 
     return (
         <div className='pb-5 px-5 pt-4'>
@@ -22,17 +44,17 @@ const VoucherPrint = ({ compLogo, voucherData }) => {
                 <Col md={4} className='text-center'>
                     {compLogo == "1" &&
                         <>
-                            <img src={'/public/seanetLogo.png'} style={{ filter: `invert(0.5)` }} height={100} />
+                            <img src={'/seanet-logo.png'} style={{ filter: `invert(0.5)` }} height={100} />
                             <div>SHIPPING & LOGISTICS</div>
                         </>
                     }
                     {compLogo == "2" &&
                         <>
-                            <img src={'/public/aircargo-logo.png'} style={{ filter: `invert(0.5)` }} height={100} />
+                            <img src={'/aircargo-logo.png'} style={{ filter: `invert(0.5)` }} height={100} />
                         </>
                     }
                 </Col>
-                <Col>
+                <Col className='mt-4'>
                     <div className='text-center '>
                         <div style={{ fontSize: 20 }}><b>{compLogo == "1" ? "SEA NET SHIPPING & LOGISTICS" : "AIR CARGO SERVICES"}</b></div>
                         <div style={paraStyles}>House# D-213, DMCHS, Siraj Ud Daula Road, Karachi</div>
@@ -42,9 +64,9 @@ const VoucherPrint = ({ compLogo, voucherData }) => {
                     </div>
                 </Col>
             </Row>
-            <Row>
-                <Col md={5}><Line /></Col>
-                <Col md={2}>
+            <Row className='my-2'>
+                <Col md={4}><Line /></Col>
+                <Col md={4}>
                     <div className='text-center fs-15' style={{ whiteSpace: 'nowrap' }}>
                         <strong>
                             {
@@ -67,102 +89,88 @@ const VoucherPrint = ({ compLogo, voucherData }) => {
                         </strong>
                     </div>
                 </Col>
-                <Col md={5}><Line /></Col>
+                <Col md={4}><Line /></Col>
             </Row>
             <Row className='my-2'>
                 <Col md={4}>
-                    <div className='d-flex justify-content-start px-2 fs-12'>
-                        <label className=' mt-2 me-2 font-bold'>Voucher  # :</label>
-                        <input
-                            readOnly
-                            style={{ outline: "none" }}
-                            type='text'
-                            className='px-2 mx-2 border-top-0 border-start-0 border-end-0'
-                            defaultValue={voucherData.voucher_Id}
-                        />
-                    </div>
+                    <label className=' mt-2 me-2 font-bold fs-10'>Voucher # :</label>
+                    <input
+                        readOnly
+                        style={{ outline: "none" }}
+                        type='text'
+                        className='border-top-0 border-start-0 border-end-0 fs-10'
+                        defaultValue={voucherData.voucher_Id}
+                    />
                 </Col>
                 <Col md={4}>
-                    <div className='d-flex justify-content-start px-2 fs-12'>
-                        <label className=' mt-2 font-bold'>Source No # :</label>
-                        <input
-                            readOnly
-                            style={{ outline: "none" }}
-                            type='text'
-                            className='px-2 mx-2 border-top-0 border-start-0 border-end-0'
-                        />
-                    </div>
+                    <label className=' mt-2 font-bold fs-10'>Source No # :</label>
+                    <input
+                        readOnly
+                        style={{ outline: "none" }}
+                        type='text'
+                        className='border-top-0 border-start-0 border-end-0 fs-10'
+                    />
                 </Col>
                 <Col md={4}>
-                    <div className='d-flex justify-content-start px-2 fs-12'>
-                        <label className='mt-2 font-bold'>Date # :</label>
-                        <input
-                            readOnly
-                            style={{ outline: "none" }}
-                            type='text'
-                            className='px-2 mx-2 border-top-0 border-start-0 border-end-0'
-                            defaultValue={fomratedDate}
-                        />
-                    </div>
+                    <label className='mt-2 font-bold fs-10'>Date # :</label>
+                    <input
+                        readOnly
+                        style={{ outline: "none" }}
+                        type='text'
+                        className='border-top-0 border-start-0 border-end-0 fs-10'
+                        defaultValue={fomratedDate}
+                    />
                 </Col>
             </Row>
             <Row className='my-2 '>
                 <Col md={8}>
-                    <div className='d-flex justify-content-start px-2 fs-12'>
-                        <label className='mt-2  font-bold'>Cheque No :</label>
-                        <input
-                            readOnly
-                            style={{ outline: "none", }}
-                            type='text'
-                            className='px-2 mx-2 border-top-0 border-start-0 border-end-0'
-                            defaultValue={voucherData.chequeNo ? voucherData.chequeNo : ""}
-                        />
-                    </div>
+                    <label className='mt-2 font-bold fs-10'>Cheque No :</label>
+                    <input
+                        readOnly
+                        style={{ outline: "none", }}
+                        type='text'
+                        className='border-top-0 border-start-0 border-end-0 fs-10'
+                        defaultValue={voucherData.chequeNo ? voucherData.chequeNo : ""}
+                    />
                 </Col>
                 <Col md={4}>
-                    <div className='d-flex justify-content-start px-2 fs-12'>
-                        <label className='mt-2 font-bold'>Cheque Date :</label>
-                        <input
-                            readOnly
-                            style={{ outline: "none" }}
-                            type='text'
-                            className='px-2 mx-2 border-top-0 border-start-0 border-end-0'
-                            defaultValue={voucherData.chequeDate ? voucherData.chequeDate : ""}
-                        />
-                    </div>
+                    <label className='mt-2 font-bold fs-10'>Cheque Date :</label>
+                    <input
+                        readOnly
+                        style={{ outline: "none" }}
+                        type='text'
+                        className='border-top-0 border-start-0 border-end-0 fs-10'
+                        defaultValue={voucherData.chequeDate ? voucherData.chequeDate : ""}
+                    />
                 </Col>
             </Row>
-            <Row className='my-2 '>
-                <Col md={8}>
-                    <div className='d-flex justify-content-start px-2 fs-12'>
-                        <label className=' mt-2 font-bold'>Pay to :</label>
-                        <input
-                            readOnly
-                            style={{ outline: "none" }}
-                            type='text'
-                            className='px-2 mx-2 border-top-0 border-start-0 border-end-0'
-                            defaultValue={voucherData.payTo ? voucherData.payTo : ""}
-                        />
-                    </div>
+            <Row className='my-2'>
+                <Col md={12}>
+                    <label className=' mt-2 font-bold fs-10'>Pay to :</label>
+                    <input
+                        readOnly
+                        style={{ outline: "none", width: "80%" }}
+                        type='text'
+                        className='border-top-0 border-start-0 border-end-0 fs-10'
+                        defaultValue={voucherData.payTo ? voucherData.payTo : ""}
+                    />
                 </Col>
-                <Col md={4}></Col>
             </Row>
             <Row>
                 <Col md={12}>
-                    <div className='d-flex justify-content-start px-2 fs-12'>
-                        <label className='mt-2 font-bold'>Narration :</label>
-                        <input
-                            readOnly
-                            style={{ outline: "none", width: "80%", }}
-                            type='text'
-                            className='px-2 mx-2 border-top-0 border-start-0 border-end-0'
-                        />
-                    </div>
+                    <label className='mt-2 font-bold fs-10'>Narration :</label>
+                    <input
+                        readOnly
+                        style={{ outline: "none", width: "80%", }}
+                        type='text'
+                        className='border-top-0 border-start-0 border-end-0 fs-10'
+                        defaultValue={voucherData.payTo ? voucherData.payTo : ""}
+                    />
                 </Col>
             </Row>
-            <div className='mt-3' style={{ maxHeight: 500, overflowY: 'auto' }}>
-                <Table className='tableFixHead'>
-                    <thead>
+            <div className='mt-4' style={{ maxHeight: 500, overflowY: 'auto' }}>
+                <Table bordered className='tableFixHead'>
+                    <thead style={{ fontSize: "10px" }}>
                         <tr>
                             <th>Code</th>
                             <th>Head of Account</th>
@@ -172,26 +180,101 @@ const VoucherPrint = ({ compLogo, voucherData }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {voucherData.Voucher_Heads.map((x, index) => {
-                            return (
-                                <tr key={index} className=''>
-                                    <td>{index + 1}</td>
-                                    <td>
-                                        <span className=''>{x.narration}</span>
-                                    </td>
-                                    <td>
-                                        <span className=''>{"KHI"}</span>
-                                    </td>
-                                    <td>
-                                        <span className=''>{commas(x.amount)}</span>
-                                    </td>
-                                </tr>
-                            )
-                        })
-                        }
+                        {
+                            voucherData.Voucher_Heads.map((x, index) => {
+                                return (
+                                    <>
+                                        <tr key={index} className='fs-10' >
+                                            <td>{index + 1}</td>
+                                            <td>
+                                                <span className=''>{x.narration}</span>
+                                            </td>
+                                            <td>
+                                                <span className=''>{"KHI"}</span>
+                                            </td>
+                                            <td className='text-end' >
+                                                <span>{x.type === "debit" ? commas(x.amount) : ""}</span>
+                                            </td>
+                                            <td className='text-end'>
+                                                <span>{x.type === "credit" ? commas(x.amount) : ""}</span>
+                                            </td>
+                                        </tr>
+                                    </>
+                                )
+                            })}
+                        <tr className='text-end fw-bold fs-10'>
+                            <td colSpan={3} >
+                                Total
+                            </td>
+                            <td>
+                                {commas(debitTotal)}
+                            </td>
+                            <td>
+                                {commas(creditTotal)}
+                            </td>
+                        </tr>
                     </tbody>
                 </Table>
             </div>
+            <Row className='my-2'>
+                <Col md={12}>
+                    <label className='fs-10'>Total amount in words :</label>
+                    <input
+                        type='text'
+                        style={{ width: 100, outline: "none" }}
+                        className='w-75 border-top-0 border-start-0 border-end-0 fs-10'
+                        readOnly
+                        defaultValue={numToWords(creditTotal)}
+                    />
+                </Col>
+            </Row>
+            <Row style={{ position: "fixed", bottom: 100, width: "90%" }}>
+                <Col md={4}>
+                    <div className='d-flex flex-column justify-content-center'>
+                        <input
+                            style={{ outline: "none" }}
+                            type='text'
+                            className='border-top-0 border-start-0 border-end-0 fs-10'
+                            readOnly
+                        />
+                        <label className='text-center fs-10 fw-bold'>Prepared by</label>
+                    </div>
+                </Col>
+                <Col md={4}>
+                    <div className='d-flex flex-column justify-content-center'>
+                        <input
+                            style={{ outline: "none" }}
+                            type='text'
+                            className='border-top-0 border-start-0 border-end-0 fs-10'
+                            readOnly
+                        />
+                        <label className='text-center fs-10 fw-bold'>Checked by</label>
+                    </div>
+                </Col>
+                <Col md={4}>
+                    <div className='d-flex flex-column justify-content-center'>
+                        <input
+                            style={{ outline: "none" }}
+                            type='text'
+                            className='border-top-0 border-start-0 border-end-0 fs-10'
+                            readOnly
+                        />
+                        <label className='text-center fs-10 fw-bold'>Approved by</label>
+                    </div>
+                </Col>
+            </Row>
+            <Row style={{ marginTop: "20px", position: "fixed", bottom: 20, width: "90%" }}>
+                <Col md={6}>
+                    <div className='text-start'>
+                        <span className='fs-10'>Printed on : {new Date().toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })} at {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
+                    </div>
+                </Col>
+                <Col md={6}>
+                    <div className='text-end'>
+                        <span className='fs-10'>Printed by :{Cookies.get("username")} </span>
+                    </div>
+                </Col>
+            </Row>
         </div>
     )
 }
