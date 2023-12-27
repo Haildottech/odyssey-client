@@ -174,7 +174,7 @@ const VoucherPrint = ({ compLogo, voucherData }) => {
                     <tbody>
                         {voucherData.Voucher_Heads.map((x, index) => {
                             return (
-                                <tr key={index} className='f'>
+                                <tr key={index} className=''>
                                     <td>{index + 1}</td>
                                     <td>
                                         <span className=''>{x.narration}</span>
