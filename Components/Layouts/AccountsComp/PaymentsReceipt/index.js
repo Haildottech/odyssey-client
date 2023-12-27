@@ -170,7 +170,7 @@ const PaymentsReceipt = () => {
                     }} 
                 >
                     <Radio value={"Payble"}>Payble</Radio>
-                    <Radio value={"Recievable"}>Recievable</Radio>
+                    <Radio value={"Recievable"}>Receivable</Radio>
                 </Radio.Group>
             </Col>
             <Col md={2}>

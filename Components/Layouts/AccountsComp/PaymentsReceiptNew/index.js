@@ -180,7 +180,7 @@ const PaymentsReceiptNew = ({id, voucherData}) => {
                 <b>Pay Type: </b>
                 <Radio.Group className='mt-1' value={state.payType} onChange={(e)=> setAll({search:"", payType:e.target.value})} >
                     <Radio value={"Payble"}>Payble</Radio>
-                    <Radio value={"Recievable"}>Recievable</Radio>
+                    <Radio value={"Recievable"}>Receivable</Radio>
                 </Radio.Group>
         </Col>
         <Col className='text-end'>
