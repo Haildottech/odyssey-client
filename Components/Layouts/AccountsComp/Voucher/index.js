@@ -25,7 +25,7 @@ const Voucher = ({id, voucherData}) => {
   });
 
   const onSubmit = async(data) => {
-    //setLoad(true)
+    setLoad(true)
     console.log(data)
     let settlementAmmount = 0.00;
     let debit = 0.00, credit = 0.00;
@@ -63,16 +63,17 @@ const Voucher = ({id, voucherData}) => {
           openNotification("Success", `Voucher Created Successfully!`, "green");
           dispatch(incrementTab({"label":"Voucher","key":"3-5","id":`${x.data.result.id}`}));
           Router.push(`/accounts/vouchers/${x.data.result.id}`);
+          setLoad(false);
         }else{
           openNotification( "Error", `An Error occured Please Try Again!`, "red");
         }
-      })
+      });
     } else {
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_UPDATE_VOUCEHR, {...voucher, id:id}).then((x)=>{
         x.data.status == "success"
         ? openNotification("Success", `Voucher Updated Successfully!`, "green")
         : openNotification( "Error", `An Error occured Please Try Again!`, "red");
-      })
+      });
     }
     await delay(1000);
     setLoad(false)

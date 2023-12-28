@@ -14,6 +14,7 @@ import VoucherPrint from "./VoucherPrint";
 import { InputNumber } from "antd";
 import moment from "moment";
 import axios from "axios";
+import Router from "next/router";
 
 const Vouchers = ({ register, control, errors, CompanyId, child, settlement, reset, voucherData, setSettlement, setChild, id }) => {
 
@@ -200,7 +201,12 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
           <div className="mt-2">Credit Total</div>
           <div style={{ color: 'grey', paddingTop: 3, paddingRight: 6, border: '1px solid grey', fontSize: 16, textAlign: 'right' }}>{commas(totalCredit)}</div>
         </Col>
-        <Col>
+        <Col md={3}>
+          <button type="button" className="btn-custom mb-3 fs-11" style={{ width: "110px", float: 'left' }}
+            onClick={() => Router.push("/accounts/vouchers/new")}
+          >
+            New
+          </button>
           <ReactToPrint
             content={() => inputRef}
             trigger={() => (

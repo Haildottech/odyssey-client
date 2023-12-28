@@ -66,7 +66,7 @@ const App = ({ voucherData }) => {
     { headerName: 'Delete', cellRendererSelector: () => deleteComp },
   ]);
   const [offset, setOffset] = useState(0);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [pageLoad, setPageLoad] = useState(false)
 
