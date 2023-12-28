@@ -56,6 +56,7 @@ const Voucher = ({id, voucherData}) => {
     voucher.type = (voucher.vType=="BPV"||voucher.vType=="CPV")?"Payble":(voucher.vType=="BRV"||voucher.vType=="CRV")?"Recievable":voucher.vType=="TV"?"Trasnfer Voucher":"General Voucher"
     //voucher.createdAt = voucherData.createdAt
 
+    //Create New Voucher //
     if(id=="new"){
       delete voucher.id;
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, voucher).then((x)=>{
