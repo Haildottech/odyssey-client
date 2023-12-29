@@ -282,7 +282,7 @@ const MainLayout = ({children}) => {
         setTabActive(tempTabActive);
       }
     }
-    toggleTab(tabs)
+    // toggleTab(tabs)
   };
 
   useEffect(() => memoizedAlterTabs(), [tabs]);
