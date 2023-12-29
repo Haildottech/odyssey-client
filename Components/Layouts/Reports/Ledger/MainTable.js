@@ -13,6 +13,7 @@ import { CSVLink } from "react-csv";
 const MainTable = ({ ledger, closing, opening, name, company, currency, from, to }) => {
 
   let inputRef = useRef(null);
+  const [isPrinting, setIsPrinting] = useState(false);
   const dispatch = useDispatch();
   const [username, setUserName] = useState("");
   const commas = (a) => { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ") };
@@ -20,11 +21,6 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
   const TableComponent = () => {
     return (
       <div className="">
-        <div className="d-flex justify-content-end items-end">
-          <CSVLink data={ledger} className="btn-custom mx-2 fs-11 text-center" style={{ width: "110px", float: 'left' }}>
-            Excel
-          </CSVLink>
-        </div>
         <PrintTopHeader company={company} />
         <div className="d-flex justify-content-between mt-4">
           <h6 className="blue-txt"><b>{name}</b></h6>
@@ -111,7 +107,14 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
 
   return (
     <div>
-      <ReactToPrint content={() => inputRef} trigger={() => <AiFillPrinter className="blue-txt cur fl-r" size={30} />} />
+      <ReactToPrint content={() => inputRef} onBeforePrint={() => setIsPrinting(false)} onAfterPrint={() => setIsPrinting(true)}
+        trigger={() => <AiFillPrinter className="blue-txt cur fl-r" size={30} />}
+      />
+      <div className="d-flex justify-content-end items-end">
+        <CSVLink data={ledger} className="btn-custom mx-2 fs-11 text-center" style={{ width: "110px", float: 'left' }}>
+          Excel
+        </CSVLink>
+      </div>
       <TableComponent />
       <div style={{ display: "none" }}>
         <div className="pt-5 px-3" ref={(response) => (inputRef = response)}>

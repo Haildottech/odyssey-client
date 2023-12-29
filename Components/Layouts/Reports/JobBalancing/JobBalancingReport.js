@@ -100,11 +100,6 @@ const JobBalancingReport = ({ result, query }) => {
     const TableComponent = () => {
         return (
             <>
-                <div className="d-flex justify-content-end items-end" >
-                    <CSVLink data={result.result} className="btn-custom mx-2 fs-11 text-center" style={{ width: "110px", float: 'left' }}>
-                        Excel
-                    </CSVLink>
-                </div>
                 {!load &&
                     <>
                         {records.length > 0 &&
@@ -220,7 +215,16 @@ const JobBalancingReport = ({ result, query }) => {
 
     return (
         <div className='base-page-layout'>
-            {query.report == "viewer" && <ReactToPrint content={() => inputRef} trigger={() => <AiFillPrinter className="blue-txt cur fl-r" size={30} />} />}
+            {query.report == "viewer" && (
+                <>
+                    <ReactToPrint content={() => inputRef} trigger={() => <AiFillPrinter className="blue-txt cur fl-r" size={30} />} />
+                    <div className="d-flex justify-content-end " >
+                        <CSVLink data={result.result} className="btn-custom mx-2 fs-11 text-center" style={{ width: "110px", float: 'left' }}>
+                            Excel
+                        </CSVLink>
+                    </div>
+                </>
+            )}
             {query.report == "viewer" && <TableComponent />}
             {query.report != "viewer" &&
                 <div className="ag-theme-alpine" style={{ width: "100%", height: '72vh' }}>
