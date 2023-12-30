@@ -1,18 +1,21 @@
+import React, { useEffect } from 'react';
 import axios from 'axios';
+import dynamic from 'next/dynamic'
 import moment from 'moment';
 import { Tabs } from "antd";
 import Routing from './Routing';
 import Cookies from 'js-cookie';
-import Invoice from './Invoice';
 import Router from "next/router";
-import BookingInfo from './BookingInfo';
-import React, { useEffect } from 'react';
-import ChargesComp from './ChargesComp/';
-import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
-import EquipmentInfo from './EquipmentInfo';
-import LoadingProgram from './Loading Program';
-import DelieveryOrder from './Delievery Order';
+
+const Invoice = dynamic(() => import('./Invoice'), {loading: () => <p>Loading...</p>,})
+const BookingInfo = dynamic(() => import('./BookingInfo'), {loading: () => <p>Loading...</p>,})
+const ChargesComp = dynamic(() => import('./ChargesComp'), {loading: () => <p>Loading...</p>,})
+const EquipmentInfo = dynamic(() => import('./EquipmentInfo'), {loading: () => <p>Loading...</p>,})
+const DelieveryOrder = dynamic(() => import('./Delievery Order'), {loading: () => <p>Loading...</p>,})
+const LoadingProgram = dynamic(() => import('./Loading Program'), {loading: () => <p>Loading...</p>,})
+
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm, useWatch } from "react-hook-form";
 import { incrementTab, removeTab } from '/redux/tabs/tabSlice';
 import { SignupSchema, getInvoices, baseValues } from './states';
@@ -36,7 +39,6 @@ const CreateOrEdit = ({state, dispatch, companyId, jobData, id, type, refetch}) 
   const tabs = useSelector((state)=>state.tabs.tabs)
 
   useEffect(() => {
-    console.log(type)
     let tempState = {...baseValues, ...jobData};
     let tempVoyageList = [...state.voyageList];
     tempVoyageList.length>0?null:tempVoyageList.push(tempState.Voyage);
