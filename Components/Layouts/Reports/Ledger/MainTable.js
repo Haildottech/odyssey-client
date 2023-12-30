@@ -16,7 +16,7 @@ const MainTable = ({ledger, closing, opening, name, company, currency, from, to}
   const [username, setUserName] = useState("");
   const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")};
 
-  const TableComponent = () => {
+  const TableComponent = ({overflow}) => {
     return(
     <div className="">
       <PrintTopHeader company={company} />
@@ -37,14 +37,14 @@ const MainTable = ({ledger, closing, opening, name, company, currency, from, to}
         </span>
       </div>
       <hr className="m-0" />
-      <div style={{maxHeight:"62vh", overflowY:"auto", overflowX:"hidden"}}>
+      <div style={{maxHeight:overflow?"62vh":"100%", overflowY:"auto", overflowX:"hidden"}}>
         <div className="table-sm-1 mt-2">
         <Table className="tableFixHead" bordered>
           <thead>
             <tr className="custom-width">
               <th className="text-center class-1">No.</th>
               <th className="text-center class-1">Date</th>
-              <th className="text-center class-2" style={{minWidth:300}}>Particular</th>
+              <th className="text-center class-2" style={{minWidth:overflow?300:200}}>Particular</th>
               <th className="text-center class-1" style={{width:100}}>Debit</th>
               <th className="text-center class-1" style={{width:100}}>Credit</th>
               <th className="text-center class-1" style={{width:120}}>Balance</th>
@@ -69,11 +69,11 @@ const MainTable = ({ledger, closing, opening, name, company, currency, from, to}
                   }
                 }}
               >{x.voucher}</td>
-              <td className="text-center fs-12 grey-txt">{x.date.slice(0, 10)}</td>
-              <td className="fs-12" style={{minWidth:70, maxWidth:70}}>{x.narration}</td>
-              <td className="text-end fs-12">{x.type=="debit" && commas(x.amount)}</td>
-              <td className="text-end fs-12">{x.type=="credit" && commas(x.amount)}</td>
-              <td className="text-end fs-12">{x.balance>0?<span className="blue-txt">{`${commas(x.balance)} dr`}</span>:<span className="grey-txt">{`${commas(x.balance*-1)} cr`}</span>}</td>
+              <td className="text-center fs-10 grey-txt">{x.date.slice(0, 10)}</td>
+              <td className="fs-10" style={{minWidth:60, maxWidth:60}}>{x.narration}</td>
+              <td className="text-end fs-10">{x.type=="debit" && commas(x.amount)}</td>
+              <td className="text-end fs-10">{x.type=="credit" && commas(x.amount)}</td>
+              <td className="text-end fs-10">{x.balance>0?<span className="blue-txt">{`${commas(x.balance)} dr`}</span>:<span className="grey-txt">{`${commas(x.balance*-1)} cr`}</span>}</td>
             </tr>
           )})}
           </tbody>
@@ -89,6 +89,8 @@ const MainTable = ({ledger, closing, opening, name, company, currency, from, to}
           }
         </b>
       </div>
+      <div style={{position:'absolute', bottom:10, fontSize:10}}>Printed On: {`${moment().format("YYYY-MM-DD")}`}</div>
+      <div style={{position:'absolute', bottom:10, right:10, fontSize:10}}>Printed By: {username}</div>
     </div>
     )
   }
@@ -104,12 +106,10 @@ const MainTable = ({ledger, closing, opening, name, company, currency, from, to}
   return (
   <div> 
     <ReactToPrint content={()=>inputRef} trigger={()=><AiFillPrinter className="blue-txt cur fl-r" size={30} />} />
-    <TableComponent  />
+    <TableComponent overflow={true} />
     <div style={{display:"none"}}>
       <div className="pt-5 px-3" ref={(response)=>(inputRef=response)}>
-        <TableComponent />
-        <div style={{position:'absolute', bottom:10}}>Printed On: {`${moment().format("YYYY-MM-DD")}`}</div>
-        <div style={{position:'absolute', bottom:10, right:10}}>Printed By: {username}</div>
+        <TableComponent overflow={false} />
       </div>
     </div>
   </div>
