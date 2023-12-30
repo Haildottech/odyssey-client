@@ -11,13 +11,13 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
   useEffect(() => {
     if (voucherData.status == "success") {
       let openingBalance = 0.00, closingBalance = 0.00, tempArray = [];
-      console.log(voucherData.result)
+      //console.log(voucherData.result)
       voucherData.result.forEach((y) => {
         const createdAtDate = moment(y.createdAt);
 
         if (createdAtDate.isBetween(moment(from), moment(to), 'day', '[]') || createdAtDate.isSame(moment(to), 'day')) {
           closingBalance = y.type === "debit" ? closingBalance + parseFloat(y.amount) / parseFloat(y['Voucher.exRate']) : closingBalance - parseFloat(y.amount) / parseFloat(y['Voucher.exRate']);
-
+          
           if (y['Voucher.vType'] === "OP") {
             openingBalance = y.type === "debit" ? openingBalance + parseFloat(y.amount) / parseFloat(y['Voucher.exRate']) : openingBalance - parseFloat(y.amount) / parseFloat(y['Voucher.exRate']);
           } else {
@@ -32,6 +32,8 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
               narration: y.narration,
             });
           }
+        } else {
+          openingBalance = y.type === "debit" ? openingBalance + parseFloat(y.amount) / parseFloat(y['Voucher.exRate']) : openingBalance - parseFloat(y.amount) / parseFloat(y['Voucher.exRate']);
         }
       });
       setOpening(openingBalance);
@@ -47,4 +49,4 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
   )
 }
 
-export default LedgerReport
+export default React.memo(LedgerReport)
