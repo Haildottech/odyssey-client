@@ -97,17 +97,16 @@ const JobBalancingReport = ({ result, query }) => {
         setLoad(false)
     }
 
-    const TableComponent = () => {
+    const TableComponent = ({overflow}) => {
         return (
             <>
                 {!load &&
                     <>
                         {records.length > 0 &&
                             <>
-
                                 <PrintTopHeader company={query.company} />
                                 <hr className='mb-2' />
-                                <div className='table-sm-1' style={{ maxHeight: 600, overflowY: 'auto' }}>
+                                <div className='table-sm-1' style={{ maxHeight: overflow ? 600 : "100%", overflowY: 'auto' }}>
                                     <Table className='tableFixHead' bordered style={{ fontSize: 12 }}>
                                         <thead>
                                             <tr>
@@ -218,6 +217,7 @@ const JobBalancingReport = ({ result, query }) => {
             {query.report == "viewer" && (
                 <>
                     <ReactToPrint content={() => inputRef} trigger={() => <AiFillPrinter className="blue-txt cur fl-r" size={30} />} />
+                    {/* <---- Excel Download button ----> */}
                     <div className="d-flex justify-content-end " >
                         <CSVLink data={result.result} className="btn-custom mx-2 fs-11 text-center" style={{ width: "110px", float: 'left' }}>
                             Excel
@@ -225,7 +225,9 @@ const JobBalancingReport = ({ result, query }) => {
                     </div>
                 </>
             )}
-            {query.report == "viewer" && <TableComponent />}
+            {/* <---- Reports View only ----> */}
+            {query.report == "viewer" && <TableComponent overflow={true}/>}
+            {/* <---- list View only with filteration ----> */}
             {query.report != "viewer" &&
                 <div className="ag-theme-alpine" style={{ width: "100%", height: '72vh' }}>
                     <AgGridReact
@@ -239,9 +241,11 @@ const JobBalancingReport = ({ result, query }) => {
                     />
                 </div>
             }
+            {/* <---- Component that will be displaying in print mode  ----> */}
             <div style={{ display: 'none' }}>
                 <div className="pt-5 px-3" ref={(response) => (inputRef = response)}>
-                    <TableComponent size={'sm'} />
+                    {/* <---- Setting overflow true while in printing ----> */}
+                    <TableComponent overflow={false}/>
                     <div style={{ position: 'absolute', bottom: 10 }}>Printed On: {`${moment().format("YYYY-MM-DD")}`}</div>
                     <div style={{ position: 'absolute', bottom: 10, right: 10 }}>Printed By: {username}</div>
                 </div>

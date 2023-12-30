@@ -18,7 +18,7 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
   const [username, setUserName] = useState("");
   const commas = (a) => { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ") };
 
-  const TableComponent = () => {
+  const TableComponent = ({overFlow}) => {
     return (
       <div className="">
         <PrintTopHeader company={company} />
@@ -40,7 +40,7 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
         </div>
 
         <hr className="m-0" />
-        <div className="printDiv" style={{ maxHeight: "60vh", overflowY: "auto", overflowX: "hidden" , height:"auto" }}>
+        <div className="printDiv" style={{ maxHeight: overFlow ? "60vh" : "100%", overflowY: "auto", overflowX: "hidden" , height:"auto" }}>
 
           <div className="table-sm-1 mt-2">
             <Table className="tableFixHead" bordered>
@@ -117,10 +117,10 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
           Excel
         </CSVLink>
       </div>
-      <TableComponent />
+      <TableComponent overFlow={true}/>
       <div style={{ display: "none" }}>
         <div className="pt-5 px-3" ref={(response) => (inputRef = response)}>
-          <TableComponent />
+          <TableComponent overFlow={false}/>
           <div style={{ position: 'absolute', bottom: 10 }}>Printed On: {`${moment().format("YYYY-MM-DD")}`}</div>
           <div style={{ position: 'absolute', bottom: 10, right: 10 }}>Printed By: {username}</div>
         </div>
