@@ -12,13 +12,17 @@ const SeJob = ({id, type}) => {
   const { data, isSuccess:dataSuccess } = useQuery({queryKey: ['values'], queryFn: getJobValues});
   const { data:newdata, isSuccess, refetch } = useQuery({
     queryKey:["jobData", {id, type}], queryFn: () => getJobById({id, type}),
-  })
+  });
 
   const companyId = useSelector((state) => state.company.value);
   const [ state, dispatch ] = useReducer(recordsReducer, initialState);
-  
+
   useEffect(() => {
-    let tempPerms = JSON.parse(Cookies.get('permissions'));
+    getData();
+  }, [dataSuccess, isSuccess])
+  
+  const getData = async() => {
+    let tempPerms = await JSON.parse(Cookies.get('permissions'));
     if(dataSuccess && newdata) {
       dispatch({type:'set',
         payload:{
@@ -30,7 +34,7 @@ const SeJob = ({id, type}) => {
         }
       })
     }
-  }, [dataSuccess, isSuccess])
+  }
 
   return (
   <div className='base-page-layout'>
