@@ -9,7 +9,7 @@ import Router from 'next/router';
 
 const Ledger = () => {
 
-  const [from, setFrom] = useState(moment("2023-12-01").format("YYYY-MM-DD"));
+  const [from, setFrom] = useState(moment("2023-07-01").format("YYYY-MM-DD"));
   const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
   const [ company, setCompany ] = useState(1);
   const [ account, setAccount ] = useState("");

@@ -40,7 +40,8 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
         </div>
 
         <hr className="m-0" />
-        <div style={{ maxHeight: "62vh", overflowY: "auto", overflowX: "hidden" }}>
+        <div className="printDiv" style={{ maxHeight: "60vh", overflowY: "auto", overflowX: "hidden" , height:"auto" }}>
+
           <div className="table-sm-1 mt-2">
             <Table className="tableFixHead" bordered>
               <thead>
@@ -97,6 +98,7 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
     )
   }
 
+
   useEffect(() => {
     getUserName();
     async function getUserName() {
@@ -128,3 +130,4 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
 };
 
 export default MainTable;
+
