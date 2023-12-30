@@ -47,6 +47,8 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
               narration: y.narration,
             });
           }
+        } else {
+          openingBalance = y.type === "debit" ? openingBalance + parseFloat(y.amount) / parseFloat(y['Voucher.exRate']) : openingBalance - parseFloat(y.amount) / parseFloat(y['Voucher.exRate']);
         }
       });
       setOpening(openingBalance);

@@ -200,7 +200,6 @@ const MainLayout = ({children}) => {
   });
   
   const memoizedAlterTabs = () => {
-    // console.log("Here")
     if(Object.keys(tabs).length>0){
       let tempTabs = [...tabItems];
       let cancel = false;
@@ -282,7 +281,6 @@ const MainLayout = ({children}) => {
         setTabActive(tempTabActive);
       }
     }
-    toggleTab(tabs)
   };
 
   useEffect(() => memoizedAlterTabs(), [tabs]);
@@ -311,7 +309,6 @@ const MainLayout = ({children}) => {
 
   const toggleTab = (x) => {
     setToggleState(x.key);
-    //console.log(x.key)
     if(x.key=='1-1'){ Router.push('/dashboard/home') }
     else if(x.key=='1-2'){ Router.push('/dashboard/requests') }
     else if(x.key=='2-1'){ Router.push('/employees') }
