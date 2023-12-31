@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const SignupSchema = Yup.object().shape({
   empName: Yup.string().min(3, 'Too Short!').max(45, 'Too Long!').required('Required'),
-  selectDesignation: Yup.string().min(3, 'Too Short!').max(30, 'Too Long!').required('Required'),
+  selectDesignation: Yup.string().required('Required'),
   selectDepart: Yup.string().min(1, 'Too Short!').max(30, 'Too Long!').required('Required'),
   //selectCompany: Yup.string().min(1, 'Required!').max(30, 'Too Long!').required('Required'),
   cnic: Yup.string().min(10, 'Too Short!').max(30, 'Too Long!').required('Required'),
@@ -40,15 +40,13 @@ const MyField = () => {
   }, [selectDesignation, touched.selectDesignation]);
 
   return (
-    <>
-      <Select name="selectManager" style={{ width: "100%" }} placeholder="Select Designation" showSearch disabled={req}>
-        <Select.OptGroup label="Managers">
-          {managers.map((x, index)=>{
-            return(<Select.Option value={x.name} key={index}>{x.name}</Select.Option>)
-          })}
-        </Select.OptGroup>
-      </Select>
-    </>
+    <Select name="selectManager" style={{ width: "100%" }} placeholder="Select Manager" showSearch disabled={req}>
+      <Select.OptGroup label="Managers">
+        {managers.map((x, index)=>{
+          return(<Select.Option value={x.name} key={index}>{x.name}</Select.Option>)
+        })}
+      </Select.OptGroup>
+    </Select>
   );
 };
 
@@ -59,6 +57,7 @@ const CreateOrEdit = ({appendClient, edit, setVisible, setEdit, selectedEmployee
     queryKey:['values'],
     queryFn:getJobValues
   });
+
   const [values, setValues] = useState({
     selectDesignation:'', selectManager: '', //selectCompany:'',
     accessLevels:[], selectDepart:'', fatherName: '',
@@ -74,37 +73,37 @@ const CreateOrEdit = ({appendClient, edit, setVisible, setEdit, selectedEmployee
 
   useEffect(() => {
     if(edit){
-        let tempState = {...values};
-        let arr  = [];
-        selectedEmployee.Access_Levels.forEach(x => {
-          arr.push(x.access_name)
-        });
-        tempState={
-          selectDesignation: selectedEmployee.designation,
-          selectManager: selectedEmployee.manager,
-          //selectCompany: selectedEmployee.CompanyId,
-          selectDepart: selectedEmployee.department,
-          fatherName: selectedEmployee.fatherName,
-          accountNo: selectedEmployee.account_no,
-          userName: selectedEmployee.username,
-          address: selectedEmployee.address,
-          accessLevels:arr,
-          empName: selectedEmployee.name,
-          phone: selectedEmployee.contact,
-          email: selectedEmployee.email,
-          pass: selectedEmployee.password,
-          cnic: selectedEmployee.cnic,
-          bank: selectedEmployee.bank,
-          code: selectedEmployee.code,
-          date: selectedEmployee.date,
-          id: selectedEmployee.id,
-        }
-        if(typeof selectedEmployee.represent=='string'){
-          tempState.represent=selectedEmployee.represent.split(",")
-        }else{
-          tempState.represent=selectedEmployee.represent
-        }
-        setValues(tempState)
+      let tempState = {...values};
+      let arr  = [];
+      selectedEmployee.Access_Levels.forEach(x => {
+        arr.push(x.access_name)
+      });
+      tempState={
+        selectDesignation: selectedEmployee.designation,
+        selectManager: selectedEmployee.manager,
+        //selectCompany: selectedEmployee.CompanyId,
+        selectDepart: selectedEmployee.department,
+        fatherName: selectedEmployee.fatherName,
+        accountNo: selectedEmployee.account_no,
+        userName: selectedEmployee.username,
+        address: selectedEmployee.address,
+        accessLevels:arr,
+        empName: selectedEmployee.name,
+        phone: selectedEmployee.contact,
+        email: selectedEmployee.email,
+        pass: selectedEmployee.password,
+        cnic: selectedEmployee.cnic,
+        bank: selectedEmployee.bank,
+        code: selectedEmployee.code,
+        date: selectedEmployee.date,
+        id: selectedEmployee.id,
+      }
+      if(typeof selectedEmployee.represent=='string'){
+        tempState.represent=selectedEmployee.represent.split(",")
+      } else {
+        tempState.represent=selectedEmployee.represent
+      }
+      setValues(tempState);
     }
     return () => { }
   }, [edit, selectedEmployee])
@@ -132,41 +131,40 @@ return(
         tempValues.represent = tempValues.represent.toString();
         let Username = Cookies.get('username')
         if(edit){
-            axios.post(process.env.NEXT_PUBLIC_CLIMAX_EDIT_EMPLOYEE,{ values:tempValues, updatedBy:Username }).then((x)=>{
-              let arr  = [];
-              x.data.resultTwo.forEach(y => {
-                arr.push({access_name:y.access_name})
-              });
-              let obj = {
-                  id: values.id,
-                  name: values.empName,
-                  fatherName:values.fatherName,
-                  email: values.email,
-                  Access_Levels:arr,
-                  username: values.userName,
-                  password: values.pass,
-                  contact: values.phone,
-                  address: values.address,
-                  cnic: values.cnic,
-                  designation: values.selectDesignation,
-                  department: values.selectDepart,
-                  manager: values.selectManager,
-                  //CompanyId: values.selectCompany,
-                  represent:values.represent,
-                  date: values.date,
-                  bank: values.bank,
-                  account_no: values.accountNo,
-                  code: values.code,
-                  active: 1,
-                  status: 1
-              }
-              updateUser(obj);
-              setEdit(false);
-              setVisible(false);
-              setLoad(false);
-              refetch();
-            })
-        }else{
+          axios.post(process.env.NEXT_PUBLIC_CLIMAX_EDIT_EMPLOYEE,{ values:tempValues, updatedBy:Username }).then((x)=>{
+            let arr  = [];
+            x.data.resultTwo.forEach(y => {
+              arr.push({access_name:y.access_name})
+            });
+            let obj = {
+                id: values.id,
+                name: values.empName,
+                fatherName:values.fatherName,
+                email: values.email,
+                Access_Levels:arr,
+                username: values.userName,
+                password: values.pass,
+                contact: values.phone,
+                address: values.address,
+                cnic: values.cnic,
+                designation: values.selectDesignation,
+                department: values.selectDepart,
+                manager: values.selectManager,
+                represent:values.represent,
+                date: values.date,
+                bank: values.bank,
+                account_no: values.accountNo,
+                code: values.code,
+                active: 1,
+                status: 1
+            }
+            updateUser(obj);
+            setEdit(false);
+            setVisible(false);
+            setLoad(false);
+            refetch();
+          })
+        } else {
           axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_EMPLOYEE,{
             values:values, createdBy:Username
           }).then((x)=>{
@@ -221,7 +219,7 @@ return(
             <Select.Option value='ceo'>CFO</Select.Option>
             <Select.Option value='admin'>Admin</Select.Option>
             <Select.Option value='rider'>Rider</Select.Option>
-
+            <Select.Option value='hr'>HR</Select.Option>
           </Select.OptGroup>
         </Select>
         </Form.Item>
@@ -234,20 +232,6 @@ return(
         </Form.Item>
         </Col>
         <Col>
-        {/* <Form.Item name="selectCompany" hasFeedback={true} showValidateSuccess={true}>
-        <div>Select Company</div>
-        <Select name="selectCompany" style={{ width: "100%" }} placeholder="Select Company">
-          <Select.OptGroup label="Companies">
-            {
-              company.map((x)=>{
-                return(
-                  <Select.Option key={x.id} value={x.id}>{x.title}</Select.Option>
-                )
-              })
-            }
-          </Select.OptGroup>
-        </Select>
-        </Form.Item> */}
 
         <Form.Item name="cnic" hasFeedback={true} showValidateSuccess={true}>
           <div>CNIC</div><Input name="cnic" placeholder="CNIC" style={{width:200}} />

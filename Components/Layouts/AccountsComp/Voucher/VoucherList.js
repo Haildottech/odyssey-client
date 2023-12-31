@@ -8,10 +8,11 @@ import moment from 'moment';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import PopConfirm from '../../../Shared/PopConfirm';
+import { RiDeleteBin2Fill } from "react-icons/ri";
 
 const commas = (a) => a == 0 ? '0' : parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
 
-const App = ({ voucherData }) => {
+const VoucherList = ({ voucherData }) => {
 
   const gridRef = useRef();
   const [rowData, setRowData] = useState();
@@ -35,7 +36,7 @@ const App = ({ voucherData }) => {
       <span className='fw-6 fs-12'>{moment(props.data.createdAt).format("YYYY-MM-DD")}</span>
     </>
   };
-  const deleteComp = {
+  const DeleteComp = {
     component: (props) => <>
       <div className='px-2'
         onClick={() => {
@@ -49,20 +50,20 @@ const App = ({ voucherData }) => {
             })
         }}
       >
-        <span className='fs-15 btn-red-two'>x</span>
+        <span className='fs-15 btn-red-two'><RiDeleteBin2Fill /></span>
       </div>
     </>
   };
 
   const [columnDefs, setColumnDefs] = useState([
-    { headerName: '#', field: 'no', width: 40 },
+    // { headerName: '#', field: 'no', width: 40 },
     { headerName: 'Voucher No.', field: 'voucher_Id', filter: true, cellRendererSelector: () => genderDetails, filter: true },
     { headerName: 'Type', field: 'type', filter: true },
     { headerName: 'Cheque Date', field: 'date', filter: true, },
     { headerName: 'Paid To', field: 'payTo', filter: true },
     { headerName: 'Amount', field: 'amount', filter: true, cellRendererSelector: () => amountDetails, filter: true },
     { headerName: 'Voucher Date', field: 'createdAt', filter: true, cellRendererSelector: () => dateComp, filter: true },
-    { headerName: 'Delete', cellRendererSelector: () => deleteComp },
+    { headerName: 'Delete', cellRendererSelector: () => DeleteComp },
   ]);
   const [offset, setOffset] = useState(0);
   const [page, setPage] = useState(1);
@@ -107,7 +108,7 @@ const App = ({ voucherData }) => {
   const setData = async (data) => {
     let tempData = data.result
     await tempData?.forEach((x, i) => {
-      x.no = i + 1
+      x.no = i + 1 ;
       x.amount = x.Voucher_Heads?.reduce((x, cur) => x + Number(cur.amount), 0),
         x.date = moment(x.createdAt).format("YYYY-MM-DD")
     });
@@ -154,4 +155,4 @@ const App = ({ voucherData }) => {
   );
 };
 
-export default App;
+export default React.memo(VoucherList);

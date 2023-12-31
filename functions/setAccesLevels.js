@@ -7,6 +7,10 @@ import { RiShipLine } from "react-icons/ri";
 
 function setAccesLevels(dispatch, collapsed){
     let items = [];
+    let obj = { seaJobs:false, ae:false, setup:false, accounts:false, admin:false }
+    let levels = Cookies.get("access");
+    let company = Cookies.get("companyId");
+
     const dashboard = getParentItem('Dashboard', '1', <HomeOutlined />,[
       getItem('Home', '1-1',<></>, null, {
         label: `Home`,
@@ -26,16 +30,16 @@ function setAccesLevels(dispatch, collapsed){
         key: '2-1',
         children: `Content of Tab Pane 2`,
       }),
-      getItem('Client List', '2-2',<></>, null, {
+      (levels?.includes("accounts")||levels?.includes("admin"))?getItem('Client List', '2-2',<></>, null, {
         label: `Client List`,
         key: '2-2',
         children: `Content of Tab Pane 2`,
-      }),
-      getItem('Vendor List', '2-5',<></>, null, {
+      }):null,
+      (levels?.includes("accounts")||levels?.includes("admin"))?getItem('Vendor List', '2-5',<></>, null, {
         label: `Vendor List`,
         key: '2-5',
         children: `Content of Tab Pane 2`,
-      }),
+      }):null,
       getItem('Non-GL Parties', '2-9',<></>, null, {
         label: `Non-GL Parties`,
         key: '2-9',
@@ -213,18 +217,16 @@ function setAccesLevels(dispatch, collapsed){
     )
 
     function getParentItem(label, key, icon, children) {
-        return { key, icon, children, label}
+      return { key, icon, children, label}
     }
     function getItem(label, key, icon, children, tab) {
-        return { key, icon, children, label,
-        onClick:()=>{
-          if(!collapsed){ dispatch(incrementTab(tab)); }
-        }
+      return { key, icon, children, label,
+      onClick:()=>{
+        if(!collapsed){ dispatch(incrementTab(tab)); }
+      }
     }}
 
-    let obj = { seaJobs:false, ae:false, setup:false, accounts:false, admin:false }
-    let levels = Cookies.get("access");
-    let company = Cookies.get("companyId");
+
     if(levels){
       levels = levels.slice(0, -1)
       levels = levels.substring(1);
@@ -251,7 +253,6 @@ function setAccesLevels(dispatch, collapsed){
         }
       });
     }
-    // console.log(obj)
     if(company!='2'){
       obj.seaJobs?
       items.push(seaJobs):null;

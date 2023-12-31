@@ -10,6 +10,7 @@ import axios from 'axios';
 import { setAccesLevels } from '/functions/setAccesLevels';
 import logout from '/functions/logout';
 import { setTab } from '/redux/tabs/tabSlice';
+import { SlLogout } from "react-icons/sl";
 
 const { Header, Content, Sider } = Layout;
 
@@ -423,7 +424,10 @@ const MainLayout = ({children}) => {
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aeJobList")}>AE</span>
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aiJobList")}>AI</span>
     </>}
-      <span style={{float:'right', color:'white'}} className='mx-5 cur' onClick={()=>logout()}> Logout </span>
+      <span style={{color:'white'}} className='mx-3' ><b>Welcome, </b> {username} </span>
+      <span style={{float:'right', color:'white'}} className='mx-5 cur' onClick={()=>logout()}> 
+        <SlLogout className='mx-2' style={{position:'relative', bottom:2}} />Logout
+      </span>
     </Header>
     <Content style={{ margin:'24px 16px', padding:0, minHeight:280}}> 
     <div className='dashboard-styles'>
