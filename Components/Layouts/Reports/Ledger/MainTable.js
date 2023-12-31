@@ -129,5 +129,5 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
   )
 };
 
-export default MainTable;
+export default React.memo(MainTable);
 
