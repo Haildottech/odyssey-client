@@ -51,8 +51,8 @@ if(groupBy) {
         type == "Perishable" ? calculatePershable(groupBy, result, setCsvData) 
         : calculateDry(groupBy, result, setCsvData)}>Generate File</button>
         {scvData.length>0 &&
-        <CSVLink data={scvData} className='btn-custom mx-3 px-4 py-2 mb-2' style={{color:'white'}}>
-        Download me
+          <CSVLink data={scvData} className='btn-custom mx-3 px-4 py-2 mb-2' style={{color:'white'}}>
+            Download me
         </CSVLink>
         }
     </div>

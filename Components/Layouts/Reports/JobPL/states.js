@@ -31,6 +31,7 @@ const initialState = {
   overseasagent:'',
   jobType:'Sea Export',
   salesrepresentative:'',
+  csvData:[],
 
   totalRevenue:0.00,
   totalCost:0.00,
@@ -145,4 +146,29 @@ const companies = [
     {label:'Air Import', value:"AI"},
   ];
 
-export { recordsReducer, initialState, companies, handleSubmit, plainOptions }
+  const excelDataFormatter = (state, set) => {
+    let tempData = [
+      ["Job No", "Date", "Client", "F. Dest", "Weight", "Containers", "Volume", "Revenue", "Cost", "P/L", "Gain/Loss", "After Gain/Loss"],
+    ];
+  
+    for (let index = 0; index < state.records.length; index++) {
+      let data = [
+        state.records[index].jobNo,
+        state.records[index].createdAt ? state.records[index].createdAt.slice(0, 10) : "",
+        state.records[index].Client.name ? state.records[index].Client.name : "",
+        state.records[index].fd ? state.records[index].fd : "",
+        state.records[index].revenue ? state.records[index].revenue.toFixed(2) : "",
+        state.records[index].cost ? state.records[index].cost.toFixed(2) : "",
+        state.records[index].actual ? state.records[index].actual.toFixed(2) : "",
+        state.records[index].gainLoss ? state.records[index].gainLoss.toFixed(2) : "",
+        state.records[index].after ? state.records[index].after.toFixed(2) : "",
+        ];
+
+      tempData.push(data);
+    }
+    set({
+      csvData:tempData
+    })
+  };
+  
+export { recordsReducer, initialState, companies, handleSubmit, plainOptions, excelDataFormatter }

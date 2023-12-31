@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Spinner, Table } from 'react-bootstrap';
 import moment from 'moment';
 
-const Sheet = ({state}) => {
+const Sheet = ({state, overflow}) => {
 
     const setCommas = (val) => {
         if(val){
@@ -14,7 +14,7 @@ const Sheet = ({state}) => {
 
   return (
     <div>
-    <div className='' style={{maxHeight:500, overflowY:'auto'}}>
+    <div className='' style={{maxHeight:overflow ? 600 : "100%", overflowY:'auto'}}>
         <Table className='tableFixHead vertical' bordered>
         <thead>
             <tr className='fs-11 text-center'>
@@ -37,7 +37,7 @@ const Sheet = ({state}) => {
         <tbody>
         {state.records.map((x,index)=>{
         return (
-        <tr key={index} className='f fs-11 text-center'>
+        <tr key={index} className='f fs-10 text-center'>
             {/* <td>{index + 1}</td> */}
             <td>{x.jobNo}</td>
             <td>{moment(x.createdAt).format("MM/DD/YY")}</td>

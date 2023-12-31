@@ -16,7 +16,6 @@ const App = ({ voucherData }) => {
   const gridRef = useRef();
   const [rowData, setRowData] = useState();
   const dispatch = useDispatch();
-  const [noMoreData, setNoMoreData] = useState(false);
 
   const amountDetails = {
     component: (props) => <>
@@ -69,6 +68,7 @@ const App = ({ voucherData }) => {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [pageLoad, setPageLoad] = useState(false)
+  const [noMoreData, setNoMoreData] = useState(false);
 
   const defaultColDef = useMemo(() => ({
     sortable: true
