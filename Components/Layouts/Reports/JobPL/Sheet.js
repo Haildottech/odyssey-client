@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Spinner, Table } from 'react-bootstrap';
 import moment from 'moment';
 
-const Sheet = ({state, overflow}) => {
+const Sheet = ({state, overflow, fontSize}) => {
 
     const setCommas = (val) => {
         if(val){
@@ -17,7 +17,7 @@ const Sheet = ({state, overflow}) => {
     <div className='' style={{maxHeight:overflow ? 600 : "100%", overflowY:'auto'}}>
         <Table className='tableFixHead vertical' bordered>
         <thead>
-            <tr className='fs-11 text-center'>
+            <tr className='fs-10 text-center'>
                 {/* <th>#</th> */}
                 <th>Job No</th>
                 <th style={{width:45}}>Date</th>
@@ -57,7 +57,7 @@ const Sheet = ({state, overflow}) => {
         </tr>
         )})}
         <tr className='f fs-11 text-center'>
-            <td colSpan={8}></td>
+            <td colSpan={7}></td>
             <td>Total: </td>
             <td>{setCommas(state.totalRevenue)}</td>
             {/* <td>{setCommas(state.records?.reduce((x, c) => {return Number(c.revenue) + x},0)||0)}</td> */}

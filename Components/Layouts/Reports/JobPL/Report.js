@@ -1,4 +1,4 @@
-import { recordsReducer, initialState, companies, handleSubmit, plainOptions, excelDataFormatter } from './states';
+import { recordsReducer, initialState, companies, fetchData, plainOptions, excelDataFormatter } from './states';
 import React, { useReducer, useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import Sheet from './Sheet';
 import PrintTopHeader from '../../../Shared/PrintTopHeader';
@@ -10,56 +10,42 @@ import { Spinner } from "react-bootstrap";
 import { AgGridReact } from 'ag-grid-react';
 import { CSVLink } from "react-csv";
 
-
 const Report = ({ query }) => {
 
-  const [username, setUserName] = useState("");
-  const [csvData,setCsvData] = useState([]);
   let inputRef = useRef(null);
-  const setCommas = (val) => {
-    if (val) {
-      return val.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
-    } else {
-      return 0
-    }
-  }
+  const [username, setUserName] = useState("");
 
+  const setCommas = (val) => val? val.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", "):'0'
+  
   const set = (obj) => dispatch({ type: 'set', payload: obj });
   const [state, dispatch] = useReducer(recordsReducer, initialState);
 
   useEffect(() => {
-    initialFunction()
-  }, [])
-  const initialFunction = async() => {
-    await getValues();
-    getUserName();
-    async function getUserName() {
-      let name = await Cookies.get("username");
-      setUserName(name)
-    }
-    excelDataFormatter(state, set)
-  }
+    getValues();
+  }, []);
 
   async function getValues() {
-    await set(query);
-    handleSubmit(set, state)
+    await set({
+      from:query.from,
+      to:query.to
+    });
+    let name = await Cookies.get("username");
+    setUserName(name);
+    await fetchData(set, query)
   }
-
-  const TableComponent = ({ overflow }) => {
-    // console.log(state)
+  
+  const TableComponent = ({ overflow, fontSize }) => {
     return (
       <>
         <PrintTopHeader company={query.company} />
         <hr className='mb-2' />
-        {/* <---- Passing overflow to table component ----> */}
-        <Sheet state={state} overflow={overflow} />
+        <Sheet state={state} overflow={overflow} fontSize={fontSize} />
       </>
     )
   }
 
   const gridRef = useRef();
   const [columnDefs, setColumnDefs] = useState([
-    //{headerName: '#', field:'no', width: 50 },
     { headerName: 'Job No', field: 'jobNo', width: 120, filter: true },
     {
       headerName: 'Date', field: 'createdAt', width: 70, filter: true,
@@ -145,7 +131,6 @@ const Report = ({ query }) => {
         {!state.load &&
           <>
             <PrintTopHeader company={query.company} />
-
             <hr className='mb-2' />
             <Sheet state={state} overflow={true} />
           </>
@@ -171,7 +156,7 @@ const Report = ({ query }) => {
       <div style={{ display: 'none' }}>
         <div className="pt-5 px-3" ref={(response) => (inputRef = response)}>
           {/* <---- Setting overflow true while in printing ----> */}
-          <TableComponent overflow={false} />
+          <TableComponent overflow={false} fontSize={10} />
           {/* <---- footer ----> */}
           <div style={{ position: 'absolute', bottom: 10 }}>Printed On: {`${moment().format("YYYY-MM-DD")}`}</div>
           <div style={{ position: 'absolute', bottom: 10, right: 10 }}>Printed By: {username}</div>

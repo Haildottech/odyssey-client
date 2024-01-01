@@ -70,24 +70,26 @@ const JobPL = () => {
         onClick={()=>{
           //handleSubmit(set,state)
           const { to, from, client, company, jobType, overseasagent, salesrepresentative } = state 
+          console.log(from, to)
           Router.push({
             pathname:`/reports/jobPLReport/report`, 
             query:{ 
-              to:to, 
-              from:from, 
-              client:client, 
-              company:company, 
-              jobtype:jobType, 
-              overseasagent:overseasagent, 
-              salesrepresentative:salesrepresentative,
+              to:state.to, 
+              from:state.from, 
+              client:state.client, 
+              company:state.company, 
+              jobtype:state.jobType, 
+              overseasagent:state.overseasagent, 
+              salesrepresentative:state.salesrepresentative,
               report:state.reportType
             }
           });
           dispatchNew(incrementTab({
             "label": "Job Profit & Loss", "key": "5-4-1",
-            "id":`?to=${to}&from=${from}&client=${client}&company=${company}&jobtype=${jobType}&overseasagent=${overseasagent}&salesrepresentative=${salesrepresentative}$report=${state.reportType}`
+            "id":`?to=${to}&from=${from}&client=${client}&company=${company}&jobtype=${jobType}&overseasagent=${overseasagent}&salesrepresentative=${salesrepresentative}&report=${state.reportType}`
           }));
-        }} disabled={state.load}
+        }}
+        disabled={state.load}
       >
         {state.load?<Spinner size='sm' />:"Go"}
       </button>

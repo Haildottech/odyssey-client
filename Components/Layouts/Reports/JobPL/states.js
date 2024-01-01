@@ -41,7 +41,7 @@ const initialState = {
   totalAfter:0.00
 };
 
-const companies = [
+  const companies = [
     {
       value: '1',
       label: 'Seanet Shipping',
@@ -56,17 +56,16 @@ const companies = [
     }
   ]
 
-  const handleSubmit = async(set, state) => {
+  const fetchData = async(set, state) => {
     set({load:true});
-    let invoices = [];
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_MISC_GET_JOB_PROFIT_LOSS,{
       headers:{ ...state }
     }).then(async(x) => {
       let result = x.data.result, totalRevenue=0.00, totalCost=0.00, totalPnl=0.00, totalActual=0.0, totalgainLoss=0.0, totalAfter=0.0;
-
       if(x.data.status!="success" || x.data.result.length<1){
         openNotification("Error", "No record found with current criteria", "orange");
       } else {
+        
         await result.forEach((y) => {
           y.revenue = 0.0;
           y.cost = 0.0;
@@ -105,6 +104,8 @@ const companies = [
           y.actual = y.revenue - y.cost
           totalAfter = totalAfter + y.after
         })
+        console.log(result)
+        excelDataFormatter(result, set)
       }
       await set({
         visible:x.data.status=="success"?
@@ -146,24 +147,23 @@ const companies = [
     {label:'Air Import', value:"AI"},
   ];
 
-  const excelDataFormatter = (state, set) => {
+  const excelDataFormatter = (records, set) => {
     let tempData = [
       ["Job No", "Date", "Client", "F. Dest", "Weight", "Containers", "Volume", "Revenue", "Cost", "P/L", "Gain/Loss", "After Gain/Loss"],
     ];
-  
-    for (let index = 0; index < state.records.length; index++) {
+    for (let index = 0; index < records.length; index++) {
       let data = [
-        state.records[index].jobNo,
-        state.records[index].createdAt ? state.records[index].createdAt.slice(0, 10) : "",
-        state.records[index].Client.name ? state.records[index].Client.name : "",
-        state.records[index].fd ? state.records[index].fd : "",
-        state.records[index].revenue ? state.records[index].revenue.toFixed(2) : "",
-        state.records[index].cost ? state.records[index].cost.toFixed(2) : "",
-        state.records[index].actual ? state.records[index].actual.toFixed(2) : "",
-        state.records[index].gainLoss ? state.records[index].gainLoss.toFixed(2) : "",
-        state.records[index].after ? state.records[index].after.toFixed(2) : "",
-        ];
-
+        records[index].jobNo,
+        records[index].createdAt ? records[index].createdAt.slice(0, 10) : "",
+        records[index].Client.name ? records[index].Client.name : "",
+        records[index].fd ? records[index].fd : "",
+        '','','','',
+        records[index].revenue ? records[index].revenue.toFixed(2) : "",
+        records[index].cost ? records[index].cost.toFixed(2) : "",
+        records[index].actual ? records[index].actual.toFixed(2) : "",
+        records[index].gainLoss ? records[index].gainLoss.toFixed(2) : "",
+        records[index].after ? records[index].after.toFixed(2) : "",
+      ];
       tempData.push(data);
     }
     set({
@@ -171,4 +171,4 @@ const companies = [
     })
   };
   
-export { recordsReducer, initialState, companies, handleSubmit, plainOptions, excelDataFormatter }
+export { recordsReducer, initialState, companies, fetchData, plainOptions, excelDataFormatter }
