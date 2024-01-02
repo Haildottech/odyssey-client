@@ -11,7 +11,7 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
     if (voucherData.status == "success") {
       let openingBalance = 0.0, closingBalance = 0.0, tempArray = [];
       voucherData.result.forEach((y) => {
-        console.log("Transaction:", y);
+        // console.log("Transaction:", y);
         const createdAtDate = moment(y.createdAt);
         if (
           createdAtDate.isBetween(moment(from), moment(to), "day", "[]") ||

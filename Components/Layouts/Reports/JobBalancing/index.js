@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getJobValues } from '/apis/jobs';
 import { incrementTab } from '/redux/tabs/tabSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Router from "next/router";
 import moment from 'moment';
+import { setFilterValues } from "../../../../redux/filters/filterSlice";
 
 const JobBalancing = () => {
 
@@ -26,11 +27,43 @@ const JobBalancing = () => {
     const [ payType, setPayType ] = useState("Payble");
     const { data, status } = useQuery({ queryKey:['values'], queryFn:getJobValues });
     
+    const stateValues = {
+        from,
+        to,
+        company,
+        payType,
+        party,
+        overseasAgent,
+        representator,
+        currency,
+        jobTypes,
+        reportType,
+    }
+
+    const filterValues = useSelector(state=>state.filterValues);
+    const filters = filterValues.find(page=>page.pageName==="jobBalancing");
+    const value = filters ? filters.values : null ;
+
     useEffect(() => {
       if(status=="success"){
         setValues(data.result)
       }
     }, [status]);
+
+    useEffect(()=>{
+        if(filters){
+            setFrom(value.from),
+            setTo(value.to),
+            setCompany(value.company),
+            setPayType(value.payType),
+            setParty(value.party),
+            setOverseasAgent(value.overseasAgent),
+            setRepresentator(value.representator),
+            setCurrency(value.currency),
+            setJobTypes(value.jobTypes),
+            setReportType(value.reportType)
+        }
+    },[])
 
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
@@ -60,6 +93,10 @@ const JobBalancing = () => {
           "label": "Job Balancing Report",
           "key": "5-1-1",
           "id":`report?company=${company}&overseasagent=${overseasAgent}&representator=${representator}&currency=${currency}&jobtypes=${jobTypes}&to=${to}&from=${from}&paytype=${payType}&party=${party}&report=${reportType}`
+        }));
+        dispatch(setFilterValues({
+            pageName:"jobBalancing",
+            values:stateValues
         }))
     }
 

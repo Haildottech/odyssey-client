@@ -104,7 +104,6 @@ const initialState = {
           y.actual = y.revenue - y.cost
           totalAfter = totalAfter + y.after
         })
-        console.log(result)
         excelDataFormatter(result, set)
       }
       await set({
