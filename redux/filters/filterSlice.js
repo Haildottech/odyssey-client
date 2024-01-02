@@ -16,6 +16,11 @@ export const filterValuesSlice = createSlice({
                 state.push({ pageName, values });
             }
         },
+        removerFilterValue(state,action){
+            const {pageName} = action.payload;
+            const removePage = state.filter(page=>page.pageName !== pageName)
+            return removePage
+        }
     }
 });
 
