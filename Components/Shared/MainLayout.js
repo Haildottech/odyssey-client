@@ -3,7 +3,7 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { companySelect, addCompanies } from '/redux/company/companySlice';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Select } from 'antd';
+import { Input, Layout, Menu, Select } from 'antd';
 import Router, { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -20,6 +20,7 @@ const MainLayout = ({children}) => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [load, setLoad] = useState(true);
+  const [searchingList, setSearchingList] = useState([]);
   const [company, setCompany] = useState('');
   const [companies, setCompanies] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
@@ -29,6 +30,16 @@ const MainLayout = ({children}) => {
 
   useEffect(() => { 
     getCompanies(); 
+  }, [])
+
+  useEffect(()=>{
+    if(items.length>0){
+      let newTemp = [];
+      items.forEach((x)=>{
+        newTemp.push(...x.children)
+      })
+      setSearchingList(newTemp);
+    }
   }, [])
 
   async function getCompanies(){
@@ -397,6 +408,16 @@ const MainLayout = ({children}) => {
     }
   };
 
+  const searchPages = (e) => {
+    let item;
+    searchingList.forEach((x)=>{
+      if(x.key==e){
+        item = x
+      }
+    })
+    toggleTab(item);
+  }
+
   return (
   <Layout className="main-dashboard-layout">
     {!load && 
@@ -408,6 +429,15 @@ const MainLayout = ({children}) => {
           <img src={company=='1'?'/seanet-logo.png':company=='3'?'/aircargo-logo.png':company=='2'?'/cargolinkers-logo.png':null}/>
           {!collapsed && <p className='wh-txt'>Dashboard</p>}
         </span>
+      </div>
+      <div className='px-3'>
+      <Select showSearch style={{  width: "100%" }} placeholder="Search to Select" optionFilterProp="children" onChange={searchPages}
+        filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLowerCase())}
+        filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase()) }
+        options={searchingList.map((x)=>{
+          return { value:x.key, label:x.label }
+        })}
+      />
       </div>
       <Menu mode="inline" theme="dark" defaultSelectedKeys={['1']} items={!collapsed?items:[]} />
     </Sider>
