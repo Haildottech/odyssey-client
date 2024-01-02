@@ -9,6 +9,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import PopConfirm from '../../../Shared/PopConfirm';
 import { RiDeleteBin2Fill } from "react-icons/ri";
+import Form from 'react-bootstrap/Form';
 
 const commas = (a) => a == 0 ? '0' : parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
 
@@ -57,20 +58,25 @@ const VoucherList = ({ voucherData }) => {
 
   const [columnDefs, setColumnDefs] = useState([
     // { headerName: '#', field: 'no', width: 40 },
-    { headerName: 'Voucher No.', field: 'voucher_Id', filter: true, cellRendererSelector: () => genderDetails, filter: true },
-    { headerName: 'Type', field: 'type', filter: true },
-    { headerName: 'Cheque Date', field: 'date', filter: true, },
-    { headerName: 'Paid To', field: 'payTo', filter: true },
-    { headerName: 'Amount', field: 'amount', filter: true, cellRendererSelector: () => amountDetails, filter: true },
-    { headerName: 'Voucher Date', field: 'createdAt', filter: true, cellRendererSelector: () => dateComp, filter: true },
+    { headerName: 'Voucher No.', field: 'voucher_Id', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => genderDetails, filter: true },
+    { headerName: 'Type', field: 'type', filter: true , filter: 'agTextColumnFilter', },
+    { headerName: 'Cheque Date', field: 'date', filter: true, filter: 'agTextColumnFilter', },
+    { headerName: 'Paid To', field: 'payTo', filter: true , filter: 'agTextColumnFilter',},
+    { headerName: 'Amount', field: 'amount', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => amountDetails, filter: true },
+    { headerName: 'Voucher Date', field: 'createdAt', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => dateComp, filter: true },
     { headerName: 'Delete', cellRendererSelector: () => DeleteComp },
   ]);
+
   const [offset, setOffset] = useState(0);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [pageLoad, setPageLoad] = useState(false)
   const [noMoreData, setNoMoreData] = useState(false);
-
+  //search 
+  const [query, setQuery] = useState("")
+  const keys = ["voucher_Id", "type", "amount"]
+  const [searchData,setSearchData] = useState([])
+  
   const defaultColDef = useMemo(() => ({
     sortable: true
   }));
@@ -84,10 +90,12 @@ const VoucherList = ({ voucherData }) => {
 
   const nextPage = (offsetValue) => {
     setPageLoad(true)
+    const limit = query ? 0 : 30;
     axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_VOUCHERS, {
       headers: {
         "id": `${Cookies.get('companyId')}`,
-        "offset": `${offsetValue}`
+        "offset": `${offsetValue}`,
+        "limit": `${limit}`,
       }
     }).then((x) => {
       offsetValue > offset ?
@@ -100,15 +108,45 @@ const VoucherList = ({ voucherData }) => {
     });
   }
 
+   // search funtionalites
+  const handleFilterChanged = () => {
+    const api = gridRef.current.api;
+    const filters = api.getFilterModel();
+    const searchText = Object.values(filters)
+      .map(filter => filter.filter)
+      .join(' ');
+  
+    setQuery(searchText.toLowerCase());
+  };
+  
+  const search = (data) => {
+    return data.filter(item => {
+      // Combining all column values into a single string for searching
+      const rowValues = Object.values(item).join(' ').toLowerCase();
+      // converting query into the lowercase 
+      const lowerCaseQuery = query.toLowerCase()
+      // searching with both lowercase and uppercase
+      return keys.some(key => rowValues.includes(lowerCaseQuery) || rowValues.includes(query));
+    });
+  };
+
+  useEffect(()=>{
+    if(rowData){
+      const filterData = search(rowData);
+      setSearchData(filterData);
+    }
+  },[query, rowData])
+
   useEffect(() => {
     setCount(parseInt(voucherData.count / 30))
     setData(voucherData);
   }, []);
 
+
   const setData = async (data) => {
     let tempData = data.result
     await tempData?.forEach((x, i) => {
-      x.no = i + 1 ;
+      x.no = i + 1;
       x.amount = x.Voucher_Heads?.reduce((x, cur) => x + Number(cur.amount), 0),
         x.date = moment(x.createdAt).format("YYYY-MM-DD")
     });
@@ -122,8 +160,11 @@ const VoucherList = ({ voucherData }) => {
   return (
     <div className='base-page-layout'>
       <Row>
-        <Col><h5>Voucher Details</h5></Col>
-        <Col>
+        <Col md="6"><h5>Voucher Details</h5></Col>
+        <Col md="4">
+          <Form.Control type="text" placeholder="Search..." size='sm' onChange={e => setQuery(e.target.value)} />
+        </Col>
+        <Col md="2">
           <button className='btn-custom right'
             onClick={async () => {
               await Router.push(`/accounts/vouchers/new`)
@@ -136,13 +177,14 @@ const VoucherList = ({ voucherData }) => {
       <div className="ag-theme-alpine" style={{ width: "100%", height: '72vh' }}>
         <AgGridReact
           ref={gridRef} // Ref for accessing Grid's API
-          rowData={rowData} // Row Data for Rows
+          rowData={searchData} // Row Data for Rows
           columnDefs={columnDefs} // Column Defs for Columns
           defaultColDef={defaultColDef} // Default Column Properties
           animateRows={true} // Optional - set to 'true' to have rows animate when sorted
           rowSelection='multiple' // Options - allows click selection of rows
           onCellClicked={cellClickedListener}
           getRowHeight={getRowHeight}
+          onFilterChanged={()=>handleFilterChanged()}//for multi searching
         />
       </div>
       <div className='my-1'>
