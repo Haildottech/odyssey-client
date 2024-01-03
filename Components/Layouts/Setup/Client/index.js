@@ -94,10 +94,10 @@ const Client = ({sessionData, clientData}) => {
     <Row>
     <Col md={3}><h5>Clients</h5></Col>
     <Col md={7} style={{display:"inline-block"}}><span>Search By :</span>
-      <Select placeholder="Search" onChange={(e) => setSearchBy(e)} style={{width:"150px", marginLeft:"5px"}}
+      <Select placeholder="Search" onChange={(e) => setSearchBy(e)} style={{width:"150px", marginLeft:"5px",borderRadius:"8px"}}
         options={[{value : "name", label:"Name"}]} defaultValue={"name"}
       />
-      <Input style={{width:"290px", marginLeft:"5px"}} placeholder={searchBy == 'name' ? "Type Name" : "Type Code"}
+      <Input style={{width:"290px", marginLeft:"5px", borderRadius:"5px"}} placeholder={searchBy == 'name' ? "Type Name" : "Type Code"}
         onChange={(e) => onSearch(e)}
       />
     </Col>

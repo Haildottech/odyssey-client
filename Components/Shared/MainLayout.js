@@ -3,7 +3,7 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { companySelect, addCompanies } from '/redux/company/companySlice';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect } from 'react';
-import { Input, Layout, Menu, Select } from 'antd';
+import { Layout, Menu, Select } from 'antd';
 import Router, { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -424,13 +424,13 @@ const MainLayout = ({children}) => {
     <Sider trigger={null} collapsible collapsed={collapsed} 
       className='side-menu-styles' 
       style={{maxHeight:'100vh',overflowY:'auto'}}>
-      <div className={!collapsed?'big-logo':'small-logo'}>
+      <div className={!collapsed ? 'big-logo' : 'small-logo'}>
         <span>
           <img src={company=='1'?'/seanet-logo.png':company=='3'?'/aircargo-logo.png':company=='2'?'/cargolinkers-logo.png':null}/>
           {!collapsed && <p className='wh-txt'>Dashboard</p>}
         </span>
       </div>
-      <div className='px-3'>
+      {!collapsed && <div className='px-3'>
       <Select showSearch style={{  width: "100%" }} placeholder="Search to Select" optionFilterProp="children" onChange={searchPages}
         filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLowerCase())}
         filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase()) }
@@ -438,8 +438,8 @@ const MainLayout = ({children}) => {
           return { value:x.key, label:x.label }
         })}
       />
-      </div>
-      <Menu mode="inline" theme="dark" defaultSelectedKeys={['1']} items={!collapsed?items:[]} />
+      </div>}
+      <Menu mode="inline" theme='dark' defaultSelectedKeys={['1']} items={!collapsed?items:[]} />
     </Sider>
     }
     <Layout className="site-layout">
@@ -454,8 +454,8 @@ const MainLayout = ({children}) => {
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aeJobList")}>AE</span>
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aiJobList")}>AI</span>
     </>}
-      <span style={{color:'white'}} className='mx-3' ><b>Welcome, </b> {username} </span>
-      <span style={{float:'right', color:'white'}} className='mx-5 cur' onClick={()=>logout()}> 
+      <span style={{color:'black'}} className='mx-3' ><b>Welcome, </b> {username} </span>
+      <span style={{float:'right', color:'black'}} className='mx-5 cur' onClick={()=>logout()}> 
         <SlLogout className='mx-2' style={{position:'relative', bottom:2}} />Logout
       </span>
     </Header>

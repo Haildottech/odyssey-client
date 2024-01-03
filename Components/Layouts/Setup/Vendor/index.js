@@ -89,7 +89,7 @@ const Vendor = ({sessionData, vendorData}) => {
           defaultValue={'name'}
           options={[{value : "code", label:"Code"},{value : "name", label:"Name"}]}
         />
-        <Input style={{width:"290px", marginLeft:"5px"}} placeholder={searchBy == 'name' ? "Type Name" : "Type Code"}
+        <Input style={{width:"290px", marginLeft:"5px",borderRadius:"5px"}} placeholder={searchBy == 'name' ? "Type Name" : "Type Code"}
           onChange={(e) => onSearch(e)}
         />
         <button className='btn-custom mx-2' onClick={()=> searchVendor() }>Search</button>

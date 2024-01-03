@@ -75,6 +75,8 @@ const Charges = ({chargeData}) => {
             <Col md={4}></Col>
             <Col md={5}>
                 <Input value={state.search} placeholder="search"
+                    style={{borderRadius:"5px"}}
+                    className='ant-input'
                     onChange={(e)=>dispatch({type:'toggle', fieldName:'search', payload:e.target.value})} 
                 />
                 </Col>

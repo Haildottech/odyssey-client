@@ -210,7 +210,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
           <ReactToPrint
             content={() => inputRef}
             trigger={() => (
-              <div className="div-btn-custom text-center p-1 px-5 fl-right">Print</div>
+              <div className="btn-custom text-center p-1 px-5 fl-right">Print</div>
             )}
           />
         </Col>
