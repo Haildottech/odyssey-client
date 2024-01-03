@@ -86,7 +86,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
             </Col>
           </Row>
           <hr className='my-2' />
-          <div className='mt-3' style={{ maxHeight: 600, overflowY: 'auto' }}>
+          <div className='mt-3' style={{ maxHeight: "100%", overflowY: 'auto' }}>
             <Table className='tableFixHead'>
               <thead>
                 <tr>
@@ -156,7 +156,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
               </tbody>
             </Table>
           </div>
-          <div className=''style={{maxWidth:"50%",position:"fixed", bottom:20, right:25}} >
+          <div className='d-flex justify-content-end items-end my-4'style={{maxWidth:"100%"}} >
                 <Pagination noOfPages={noOfPages} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
           </div>
         </div>
