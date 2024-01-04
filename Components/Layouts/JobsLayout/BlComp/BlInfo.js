@@ -55,11 +55,11 @@ const BlInfo = ({control, id, register, state, useWatch, dispatch, reset, type, 
             <div className="" style={{lineHeight:1.35}}>Job No. *</div>
             <div className='dummy-input'>{allValues.jobNo}</div>
             </Col>
-            <Col md={12}>
+            <Col md={12}> 
                 <div className='mt-2'></div>
                 <InputComp register={register} name='hbl' control={control} width={150} 
                     label={(type=="SE"||type=="SI")?'HBL # *':"HAWB #*"}
-                    disabled={(type=="SI"||type=="AI"||type=="AE")?false:true} 
+                    // disabled={(type=="SI"||type=="AI"||type=="AE")?false:true} 
                 />
             </Col>
             <Col md={12}>

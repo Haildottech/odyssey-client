@@ -11,6 +11,7 @@ import { setAccesLevels } from '/functions/setAccesLevels';
 import logout from '/functions/logout';
 import { setTab } from '/redux/tabs/tabSlice';
 import { SlLogout } from "react-icons/sl";
+import { FaRegBell } from "react-icons/fa";
 
 const { Header, Content, Sider } = Layout;
 
@@ -36,7 +37,11 @@ const MainLayout = ({children}) => {
     if(items.length>0){
       let newTemp = [];
       items.forEach((x)=>{
-        newTemp.push(...x.children)
+        x.children.forEach((y)=>{
+          if(y){
+            newTemp.push(y)
+          }
+        })
       })
       setSearchingList(newTemp);
     }
@@ -435,7 +440,7 @@ const MainLayout = ({children}) => {
         filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLowerCase())}
         filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase()) }
         options={searchingList.map((x)=>{
-          return { value:x.key, label:x.label }
+          return { value:x?.key, label:x?.label }
         })}
       />
       </div>}
@@ -457,6 +462,9 @@ const MainLayout = ({children}) => {
       <span style={{color:'black'}} className='mx-3' ><b>Welcome, </b> {username} </span>
       <span style={{float:'right', color:'black'}} className='mx-5 cur' onClick={()=>logout()}> 
         <SlLogout className='mx-2' style={{position:'relative', bottom:2}} />Logout
+      </span>
+      <span style={{float:"right", color:'black'}} className='mx-5 cur' >
+        <FaRegBell size={"20"} className='mx-2' style={{position:"relative", bottom:"2"}}/>
       </span>
     </Header>
     <Content style={{ margin:'24px 16px', padding:0, minHeight:280}}> 
