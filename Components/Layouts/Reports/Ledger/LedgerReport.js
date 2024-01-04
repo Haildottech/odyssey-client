@@ -10,8 +10,10 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
   useEffect(() => {
     if (voucherData.status == "success") {
       let openingBalance = 0.0, closingBalance = 0.0, tempArray = [];
+
       voucherData.result.forEach((y) => {
         // console.log("Transaction:", y);
+        let exRate = parseFloat(y["Voucher.exRate"])>0?parseFloat(y["Voucher.exRate"]):1;
         const createdAtDate = moment(y.createdAt);
         if (
           createdAtDate.isBetween(moment(from), moment(to), "day", "[]") ||
@@ -20,23 +22,23 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
           closingBalance =
             y.type === "debit"
               ? closingBalance +
-                parseFloat(y.amount) / parseFloat(y["Voucher.exRate"])
+                parseFloat(y.amount) / exRate
               : closingBalance -
-                parseFloat(y.amount) / parseFloat(y["Voucher.exRate"]);
+                parseFloat(y.amount) / exRate
 
           if (y["Voucher.vType"] === "OP") {
             openingBalance =
               y.type === "debit"
                 ? openingBalance +
-                  parseFloat(y.amount) / parseFloat(y["Voucher.exRate"])
+                  parseFloat(y.amount) / exRate
                 : openingBalance -
-                  parseFloat(y.amount) / parseFloat(y["Voucher.exRate"]);
+                  parseFloat(y.amount) / exRate
           } else {
             tempArray.push({
               date: y.createdAt,
               voucherType: y["Voucher.type"],
               voucherId: y["Voucher.id"],
-              amount: parseFloat(y.amount) / parseFloat(y["Voucher.exRate"]),
+              amount: parseFloat(y.amount) / exRate,
               balance: closingBalance,
               voucher: y["Voucher.voucher_Id"],
               type: y.type,
@@ -44,7 +46,7 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
             });
           }
         } else {
-          openingBalance = y.type === "debit" ? openingBalance + parseFloat(y.amount) / parseFloat(y['Voucher.exRate']) : openingBalance - parseFloat(y.amount) / parseFloat(y['Voucher.exRate']);
+          openingBalance = y.type === "debit" ? openingBalance + parseFloat(y.amount) / exRate : openingBalance - parseFloat(y.amount) / exRate;
         }
       });
       setOpening(openingBalance);
