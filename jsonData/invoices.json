@@ -15,8 +15,7 @@
         "createdAt": "2013-01-18",
         "receivable": 200,
         "received": 0,
-        "balance": 200,
-        "party_Id": "918858792983265281"
+        "balance": 200
     },
     {
         "companyId": 3,
@@ -34,84 +33,7 @@
         "createdAt": "2015-05-12",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858792566128641"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 102.5,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-169/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2562.5,
-        "createdAt": "2015-07-25",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "ATEE APPAREL",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-146/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 4500,
-        "createdAt": "2015-06-05",
-        "receivable": 4500,
-        "received": 0,
-        "balance": 4500,
-        "party_Id": "918858792448393217"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 102.5,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-168/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 7687.5,
-        "createdAt": "2015-07-25",
-        "receivable": 75,
-        "received": 0,
-        "balance": 75,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 102.5,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-170/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2562.5,
-        "createdAt": "2015-07-25",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -129,673 +51,7 @@
         "createdAt": "2015-05-13",
         "receivable": 7500,
         "received": 0,
-        "balance": 7500,
-        "party_Id": "918858792566128641"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 103,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-171/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2575,
-        "createdAt": "2015-07-25",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 103,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-172/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2575,
-        "createdAt": "2015-07-25",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 100,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-173/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 7500,
-        "createdAt": "2015-07-27",
-        "receivable": 75,
-        "received": 0,
-        "balance": 75,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 100,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-174/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2500,
-        "createdAt": "2015-07-27",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 103,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-175/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2575,
-        "createdAt": "2015-07-27",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 103,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-176/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 5150,
-        "createdAt": "2015-07-27",
-        "receivable": 50,
-        "received": 0,
-        "balance": 50,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 103,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-177/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2575,
-        "createdAt": "2015-07-27",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 103,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-178/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2575,
-        "createdAt": "2015-07-27",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 100,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-179/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 7500,
-        "createdAt": "2015-07-27",
-        "receivable": 75,
-        "received": 0,
-        "balance": 75,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 103,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-180/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2575,
-        "createdAt": "2015-07-27",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 103,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-181/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2575,
-        "createdAt": "2015-07-27",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 102,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-182/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2550,
-        "createdAt": "2015-08-04",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 100,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-183/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2500,
-        "createdAt": "2015-08-14",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 100,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-184/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2500,
-        "createdAt": "2015-08-22",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 105,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-185/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2625,
-        "createdAt": "2015-09-05",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 104,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-186/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 7800,
-        "createdAt": "2015-09-11",
-        "receivable": 75,
-        "received": 0,
-        "balance": 75,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 104,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-187/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2600,
-        "createdAt": "2015-09-11",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 104,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-188/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2600,
-        "createdAt": "2015-09-11",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 105,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-189/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 7875,
-        "createdAt": "2015-09-20",
-        "receivable": 75,
-        "received": 0,
-        "balance": 75,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 105,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-190/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2625,
-        "createdAt": "2015-09-20",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 100,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-191/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2500,
-        "createdAt": "2015-09-20",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 104.5,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-192/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 5225,
-        "createdAt": "2015-09-25",
-        "receivable": 50,
-        "received": 0,
-        "balance": 50,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
-        "currency": "USD",
-        "ex_rate": 104.5,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-193/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2612.5,
-        "createdAt": "2015-09-25",
-        "receivable": 25,
-        "received": 0,
-        "balance": 25,
-        "party_Id": "918858793200549889"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "SONIC TEXTILE INDUSTRIES-AGENT",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-661/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 4500,
-        "createdAt": "2016-02-27",
-        "receivable": 4500,
-        "received": 0,
-        "balance": 4500,
-        "party_Id": "918858797084475393"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "DYNAMIC SHIPPING AGENCIES",
-        "currency": "USD",
-        "ex_rate": 105,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-1/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 17875.2,
-        "createdAt": "2016-05-09",
-        "receivable": 170.24,
-        "received": 0,
-        "balance": 170.24,
-        "party_Id": "918858792831549441"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "SEA SQUAD LOGISTICS",
-        "currency": "USD",
-        "ex_rate": 105.3,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-335/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 31590,
-        "createdAt": "2016-05-31",
-        "receivable": 300,
-        "received": 0,
-        "balance": 300,
-        "party_Id": "918858792084701185"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "SERVOTECH SHIPPING (PVT) LTD",
-        "currency": "USD",
-        "ex_rate": 106,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-13/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 3710,
-        "createdAt": "2016-06-06",
-        "receivable": 35,
-        "received": 0,
-        "balance": 35,
-        "party_Id": "918858776676794369"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "AF EXPORTS",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-365/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 44380,
-        "createdAt": "2016-06-07",
-        "receivable": 44380,
-        "received": 0,
-        "balance": 44380,
-        "party_Id": "918858792165244929"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "SONIC TEXTILE INDUSTRIES-AGENT",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-662/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 2800,
-        "createdAt": "2016-06-19",
-        "receivable": 2800,
-        "received": 0,
-        "balance": 2800,
-        "party_Id": "918858797084475393"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "DYNAMIC SHIPPING AGENCIES",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-2/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 275,
-        "createdAt": "2016-06-30",
-        "receivable": 275,
-        "received": 0,
-        "balance": 275,
-        "party_Id": "918858792831549441"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "DYNAMIC SHIPPING AGENCIES",
-        "currency": "USD",
-        "ex_rate": 105,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-3/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 5250,
-        "createdAt": "2016-07-20",
-        "receivable": 50,
-        "received": 0,
-        "balance": 50,
-        "party_Id": "918858792831549441"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "MILESTONE TEXTILES",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-396/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 1100,
-        "createdAt": "2016-08-18",
-        "receivable": 1100,
-        "received": 0,
-        "balance": 1100,
-        "party_Id": "918858794064969729"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "NTA SP. Z.O.O",
-        "currency": "USD",
-        "ex_rate": 106,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-125/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 5320.14,
-        "createdAt": "2016-09-08",
-        "receivable": 50.190000000000005,
-        "received": 0,
-        "balance": 50.190000000000005,
-        "party_Id": "918858794318168065"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "SEKO INT'L FREIGHT FORWARDING (SHANGHAI)",
-        "currency": "USD",
-        "ex_rate": 105,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-235/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 1543.5,
-        "createdAt": "2016-09-11",
-        "receivable": 14.7,
-        "received": 0,
-        "balance": 14.7,
-        "party_Id": "918858795124850689"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "MILESTONE TEXTILES",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-397/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 3000,
-        "createdAt": "2016-09-18",
-        "receivable": 3000,
-        "received": 0,
-        "balance": 3000,
-        "party_Id": "918858794064969729"
+        "balance": 7500
     },
     {
         "companyId": 3,
@@ -813,8 +69,709 @@
         "createdAt": "2015-05-21",
         "receivable": 5000,
         "received": 0,
-        "balance": 5000,
-        "party_Id": "918858792566128641"
+        "balance": 5000
+    },
+    {
+        "companyId": 3,
+        "party_Name": "ATEE APPAREL",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-146/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 4500,
+        "createdAt": "2015-06-05",
+        "receivable": 4500,
+        "received": 0,
+        "balance": 4500
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 102.5,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-168/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 7687.5,
+        "createdAt": "2015-07-25",
+        "receivable": 75,
+        "received": 0,
+        "balance": 75
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 102.5,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-169/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2562.5,
+        "createdAt": "2015-07-25",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 102.5,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-170/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2562.5,
+        "createdAt": "2015-07-25",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 103,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-171/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2575,
+        "createdAt": "2015-07-25",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 103,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-172/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2575,
+        "createdAt": "2015-07-25",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 100,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-173/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 7500,
+        "createdAt": "2015-07-27",
+        "receivable": 75,
+        "received": 0,
+        "balance": 75
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 100,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-174/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2500,
+        "createdAt": "2015-07-27",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 103,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-175/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2575,
+        "createdAt": "2015-07-27",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 103,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-176/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 5150,
+        "createdAt": "2015-07-27",
+        "receivable": 50,
+        "received": 0,
+        "balance": 50
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 103,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-177/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2575,
+        "createdAt": "2015-07-27",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 103,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-178/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2575,
+        "createdAt": "2015-07-27",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 100,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-179/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 7500,
+        "createdAt": "2015-07-27",
+        "receivable": 75,
+        "received": 0,
+        "balance": 75
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 103,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-180/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2575,
+        "createdAt": "2015-07-27",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 103,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-181/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2575,
+        "createdAt": "2015-07-27",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 102,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-182/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2550,
+        "createdAt": "2015-08-04",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 100,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-183/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2500,
+        "createdAt": "2015-08-14",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 100,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-184/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2500,
+        "createdAt": "2015-08-22",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 105,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-185/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2625,
+        "createdAt": "2015-09-05",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 104,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-186/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 7800,
+        "createdAt": "2015-09-11",
+        "receivable": 75,
+        "received": 0,
+        "balance": 75
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 104,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-187/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2600,
+        "createdAt": "2015-09-11",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 104,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-188/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2600,
+        "createdAt": "2015-09-11",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 105,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-189/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 7875,
+        "createdAt": "2015-09-20",
+        "receivable": 75,
+        "received": 0,
+        "balance": 75
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 105,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-190/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2625,
+        "createdAt": "2015-09-20",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 100,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-191/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2500,
+        "createdAt": "2015-09-20",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 104.5,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-192/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 5225,
+        "createdAt": "2015-09-25",
+        "receivable": 50,
+        "received": 0,
+        "balance": 50
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GEMS FREIGHT FORWARDING CO., LTD.",
+        "currency": "USD",
+        "ex_rate": 104.5,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-193/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2612.5,
+        "createdAt": "2015-09-25",
+        "receivable": 25,
+        "received": 0,
+        "balance": 25
+    },
+    {
+        "companyId": 3,
+        "party_Name": "SONIC TEXTILE INDUSTRIES-AGENT",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-661/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 4500,
+        "createdAt": "2016-02-27",
+        "receivable": 4500,
+        "received": 0,
+        "balance": 4500
+    },
+    {
+        "companyId": 3,
+        "party_Name": "DYNAMIC SHIPPING AGENCIES",
+        "currency": "USD",
+        "ex_rate": 105,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-1/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 17875.2,
+        "createdAt": "2016-05-09",
+        "receivable": 170.24,
+        "received": 0,
+        "balance": 170.24
+    },
+    {
+        "companyId": 3,
+        "party_Name": "SEA SQUAD LOGISTICS",
+        "currency": "USD",
+        "ex_rate": 105.3,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-335/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 31590,
+        "createdAt": "2016-05-31",
+        "receivable": 300,
+        "received": 0,
+        "balance": 300
+    },
+    {
+        "companyId": 3,
+        "party_Name": "SERVOTECH SHIPPING (PVT) LTD",
+        "currency": "USD",
+        "ex_rate": 106,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-13/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 3710,
+        "createdAt": "2016-06-06",
+        "receivable": 35,
+        "received": 0,
+        "balance": 35
+    },
+    {
+        "companyId": 3,
+        "party_Name": "AF EXPORTS",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-365/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 44380,
+        "createdAt": "2016-06-07",
+        "receivable": 44380,
+        "received": 0,
+        "balance": 44380
+    },
+    {
+        "companyId": 3,
+        "party_Name": "SONIC TEXTILE INDUSTRIES-AGENT",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-662/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 2800,
+        "createdAt": "2016-06-19",
+        "receivable": 2800,
+        "received": 0,
+        "balance": 2800
+    },
+    {
+        "companyId": 3,
+        "party_Name": "DYNAMIC SHIPPING AGENCIES",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-2/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 275,
+        "createdAt": "2016-06-30",
+        "receivable": 275,
+        "received": 0,
+        "balance": 275
+    },
+    {
+        "companyId": 3,
+        "party_Name": "DYNAMIC SHIPPING AGENCIES",
+        "currency": "USD",
+        "ex_rate": 105,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-3/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 5250,
+        "createdAt": "2016-07-20",
+        "receivable": 50,
+        "received": 0,
+        "balance": 50
+    },
+    {
+        "companyId": 3,
+        "party_Name": "MILESTONE TEXTILES",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-396/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 1100,
+        "createdAt": "2016-08-18",
+        "receivable": 1100,
+        "received": 0,
+        "balance": 1100
+    },
+    {
+        "companyId": 3,
+        "party_Name": "NTA SP. Z.O.O",
+        "currency": "USD",
+        "ex_rate": 106,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-125/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 5320.14,
+        "createdAt": "2016-09-08",
+        "receivable": 50.190000000000005,
+        "received": 0,
+        "balance": 50.190000000000005
+    },
+    {
+        "companyId": 3,
+        "party_Name": "SEKO INT'L FREIGHT FORWARDING (SHANGHAI)",
+        "currency": "USD",
+        "ex_rate": 105,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-235/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 1543.5,
+        "createdAt": "2016-09-11",
+        "receivable": 14.7,
+        "received": 0,
+        "balance": 14.7
+    },
+    {
+        "companyId": 3,
+        "party_Name": "MILESTONE TEXTILES",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-397/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 3000,
+        "createdAt": "2016-09-18",
+        "receivable": 3000,
+        "received": 0,
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -832,8 +789,7 @@
         "createdAt": "2016-09-20",
         "receivable": 49,
         "received": 0,
-        "balance": 49,
-        "party_Id": "918858792039284737"
+        "balance": 49
     },
     {
         "companyId": 3,
@@ -851,8 +807,7 @@
         "createdAt": "2016-09-23",
         "receivable": 76,
         "received": 0,
-        "balance": 76,
-        "party_Id": "918858795561680897"
+        "balance": 76
     },
     {
         "companyId": 3,
@@ -870,8 +825,7 @@
         "createdAt": "2016-09-27",
         "receivable": 14,
         "received": 0,
-        "balance": 14,
-        "party_Id": "918858792039284737"
+        "balance": 14
     },
     {
         "companyId": 3,
@@ -889,8 +843,7 @@
         "createdAt": "2016-09-27",
         "receivable": 14,
         "received": 0,
-        "balance": 14,
-        "party_Id": "918858792039284737"
+        "balance": 14
     },
     {
         "companyId": 3,
@@ -908,8 +861,7 @@
         "createdAt": "2016-10-11",
         "receivable": 171,
         "received": 0,
-        "balance": 171,
-        "party_Id": "918858795561680897"
+        "balance": 171
     },
     {
         "companyId": 3,
@@ -927,8 +879,7 @@
         "createdAt": "2016-10-12",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858792419786753"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -946,8 +897,7 @@
         "createdAt": "2016-10-14",
         "receivable": 12716,
         "received": 0,
-        "balance": 12716,
-        "party_Id": "918858794064969729"
+        "balance": 12716
     },
     {
         "companyId": 3,
@@ -965,8 +915,7 @@
         "createdAt": "2016-10-22",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858794318168065"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -984,8 +933,7 @@
         "createdAt": "2016-10-23",
         "receivable": 916,
         "received": 0,
-        "balance": 916,
-        "party_Id": "918858794064969729"
+        "balance": 916
     },
     {
         "companyId": 3,
@@ -1003,8 +951,7 @@
         "createdAt": "2016-11-06",
         "receivable": 0.04,
         "received": 0,
-        "balance": 0.04,
-        "party_Id": "918858793684893697"
+        "balance": 0.04
     },
     {
         "companyId": 3,
@@ -1022,8 +969,7 @@
         "createdAt": "2016-11-11",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1041,8 +987,7 @@
         "createdAt": "2016-11-15",
         "receivable": 4500,
         "received": 0,
-        "balance": 4500,
-        "party_Id": "918858794064969729"
+        "balance": 4500
     },
     {
         "companyId": 3,
@@ -1060,8 +1005,7 @@
         "createdAt": "2016-11-19",
         "receivable": 17886,
         "received": 0,
-        "balance": 17886,
-        "party_Id": "918858794064969729"
+        "balance": 17886
     },
     {
         "companyId": 3,
@@ -1079,8 +1023,7 @@
         "createdAt": "2016-11-21",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1098,8 +1041,7 @@
         "createdAt": "2016-11-22",
         "receivable": 4500,
         "received": 0,
-        "balance": 4500,
-        "party_Id": "918858792419786753"
+        "balance": 4500
     },
     {
         "companyId": 3,
@@ -1117,8 +1059,7 @@
         "createdAt": "2016-12-07",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858794318168065"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -1136,8 +1077,7 @@
         "createdAt": "2017-01-04",
         "receivable": 14,
         "received": 0,
-        "balance": 14,
-        "party_Id": "918858792039284737"
+        "balance": 14
     },
     {
         "companyId": 3,
@@ -1155,8 +1095,7 @@
         "createdAt": "2017-01-14",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1174,8 +1113,7 @@
         "createdAt": "2017-01-18",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1193,8 +1131,7 @@
         "createdAt": "2017-01-19",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1212,8 +1149,7 @@
         "createdAt": "2017-02-04",
         "receivable": 119,
         "received": 0,
-        "balance": 119,
-        "party_Id": "918858792290484225"
+        "balance": 119
     },
     {
         "companyId": 3,
@@ -1231,8 +1167,7 @@
         "createdAt": "2017-02-07",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1250,8 +1185,7 @@
         "createdAt": "2017-02-11",
         "receivable": 2631,
         "received": 0,
-        "balance": 2631,
-        "party_Id": "918858794058842113"
+        "balance": 2631
     },
     {
         "companyId": 3,
@@ -1269,8 +1203,7 @@
         "createdAt": "2017-02-23",
         "receivable": 127.5,
         "received": 0,
-        "balance": 127.5,
-        "party_Id": "918858793844113409"
+        "balance": 127.5
     },
     {
         "companyId": 3,
@@ -1288,8 +1221,7 @@
         "createdAt": "2017-02-24",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858794064969729"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -1307,8 +1239,7 @@
         "createdAt": "2017-03-11",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1326,8 +1257,7 @@
         "createdAt": "2017-03-21",
         "receivable": 3000,
         "received": 0,
-        "balance": 3000,
-        "party_Id": "918858794064969729"
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -1345,8 +1275,7 @@
         "createdAt": "2017-03-28",
         "receivable": 180,
         "received": 0,
-        "balance": 180,
-        "party_Id": "918858792831549441"
+        "balance": 180
     },
     {
         "companyId": 3,
@@ -1364,8 +1293,7 @@
         "createdAt": "2017-03-28",
         "receivable": 90,
         "received": 0,
-        "balance": 90,
-        "party_Id": "918858792831549441"
+        "balance": 90
     },
     {
         "companyId": 3,
@@ -1383,8 +1311,7 @@
         "createdAt": "2017-03-29",
         "receivable": 3000,
         "received": 0,
-        "balance": 3000,
-        "party_Id": "918858794064969729"
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -1402,8 +1329,7 @@
         "createdAt": "2017-04-01",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1421,8 +1347,7 @@
         "createdAt": "2017-04-07",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1440,8 +1365,7 @@
         "createdAt": "2017-04-18",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858794064969729"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -1459,8 +1383,7 @@
         "createdAt": "2017-04-20",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858794064969729"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -1478,8 +1401,7 @@
         "createdAt": "2017-04-22",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858797084475393"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1497,8 +1419,7 @@
         "createdAt": "2017-04-25",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858794064969729"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -1516,8 +1437,7 @@
         "createdAt": "2017-04-26",
         "receivable": 248,
         "received": 0,
-        "balance": 248,
-        "party_Id": "918858793844113409"
+        "balance": 248
     },
     {
         "companyId": 3,
@@ -1535,8 +1455,7 @@
         "createdAt": "2017-04-26",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858794064969729"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -1554,8 +1473,7 @@
         "createdAt": "2017-04-27",
         "receivable": 3000,
         "received": 0,
-        "balance": 3000,
-        "party_Id": "918858794064969729"
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -1573,8 +1491,7 @@
         "createdAt": "2017-05-01",
         "receivable": 3000,
         "received": 0,
-        "balance": 3000,
-        "party_Id": "918858794064969729"
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -1592,8 +1509,7 @@
         "createdAt": "2017-05-11",
         "receivable": 0.48000000000000004,
         "received": 0,
-        "balance": 0.48000000000000004,
-        "party_Id": "918858794318168065"
+        "balance": 0.48000000000000004
     },
     {
         "companyId": 3,
@@ -1611,8 +1527,7 @@
         "createdAt": "2017-05-14",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858797084475393"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -1630,8 +1545,7 @@
         "createdAt": "2017-05-23",
         "receivable": 4100,
         "received": 0,
-        "balance": 4100,
-        "party_Id": "918858794064969729"
+        "balance": 4100
     },
     {
         "companyId": 3,
@@ -1649,8 +1563,7 @@
         "createdAt": "2017-05-23",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858794064969729"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -1668,8 +1581,7 @@
         "createdAt": "2017-05-24",
         "receivable": 4100,
         "received": 0,
-        "balance": 4100,
-        "party_Id": "918858797084475393"
+        "balance": 4100
     },
     {
         "companyId": 3,
@@ -1687,8 +1599,7 @@
         "createdAt": "2017-06-11",
         "receivable": 280,
         "received": 0,
-        "balance": 280,
-        "party_Id": "918858792831549441"
+        "balance": 280
     },
     {
         "companyId": 3,
@@ -1706,8 +1617,7 @@
         "createdAt": "2017-06-12",
         "receivable": 3000,
         "received": 0,
-        "balance": 3000,
-        "party_Id": "918858797084475393"
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -1725,8 +1635,7 @@
         "createdAt": "2017-06-17",
         "receivable": 3750,
         "received": 0,
-        "balance": 3750,
-        "party_Id": "918858794064969729"
+        "balance": 3750
     },
     {
         "companyId": 3,
@@ -1744,8 +1653,7 @@
         "createdAt": "2017-06-20",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795039227905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -1763,8 +1671,7 @@
         "createdAt": "2017-06-24",
         "receivable": 45,
         "received": 0,
-        "balance": 45,
-        "party_Id": "918858795039227905"
+        "balance": 45
     },
     {
         "companyId": 3,
@@ -1782,8 +1689,7 @@
         "createdAt": "2017-06-26",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858797084475393"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1801,8 +1707,7 @@
         "createdAt": "2017-06-28",
         "receivable": 4000,
         "received": 0,
-        "balance": 4000,
-        "party_Id": "918858797084475393"
+        "balance": 4000
     },
     {
         "companyId": 3,
@@ -1820,8 +1725,7 @@
         "createdAt": "2017-06-29",
         "receivable": 168630,
         "received": 0,
-        "balance": 168630,
-        "party_Id": "918858792496103425"
+        "balance": 168630
     },
     {
         "companyId": 3,
@@ -1839,8 +1743,7 @@
         "createdAt": "2017-07-04",
         "receivable": 35,
         "received": 0,
-        "balance": 35,
-        "party_Id": "918858795039227905"
+        "balance": 35
     },
     {
         "companyId": 3,
@@ -1858,8 +1761,7 @@
         "createdAt": "2017-07-17",
         "receivable": 3335.329990627929,
         "received": 380.8,
-        "balance": 2954.529990627929,
-        "party_Id": "918858795390205953"
+        "balance": 2954.529990627929
     },
     {
         "companyId": 3,
@@ -1877,8 +1779,7 @@
         "createdAt": "2017-07-28",
         "receivable": 1100,
         "received": 0,
-        "balance": 1100,
-        "party_Id": "918858797084475393"
+        "balance": 1100
     },
     {
         "companyId": 3,
@@ -1896,8 +1797,7 @@
         "createdAt": "2017-07-30",
         "receivable": 1540.2,
         "received": 0,
-        "balance": 1540.2,
-        "party_Id": "918858797084475393"
+        "balance": 1540.2
     },
     {
         "companyId": 3,
@@ -1915,8 +1815,7 @@
         "createdAt": "2017-08-05",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -1934,8 +1833,7 @@
         "createdAt": "2017-08-05",
         "receivable": 3000,
         "received": 0,
-        "balance": 3000,
-        "party_Id": "918858794064969729"
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -1953,8 +1851,7 @@
         "createdAt": "2017-08-11",
         "receivable": 3000,
         "received": 0,
-        "balance": 3000,
-        "party_Id": "918858794064969729"
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -1972,8 +1869,7 @@
         "createdAt": "2017-08-22",
         "receivable": 3200,
         "received": 0,
-        "balance": 3200,
-        "party_Id": "918858792496103425"
+        "balance": 3200
     },
     {
         "companyId": 3,
@@ -1991,8 +1887,7 @@
         "createdAt": "2017-08-31",
         "receivable": 1050,
         "received": 0,
-        "balance": 1050,
-        "party_Id": "918858797084475393"
+        "balance": 1050
     },
     {
         "companyId": 3,
@@ -2010,8 +1905,7 @@
         "createdAt": "2017-09-11",
         "receivable": 6300,
         "received": 0,
-        "balance": 6300,
-        "party_Id": "918858794064969729"
+        "balance": 6300
     },
     {
         "companyId": 3,
@@ -2029,8 +1923,7 @@
         "createdAt": "2017-09-13",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858794064969729"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -2048,8 +1941,7 @@
         "createdAt": "2017-09-13",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -2067,8 +1959,7 @@
         "createdAt": "2017-09-20",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -2086,8 +1977,7 @@
         "createdAt": "2017-09-20",
         "receivable": 13608,
         "received": 0,
-        "balance": 13608,
-        "party_Id": "918858794620682241"
+        "balance": 13608
     },
     {
         "companyId": 3,
@@ -2105,8 +1995,7 @@
         "createdAt": "2017-09-22",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -2124,8 +2013,7 @@
         "createdAt": "2017-09-28",
         "receivable": 4050,
         "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -2143,8 +2031,7 @@
         "createdAt": "2017-10-04",
         "receivable": 4600,
         "received": 0,
-        "balance": 4600,
-        "party_Id": "918858792496103425"
+        "balance": 4600
     },
     {
         "companyId": 3,
@@ -2162,8 +2049,7 @@
         "createdAt": "2017-10-04",
         "receivable": 2500,
         "received": 0,
-        "balance": 2500,
-        "party_Id": "918858797084475393"
+        "balance": 2500
     },
     {
         "companyId": 3,
@@ -2181,8 +2067,7 @@
         "createdAt": "2017-10-08",
         "receivable": 3050,
         "received": 0,
-        "balance": 3050,
-        "party_Id": "918858794064969729"
+        "balance": 3050
     },
     {
         "companyId": 3,
@@ -2200,8 +2085,7 @@
         "createdAt": "2017-10-12",
         "receivable": 1250,
         "received": 0,
-        "balance": 1250,
-        "party_Id": "918858797084475393"
+        "balance": 1250
     },
     {
         "companyId": 3,
@@ -2219,8 +2103,7 @@
         "createdAt": "2017-10-18",
         "receivable": 350,
         "received": 0,
-        "balance": 350,
-        "party_Id": "918858797084475393"
+        "balance": 350
     },
     {
         "companyId": 3,
@@ -2238,8 +2121,7 @@
         "createdAt": "2017-10-27",
         "receivable": 3950,
         "received": 0,
-        "balance": 3950,
-        "party_Id": "918858792496103425"
+        "balance": 3950
     },
     {
         "companyId": 3,
@@ -2257,8 +2139,7 @@
         "createdAt": "2017-10-28",
         "receivable": 1250,
         "received": 0,
-        "balance": 1250,
-        "party_Id": "918858797084475393"
+        "balance": 1250
     },
     {
         "companyId": 3,
@@ -2276,8 +2157,7 @@
         "createdAt": "2017-10-30",
         "receivable": 3750,
         "received": 0,
-        "balance": 3750,
-        "party_Id": "918858794064969729"
+        "balance": 3750
     },
     {
         "companyId": 3,
@@ -2295,8 +2175,7 @@
         "createdAt": "2017-10-30",
         "receivable": 4600,
         "received": 0,
-        "balance": 4600,
-        "party_Id": "918858794064969729"
+        "balance": 4600
     },
     {
         "companyId": 3,
@@ -2314,8 +2193,7 @@
         "createdAt": "2017-11-06",
         "receivable": 4350,
         "received": 0,
-        "balance": 4350,
-        "party_Id": "918858792496103425"
+        "balance": 4350
     },
     {
         "companyId": 3,
@@ -2333,8 +2211,7 @@
         "createdAt": "2017-11-06",
         "receivable": 3050,
         "received": 0,
-        "balance": 3050,
-        "party_Id": "918858794064969729"
+        "balance": 3050
     },
     {
         "companyId": 3,
@@ -2352,8 +2229,7 @@
         "createdAt": "2017-11-10",
         "receivable": 110.4,
         "received": 0,
-        "balance": 110.4,
-        "party_Id": "918858794488791041"
+        "balance": 110.4
     },
     {
         "companyId": 3,
@@ -2371,8 +2247,7 @@
         "createdAt": "2017-11-18",
         "receivable": 4600,
         "received": 0,
-        "balance": 4600,
-        "party_Id": "918858794064969729"
+        "balance": 4600
     },
     {
         "companyId": 3,
@@ -2390,8 +2265,7 @@
         "createdAt": "2017-11-18",
         "receivable": 20012.4,
         "received": 0,
-        "balance": 20012.4,
-        "party_Id": "918858797084475393"
+        "balance": 20012.4
     },
     {
         "companyId": 3,
@@ -2409,8 +2283,7 @@
         "createdAt": "2017-11-20",
         "receivable": 3250,
         "received": 0,
-        "balance": 3250,
-        "party_Id": "918858797084475393"
+        "balance": 3250
     },
     {
         "companyId": 3,
@@ -2428,8 +2301,7 @@
         "createdAt": "2017-11-21",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858797093421057"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -2447,8 +2319,7 @@
         "createdAt": "2017-11-27",
         "receivable": 0.1,
         "received": 0,
-        "balance": 0.1,
-        "party_Id": "918858776225185793"
+        "balance": 0.1
     },
     {
         "companyId": 3,
@@ -2466,8 +2337,7 @@
         "createdAt": "2017-12-05",
         "receivable": 5.999999999999999,
         "received": 0,
-        "balance": 5.999999999999999,
-        "party_Id": "918858797093421057"
+        "balance": 5.999999999999999
     },
     {
         "companyId": 3,
@@ -2485,8 +2355,7 @@
         "createdAt": "2017-12-08",
         "receivable": 486,
         "received": 0,
-        "balance": 486,
-        "party_Id": "918858792165244929"
+        "balance": 486
     },
     {
         "companyId": 3,
@@ -2504,8 +2373,7 @@
         "createdAt": "2017-12-08",
         "receivable": 4600,
         "received": 0,
-        "balance": 4600,
-        "party_Id": "918858794064969729"
+        "balance": 4600
     },
     {
         "companyId": 3,
@@ -2523,8 +2391,7 @@
         "createdAt": "2017-12-12",
         "receivable": 3,
         "received": 0,
-        "balance": 3,
-        "party_Id": "918858797093421057"
+        "balance": 3
     },
     {
         "companyId": 3,
@@ -2542,8 +2409,7 @@
         "createdAt": "2017-12-21",
         "receivable": 0.25,
         "received": 0,
-        "balance": 0.25,
-        "party_Id": "918858776225185793"
+        "balance": 0.25
     },
     {
         "companyId": 3,
@@ -2561,27 +2427,7 @@
         "createdAt": "2017-12-29",
         "receivable": 4930,
         "received": 0,
-        "balance": 4930,
-        "party_Id": "918858792165244929"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "MILESTONE TEXTILES",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-439/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 4050,
-        "createdAt": "2018-01-07",
-        "receivable": 4050,
-        "received": 0,
-        "balance": 4050,
-        "party_Id": "918858794064969729"
+        "balance": 4930
     },
     {
         "companyId": 3,
@@ -2599,8 +2445,25 @@
         "createdAt": "2018-01-07",
         "receivable": 4300,
         "received": 0,
-        "balance": 4300,
-        "party_Id": "918858794064969729"
+        "balance": 4300
+    },
+    {
+        "companyId": 3,
+        "party_Name": "MILESTONE TEXTILES",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-439/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 4050,
+        "createdAt": "2018-01-07",
+        "receivable": 4050,
+        "received": 0,
+        "balance": 4050
     },
     {
         "companyId": 3,
@@ -2618,8 +2481,7 @@
         "createdAt": "2018-01-16",
         "receivable": 3850,
         "received": 0,
-        "balance": 3850,
-        "party_Id": "918858794064969729"
+        "balance": 3850
     },
     {
         "companyId": 3,
@@ -2637,8 +2499,7 @@
         "createdAt": "2018-01-21",
         "receivable": 4600,
         "received": 0,
-        "balance": 4600,
-        "party_Id": "918858794064969729"
+        "balance": 4600
     },
     {
         "companyId": 3,
@@ -2656,8 +2517,7 @@
         "createdAt": "2018-01-26",
         "receivable": 4300,
         "received": 0,
-        "balance": 4300,
-        "party_Id": "918858794064969729"
+        "balance": 4300
     },
     {
         "companyId": 3,
@@ -2675,8 +2535,7 @@
         "createdAt": "2018-01-28",
         "receivable": 9,
         "received": 0,
-        "balance": 9,
-        "party_Id": "918858797093421057"
+        "balance": 9
     },
     {
         "companyId": 3,
@@ -2694,8 +2553,7 @@
         "createdAt": "2018-02-01",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858795124850689"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -2713,8 +2571,7 @@
         "createdAt": "2018-02-01",
         "receivable": 4250,
         "received": 0,
-        "balance": 4250,
-        "party_Id": "918858794064969729"
+        "balance": 4250
     },
     {
         "companyId": 3,
@@ -2732,8 +2589,7 @@
         "createdAt": "2018-02-03",
         "receivable": 22017,
         "received": 0,
-        "balance": 22017,
-        "party_Id": "918858792165244929"
+        "balance": 22017
     },
     {
         "companyId": 3,
@@ -2751,8 +2607,7 @@
         "createdAt": "2018-02-03",
         "receivable": 4130,
         "received": 0,
-        "balance": 4130,
-        "party_Id": "918858794064969729"
+        "balance": 4130
     },
     {
         "companyId": 3,
@@ -2770,8 +2625,7 @@
         "createdAt": "2018-02-09",
         "receivable": 4300,
         "received": 0,
-        "balance": 4300,
-        "party_Id": "918858794064969729"
+        "balance": 4300
     },
     {
         "companyId": 3,
@@ -2789,8 +2643,7 @@
         "createdAt": "2018-02-12",
         "receivable": 0.7,
         "received": 0,
-        "balance": 0.7,
-        "party_Id": "918858795039227905"
+        "balance": 0.7
     },
     {
         "companyId": 3,
@@ -2808,8 +2661,7 @@
         "createdAt": "2018-02-13",
         "receivable": 9300,
         "received": 0,
-        "balance": 9300,
-        "party_Id": "918858794064969729"
+        "balance": 9300
     },
     {
         "companyId": 3,
@@ -2827,8 +2679,7 @@
         "createdAt": "2018-02-16",
         "receivable": 40,
         "received": 0,
-        "balance": 40,
-        "party_Id": "918858795039227905"
+        "balance": 40
     },
     {
         "companyId": 3,
@@ -2846,8 +2697,7 @@
         "createdAt": "2018-02-23",
         "receivable": 4300,
         "received": 0,
-        "balance": 4300,
-        "party_Id": "918858794064969729"
+        "balance": 4300
     },
     {
         "companyId": 3,
@@ -2865,8 +2715,7 @@
         "createdAt": "2018-02-27",
         "receivable": 75,
         "received": 0,
-        "balance": 75,
-        "party_Id": "918858794971430913"
+        "balance": 75
     },
     {
         "companyId": 3,
@@ -2884,8 +2733,7 @@
         "createdAt": "2018-03-04",
         "receivable": 4214,
         "received": 0,
-        "balance": 4214,
-        "party_Id": "918858794064969729"
+        "balance": 4214
     },
     {
         "companyId": 3,
@@ -2903,8 +2751,7 @@
         "createdAt": "2018-03-08",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858795124850689"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -2922,8 +2769,7 @@
         "createdAt": "2018-03-14",
         "receivable": 3050,
         "received": 0,
-        "balance": 3050,
-        "party_Id": "918858794064969729"
+        "balance": 3050
     },
     {
         "companyId": 3,
@@ -2941,8 +2787,7 @@
         "createdAt": "2018-03-20",
         "receivable": 4300,
         "received": 0,
-        "balance": 4300,
-        "party_Id": "918858794064969729"
+        "balance": 4300
     },
     {
         "companyId": 3,
@@ -2960,8 +2805,7 @@
         "createdAt": "2018-03-27",
         "receivable": 60,
         "received": 0,
-        "balance": 60,
-        "party_Id": "918858792039284737"
+        "balance": 60
     },
     {
         "companyId": 3,
@@ -2979,8 +2823,7 @@
         "createdAt": "2018-04-05",
         "receivable": 50,
         "received": 0,
-        "balance": 50,
-        "party_Id": "918858795124850689"
+        "balance": 50
     },
     {
         "companyId": 3,
@@ -2998,8 +2841,7 @@
         "createdAt": "2018-04-11",
         "receivable": 260,
         "received": 0,
-        "balance": 260,
-        "party_Id": "918858789750505473"
+        "balance": 260
     },
     {
         "companyId": 3,
@@ -3017,8 +2859,7 @@
         "createdAt": "2018-04-18",
         "receivable": 4300,
         "received": 0,
-        "balance": 4300,
-        "party_Id": "918858794064969729"
+        "balance": 4300
     },
     {
         "companyId": 3,
@@ -3036,8 +2877,7 @@
         "createdAt": "2018-04-21",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858795124850689"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -3055,8 +2895,7 @@
         "createdAt": "2018-04-23",
         "receivable": 4300,
         "received": 0,
-        "balance": 4300,
-        "party_Id": "918858794064969729"
+        "balance": 4300
     },
     {
         "companyId": 3,
@@ -3074,8 +2913,7 @@
         "createdAt": "2018-04-23",
         "receivable": 3050,
         "received": 0,
-        "balance": 3050,
-        "party_Id": "918858794064969729"
+        "balance": 3050
     },
     {
         "companyId": 3,
@@ -3093,8 +2931,7 @@
         "createdAt": "2018-05-15",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858792039284737"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -3112,8 +2949,7 @@
         "createdAt": "2018-05-15",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858792039284737"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -3131,8 +2967,7 @@
         "createdAt": "2018-05-17",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858795124850689"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -3150,8 +2985,7 @@
         "createdAt": "2018-05-17",
         "receivable": 50,
         "received": 0,
-        "balance": 50,
-        "party_Id": "918858795557191681"
+        "balance": 50
     },
     {
         "companyId": 3,
@@ -3169,8 +3003,7 @@
         "createdAt": "2018-05-23",
         "receivable": 3,
         "received": 0,
-        "balance": 3,
-        "party_Id": "918858797093421057"
+        "balance": 3
     },
     {
         "companyId": 3,
@@ -3188,8 +3021,7 @@
         "createdAt": "2018-05-28",
         "receivable": 3524,
         "received": 0,
-        "balance": 3524,
-        "party_Id": "918858794064969729"
+        "balance": 3524
     },
     {
         "companyId": 3,
@@ -3207,8 +3039,7 @@
         "createdAt": "2018-05-31",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858795124850689"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -3226,8 +3057,7 @@
         "createdAt": "2018-06-01",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -3245,8 +3075,7 @@
         "createdAt": "2018-06-01",
         "receivable": 617,
         "received": 0,
-        "balance": 617,
-        "party_Id": "918858795596808193"
+        "balance": 617
     },
     {
         "companyId": 3,
@@ -3264,8 +3093,7 @@
         "createdAt": "2018-06-08",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -3283,8 +3111,7 @@
         "createdAt": "2018-06-10",
         "receivable": 3592,
         "received": 0,
-        "balance": 3592,
-        "party_Id": "918858794064969729"
+        "balance": 3592
     },
     {
         "companyId": 3,
@@ -3302,8 +3129,7 @@
         "createdAt": "2018-06-12",
         "receivable": 3054,
         "received": 0,
-        "balance": 3054,
-        "party_Id": "918858794064969729"
+        "balance": 3054
     },
     {
         "companyId": 3,
@@ -3321,8 +3147,7 @@
         "createdAt": "2018-06-14",
         "receivable": 170.00004330035293,
         "received": 0,
-        "balance": 170.00004330035293,
-        "party_Id": "918858795390205953"
+        "balance": 170.00004330035293
     },
     {
         "companyId": 3,
@@ -3340,8 +3165,7 @@
         "createdAt": "2018-06-15",
         "receivable": 40,
         "received": 0,
-        "balance": 40,
-        "party_Id": "918858795390205953"
+        "balance": 40
     },
     {
         "companyId": 3,
@@ -3359,8 +3183,7 @@
         "createdAt": "2018-06-18",
         "receivable": 3606,
         "received": 0,
-        "balance": 3606,
-        "party_Id": "918858794058842113"
+        "balance": 3606
     },
     {
         "companyId": 3,
@@ -3378,8 +3201,7 @@
         "createdAt": "2018-06-20",
         "receivable": 7576,
         "received": 0,
-        "balance": 7576,
-        "party_Id": "918858794910515201"
+        "balance": 7576
     },
     {
         "companyId": 3,
@@ -3397,8 +3219,7 @@
         "createdAt": "2018-06-22",
         "receivable": 105,
         "received": 0,
-        "balance": 105,
-        "party_Id": "918858795390205953"
+        "balance": 105
     },
     {
         "companyId": 3,
@@ -3416,8 +3237,7 @@
         "createdAt": "2018-06-28",
         "receivable": 50,
         "received": 0,
-        "balance": 50,
-        "party_Id": "918858795557191681"
+        "balance": 50
     },
     {
         "companyId": 3,
@@ -3435,8 +3255,7 @@
         "createdAt": "2018-06-29",
         "receivable": 16,
         "received": 0,
-        "balance": 16,
-        "party_Id": "918858794553638913"
+        "balance": 16
     },
     {
         "companyId": 3,
@@ -3454,8 +3273,7 @@
         "createdAt": "2018-06-29",
         "receivable": 4,
         "received": 0,
-        "balance": 4,
-        "party_Id": "918858794553638913"
+        "balance": 4
     },
     {
         "companyId": 3,
@@ -3473,8 +3291,7 @@
         "createdAt": "2018-07-06",
         "receivable": 3050,
         "received": 0,
-        "balance": 3050,
-        "party_Id": "918858794064969729"
+        "balance": 3050
     },
     {
         "companyId": 3,
@@ -3492,8 +3309,7 @@
         "createdAt": "2018-07-07",
         "receivable": 3082,
         "received": 0,
-        "balance": 3082,
-        "party_Id": "918858794064969729"
+        "balance": 3082
     },
     {
         "companyId": 3,
@@ -3511,8 +3327,7 @@
         "createdAt": "2018-07-13",
         "receivable": 3668,
         "received": 0,
-        "balance": 3668,
-        "party_Id": "918858794910515201"
+        "balance": 3668
     },
     {
         "companyId": 3,
@@ -3530,8 +3345,7 @@
         "createdAt": "2018-07-14",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858794553638913"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -3549,8 +3363,7 @@
         "createdAt": "2018-07-14",
         "receivable": 125000,
         "received": 0,
-        "balance": 125000,
-        "party_Id": "918858793499820033"
+        "balance": 125000
     },
     {
         "companyId": 3,
@@ -3568,8 +3381,7 @@
         "createdAt": "2018-07-24",
         "receivable": 4188,
         "received": 0,
-        "balance": 4188,
-        "party_Id": "918858794064969729"
+        "balance": 4188
     },
     {
         "companyId": 3,
@@ -3587,8 +3399,7 @@
         "createdAt": "2018-07-25",
         "receivable": 4646,
         "received": 0,
-        "balance": 4646,
-        "party_Id": "918858794064969729"
+        "balance": 4646
     },
     {
         "companyId": 3,
@@ -3606,8 +3417,7 @@
         "createdAt": "2018-07-25",
         "receivable": 4458,
         "received": 0,
-        "balance": 4458,
-        "party_Id": "918858794064969729"
+        "balance": 4458
     },
     {
         "companyId": 3,
@@ -3625,8 +3435,7 @@
         "createdAt": "2018-07-25",
         "receivable": 14500,
         "received": 0,
-        "balance": 14500,
-        "party_Id": "918858794064969729"
+        "balance": 14500
     },
     {
         "companyId": 3,
@@ -3644,8 +3453,7 @@
         "createdAt": "2018-07-31",
         "receivable": 0.85,
         "received": 0,
-        "balance": 0.85,
-        "party_Id": "918858793779134465"
+        "balance": 0.85
     },
     {
         "companyId": 3,
@@ -3663,8 +3471,7 @@
         "createdAt": "2018-08-03",
         "receivable": 20,
         "received": 0,
-        "balance": 20,
-        "party_Id": "918858791655899137"
+        "balance": 20
     },
     {
         "companyId": 3,
@@ -3682,8 +3489,7 @@
         "createdAt": "2018-08-04",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858795153915905"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -3701,8 +3507,7 @@
         "createdAt": "2018-08-06",
         "receivable": 411.6,
         "received": 0,
-        "balance": 411.6,
-        "party_Id": "918858790560464897"
+        "balance": 411.6
     },
     {
         "companyId": 3,
@@ -3720,8 +3525,7 @@
         "createdAt": "2018-08-06",
         "receivable": 504,
         "received": 0,
-        "balance": 504,
-        "party_Id": "918858790560464897"
+        "balance": 504
     },
     {
         "companyId": 3,
@@ -3739,8 +3543,7 @@
         "createdAt": "2018-08-06",
         "receivable": 491.4,
         "received": 0,
-        "balance": 491.4,
-        "party_Id": "918858790560464897"
+        "balance": 491.4
     },
     {
         "companyId": 3,
@@ -3758,8 +3561,7 @@
         "createdAt": "2018-08-09",
         "receivable": 50,
         "received": 0,
-        "balance": 50,
-        "party_Id": "918858795557191681"
+        "balance": 50
     },
     {
         "companyId": 3,
@@ -3777,8 +3579,7 @@
         "createdAt": "2018-08-19",
         "receivable": 0.05,
         "received": 0,
-        "balance": 0.05,
-        "party_Id": "918858795039227905"
+        "balance": 0.05
     },
     {
         "companyId": 3,
@@ -3796,8 +3597,7 @@
         "createdAt": "2018-08-21",
         "receivable": 3102,
         "received": 0,
-        "balance": 3102,
-        "party_Id": "918858794064969729"
+        "balance": 3102
     },
     {
         "companyId": 3,
@@ -3815,8 +3615,7 @@
         "createdAt": "2018-08-24",
         "receivable": 4344,
         "received": 0,
-        "balance": 4344,
-        "party_Id": "918858794064969729"
+        "balance": 4344
     },
     {
         "companyId": 3,
@@ -3834,8 +3633,7 @@
         "createdAt": "2018-08-25",
         "receivable": 160,
         "received": 0,
-        "balance": 160,
-        "party_Id": "918858792831549441"
+        "balance": 160
     },
     {
         "companyId": 3,
@@ -3853,8 +3651,7 @@
         "createdAt": "2018-08-31",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -3872,8 +3669,7 @@
         "createdAt": "2018-08-31",
         "receivable": 134.4,
         "received": 0,
-        "balance": 134.4,
-        "party_Id": "918858790560464897"
+        "balance": 134.4
     },
     {
         "companyId": 3,
@@ -3891,8 +3687,7 @@
         "createdAt": "2018-09-09",
         "receivable": 4506,
         "received": 0,
-        "balance": 4506,
-        "party_Id": "918858794064969729"
+        "balance": 4506
     },
     {
         "companyId": 3,
@@ -3910,8 +3705,7 @@
         "createdAt": "2018-09-15",
         "receivable": 4558,
         "received": 0,
-        "balance": 4558,
-        "party_Id": "918858794064969729"
+        "balance": 4558
     },
     {
         "companyId": 3,
@@ -3929,8 +3723,7 @@
         "createdAt": "2018-09-16",
         "receivable": 4436,
         "received": 0,
-        "balance": 4436,
-        "party_Id": "918858797084475393"
+        "balance": 4436
     },
     {
         "companyId": 3,
@@ -3948,8 +3741,7 @@
         "createdAt": "2018-10-17",
         "receivable": 4706,
         "received": 0,
-        "balance": 4706,
-        "party_Id": "918858794064969729"
+        "balance": 4706
     },
     {
         "companyId": 3,
@@ -3967,8 +3759,7 @@
         "createdAt": "2018-10-20",
         "receivable": 4747,
         "received": 0,
-        "balance": 4747,
-        "party_Id": "918858794064969729"
+        "balance": 4747
     },
     {
         "companyId": 3,
@@ -3986,8 +3777,7 @@
         "createdAt": "2018-10-23",
         "receivable": 4300,
         "received": 0,
-        "balance": 4300,
-        "party_Id": "918858794064969729"
+        "balance": 4300
     },
     {
         "companyId": 3,
@@ -4005,8 +3795,7 @@
         "createdAt": "2018-10-28",
         "receivable": 3050,
         "received": 0,
-        "balance": 3050,
-        "party_Id": "918858794064969729"
+        "balance": 3050
     },
     {
         "companyId": 3,
@@ -4024,8 +3813,7 @@
         "createdAt": "2018-11-03",
         "receivable": 26,
         "received": 0,
-        "balance": 26,
-        "party_Id": "918858795039227905"
+        "balance": 26
     },
     {
         "companyId": 3,
@@ -4043,8 +3831,7 @@
         "createdAt": "2018-11-03",
         "receivable": 10,
         "received": 0,
-        "balance": 10,
-        "party_Id": "918858794553638913"
+        "balance": 10
     },
     {
         "companyId": 3,
@@ -4062,8 +3849,7 @@
         "createdAt": "2018-11-03",
         "receivable": 20,
         "received": 0,
-        "balance": 20,
-        "party_Id": "918858795153915905"
+        "balance": 20
     },
     {
         "companyId": 3,
@@ -4081,8 +3867,7 @@
         "createdAt": "2018-11-06",
         "receivable": 4550,
         "received": 0,
-        "balance": 4550,
-        "party_Id": "918858794064969729"
+        "balance": 4550
     },
     {
         "companyId": 3,
@@ -4100,8 +3885,7 @@
         "createdAt": "2018-11-06",
         "receivable": 4394,
         "received": 0,
-        "balance": 4394,
-        "party_Id": "918858794064969729"
+        "balance": 4394
     },
     {
         "companyId": 3,
@@ -4119,8 +3903,7 @@
         "createdAt": "2018-11-10",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795039227905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -4138,8 +3921,7 @@
         "createdAt": "2018-11-16",
         "receivable": 620,
         "received": 0,
-        "balance": 620,
-        "party_Id": "918858795342921729"
+        "balance": 620
     },
     {
         "companyId": 3,
@@ -4157,8 +3939,7 @@
         "createdAt": "2018-11-30",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858794553638913"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -4176,8 +3957,7 @@
         "createdAt": "2018-12-04",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -4195,8 +3975,7 @@
         "createdAt": "2018-12-07",
         "receivable": 4356,
         "received": 0,
-        "balance": 4356,
-        "party_Id": "918858794910515201"
+        "balance": 4356
     },
     {
         "companyId": 3,
@@ -4214,8 +3993,7 @@
         "createdAt": "2018-12-11",
         "receivable": 23.529999999999998,
         "received": 0,
-        "balance": 23.529999999999998,
-        "party_Id": "918858795039227905"
+        "balance": 23.529999999999998
     },
     {
         "companyId": 3,
@@ -4233,8 +4011,7 @@
         "createdAt": "2018-12-22",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858794553638913"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -4252,8 +4029,7 @@
         "createdAt": "2018-12-22",
         "receivable": 545,
         "received": 0,
-        "balance": 545,
-        "party_Id": "918858795578621953"
+        "balance": 545
     },
     {
         "companyId": 3,
@@ -4271,8 +4047,7 @@
         "createdAt": "2018-12-27",
         "receivable": 445,
         "received": 0,
-        "balance": 445,
-        "party_Id": "918858795676270593"
+        "balance": 445
     },
     {
         "companyId": 3,
@@ -4290,8 +4065,7 @@
         "createdAt": "2019-01-13",
         "receivable": 1200,
         "received": 0,
-        "balance": 1200,
-        "party_Id": "918858795039227905"
+        "balance": 1200
     },
     {
         "companyId": 3,
@@ -4309,8 +4083,7 @@
         "createdAt": "2019-01-19",
         "receivable": 4334,
         "received": 0,
-        "balance": 4334,
-        "party_Id": "918858794064969729"
+        "balance": 4334
     },
     {
         "companyId": 3,
@@ -4328,8 +4101,7 @@
         "createdAt": "2019-01-21",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -4347,8 +4119,7 @@
         "createdAt": "2019-01-21",
         "receivable": 4314,
         "received": 0,
-        "balance": 4314,
-        "party_Id": "918858794064969729"
+        "balance": 4314
     },
     {
         "companyId": 3,
@@ -4366,8 +4137,7 @@
         "createdAt": "2019-01-30",
         "receivable": 75,
         "received": 0,
-        "balance": 75,
-        "party_Id": "918858795794694145"
+        "balance": 75
     },
     {
         "companyId": 3,
@@ -4385,8 +4155,7 @@
         "createdAt": "2019-02-01",
         "receivable": 5238,
         "received": 0,
-        "balance": 5238,
-        "party_Id": "918858794274684929"
+        "balance": 5238
     },
     {
         "companyId": 3,
@@ -4404,8 +4173,7 @@
         "createdAt": "2019-02-06",
         "receivable": 5882,
         "received": 0,
-        "balance": 5882,
-        "party_Id": "918858792448393217"
+        "balance": 5882
     },
     {
         "companyId": 3,
@@ -4423,8 +4191,7 @@
         "createdAt": "2019-02-08",
         "receivable": 80,
         "received": 0,
-        "balance": 80,
-        "party_Id": "918858792831549441"
+        "balance": 80
     },
     {
         "companyId": 3,
@@ -4442,8 +4209,7 @@
         "createdAt": "2019-02-13",
         "receivable": 322.90000000000003,
         "received": 0,
-        "balance": 322.90000000000003,
-        "party_Id": "918858790560464897"
+        "balance": 322.90000000000003
     },
     {
         "companyId": 3,
@@ -4461,8 +4227,7 @@
         "createdAt": "2019-02-16",
         "receivable": 4092,
         "received": 0,
-        "balance": 4092,
-        "party_Id": "918858794064969729"
+        "balance": 4092
     },
     {
         "companyId": 3,
@@ -4480,8 +4245,7 @@
         "createdAt": "2019-03-01",
         "receivable": 1,
         "received": 0,
-        "balance": 1,
-        "party_Id": "918858793899294721"
+        "balance": 1
     },
     {
         "companyId": 3,
@@ -4499,8 +4263,7 @@
         "createdAt": "2019-03-23",
         "receivable": 528.1,
         "received": 0,
-        "balance": 528.1,
-        "party_Id": "918858795039227905"
+        "balance": 528.1
     },
     {
         "companyId": 3,
@@ -4518,8 +4281,7 @@
         "createdAt": "2019-03-24",
         "receivable": 2887.5,
         "received": 0,
-        "balance": 2887.5,
-        "party_Id": "918858795336433665"
+        "balance": 2887.5
     },
     {
         "companyId": 3,
@@ -4537,8 +4299,7 @@
         "createdAt": "2019-03-31",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -4556,8 +4317,7 @@
         "createdAt": "2019-04-05",
         "receivable": 90,
         "received": 0,
-        "balance": 90,
-        "party_Id": "918858795039227905"
+        "balance": 90
     },
     {
         "companyId": 3,
@@ -4575,8 +4335,7 @@
         "createdAt": "2019-04-10",
         "receivable": 4742,
         "received": 0,
-        "balance": 4742,
-        "party_Id": "918858794064969729"
+        "balance": 4742
     },
     {
         "companyId": 3,
@@ -4594,8 +4353,7 @@
         "createdAt": "2019-04-14",
         "receivable": 4474,
         "received": 0,
-        "balance": 4474,
-        "party_Id": "918858794058842113"
+        "balance": 4474
     },
     {
         "companyId": 3,
@@ -4613,8 +4371,7 @@
         "createdAt": "2019-04-18",
         "receivable": 255,
         "received": 0,
-        "balance": 255,
-        "party_Id": "918858795774509057"
+        "balance": 255
     },
     {
         "companyId": 3,
@@ -4632,8 +4389,7 @@
         "createdAt": "2019-04-18",
         "receivable": 165,
         "received": 0,
-        "balance": 165,
-        "party_Id": "918858790560464897"
+        "balance": 165
     },
     {
         "companyId": 3,
@@ -4651,8 +4407,7 @@
         "createdAt": "2019-04-24",
         "receivable": 985,
         "received": 0,
-        "balance": 985,
-        "party_Id": "918858795342921729"
+        "balance": 985
     },
     {
         "companyId": 3,
@@ -4670,8 +4425,7 @@
         "createdAt": "2019-04-25",
         "receivable": 4426,
         "received": 0,
-        "balance": 4426,
-        "party_Id": "918858794064969729"
+        "balance": 4426
     },
     {
         "companyId": 3,
@@ -4689,8 +4443,7 @@
         "createdAt": "2019-04-29",
         "receivable": 3584,
         "received": 0,
-        "balance": 3584,
-        "party_Id": "918858794064969729"
+        "balance": 3584
     },
     {
         "companyId": 3,
@@ -4708,8 +4461,7 @@
         "createdAt": "2019-05-09",
         "receivable": 4580,
         "received": 0,
-        "balance": 4580,
-        "party_Id": "918858794064969729"
+        "balance": 4580
     },
     {
         "companyId": 3,
@@ -4727,8 +4479,7 @@
         "createdAt": "2019-05-11",
         "receivable": 3570,
         "received": 0,
-        "balance": 3570,
-        "party_Id": "918858794064969729"
+        "balance": 3570
     },
     {
         "companyId": 3,
@@ -4746,8 +4497,7 @@
         "createdAt": "2019-05-25",
         "receivable": 3578,
         "received": 0,
-        "balance": 3578,
-        "party_Id": "918858794064969729"
+        "balance": 3578
     },
     {
         "companyId": 3,
@@ -4765,8 +4515,7 @@
         "createdAt": "2019-06-09",
         "receivable": 70,
         "received": 0,
-        "balance": 70,
-        "party_Id": "918858791655899137"
+        "balance": 70
     },
     {
         "companyId": 3,
@@ -4784,8 +4533,7 @@
         "createdAt": "2019-06-20",
         "receivable": 50.00000000000001,
         "received": 0,
-        "balance": 50.00000000000001,
-        "party_Id": "918858795557191681"
+        "balance": 50.00000000000001
     },
     {
         "companyId": 3,
@@ -4803,8 +4551,7 @@
         "createdAt": "2019-06-22",
         "receivable": 120,
         "received": 0,
-        "balance": 120,
-        "party_Id": "918858792831549441"
+        "balance": 120
     },
     {
         "companyId": 3,
@@ -4822,8 +4569,7 @@
         "createdAt": "2019-06-22",
         "receivable": 13180,
         "received": 0,
-        "balance": 13180,
-        "party_Id": "918858794064969729"
+        "balance": 13180
     },
     {
         "companyId": 3,
@@ -4841,8 +4587,7 @@
         "createdAt": "2019-07-11",
         "receivable": 85,
         "received": 0,
-        "balance": 85,
-        "party_Id": "918858795794694145"
+        "balance": 85
     },
     {
         "companyId": 3,
@@ -4860,8 +4605,7 @@
         "createdAt": "2019-07-12",
         "receivable": 40,
         "received": 0,
-        "balance": 40,
-        "party_Id": "918858792831549441"
+        "balance": 40
     },
     {
         "companyId": 3,
@@ -4879,8 +4623,7 @@
         "createdAt": "2019-07-16",
         "receivable": 5550,
         "received": 0,
-        "balance": 5550,
-        "party_Id": "918858794064969729"
+        "balance": 5550
     },
     {
         "companyId": 3,
@@ -4898,8 +4641,7 @@
         "createdAt": "2019-07-19",
         "receivable": 462.20000000000005,
         "received": 0,
-        "balance": 462.20000000000005,
-        "party_Id": "918858795990089729"
+        "balance": 462.20000000000005
     },
     {
         "companyId": 3,
@@ -4917,8 +4659,7 @@
         "createdAt": "2019-07-25",
         "receivable": 24000,
         "received": 0,
-        "balance": 24000,
-        "party_Id": "918858792496103425"
+        "balance": 24000
     },
     {
         "companyId": 3,
@@ -4936,8 +4677,7 @@
         "createdAt": "2019-07-25",
         "receivable": 70,
         "received": 0,
-        "balance": 70,
-        "party_Id": "918858790862094337"
+        "balance": 70
     },
     {
         "companyId": 3,
@@ -4955,8 +4695,7 @@
         "createdAt": "2019-07-26",
         "receivable": 5755,
         "received": 0,
-        "balance": 5755,
-        "party_Id": "918858792496103425"
+        "balance": 5755
     },
     {
         "companyId": 3,
@@ -4974,8 +4713,7 @@
         "createdAt": "2019-07-27",
         "receivable": 5710,
         "received": 0,
-        "balance": 5710,
-        "party_Id": "918858792496103425"
+        "balance": 5710
     },
     {
         "companyId": 3,
@@ -4993,8 +4731,7 @@
         "createdAt": "2019-07-29",
         "receivable": 5162,
         "received": 0,
-        "balance": 5162,
-        "party_Id": "918858794064969729"
+        "balance": 5162
     },
     {
         "companyId": 3,
@@ -5012,8 +4749,7 @@
         "createdAt": "2019-07-30",
         "receivable": 5320,
         "received": 0,
-        "balance": 5320,
-        "party_Id": "918858794064969729"
+        "balance": 5320
     },
     {
         "companyId": 3,
@@ -5031,8 +4767,7 @@
         "createdAt": "2019-07-30",
         "receivable": 5340,
         "received": 0,
-        "balance": 5340,
-        "party_Id": "918858794064969729"
+        "balance": 5340
     },
     {
         "companyId": 3,
@@ -5050,8 +4785,7 @@
         "createdAt": "2019-08-06",
         "receivable": 5084,
         "received": 0,
-        "balance": 5084,
-        "party_Id": "918858794064969729"
+        "balance": 5084
     },
     {
         "companyId": 3,
@@ -5069,8 +4803,7 @@
         "createdAt": "2019-08-09",
         "receivable": 20,
         "received": 0,
-        "balance": 20,
-        "party_Id": "918858794553638913"
+        "balance": 20
     },
     {
         "companyId": 3,
@@ -5088,8 +4821,7 @@
         "createdAt": "2019-08-09",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858794553638913"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -5107,8 +4839,7 @@
         "createdAt": "2019-08-10",
         "receivable": 5300,
         "received": 0,
-        "balance": 5300,
-        "party_Id": "918858794064969729"
+        "balance": 5300
     },
     {
         "companyId": 3,
@@ -5126,8 +4857,7 @@
         "createdAt": "2019-08-23",
         "receivable": 26176.5,
         "received": 0,
-        "balance": 26176.5,
-        "party_Id": "918858792496103425"
+        "balance": 26176.5
     },
     {
         "companyId": 3,
@@ -5145,8 +4875,7 @@
         "createdAt": "2019-08-24",
         "receivable": 4062,
         "received": 0,
-        "balance": 4062,
-        "party_Id": "918858794064969729"
+        "balance": 4062
     },
     {
         "companyId": 3,
@@ -5164,8 +4893,7 @@
         "createdAt": "2019-08-29",
         "receivable": 0.25,
         "received": 0,
-        "balance": 0.25,
-        "party_Id": "918858794058842113"
+        "balance": 0.25
     },
     {
         "companyId": 3,
@@ -5183,8 +4911,7 @@
         "createdAt": "2019-09-06",
         "receivable": 5546,
         "received": 0,
-        "balance": 5546,
-        "party_Id": "918858794064969729"
+        "balance": 5546
     },
     {
         "companyId": 3,
@@ -5202,8 +4929,7 @@
         "createdAt": "2019-09-12",
         "receivable": 16131,
         "received": 0,
-        "balance": 16131,
-        "party_Id": "918858790143885313"
+        "balance": 16131
     },
     {
         "companyId": 3,
@@ -5221,8 +4947,7 @@
         "createdAt": "2019-09-18",
         "receivable": 4598,
         "received": 0,
-        "balance": 4598,
-        "party_Id": "918858794064969729"
+        "balance": 4598
     },
     {
         "companyId": 3,
@@ -5240,8 +4965,7 @@
         "createdAt": "2019-09-21",
         "receivable": 5348,
         "received": 0,
-        "balance": 5348,
-        "party_Id": "918858794064969729"
+        "balance": 5348
     },
     {
         "companyId": 3,
@@ -5259,8 +4983,7 @@
         "createdAt": "2019-09-23",
         "receivable": 4566,
         "received": 0,
-        "balance": 4566,
-        "party_Id": "918858794064969729"
+        "balance": 4566
     },
     {
         "companyId": 3,
@@ -5278,8 +5001,7 @@
         "createdAt": "2019-09-25",
         "receivable": 5398,
         "received": 0,
-        "balance": 5398,
-        "party_Id": "918858794064969729"
+        "balance": 5398
     },
     {
         "companyId": 3,
@@ -5297,8 +5019,7 @@
         "createdAt": "2019-09-26",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795390205953"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -5316,8 +5037,7 @@
         "createdAt": "2019-10-01",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -5335,8 +5055,7 @@
         "createdAt": "2019-10-03",
         "receivable": 790,
         "received": 0,
-        "balance": 790,
-        "party_Id": "918858795342921729"
+        "balance": 790
     },
     {
         "companyId": 3,
@@ -5354,8 +5073,7 @@
         "createdAt": "2019-10-04",
         "receivable": 5688,
         "received": 0,
-        "balance": 5688,
-        "party_Id": "918858794064969729"
+        "balance": 5688
     },
     {
         "companyId": 3,
@@ -5373,8 +5091,7 @@
         "createdAt": "2019-10-04",
         "receivable": 5840,
         "received": 0,
-        "balance": 5840,
-        "party_Id": "918858794064969729"
+        "balance": 5840
     },
     {
         "companyId": 3,
@@ -5392,8 +5109,7 @@
         "createdAt": "2019-10-10",
         "receivable": 70,
         "received": 0,
-        "balance": 70,
-        "party_Id": "918858795557191681"
+        "balance": 70
     },
     {
         "companyId": 3,
@@ -5411,8 +5127,7 @@
         "createdAt": "2019-10-11",
         "receivable": 4680,
         "received": 0,
-        "balance": 4680,
-        "party_Id": "918858794064969729"
+        "balance": 4680
     },
     {
         "companyId": 3,
@@ -5430,8 +5145,7 @@
         "createdAt": "2019-10-17",
         "receivable": 5482,
         "received": 0,
-        "balance": 5482,
-        "party_Id": "918858794064969729"
+        "balance": 5482
     },
     {
         "companyId": 3,
@@ -5449,8 +5163,7 @@
         "createdAt": "2019-10-18",
         "receivable": 0.13,
         "received": 0,
-        "balance": 0.13,
-        "party_Id": "918858776861245441"
+        "balance": 0.13
     },
     {
         "companyId": 3,
@@ -5468,8 +5181,7 @@
         "createdAt": "2019-10-31",
         "receivable": 5390,
         "received": 0,
-        "balance": 5390,
-        "party_Id": "918858794064969729"
+        "balance": 5390
     },
     {
         "companyId": 3,
@@ -5487,8 +5199,7 @@
         "createdAt": "2019-10-31",
         "receivable": 5310,
         "received": 0,
-        "balance": 5310,
-        "party_Id": "918858794064969729"
+        "balance": 5310
     },
     {
         "companyId": 3,
@@ -5506,8 +5217,7 @@
         "createdAt": "2019-11-01",
         "receivable": 9,
         "received": 0,
-        "balance": 9,
-        "party_Id": "918858793414000641"
+        "balance": 9
     },
     {
         "companyId": 3,
@@ -5525,8 +5235,7 @@
         "createdAt": "2019-11-08",
         "receivable": 1301.95,
         "received": 0,
-        "balance": 1301.95,
-        "party_Id": "918858794203250689"
+        "balance": 1301.95
     },
     {
         "companyId": 3,
@@ -5544,8 +5253,7 @@
         "createdAt": "2019-11-19",
         "receivable": 329.75001812206636,
         "received": 0,
-        "balance": 329.75001812206636,
-        "party_Id": "918858796025970689"
+        "balance": 329.75001812206636
     },
     {
         "companyId": 3,
@@ -5563,8 +5271,7 @@
         "createdAt": "2019-11-22",
         "receivable": 35,
         "received": 0,
-        "balance": 35,
-        "party_Id": "918858794553638913"
+        "balance": 35
     },
     {
         "companyId": 3,
@@ -5582,8 +5289,7 @@
         "createdAt": "2019-11-29",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858794553638913"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -5601,8 +5307,7 @@
         "createdAt": "2019-11-29",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858794553638913"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -5620,8 +5325,7 @@
         "createdAt": "2019-11-29",
         "receivable": 0.41,
         "received": 0,
-        "balance": 0.41,
-        "party_Id": "918858776861245441"
+        "balance": 0.41
     },
     {
         "companyId": 3,
@@ -5639,8 +5343,7 @@
         "createdAt": "2019-12-06",
         "receivable": 0.54,
         "received": 0,
-        "balance": 0.54,
-        "party_Id": "918858794695589889"
+        "balance": 0.54
     },
     {
         "companyId": 3,
@@ -5658,8 +5361,7 @@
         "createdAt": "2019-12-10",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -5677,8 +5379,7 @@
         "createdAt": "2019-12-13",
         "receivable": 20,
         "received": 0,
-        "balance": 20,
-        "party_Id": "918858794553638913"
+        "balance": 20
     },
     {
         "companyId": 3,
@@ -5696,8 +5397,7 @@
         "createdAt": "2019-12-13",
         "receivable": 40,
         "received": 0,
-        "balance": 40,
-        "party_Id": "918858794553638913"
+        "balance": 40
     },
     {
         "companyId": 3,
@@ -5715,8 +5415,7 @@
         "createdAt": "2019-12-13",
         "receivable": 40,
         "received": 0,
-        "balance": 40,
-        "party_Id": "918858794553638913"
+        "balance": 40
     },
     {
         "companyId": 3,
@@ -5734,8 +5433,7 @@
         "createdAt": "2019-12-13",
         "receivable": 0.25,
         "received": 0,
-        "balance": 0.25,
-        "party_Id": "918858776861245441"
+        "balance": 0.25
     },
     {
         "companyId": 3,
@@ -5753,8 +5451,7 @@
         "createdAt": "2019-12-17",
         "receivable": 5000,
         "received": 0,
-        "balance": 5000,
-        "party_Id": "918858776676433921"
+        "balance": 5000
     },
     {
         "companyId": 3,
@@ -5772,8 +5469,7 @@
         "createdAt": "2019-12-20",
         "receivable": 0.8,
         "received": 0,
-        "balance": 0.8,
-        "party_Id": "918858776861245441"
+        "balance": 0.8
     },
     {
         "companyId": 3,
@@ -5791,8 +5487,7 @@
         "createdAt": "2019-12-20",
         "receivable": 0.36,
         "received": 0,
-        "balance": 0.36,
-        "party_Id": "918858794695589889"
+        "balance": 0.36
     },
     {
         "companyId": 3,
@@ -5810,8 +5505,7 @@
         "createdAt": "2019-12-20",
         "receivable": 0.16,
         "received": 0,
-        "balance": 0.16,
-        "party_Id": "918858776899780609"
+        "balance": 0.16
     },
     {
         "companyId": 3,
@@ -5829,8 +5523,7 @@
         "createdAt": "2019-12-24",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -5848,27 +5541,7 @@
         "createdAt": "2019-12-24",
         "receivable": 804.2499758275052,
         "received": 0,
-        "balance": 804.2499758275052,
-        "party_Id": "918858791183646721"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "GARATEX",
-        "currency": "PKR",
-        "ex_rate": 1,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OOA-569/23",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 0.55,
-        "createdAt": "2020-01-03",
-        "receivable": 0.55,
-        "received": 0,
-        "balance": 0.55,
-        "party_Id": "918858776899780609"
+        "balance": 804.2499758275052
     },
     {
         "companyId": 3,
@@ -5886,8 +5559,25 @@
         "createdAt": "2020-01-03",
         "receivable": 0.22,
         "received": 0,
-        "balance": 0.22,
-        "party_Id": "918858776861245441"
+        "balance": 0.22
+    },
+    {
+        "companyId": 3,
+        "party_Name": "GARATEX",
+        "currency": "PKR",
+        "ex_rate": 1,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OOA-569/23",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 0.55,
+        "createdAt": "2020-01-03",
+        "receivable": 0.55,
+        "received": 0,
+        "balance": 0.55
     },
     {
         "companyId": 3,
@@ -5905,8 +5595,7 @@
         "createdAt": "2020-01-04",
         "receivable": 0.010004195307709685,
         "received": 0,
-        "balance": 0.010004195307709685,
-        "party_Id": "918858795390205953"
+        "balance": 0.010004195307709685
     },
     {
         "companyId": 3,
@@ -5924,8 +5613,7 @@
         "createdAt": "2020-01-10",
         "receivable": 0.27,
         "received": 0,
-        "balance": 0.27,
-        "party_Id": "918858776861245441"
+        "balance": 0.27
     },
     {
         "companyId": 3,
@@ -5943,8 +5631,7 @@
         "createdAt": "2020-01-10",
         "receivable": 0.33,
         "received": 0,
-        "balance": 0.33,
-        "party_Id": "918858776899780609"
+        "balance": 0.33
     },
     {
         "companyId": 3,
@@ -5962,8 +5649,7 @@
         "createdAt": "2020-01-10",
         "receivable": 0.02,
         "received": 0,
-        "balance": 0.02,
-        "party_Id": "918858776899780609"
+        "balance": 0.02
     },
     {
         "companyId": 3,
@@ -5981,8 +5667,7 @@
         "createdAt": "2020-01-22",
         "receivable": 0.27,
         "received": 0,
-        "balance": 0.27,
-        "party_Id": "918858776861245441"
+        "balance": 0.27
     },
     {
         "companyId": 3,
@@ -6000,8 +5685,7 @@
         "createdAt": "2020-01-22",
         "receivable": 0.03,
         "received": 0,
-        "balance": 0.03,
-        "party_Id": "918858776899780609"
+        "balance": 0.03
     },
     {
         "companyId": 3,
@@ -6019,8 +5703,7 @@
         "createdAt": "2020-01-23",
         "receivable": 249.5,
         "received": 0,
-        "balance": 249.5,
-        "party_Id": "918858776225185793"
+        "balance": 249.5
     },
     {
         "companyId": 3,
@@ -6038,8 +5721,7 @@
         "createdAt": "2020-01-24",
         "receivable": 75,
         "received": 0,
-        "balance": 75,
-        "party_Id": "918858796453462017"
+        "balance": 75
     },
     {
         "companyId": 3,
@@ -6057,8 +5739,7 @@
         "createdAt": "2020-01-24",
         "receivable": 0.05,
         "received": 0,
-        "balance": 0.05,
-        "party_Id": "918858776899780609"
+        "balance": 0.05
     },
     {
         "companyId": 3,
@@ -6076,8 +5757,7 @@
         "createdAt": "2020-01-30",
         "receivable": 184.99998415038118,
         "received": 0,
-        "balance": 184.99998415038118,
-        "party_Id": "918858796025970689"
+        "balance": 184.99998415038118
     },
     {
         "companyId": 3,
@@ -6095,8 +5775,7 @@
         "createdAt": "2020-01-30",
         "receivable": 9596,
         "received": 0,
-        "balance": 9596,
-        "party_Id": "918858797093421057"
+        "balance": 9596
     },
     {
         "companyId": 3,
@@ -6114,8 +5793,7 @@
         "createdAt": "2020-01-31",
         "receivable": 10,
         "received": 0,
-        "balance": 10,
-        "party_Id": "918858796453462017"
+        "balance": 10
     },
     {
         "companyId": 3,
@@ -6133,8 +5811,7 @@
         "createdAt": "2020-01-31",
         "receivable": 50,
         "received": 0,
-        "balance": 50,
-        "party_Id": "918858796453462017"
+        "balance": 50
     },
     {
         "companyId": 3,
@@ -6152,8 +5829,7 @@
         "createdAt": "2020-01-31",
         "receivable": 60,
         "received": 0,
-        "balance": 60,
-        "party_Id": "918858795039227905"
+        "balance": 60
     },
     {
         "companyId": 3,
@@ -6171,8 +5847,7 @@
         "createdAt": "2020-02-07",
         "receivable": 680,
         "received": 0,
-        "balance": 680,
-        "party_Id": "918858795342921729"
+        "balance": 680
     },
     {
         "companyId": 3,
@@ -6190,8 +5865,7 @@
         "createdAt": "2020-02-07",
         "receivable": 192517.79,
         "received": 0,
-        "balance": 192517.79,
-        "party_Id": "918858776899780609"
+        "balance": 192517.79
     },
     {
         "companyId": 3,
@@ -6209,8 +5883,7 @@
         "createdAt": "2020-02-07",
         "receivable": 3000,
         "received": 0,
-        "balance": 3000,
-        "party_Id": "918858797093421057"
+        "balance": 3000
     },
     {
         "companyId": 3,
@@ -6228,8 +5901,7 @@
         "createdAt": "2020-02-20",
         "receivable": 140,
         "received": 0,
-        "balance": 140,
-        "party_Id": "918858790862094337"
+        "balance": 140
     },
     {
         "companyId": 3,
@@ -6247,8 +5919,7 @@
         "createdAt": "2020-02-21",
         "receivable": 161001,
         "received": 0,
-        "balance": 161001,
-        "party_Id": "918858794695589889"
+        "balance": 161001
     },
     {
         "companyId": 3,
@@ -6266,8 +5937,7 @@
         "createdAt": "2020-02-29",
         "receivable": 114.99997412169016,
         "received": 0,
-        "balance": 114.99997412169016,
-        "party_Id": "918858792212692993"
+        "balance": 114.99997412169016
     },
     {
         "companyId": 3,
@@ -6285,8 +5955,7 @@
         "createdAt": "2020-03-20",
         "receivable": 45,
         "received": 0,
-        "balance": 45,
-        "party_Id": "918858796453462017"
+        "balance": 45
     },
     {
         "companyId": 3,
@@ -6304,8 +5973,7 @@
         "createdAt": "2020-03-20",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858796453462017"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -6323,8 +5991,7 @@
         "createdAt": "2020-03-20",
         "receivable": 668,
         "received": 0,
-        "balance": 668,
-        "party_Id": "918858793628270593"
+        "balance": 668
     },
     {
         "companyId": 3,
@@ -6342,8 +6009,7 @@
         "createdAt": "2020-03-26",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795390205953"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6361,8 +6027,7 @@
         "createdAt": "2020-04-10",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858794553638913"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6380,8 +6045,7 @@
         "createdAt": "2020-04-13",
         "receivable": 10,
         "received": 0,
-        "balance": 10,
-        "party_Id": "918858792994799617"
+        "balance": 10
     },
     {
         "companyId": 3,
@@ -6399,8 +6063,7 @@
         "createdAt": "2020-04-28",
         "receivable": 60.4,
         "received": 0,
-        "balance": 60.4,
-        "party_Id": "918858792994799617"
+        "balance": 60.4
     },
     {
         "companyId": 3,
@@ -6418,8 +6081,7 @@
         "createdAt": "2020-05-08",
         "receivable": 55,
         "received": 0,
-        "balance": 55,
-        "party_Id": "918858792577204225"
+        "balance": 55
     },
     {
         "companyId": 3,
@@ -6437,8 +6099,7 @@
         "createdAt": "2020-05-23",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795153915905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6456,8 +6117,7 @@
         "createdAt": "2020-06-05",
         "receivable": 35,
         "received": 0,
-        "balance": 35,
-        "party_Id": "918858795153915905"
+        "balance": 35
     },
     {
         "companyId": 3,
@@ -6475,8 +6135,7 @@
         "createdAt": "2020-06-13",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858797093421057"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6494,8 +6153,7 @@
         "createdAt": "2020-06-19",
         "receivable": 705,
         "received": 0,
-        "balance": 705,
-        "party_Id": "918858795342921729"
+        "balance": 705
     },
     {
         "companyId": 3,
@@ -6513,8 +6171,7 @@
         "createdAt": "2020-07-03",
         "receivable": 150,
         "received": 0,
-        "balance": 150,
-        "party_Id": "918858790674923521"
+        "balance": 150
     },
     {
         "companyId": 3,
@@ -6532,8 +6189,7 @@
         "createdAt": "2020-07-28",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6551,8 +6207,7 @@
         "createdAt": "2020-08-03",
         "receivable": 11643.999985614495,
         "received": 0,
-        "balance": 11643.999985614495,
-        "party_Id": "918858796104646657"
+        "balance": 11643.999985614495
     },
     {
         "companyId": 3,
@@ -6570,8 +6225,7 @@
         "createdAt": "2020-08-08",
         "receivable": 45,
         "received": 0,
-        "balance": 45,
-        "party_Id": "918858796453462017"
+        "balance": 45
     },
     {
         "companyId": 3,
@@ -6589,8 +6243,7 @@
         "createdAt": "2020-08-08",
         "receivable": 47,
         "received": 0,
-        "balance": 47,
-        "party_Id": "918858795039227905"
+        "balance": 47
     },
     {
         "companyId": 3,
@@ -6608,8 +6261,7 @@
         "createdAt": "2020-09-04",
         "receivable": 7096,
         "received": 0,
-        "balance": 7096,
-        "party_Id": "918858792448393217"
+        "balance": 7096
     },
     {
         "companyId": 3,
@@ -6627,8 +6279,7 @@
         "createdAt": "2020-10-02",
         "receivable": 556,
         "received": 0,
-        "balance": 556,
-        "party_Id": "918858795342921729"
+        "balance": 556
     },
     {
         "companyId": 3,
@@ -6646,8 +6297,7 @@
         "createdAt": "2020-10-09",
         "receivable": 40,
         "received": 0,
-        "balance": 40,
-        "party_Id": "918858796453462017"
+        "balance": 40
     },
     {
         "companyId": 3,
@@ -6665,8 +6315,7 @@
         "createdAt": "2020-10-09",
         "receivable": 190,
         "received": 0,
-        "balance": 190,
-        "party_Id": "918858795039227905"
+        "balance": 190
     },
     {
         "companyId": 3,
@@ -6684,8 +6333,7 @@
         "createdAt": "2020-10-09",
         "receivable": 10,
         "received": 0,
-        "balance": 10,
-        "party_Id": "918858797093421057"
+        "balance": 10
     },
     {
         "companyId": 3,
@@ -6703,8 +6351,7 @@
         "createdAt": "2020-10-24",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858797093421057"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -6722,8 +6369,7 @@
         "createdAt": "2020-10-24",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858797093421057"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -6741,8 +6387,7 @@
         "createdAt": "2020-11-23",
         "receivable": 45,
         "received": 0,
-        "balance": 45,
-        "party_Id": "918858797093421057"
+        "balance": 45
     },
     {
         "companyId": 3,
@@ -6760,8 +6405,7 @@
         "createdAt": "2020-11-23",
         "receivable": 45,
         "received": 0,
-        "balance": 45,
-        "party_Id": "918858797093421057"
+        "balance": 45
     },
     {
         "companyId": 3,
@@ -6779,8 +6423,7 @@
         "createdAt": "2020-11-24",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795557191681"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6798,8 +6441,7 @@
         "createdAt": "2020-12-03",
         "receivable": 70,
         "received": 0,
-        "balance": 70,
-        "party_Id": "918858793473998849"
+        "balance": 70
     },
     {
         "companyId": 3,
@@ -6817,8 +6459,7 @@
         "createdAt": "2020-12-07",
         "receivable": 789.3200279185446,
         "received": 0,
-        "balance": 789.3200279185446,
-        "party_Id": "918858794946068481"
+        "balance": 789.3200279185446
     },
     {
         "companyId": 3,
@@ -6836,8 +6477,7 @@
         "createdAt": "2020-12-08",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6855,8 +6495,7 @@
         "createdAt": "2020-12-10",
         "receivable": 28,
         "received": 0,
-        "balance": 28,
-        "party_Id": "918858794946068481"
+        "balance": 28
     },
     {
         "companyId": 3,
@@ -6874,8 +6513,7 @@
         "createdAt": "2020-12-11",
         "receivable": 56,
         "received": 0,
-        "balance": 56,
-        "party_Id": "918858792372502529"
+        "balance": 56
     },
     {
         "companyId": 3,
@@ -6893,8 +6531,7 @@
         "createdAt": "2020-12-18",
         "receivable": 948,
         "received": 0,
-        "balance": 948,
-        "party_Id": "918858795342921729"
+        "balance": 948
     },
     {
         "companyId": 3,
@@ -6912,8 +6549,7 @@
         "createdAt": "2020-12-23",
         "receivable": 40,
         "received": 0,
-        "balance": 40,
-        "party_Id": "918858796453462017"
+        "balance": 40
     },
     {
         "companyId": 3,
@@ -6931,8 +6567,7 @@
         "createdAt": "2020-12-30",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6950,8 +6585,7 @@
         "createdAt": "2020-12-30",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -6969,8 +6603,7 @@
         "createdAt": "2020-12-30",
         "receivable": 7295,
         "received": 0,
-        "balance": 7295,
-        "party_Id": "918858776229904385"
+        "balance": 7295
     },
     {
         "companyId": 3,
@@ -6988,8 +6621,7 @@
         "createdAt": "2021-01-15",
         "receivable": 850,
         "received": 0,
-        "balance": 850,
-        "party_Id": "918858795342921729"
+        "balance": 850
     },
     {
         "companyId": 3,
@@ -7007,8 +6639,7 @@
         "createdAt": "2021-01-27",
         "receivable": 24,
         "received": 0,
-        "balance": 24,
-        "party_Id": "918858792372502529"
+        "balance": 24
     },
     {
         "companyId": 3,
@@ -7026,8 +6657,7 @@
         "createdAt": "2021-03-23",
         "receivable": 360,
         "received": 0,
-        "balance": 360,
-        "party_Id": "918858793075376129"
+        "balance": 360
     },
     {
         "companyId": 3,
@@ -7045,8 +6675,7 @@
         "createdAt": "2021-04-13",
         "receivable": 275,
         "received": 0,
-        "balance": 275,
-        "party_Id": "918858793075376129"
+        "balance": 275
     },
     {
         "companyId": 3,
@@ -7064,8 +6693,7 @@
         "createdAt": "2021-05-07",
         "receivable": 28.040004457393767,
         "received": 0,
-        "balance": 28.040004457393767,
-        "party_Id": "918858794693918721"
+        "balance": 28.040004457393767
     },
     {
         "companyId": 3,
@@ -7083,8 +6711,7 @@
         "createdAt": "2021-05-17",
         "receivable": 54.99999017020616,
         "received": 0,
-        "balance": 54.99999017020616,
-        "party_Id": "918858792577204225"
+        "balance": 54.99999017020616
     },
     {
         "companyId": 3,
@@ -7102,8 +6729,7 @@
         "createdAt": "2021-05-22",
         "receivable": 250.5,
         "received": 0,
-        "balance": 250.5,
-        "party_Id": "918858794529423361"
+        "balance": 250.5
     },
     {
         "companyId": 3,
@@ -7121,8 +6747,7 @@
         "createdAt": "2021-06-17",
         "receivable": 21315,
         "received": 0,
-        "balance": 21315,
-        "party_Id": "918858777308332033"
+        "balance": 21315
     },
     {
         "companyId": 3,
@@ -7140,8 +6765,7 @@
         "createdAt": "2021-06-19",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858792372502529"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -7159,8 +6783,7 @@
         "createdAt": "2021-06-19",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795153915905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -7178,8 +6801,7 @@
         "createdAt": "2021-06-22",
         "receivable": 50.00000000000001,
         "received": 0,
-        "balance": 50.00000000000001,
-        "party_Id": "918858791655899137"
+        "balance": 50.00000000000001
     },
     {
         "companyId": 3,
@@ -7197,8 +6819,7 @@
         "createdAt": "2021-07-01",
         "receivable": 21748,
         "received": 0,
-        "balance": 21748,
-        "party_Id": "918858777308332033"
+        "balance": 21748
     },
     {
         "companyId": 3,
@@ -7216,8 +6837,7 @@
         "createdAt": "2021-07-06",
         "receivable": 2070,
         "received": 0,
-        "balance": 2070,
-        "party_Id": "918858776885133313"
+        "balance": 2070
     },
     {
         "companyId": 3,
@@ -7235,8 +6855,7 @@
         "createdAt": "2021-07-07",
         "receivable": 15,
         "received": 0,
-        "balance": 15,
-        "party_Id": "918858796453462017"
+        "balance": 15
     },
     {
         "companyId": 3,
@@ -7254,8 +6873,7 @@
         "createdAt": "2021-07-07",
         "receivable": 30,
         "received": 0,
-        "balance": 30,
-        "party_Id": "918858792372502529"
+        "balance": 30
     },
     {
         "companyId": 3,
@@ -7273,8 +6891,7 @@
         "createdAt": "2021-08-18",
         "receivable": 29.999999999999996,
         "received": 0,
-        "balance": 29.999999999999996,
-        "party_Id": "918858792372502529"
+        "balance": 29.999999999999996
     },
     {
         "companyId": 3,
@@ -7292,8 +6909,7 @@
         "createdAt": "2021-08-29",
         "receivable": 6547,
         "received": 0,
-        "balance": 6547,
-        "party_Id": "918858777308332033"
+        "balance": 6547
     },
     {
         "companyId": 3,
@@ -7311,8 +6927,7 @@
         "createdAt": "2021-09-13",
         "receivable": 680,
         "received": 0,
-        "balance": 680,
-        "party_Id": "918858791745323009"
+        "balance": 680
     },
     {
         "companyId": 3,
@@ -7330,8 +6945,7 @@
         "createdAt": "2021-09-15",
         "receivable": 50,
         "received": 0,
-        "balance": 50,
-        "party_Id": "918858792577204225"
+        "balance": 50
     },
     {
         "companyId": 3,
@@ -7349,8 +6963,7 @@
         "createdAt": "2021-09-17",
         "receivable": 16.58,
         "received": 0,
-        "balance": 16.58,
-        "party_Id": "918858795390205953"
+        "balance": 16.58
     },
     {
         "companyId": 3,
@@ -7368,8 +6981,7 @@
         "createdAt": "2021-10-05",
         "receivable": 62.5,
         "received": 0,
-        "balance": 62.5,
-        "party_Id": "918858792784822273"
+        "balance": 62.5
     },
     {
         "companyId": 3,
@@ -7387,8 +6999,7 @@
         "createdAt": "2021-11-02",
         "receivable": 35,
         "received": 0,
-        "balance": 35,
-        "party_Id": "918858792577204225"
+        "balance": 35
     },
     {
         "companyId": 3,
@@ -7406,8 +7017,7 @@
         "createdAt": "2021-11-14",
         "receivable": 1980,
         "received": 0,
-        "balance": 1980,
-        "party_Id": "918858791745323009"
+        "balance": 1980
     },
     {
         "companyId": 3,
@@ -7425,8 +7035,7 @@
         "createdAt": "2021-11-14",
         "receivable": 486.00000000000006,
         "received": 0,
-        "balance": 486.00000000000006,
-        "party_Id": "918858794410344449"
+        "balance": 486.00000000000006
     },
     {
         "companyId": 3,
@@ -7444,8 +7053,7 @@
         "createdAt": "2021-11-16",
         "receivable": 20,
         "received": 0,
-        "balance": 20,
-        "party_Id": "918858791441498113"
+        "balance": 20
     },
     {
         "companyId": 3,
@@ -7463,8 +7071,7 @@
         "createdAt": "2021-11-21",
         "receivable": 40,
         "received": 0,
-        "balance": 40,
-        "party_Id": "918858796453462017"
+        "balance": 40
     },
     {
         "companyId": 3,
@@ -7481,9 +7088,8 @@
         "total": 1948582.35,
         "createdAt": "2021-11-22",
         "receivable": 11037,
-        "received": 9629.72,
-        "balance": 1407.2800000000007,
-        "party_Id": "918858792240939009"
+        "received": 10324.72,
+        "balance": 712.2800000000007
     },
     {
         "companyId": 3,
@@ -7501,8 +7107,7 @@
         "createdAt": "2021-12-02",
         "receivable": 220,
         "received": 0,
-        "balance": 220,
-        "party_Id": "918858789728419841"
+        "balance": 220
     },
     {
         "companyId": 3,
@@ -7520,8 +7125,7 @@
         "createdAt": "2022-01-11",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858791655899137"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -7539,8 +7143,7 @@
         "createdAt": "2022-01-14",
         "receivable": 3619.700022944421,
         "received": 0,
-        "balance": 3619.700022944421,
-        "party_Id": "918858791745323009"
+        "balance": 3619.700022944421
     },
     {
         "companyId": 3,
@@ -7558,8 +7161,7 @@
         "createdAt": "2022-01-16",
         "receivable": 20,
         "received": 0,
-        "balance": 20,
-        "party_Id": "918858791441498113"
+        "balance": 20
     },
     {
         "companyId": 3,
@@ -7577,8 +7179,7 @@
         "createdAt": "2022-01-28",
         "receivable": 20,
         "received": 0,
-        "balance": 20,
-        "party_Id": "918858791441498113"
+        "balance": 20
     },
     {
         "companyId": 3,
@@ -7596,8 +7197,7 @@
         "createdAt": "2022-02-01",
         "receivable": 778.9999858009002,
         "received": 0,
-        "balance": 778.9999858009002,
-        "party_Id": "918858796315017217"
+        "balance": 778.9999858009002
     },
     {
         "companyId": 3,
@@ -7615,8 +7215,7 @@
         "createdAt": "2022-02-24",
         "receivable": 7250,
         "received": 0,
-        "balance": 7250,
-        "party_Id": "918858796315017217"
+        "balance": 7250
     },
     {
         "companyId": 3,
@@ -7634,8 +7233,7 @@
         "createdAt": "2022-03-04",
         "receivable": 380.8000139742401,
         "received": 0,
-        "balance": 380.8000139742401,
-        "party_Id": "918858795390205953"
+        "balance": 380.8000139742401
     },
     {
         "companyId": 3,
@@ -7653,8 +7251,7 @@
         "createdAt": "2022-03-13",
         "receivable": 8175.000000000001,
         "received": 0,
-        "balance": 8175.000000000001,
-        "party_Id": "918858796315017217"
+        "balance": 8175.000000000001
     },
     {
         "companyId": 3,
@@ -7672,8 +7269,7 @@
         "createdAt": "2022-03-27",
         "receivable": 343.56,
         "received": 0,
-        "balance": 343.56,
-        "party_Id": "918858793258254337"
+        "balance": 343.56
     },
     {
         "companyId": 3,
@@ -7691,8 +7287,7 @@
         "createdAt": "2022-04-14",
         "receivable": 150,
         "received": 0,
-        "balance": 150,
-        "party_Id": "918858789728419841"
+        "balance": 150
     },
     {
         "companyId": 3,
@@ -7710,8 +7305,7 @@
         "createdAt": "2022-04-16",
         "receivable": 8150,
         "received": 0,
-        "balance": 8150,
-        "party_Id": "918858796315017217"
+        "balance": 8150
     },
     {
         "companyId": 3,
@@ -7729,8 +7323,7 @@
         "createdAt": "2022-04-16",
         "receivable": 8150,
         "received": 0,
-        "balance": 8150,
-        "party_Id": "918858796315017217"
+        "balance": 8150
     },
     {
         "companyId": 3,
@@ -7748,8 +7341,7 @@
         "createdAt": "2022-04-18",
         "receivable": 20,
         "received": 0,
-        "balance": 20,
-        "party_Id": "918858791441498113"
+        "balance": 20
     },
     {
         "companyId": 3,
@@ -7767,8 +7359,7 @@
         "createdAt": "2022-04-28",
         "receivable": 8250,
         "received": 0,
-        "balance": 8250,
-        "party_Id": "918858796315017217"
+        "balance": 8250
     },
     {
         "companyId": 3,
@@ -7786,8 +7377,7 @@
         "createdAt": "2022-04-28",
         "receivable": 8250,
         "received": 0,
-        "balance": 8250,
-        "party_Id": "918858796315017217"
+        "balance": 8250
     },
     {
         "companyId": 3,
@@ -7805,8 +7395,7 @@
         "createdAt": "2022-04-28",
         "receivable": 8250,
         "received": 0,
-        "balance": 8250,
-        "party_Id": "918858796315017217"
+        "balance": 8250
     },
     {
         "companyId": 3,
@@ -7824,8 +7413,7 @@
         "createdAt": "2022-05-09",
         "receivable": 8250,
         "received": 0,
-        "balance": 8250,
-        "party_Id": "918858796315017217"
+        "balance": 8250
     },
     {
         "companyId": 3,
@@ -7843,8 +7431,7 @@
         "createdAt": "2022-05-24",
         "receivable": 8533.999991013825,
         "received": 0,
-        "balance": 8533.999991013825,
-        "party_Id": "918858796315017217"
+        "balance": 8533.999991013825
     },
     {
         "companyId": 3,
@@ -7862,8 +7449,7 @@
         "createdAt": "2022-06-25",
         "receivable": 150,
         "received": 0,
-        "balance": 150,
-        "party_Id": "918858792372502529"
+        "balance": 150
     },
     {
         "companyId": 3,
@@ -7881,8 +7467,7 @@
         "createdAt": "2022-11-14",
         "receivable": 784.0000199195613,
         "received": 746,
-        "balance": 38.00001991956128,
-        "party_Id": "918858792152498177"
+        "balance": 38.00001991956128
     },
     {
         "companyId": 3,
@@ -7900,8 +7485,7 @@
         "createdAt": "2022-12-01",
         "receivable": 4670.750012837716,
         "received": 1656.72,
-        "balance": 3014.0300128377157,
-        "party_Id": "918858794064969729"
+        "balance": 3014.0300128377157
     },
     {
         "companyId": 3,
@@ -7919,8 +7503,7 @@
         "createdAt": "2022-12-02",
         "receivable": 13637.88001312796,
         "received": 270.2,
-        "balance": 13367.68001312796,
-        "party_Id": "918858794064969729"
+        "balance": 13367.68001312796
     },
     {
         "companyId": 3,
@@ -7938,8 +7521,7 @@
         "createdAt": "2022-12-03",
         "receivable": 13687.000015628524,
         "received": 0,
-        "balance": 13687.000015628524,
-        "party_Id": "918858794064969729"
+        "balance": 13687.000015628524
     },
     {
         "companyId": 3,
@@ -7957,8 +7539,7 @@
         "createdAt": "2022-12-06",
         "receivable": 5728.800019647286,
         "received": 0,
-        "balance": 5728.800019647286,
-        "party_Id": "918858794064969729"
+        "balance": 5728.800019647286
     },
     {
         "companyId": 3,
@@ -7976,8 +7557,7 @@
         "createdAt": "2022-12-08",
         "receivable": 4484.800010716702,
         "received": 0,
-        "balance": 4484.800010716702,
-        "party_Id": "918858794064969729"
+        "balance": 4484.800010716702
     },
     {
         "companyId": 3,
@@ -7995,8 +7575,7 @@
         "createdAt": "2022-12-09",
         "receivable": 22959.999999999996,
         "received": 0,
-        "balance": 22959.999999999996,
-        "party_Id": "918858794064969729"
+        "balance": 22959.999999999996
     },
     {
         "companyId": 3,
@@ -8014,8 +7593,7 @@
         "createdAt": "2022-12-10",
         "receivable": 2356.9000154052587,
         "received": 0,
-        "balance": 2356.9000154052587,
-        "party_Id": "918858794064969729"
+        "balance": 2356.9000154052587
     },
     {
         "companyId": 3,
@@ -8033,8 +7611,7 @@
         "createdAt": "2022-12-14",
         "receivable": 5197.500016744847,
         "received": 0,
-        "balance": 5197.500016744847,
-        "party_Id": "918858794064969729"
+        "balance": 5197.500016744847
     },
     {
         "companyId": 3,
@@ -8052,8 +7629,7 @@
         "createdAt": "2022-12-15",
         "receivable": 3131.799981692301,
         "received": 0,
-        "balance": 3131.799981692301,
-        "party_Id": "918858794064969729"
+        "balance": 3131.799981692301
     },
     {
         "companyId": 3,
@@ -8071,8 +7647,7 @@
         "createdAt": "2023-01-05",
         "receivable": 19090.99999160892,
         "received": 5743.21,
-        "balance": 13347.789991608919,
-        "party_Id": "918858794064969729"
+        "balance": 13347.789991608919
     },
     {
         "companyId": 3,
@@ -8090,8 +7665,7 @@
         "createdAt": "2023-02-16",
         "receivable": 275,
         "received": 111,
-        "balance": 164,
-        "party_Id": "918858791154810881"
+        "balance": 164
     },
     {
         "companyId": 3,
@@ -8109,8 +7683,7 @@
         "createdAt": "2023-03-14",
         "receivable": 3073.0000336514418,
         "received": 0,
-        "balance": 3073.0000336514418,
-        "party_Id": "918858794064969729"
+        "balance": 3073.0000336514418
     },
     {
         "companyId": 3,
@@ -8128,8 +7701,7 @@
         "createdAt": "2023-03-26",
         "receivable": 3877.9999830299703,
         "received": 0,
-        "balance": 3877.9999830299703,
-        "party_Id": "918858794064969729"
+        "balance": 3877.9999830299703
     },
     {
         "companyId": 3,
@@ -8147,8 +7719,7 @@
         "createdAt": "2023-03-26",
         "receivable": 3765.300001838419,
         "received": 0,
-        "balance": 3765.300001838419,
-        "party_Id": "918858794064969729"
+        "balance": 3765.300001838419
     },
     {
         "companyId": 3,
@@ -8166,8 +7737,7 @@
         "createdAt": "2023-03-26",
         "receivable": 13900.399997737328,
         "received": 0,
-        "balance": 13900.399997737328,
-        "party_Id": "918858794064969729"
+        "balance": 13900.399997737328
     },
     {
         "companyId": 3,
@@ -8185,8 +7755,7 @@
         "createdAt": "2023-03-30",
         "receivable": 275,
         "received": 0,
-        "balance": 275,
-        "party_Id": "918858791154810881"
+        "balance": 275
     },
     {
         "companyId": 3,
@@ -8204,8 +7773,7 @@
         "createdAt": "2023-04-04",
         "receivable": 275,
         "received": 0,
-        "balance": 275,
-        "party_Id": "918858791154810881"
+        "balance": 275
     },
     {
         "companyId": 3,
@@ -8223,8 +7791,7 @@
         "createdAt": "2023-04-10",
         "receivable": 390.00003171337875,
         "received": 0,
-        "balance": 390.00003171337875,
-        "party_Id": "918858793206579201"
+        "balance": 390.00003171337875
     },
     {
         "companyId": 3,
@@ -8242,8 +7809,7 @@
         "createdAt": "2023-04-13",
         "receivable": 275,
         "received": 0,
-        "balance": 275,
-        "party_Id": "918858791154810881"
+        "balance": 275
     },
     {
         "companyId": 3,
@@ -8261,8 +7827,7 @@
         "createdAt": "2023-04-16",
         "receivable": 2040.999972162701,
         "received": 0,
-        "balance": 2040.999972162701,
-        "party_Id": "918858794064969729"
+        "balance": 2040.999972162701
     },
     {
         "companyId": 3,
@@ -8280,8 +7845,7 @@
         "createdAt": "2023-05-14",
         "receivable": 4580.500003775012,
         "received": 3816.17,
-        "balance": 764.3300037750123,
-        "party_Id": "918858793924460545"
+        "balance": 764.3300037750123
     },
     {
         "companyId": 3,
@@ -8299,8 +7863,7 @@
         "createdAt": "2023-05-14",
         "receivable": 4906.760030068944,
         "received": 0,
-        "balance": 4906.760030068944,
-        "party_Id": "918858794064969729"
+        "balance": 4906.760030068944
     },
     {
         "companyId": 3,
@@ -8318,8 +7881,7 @@
         "createdAt": "2023-05-20",
         "receivable": 3295.320004798197,
         "received": 0,
-        "balance": 3295.320004798197,
-        "party_Id": "918858794064969729"
+        "balance": 3295.320004798197
     },
     {
         "companyId": 3,
@@ -8337,8 +7899,7 @@
         "createdAt": "2023-05-23",
         "receivable": 657.9000117207212,
         "received": 0,
-        "balance": 657.9000117207212,
-        "party_Id": "918858794064969729"
+        "balance": 657.9000117207212
     },
     {
         "companyId": 3,
@@ -8356,8 +7917,7 @@
         "createdAt": "2023-05-29",
         "receivable": 4166.300013966608,
         "received": 0,
-        "balance": 4166.300013966608,
-        "party_Id": "918858794064969729"
+        "balance": 4166.300013966608
     },
     {
         "companyId": 3,
@@ -8375,8 +7935,7 @@
         "createdAt": "2023-06-01",
         "receivable": 275,
         "received": 0,
-        "balance": 275,
-        "party_Id": "918858791154810881"
+        "balance": 275
     },
     {
         "companyId": 3,
@@ -8394,8 +7953,7 @@
         "createdAt": "2023-06-08",
         "receivable": 4994.450014220318,
         "received": 0,
-        "balance": 4994.450014220318,
-        "party_Id": "918858794064969729"
+        "balance": 4994.450014220318
     },
     {
         "companyId": 3,
@@ -8413,8 +7971,7 @@
         "createdAt": "2023-06-24",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795153915905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -8432,8 +7989,7 @@
         "createdAt": "2023-06-28",
         "receivable": 4431.000021227219,
         "received": 0,
-        "balance": 4431.000021227219,
-        "party_Id": "918858794064969729"
+        "balance": 4431.000021227219
     },
     {
         "companyId": 3,
@@ -8451,8 +8007,7 @@
         "createdAt": "2023-07-19",
         "receivable": 5221.800009870648,
         "received": 0,
-        "balance": 5221.800009870648,
-        "party_Id": "918858794064969729"
+        "balance": 5221.800009870648
     },
     {
         "companyId": 3,
@@ -8470,8 +8025,7 @@
         "createdAt": "2023-07-27",
         "receivable": 305,
         "received": 0,
-        "balance": 305,
-        "party_Id": "918858795390205953"
+        "balance": 305
     },
     {
         "companyId": 3,
@@ -8489,8 +8043,7 @@
         "createdAt": "2023-07-29",
         "receivable": 4561.800017075499,
         "received": 0,
-        "balance": 4561.800017075499,
-        "party_Id": "918858794064969729"
+        "balance": 4561.800017075499
     },
     {
         "companyId": 3,
@@ -8508,8 +8061,7 @@
         "createdAt": "2023-08-05",
         "receivable": 737.0000027909417,
         "received": 0,
-        "balance": 737.0000027909417,
-        "party_Id": "918858794064969729"
+        "balance": 737.0000027909417
     },
     {
         "companyId": 3,
@@ -8527,8 +8079,7 @@
         "createdAt": "2023-08-11",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795153915905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -8546,8 +8097,7 @@
         "createdAt": "2023-08-11",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795153915905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -8565,8 +8115,7 @@
         "createdAt": "2023-08-17",
         "receivable": 4248.200008919169,
         "received": 0,
-        "balance": 4248.200008919169,
-        "party_Id": "918858794064969729"
+        "balance": 4248.200008919169
     },
     {
         "companyId": 3,
@@ -8584,8 +8133,7 @@
         "createdAt": "2023-09-08",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795153915905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -8603,8 +8151,7 @@
         "createdAt": "2023-09-19",
         "receivable": 2784.9999882094976,
         "received": 0,
-        "balance": 2784.9999882094976,
-        "party_Id": "918858794064969729"
+        "balance": 2784.9999882094976
     },
     {
         "companyId": 3,
@@ -8622,8 +8169,7 @@
         "createdAt": "2023-09-25",
         "receivable": 260.00001347485977,
         "received": 0,
-        "balance": 260.00001347485977,
-        "party_Id": "918858792858976257"
+        "balance": 260.00001347485977
     },
     {
         "companyId": 3,
@@ -8641,8 +8187,7 @@
         "createdAt": "2023-09-28",
         "receivable": 204.49999679972078,
         "received": 0,
-        "balance": 204.49999679972078,
-        "party_Id": "918858793287811073"
+        "balance": 204.49999679972078
     },
     {
         "companyId": 3,
@@ -8660,27 +8205,7 @@
         "createdAt": "2023-09-29",
         "receivable": 2960.74999048338,
         "received": 0,
-        "balance": 2960.74999048338,
-        "party_Id": "918858794064969729"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "LDP LOGISTICS.",
-        "currency": "USD",
-        "ex_rate": 287.7384,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "3",
-        "invoice_No": "ACS-OAI-32/24",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 303564.02,
-        "createdAt": "2023-10-08",
-        "receivable": 1055.0000278030323,
-        "received": 993.24,
-        "balance": 61.760027803032244,
-        "party_Id": "918858797516390401"
+        "balance": 2960.74999048338
     },
     {
         "companyId": 3,
@@ -8698,8 +8223,7 @@
         "createdAt": "2023-10-12",
         "receivable": 25,
         "received": 0,
-        "balance": 25,
-        "party_Id": "918858795153915905"
+        "balance": 25
     },
     {
         "companyId": 3,
@@ -8717,8 +8241,7 @@
         "createdAt": "2023-10-14",
         "receivable": 1227.5300106886325,
         "received": 0,
-        "balance": 1227.5300106886325,
-        "party_Id": "918858799159902209"
+        "balance": 1227.5300106886325
     },
     {
         "companyId": 3,
@@ -8736,8 +8259,7 @@
         "createdAt": "2023-10-21",
         "receivable": 19486.960070250454,
         "received": 0,
-        "balance": 19486.960070250454,
-        "party_Id": "918858796010438657"
+        "balance": 19486.960070250454
     },
     {
         "companyId": 3,
@@ -8755,27 +8277,7 @@
         "createdAt": "2023-10-24",
         "receivable": 804.9999927959185,
         "received": 0,
-        "balance": 804.9999927959185,
-        "party_Id": "918858794064969729"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "INDO TRANS LOGISTICS CORPORATION ",
-        "currency": "USD",
-        "ex_rate": 277.6204,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OAI-38/24",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 1875325.8,
-        "createdAt": "2023-10-25",
-        "receivable": 6754.999992795918,
-        "received": 0,
-        "balance": 6754.999992795918,
-        "party_Id": "918858799183069185"
+        "balance": 804.9999927959185
     },
     {
         "companyId": 3,
@@ -8793,27 +8295,7 @@
         "createdAt": "2023-10-26",
         "receivable": 481.2500090051019,
         "received": 0,
-        "balance": 481.2500090051019,
-        "party_Id": "918858776449351681"
-    },
-    {
-        "companyId": 3,
-        "party_Name": "ACE  FREIGHT LIMITED",
-        "currency": "USD",
-        "ex_rate": 277.6204,
-        "type": "Old Agent Bill",
-        "payType": "Recievable",
-        "status": "1",
-        "invoice_No": "ACS-OAI-39/24",
-        "paid": 0,
-        "roundOff": 0,
-        "approved": 1,
-        "total": 108133.14,
-        "createdAt": "2023-10-30",
-        "receivable": 389.4999791081635,
-        "received": 0,
-        "balance": 389.4999791081635,
-        "party_Id": "918858792152498177"
+        "balance": 481.2500090051019
     },
     {
         "companyId": 3,
@@ -8831,8 +8313,7 @@
         "createdAt": "2023-11-06",
         "receivable": 2248.2000100897494,
         "received": 0,
-        "balance": 2248.2000100897494,
-        "party_Id": "918858794064969729"
+        "balance": 2248.2000100897494
     },
     {
         "companyId": 3,
@@ -8850,8 +8331,25 @@
         "createdAt": "2023-11-17",
         "receivable": 1297.4000066791298,
         "received": 0,
-        "balance": 1297.4000066791298,
-        "party_Id": "918858794693918721"
+        "balance": 1297.4000066791298
+    },
+    {
+        "companyId": 3,
+        "party_Name": "CANWORLD LOGISTICS INC.,",
+        "currency": "USD",
+        "ex_rate": 290,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OAI-45/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 1329650,
+        "createdAt": "2023-11-19",
+        "receivable": 4585,
+        "received": 0,
+        "balance": 4585
     },
     {
         "companyId": 3,
@@ -8869,7 +8367,42 @@
         "createdAt": "2023-11-26",
         "receivable": 1545.0000104115836,
         "received": 0,
-        "balance": 1545.0000104115836,
-        "party_Id": "918858794064969729"
+        "balance": 1545.0000104115836
+    },
+    {
+        "companyId": 3,
+        "party_Name": "MILESTONE TEXTILES",
+        "currency": "USD",
+        "ex_rate": 285.1676,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OAI-47/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 624631.11,
+        "createdAt": "2023-12-10",
+        "receivable": 2190.399996353022,
+        "received": 0,
+        "balance": 2190.399996353022
+    },
+    {
+        "companyId": 3,
+        "party_Name": "LDP LOGISTICS.",
+        "currency": "USD",
+        "ex_rate": 283.2576,
+        "type": "Old Agent Bill",
+        "payType": "Recievable",
+        "status": "1",
+        "invoice_No": "ACS-OAI-48/24",
+        "paid": 0,
+        "roundOff": 0,
+        "approved": 1,
+        "total": 669422.68,
+        "createdAt": "2023-12-19",
+        "receivable": 2363.299978535439,
+        "received": 0,
+        "balance": 2363.299978535439
     }
 ]

@@ -36,8 +36,8 @@ const Main = ({sessionData, chartData}) => {
     <Row>
       {companyId==3 && <AWBCalculator/>}
     </Row>
-    {/* 
-    {companyId==1 && 
+    
+    {/* {companyId==1 && 
     <Container>
       <Row style={{maxHeight:"85vh", overflowY:'auto'}}>
         <Col md={12} className='mt-4'>
@@ -136,7 +136,7 @@ const Main = ({sessionData, chartData}) => {
       </Row>
     </Container>
     } */}
-    <Uploader/>
+    {/* <Uploader/> */}
   </div>
   )
 }

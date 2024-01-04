@@ -3,7 +3,7 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { companySelect, addCompanies } from '/redux/company/companySlice';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Select } from 'antd';
+import { Layout, Menu, Select, ConfigProvider } from 'antd';
 import Router, { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -436,13 +436,15 @@ const MainLayout = ({children}) => {
         </span>
       </div>
       {!collapsed && <div className='px-3'>
-      <Select showSearch style={{  width: "100%" }} placeholder="Search to Select" optionFilterProp="children" onChange={searchPages}
-        filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLowerCase())}
-        filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase()) }
-        options={searchingList.map((x)=>{
-          return { value:x?.key, label:x?.label }
-        })}
-      />
+      <ConfigProvider theme={{ token:{ colorPrimary: 'green' } }}>
+        <Select showSearch style={{  width: "100%" }} placeholder="Search to Select" optionFilterProp="children" onChange={searchPages}
+          filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLowerCase())}
+          filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase()) }
+          options={searchingList.map((x)=>{
+            return { value:x?.key, label:x?.label }
+          })}
+        />
+      </ConfigProvider>
       </div>}
       <Menu mode="inline" theme='dark' defaultSelectedKeys={['1']} items={!collapsed?items:[]} />
     </Sider>
