@@ -4,14 +4,24 @@ import { Table, Row, Col, Spinner } from 'react-bootstrap';
 import MediumModal from '/Components/Shared/Modals/MediumModal';
 import CreateOrEdit from './CreateOrEdit';
 import { useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
 
 const Employees = ({}) => {
   const [employeeList, setEmployeeList] = useState([]);
   const [visible, setVisible] = useState(false);
   const [edit, setEdit] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState({});
+  const [query,setQuery] = useState("");
+  const [originalEmployeeList, setOriginalEmployeeList] = useState([]);
+  const keys = ["name"]
 
   const company = useSelector((state) => state.company.companies);
+
+  const search = (data) => {
+    return data.filter((item)=>{
+      return keys.some(key=>item[key].toLowerCase().includes(query.toLowerCase()));
+    })
+  }
 
   useEffect(() => {
     getEmployees();
@@ -23,9 +33,15 @@ const Employees = ({}) => {
     await axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_EMPLOYEES).then((x)=>{
       if(x.data.status=='success'){
         setEmployeeList(x.data.result);
+        setOriginalEmployeeList(x.data.result)
       }
     })
   }
+
+  useEffect(()=>{
+    const filteredData = search(originalEmployeeList);
+    setEmployeeList(filteredData)
+  },[query,originalEmployeeList])
 
   const updateUser = (x) => {
     let tempState = [...employeeList];
@@ -58,8 +74,11 @@ const Employees = ({}) => {
       <Row>
       <Col md={12}>
         <Row>
-        <Col><h5>Employees</h5></Col>
-        <Col><button className='btn-custom' onClick={()=>setVisible(true)} style={{float:'right'}}>Create</button></Col>
+        <Col md="6"><h5>Employees</h5></Col>
+        <Col md="4">
+            <Form.Control type="text" placeholder="Search..." size='sm' onChange={e => setQuery(e.target.value)} />
+        </Col>
+        <Col md="2"><button className='btn-custom' onClick={()=>setVisible(true)} style={{float:'right'}}>Create</button></Col>
         </Row>
         <div className='my-2' style={{backgroundColor:'silver', height:1}}></div>
         <MediumModal visible={visible} setVisible={setVisible} setEdit={setEdit} width={800}>

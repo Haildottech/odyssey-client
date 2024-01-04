@@ -13,9 +13,9 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
   const changedValues = useSelector((state) => state.persistValues);
   const companyId = useSelector((state) => state.company.value);
   const [records, setRecords] = useState([]);
-  const [query, setQuery] = useState("");
   const dispatch = useDispatch();
   //search state
+  const [query, setQuery] = useState("");
   const keys = ["jobNo"]
   //pagination states
   const [currentPage,setCurrentPage] = useState(1);
