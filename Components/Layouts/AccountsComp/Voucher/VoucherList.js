@@ -8,7 +8,7 @@ import moment from 'moment';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import PopConfirm from '../../../Shared/PopConfirm';
-import { RiDeleteBin2Fill } from "react-icons/ri";
+import { RiDeleteBin2Fill, RiEdit2Fill } from "react-icons/ri";
 import Form from 'react-bootstrap/Form';
 
 const commas = (a) => a == 0 ? '0' : parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
@@ -56,6 +56,23 @@ const VoucherList = ({ voucherData }) => {
     </>
   };
 
+  const EditComp = {
+    component: (props) => (
+      <>
+        <div className='px-2'
+          onClick={() => handleEditClick(props.data.id)}
+        >
+          <span className='fs-15 btn-red-two'><RiEdit2Fill /></span>
+        </div>
+      </>
+    )
+  };
+
+  const handleEditClick = async (voucherId) => {
+    await Router.push(`/accounts/vouchers/${voucherId}`);
+    dispatch(incrementTab({ "label": "Voucher", "key": "3-5", "id": `${voucherId}` }));
+  };
+
   const [columnDefs, setColumnDefs] = useState([
     // { headerName: '#', field: 'no', width: 40 },
     { headerName: 'Voucher No.', field: 'voucher_Id', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => genderDetails, filter: true },
@@ -65,6 +82,7 @@ const VoucherList = ({ voucherData }) => {
     { headerName: 'Amount', field: 'amount', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => amountDetails, filter: true },
     { headerName: 'Voucher Date', field: 'createdAt', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => dateComp, filter: true },
     { headerName: 'Delete', cellRendererSelector: () => DeleteComp },
+    { headerName: 'Edit', cellRendererSelector: () => EditComp },
   ]);
 
   const [offset, setOffset] = useState(0);
@@ -80,13 +98,6 @@ const VoucherList = ({ voucherData }) => {
   const defaultColDef = useMemo(() => ({
     sortable: true
   }));
-
-  const cellClickedListener = useCallback(async (e) => {
-    if (e.colDef.headerName != "Delete") {
-      await Router.push(`/accounts/vouchers/${e.data.id}`);
-      dispatch(incrementTab({ "label": "Voucher", "key": "3-5", "id": `${e.data.id}` }));
-    }
-  }, []);
 
   const nextPage = (offsetValue) => {
     setPageLoad(true)
@@ -182,7 +193,6 @@ const VoucherList = ({ voucherData }) => {
           defaultColDef={defaultColDef} // Default Column Properties
           animateRows={true} // Optional - set to 'true' to have rows animate when sorted
           rowSelection='multiple' // Options - allows click selection of rows
-          onCellClicked={cellClickedListener}
           getRowHeight={getRowHeight}
           onFilterChanged={()=>handleFilterChanged()}//for multi searching
         />

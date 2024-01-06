@@ -6,6 +6,7 @@ import InputComp from "/Components/Shared/Form/InputComp";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import DateComp from "/Components/Shared/Form/DateComp";
+import PopConfirm from '../../../Shared/PopConfirm';
 import { AiFillRightCircle } from "react-icons/ai";
 import { Spinner, Table } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
@@ -15,6 +16,7 @@ import { InputNumber } from "antd";
 import moment from "moment";
 import axios from "axios";
 import Router from "next/router";
+
 
 const Vouchers = ({ register, control, errors, CompanyId, child, settlement, reset, voucherData, setSettlement, setChild, id }) => {
 
@@ -93,6 +95,17 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
     })
   }
 
+  async function handleDelete() {
+    PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
+      () => {
+        axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_DELETE_BASE_VOUCHER, {
+          id
+        }).then((x) => {
+          Router.push("/accounts/voucherList")
+        })
+      })
+  }
+
   const getAccounts = async () => {
     let y = "";
     switch (allValues.vType) {
@@ -135,7 +148,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
   return (
     <>
       <Row>
-        <Col md={7}>
+        <Col md={6}>
           <Row>
             <Col md={6}>
               <div>Voucher No.</div>
@@ -204,18 +217,26 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
           <div className="mt-2">Credit Total</div>
           <div style={{ color: 'grey', paddingTop: 3, paddingRight: 6, border: '1px solid grey', fontSize: 16, textAlign: 'right' }}>{commas(totalCredit)}</div>
         </Col>
-        <Col md={3}>
-          <button type="button" className="btn-custom mb-3 fs-11" style={{ width: "110px", float: 'left' }}
+        <Col md={4}>
+          <button type="button" className="btn-custom mb-3 fs-11" style={{ width: "100px", float: 'left' }}
             onClick={() => Router.push("/accounts/vouchers/new")}
           >
             New
           </button>
-          <ReactToPrint
-            content={() => inputRef}
-            trigger={() => (
-              <div className="btn-custom text-center p-1 px-5 fl-right">Print</div>
-            )}
-          />
+          <button type="button" className="btn-red mb-3 fs-11 mx-2" style={{ width: "100px", float: 'left' }}
+            onClick={() => {handleDelete()}}
+          >
+            Delete
+          </button>
+          <button>
+            {/* //print button  */}
+            <ReactToPrint
+              content={() => inputRef}
+              trigger={() => (
+                <div className="btn-custom px-4">Print</div>
+              )}
+            />
+          </button>
         </Col>
       </Row>
       <button type="button" className="btn-custom mb-3" style={{ width: "110px", float: 'right' }}
