@@ -103,7 +103,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
       case "CPV":
       case "CRV":
         y = "Cash";
-      case "JV":
+        break;
       case "TV":
         y = "All";
         break;
