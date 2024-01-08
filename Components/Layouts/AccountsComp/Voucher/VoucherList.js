@@ -1,15 +1,12 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { AgGridReact } from 'ag-grid-react';
+import React, { useState,useEffect} from 'react';
 import { useDispatch } from 'react-redux';
-import { Row, Col, Spinner, Table } from 'react-bootstrap';
+import { Row, Col,Table } from 'react-bootstrap';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from 'next/router';
 import moment from 'moment';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import PopConfirm from '../../../Shared/PopConfirm';
 import { RiDeleteBin2Fill, RiEdit2Fill } from "react-icons/ri";
-import Form from 'react-bootstrap/Form';
 import Pagination from '../../../Shared/Pagination';
 
 const commas = (a) => a == 0 ? '0' : parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
@@ -122,11 +119,11 @@ const VoucherList = ({ voucherData }) => {
                       <span className='blue-txt fw-6'>{commas(x.amount)}</span>
                     </td>
                     <td>{moment(x.createdAt).format("YYYY-MM-DD")}</td>
-                    <td onClick={() => handleEdit(x.id)}>
-                      <span className='fs-15 btn-red-two'><RiEdit2Fill /></span>
+                    <td style={{cursor:"pointer"}} onClick={() => handleEdit(x.id)}>
+                      <span className='fs-15 text-dark'><RiEdit2Fill /></span>
                     </td>
-                    <td onClick={() => handleDelete(x.id)}>
-                      <span className='fs-15 btn-red-two'><RiDeleteBin2Fill /></span>
+                    <td style={{cursor:"pointer"}} onClick={() => handleDelete(x.id)}>
+                      <span className='fs-15 text-danger'><RiDeleteBin2Fill /></span>
                     </td>
                   </tr>
                 )

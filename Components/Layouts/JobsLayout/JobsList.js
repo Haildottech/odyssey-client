@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
 import Router from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
-import Form from 'react-bootstrap/Form';
 import Pagination from '../../Shared/Pagination';
 
 const SEJobList = ({ jobsData, sessionData, type }) => {
