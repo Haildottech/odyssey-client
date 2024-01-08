@@ -127,7 +127,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
                           <span className='blue-txt fw-7'>{x.jobNo}</span>
                           <br />Nomination: <span className='grey-txt'>{x.nomination}</span>
                           <br />Freight Type: <span className='grey-txt'>{x.freightType}</span>
-                          <br />Sub Type: <span className='grey-txt '>{x.subType}</span><br />
+                          {/* <br />Sub Type: <span className='grey-txt '>{x.subType}</span><br /> */}
                         </td>
                         <td>
                           POL: <span className='grey-txt'>{x.pol}</span><br />

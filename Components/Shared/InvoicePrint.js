@@ -7,7 +7,6 @@ import inWords from '/functions/numToWords';
 import Cookies from 'js-cookie';
 
 const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calculateTotal}) => {
-
     const getPort = (id) => {
         const index = ports.ports.findIndex(element => element.id == id);
         let value = "";
@@ -158,11 +157,11 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
                     </div>
                 </Col>
                 <Col md={5}>
-                    <div style={heading}>{(invoice.operation=="SE"||invoice.operation=="SI")?"Sailing Date":"Departure Date"}</div>
+                    <div style={heading}>{(invoice.operation=="SI"|| invoice.operation=="AI")?"Arrival Date":"Departure Date"}</div>
                     <div style={paraStyles}>
                         {
-                            (invoice.operation=="SE"||invoice.operation=="SI")?
-                            moment(invoice.SE_Job?.Voyage?.exportSailDate).format("DD-MMM-YYYY"):
+                            (invoice.operation=="SE"||invoice.operation=="SI") ?
+                            moment(invoice.SE_Job?.Voyage?.importArrivalDate).format("DD-MMM-YYYY"):
                             moment(invoice.SE_Job?.departureDate).format("DD-MMM-YYYY")
                         }
                     </div>
