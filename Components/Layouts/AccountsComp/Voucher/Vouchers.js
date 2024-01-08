@@ -135,7 +135,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
           x.type = (allValues.vType == "BRV" || allValues.vType == "CRV") ? "credit" : "debit";
         })
         reset({
-          ...allValues, type: allValues.vType === "BPV" || allValues.vType === "CPV" ? "Payble" : "Recievable",
+          ...allValues, type: allValues.vType === "BPV" || allValues.vType === "CPV" ? "Payable" : "Recievable",
           Voucher_Heads: tempHeads, ChildAccountId: id == "new" ? null : allValues.ChildAccountId
         });
       })
@@ -228,7 +228,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
           >
             Delete
           </button>}
-          <button>
+          {id !== "new" && <button>
             {/* //print button  */}
             <ReactToPrint
               content={() => inputRef}
@@ -236,7 +236,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
                 <div className="btn-custom px-4">Print</div>
               )}
             />
-          </button>
+          </button>}
         </Col>
       </Row>
       <button type="button" className="btn-custom mb-3" style={{ width: "110px", float: 'right' }}
