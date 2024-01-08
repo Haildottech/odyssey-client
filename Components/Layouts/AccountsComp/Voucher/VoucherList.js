@@ -25,13 +25,11 @@ const VoucherList = ({ voucherData }) => {
       <span className='blue-txt fw-6'>{commas(props.data.amount)}</span>
     </>
   };
-
   const genderDetails = {
     component: (props) => <>
       <span className='blue-txt fw-6 fs-12'>{props.data.voucher_Id}</span>
     </>
   };
-
   const dateComp = {
     component: (props) => <>
       <span className='fw-6 fs-12'>{moment(props.data.createdAt).format("YYYY-MM-DD")}</span>
@@ -187,12 +185,12 @@ const VoucherList = ({ voucherData }) => {
           onFilterChanged={()=>handleFilterChanged()}//for multi searching
         />
       </div>
-      <div className='my-1'>
+      {/* <div className='my-1'>
         <button className='btn-custom-small px-3' onClick={() => offset != 0 ? nextPage(offset - 30) : null}>Previous</button>
         <span className='mx-3 fs-20'>{page}</span>
         <button className='btn-custom-small px-4' disabled={noMoreData} onClick={() => nextPage(offset + 30)}>Next</button>
         {pageLoad && <Spinner size='sm' className='mx-4' color={'red'} />}
-      </div>
+      </div> */}
     </div>
   );
 };
