@@ -656,4 +656,13 @@ div.rc-virtual-list > div.rc-virtual-list-holder > div > div{
   transition-duration: 300ms;
   background-color: rgb(16, 132, 132);
   color: rgb(255, 255, 255);
+};
+.searchInput{
+  border-radius: 7px;
+  border: 1px solid black;
+  padding: 5px 10px 5px 10px;
 }
+.searchInput:focus{
+ outline: none;
+}
+

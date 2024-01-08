@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { useDispatch } from 'react-redux';
-import { Row, Col, Spinner } from 'react-bootstrap';
+import { Row, Col, Spinner, Table } from 'react-bootstrap';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from 'next/router';
 import moment from 'moment';
@@ -10,149 +10,61 @@ import Cookies from 'js-cookie';
 import PopConfirm from '../../../Shared/PopConfirm';
 import { RiDeleteBin2Fill, RiEdit2Fill } from "react-icons/ri";
 import Form from 'react-bootstrap/Form';
+import Pagination from '../../../Shared/Pagination';
 
 const commas = (a) => a == 0 ? '0' : parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
 
 const VoucherList = ({ voucherData }) => {
 
-  const gridRef = useRef();
   const [rowData, setRowData] = useState();
+  const [originalData, setOriginalData] = useState();
   const dispatch = useDispatch();
 
-  const amountDetails = {
-    component: (props) => <>
-      <span style={{ color: 'grey' }}>Rs. </span>
-      <span className='blue-txt fw-6'>{commas(props.data.amount)}</span>
-    </>
-  };
-
-  const genderDetails = {
-    component: (props) => <>
-      <span className='blue-txt fw-6 fs-12'>{props.data.voucher_Id}</span>
-    </>
-  };
-
-  const dateComp = {
-    component: (props) => <>
-      <span className='fw-6 fs-12'>{moment(props.data.createdAt).format("YYYY-MM-DD")}</span>
-    </>
-  };
-  const DeleteComp = {
-    component: (props) => <>
-      <div className='px-2'
-        onClick={() => {
-          PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
-            () => {
-              axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_DELETE_BASE_VOUCHER, {
-                id: props.data.id
-              }).then((x) => {
-                Router.push("/accounts/voucherList")
-              })
-            })
-        }}
-      >
-        <span className='fs-15 btn-red-two'><RiDeleteBin2Fill /></span>
-      </div>
-    </>
-  };
-
-  const EditComp = {
-    component: (props) => (
-      <>
-        <div className='px-2'
-          onClick={() => handleEditClick(props.data.id)}
-        >
-          <span className='fs-15 btn-red-two'><RiEdit2Fill /></span>
-        </div>
-      </>
-    )
-  };
-
-  const handleEditClick = async (voucherId) => {
+  const handleDelete = (id) => {
+    PopConfirm("Confirmation", "Are You Sure To Remove This Charge?",
+      () => {
+        axios.post(process.env.NEXT_PUBLIC_CLIMAX_POST_DELETE_BASE_VOUCHER, {
+          id: id
+        }).then((x) => {
+          Router.push("/accounts/voucherList")
+        })
+      })
+  }
+  const handleEdit = async (voucherId) => {
     await Router.push(`/accounts/vouchers/${voucherId}`);
     dispatch(incrementTab({ "label": "Voucher", "key": "3-5", "id": `${voucherId}` }));
   };
 
-  const [columnDefs, setColumnDefs] = useState([
-    // { headerName: '#', field: 'no', width: 40 },
-    { headerName: 'Voucher No.', field: 'voucher_Id', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => genderDetails, filter: true },
-    { headerName: 'Type', field: 'type', filter: true , filter: 'agTextColumnFilter', },
-    { headerName: 'Cheque Date', field: 'date', filter: true, filter: 'agTextColumnFilter', },
-    { headerName: 'Paid To', field: 'payTo', filter: true , filter: 'agTextColumnFilter',},
-    { headerName: 'Amount', field: 'amount', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => amountDetails, filter: true },
-    { headerName: 'Voucher Date', field: 'createdAt', filter: true, filter: 'agTextColumnFilter', cellRendererSelector: () => dateComp, filter: true },
-    { headerName: 'Delete', cellRendererSelector: () => DeleteComp },
-    { headerName: 'Edit', cellRendererSelector: () => EditComp },
-  ]);
-
-  const [offset, setOffset] = useState(0);
-  const [page, setPage] = useState(1);
-  const [count, setCount] = useState(0);
-  const [pageLoad, setPageLoad] = useState(false)
-  const [noMoreData, setNoMoreData] = useState(false);
   //search 
   const [query, setQuery] = useState("")
   const keys = ["voucher_Id", "type", "amount"]
-  const [searchData,setSearchData] = useState([])
-  
-  const defaultColDef = useMemo(() => ({
-    sortable: true
-  }));
-
-  const nextPage = (offsetValue) => {
-    setPageLoad(true)
-    const limit = query ? 0 : 30;
-    axios.get(process.env.NEXT_PUBLIC_CLIMAX_GET_ALL_VOUCHERS, {
-      headers: {
-        "id": `${Cookies.get('companyId')}`,
-        "offset": `${offsetValue}`,
-        "limit": `${limit}`,
-      }
-    }).then((x) => {
-      offsetValue > offset ?
-        setPage(page + 1) :
-        setPage(page - 1)
-      setOffset(offsetValue)
-      setData(x.data);
-      setNoMoreData(x.data.result.length < 30);
-      setPageLoad(false)
-    });
-  }
-
-   // search funtionalites
-  const handleFilterChanged = () => {
-    const api = gridRef.current.api;
-    const filters = api.getFilterModel();
-    const searchText = Object.values(filters)
-      .map(filter => filter.filter)
-      .join(' ');
-  
-    setQuery(searchText.toLowerCase());
-  };
-  
+  // search funtionalites
   const search = (data) => {
     return data.filter(item => {
-      // Combining all column values into a single string for searching
-      const rowValues = Object.values(item).join(' ').toLowerCase();
-      // converting query into the lowercase 
-      const lowerCaseQuery = query.toLowerCase()
-      // searching with both lowercase and uppercase
-      return keys.some(key => rowValues.includes(lowerCaseQuery) || rowValues.includes(query));
+      return keys.some(key => 
+        typeof item[key] === 'string' && 
+        item[key]?.toLowerCase().includes(query.toLowerCase())
+      );
     });
   };
-
-  useEffect(()=>{
-    if(rowData){
-      const filterData = search(rowData);
-      setSearchData(filterData);
+  useEffect(() => {
+    if (originalData) {
+      const filterData = search(originalData);
+      setRowData(filterData);
     }
-  },[query, rowData])
+  }, [query, originalData]);
 
   useEffect(() => {
-    setCount(parseInt(voucherData.count / 30))
     setData(voucherData);
   }, []);
 
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(50);
+  const indexOfLast = currentPage * recordsPerPage;
+  const indexOfFirst = indexOfLast - recordsPerPage;
+  const currentRecords = rowData ? rowData.slice(indexOfFirst, indexOfLast) : null;
+  const noOfPages = rowData ? Math.ceil(rowData.length / recordsPerPage) : null;
 
   const setData = async (data) => {
     let tempData = data.result
@@ -162,18 +74,15 @@ const VoucherList = ({ voucherData }) => {
         x.date = moment(x.createdAt).format("YYYY-MM-DD")
     });
     setRowData(tempData);
+    setOriginalData(tempData);
   }
-
-  const getRowHeight = useCallback(() => {
-    return 38;
-  }, []);
 
   return (
     <div className='base-page-layout'>
       <Row>
         <Col md="6"><h5>Voucher Details</h5></Col>
         <Col md="4">
-          <Form.Control type="text" placeholder="Search..." size='sm' onChange={e => setQuery(e.target.value)} />
+          <input type="text" className='searchInput' placeholder="Enter Voucher No" size='sm' onChange={e => setQuery(e.target.value)} />
         </Col>
         <Col md="2">
           <button className='btn-custom right'
@@ -185,26 +94,52 @@ const VoucherList = ({ voucherData }) => {
         </Col>
       </Row>
       <hr />
-      <div className="ag-theme-alpine" style={{ width: "100%", height: '72vh' }}>
-        <AgGridReact
-          ref={gridRef} // Ref for accessing Grid's API
-          rowData={searchData} // Row Data for Rows
-          columnDefs={columnDefs} // Column Defs for Columns
-          defaultColDef={defaultColDef} // Default Column Properties
-          animateRows={true} // Optional - set to 'true' to have rows animate when sorted
-          rowSelection='multiple' // Options - allows click selection of rows
-          getRowHeight={getRowHeight}
-          onFilterChanged={()=>handleFilterChanged()}//for multi searching
-        />
+      <div className='mt-3' style={{ maxHeight: "65vh", overflowY: 'auto', overflowX: "scroll" }}>
+        <Table className='tableFixHead'>
+          <thead>
+            <tr>
+              <th >Voucher No.</th>
+              <th>Type</th>
+              <th>Cheque Date</th>
+              <th>Paid to</th>
+              <th>Amount</th>
+              <th>Voucher Date</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              currentRecords?.map((x, index) => {
+                return (
+                  <tr key={index}>
+                    <td className='blue-txt fw-6 fs-12'>{x.voucher_Id}</td>
+                    <td>{x.type}</td>
+                    <td>{moment(x.chequedate).format("YYYY-MM-DD")}</td>
+                    <td>{x.payTo}</td>
+                    <td>
+                      <span style={{ color: 'grey' }}>Rs. </span>
+                      <span className='blue-txt fw-6'>{commas(x.amount)}</span>
+                    </td>
+                    <td>{moment(x.createdAt).format("YYYY-MM-DD")}</td>
+                    <td onClick={() => handleEdit(x.id)}>
+                      <span className='fs-15 btn-red-two'><RiEdit2Fill /></span>
+                    </td>
+                    <td onClick={() => handleDelete(x.id)}>
+                      <span className='fs-15 btn-red-two'><RiDeleteBin2Fill /></span>
+                    </td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </Table>
       </div>
-      <div className='my-1'>
-        <button className='btn-custom-small px-3' onClick={() => offset != 0 ? nextPage(offset - 30) : null}>Previous</button>
-        <span className='mx-3 fs-20'>{page}</span>
-        <button className='btn-custom-small px-4' disabled={noMoreData} onClick={() => nextPage(offset + 30)}>Next</button>
-        {pageLoad && <Spinner size='sm' className='mx-4' color={'red'} />}
+      <div className='d-flex justify-content-end items-end my-4' style={{ maxWidth: "100%" }} >
+        <Pagination noOfPages={noOfPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
       </div>
     </div>
   );
 };
 
-export default React.memo(VoucherList);
+export default React.memo(VoucherList)

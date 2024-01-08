@@ -19,7 +19,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
   const keys = ["jobNo"]
   //pagination states
   const [currentPage,setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(5);
+  const [recordsPerPage] = useState(20);
 
   const indexOfLast = currentPage * recordsPerPage;
   const indexOfFirst = indexOfLast - recordsPerPage;
@@ -54,7 +54,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
               </h5>
             </Col>
             <Col md="2">
-              <Form.Control type="text" placeholder="Search..." size='sm' onChange={e => setQuery(e.target.value)} />
+              <input type="text" className='searchInput' placeholder="Search..." size='sm' onChange={e => setQuery(e.target.value)} />
             </Col>
             <Col md={1}>
               <button className='btn-custom right'
@@ -86,7 +86,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
             </Col>
           </Row>
           <hr className='my-2' />
-          <div className='mt-3' style={{ maxHeight: "100%", overflowY: 'auto' }}>
+          <div className='mt-3' style={{ maxHeight: "65vh", overflowY: 'auto' }}>
             <Table className='tableFixHead'>
               <thead>
                 <tr>

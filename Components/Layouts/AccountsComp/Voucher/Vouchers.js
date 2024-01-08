@@ -223,11 +223,11 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
           >
             New
           </button>
-          <button type="button" className="btn-red mb-3 fs-11 mx-2" style={{ width: "100px", float: 'left' }}
+         {id !== "new" && <button type="button" className="btn-red mb-3 fs-11 mx-2" style={{ width: "100px", float: 'left' }}
             onClick={() => {handleDelete()}}
           >
             Delete
-          </button>
+          </button>}
           <button>
             {/* //print button  */}
             <ReactToPrint
