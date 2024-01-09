@@ -53,7 +53,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
               </h5>
             </Col>
             <Col md="2">
-              <input type="text" className='searchInput' placeholder="Search..." size='sm' onChange={e => setQuery(e.target.value)} />
+              <input type="text" className='searchInput' placeholder="Enter Voucher no" size='sm' onChange={e => setQuery(e.target.value)} />
             </Col>
             <Col md={1}>
               <button className='btn-custom right'
@@ -156,7 +156,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
             </Table>
           </div>
           <div className='d-flex justify-content-end items-end my-4'style={{maxWidth:"100%"}} >
-                <Pagination noOfPages={noOfPages} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+              <Pagination noOfPages={noOfPages} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
           </div>
         </div>
       }

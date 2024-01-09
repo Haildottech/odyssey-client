@@ -17,10 +17,10 @@ import moment from "moment";
 import axios from "axios";
 import Router from "next/router";
 
-
 const Vouchers = ({ register, control, errors, CompanyId, child, settlement, reset, voucherData, setSettlement, setChild, id }) => {
 
   let inputRef = useRef(null)
+
   const { fields, append, remove } = useFieldArray({
     name: "Voucher_Heads",
     control,
