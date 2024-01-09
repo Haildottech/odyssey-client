@@ -1,11 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
-import { recordsReducer, initialState, baseValues } from './states';
+import { recordsReducer, initialState } from './states';
+import { getJobValues, getJobById } from '/apis/jobs';
+import { useQuery } from '@tanstack/react-query';
 import CreateOrEdit from './CreateOrEdit';
 import { useSelector } from 'react-redux';
 import Cookies from "js-cookie";
-import { useJobValuesQuery, useJobDataQuery } from '/redux/apis/seJobValues';
-import { getJobValues, getJobById } from '/apis/jobs';
-import { useQuery } from '@tanstack/react-query';
 
 const SeJob = ({id, type}) => {
 

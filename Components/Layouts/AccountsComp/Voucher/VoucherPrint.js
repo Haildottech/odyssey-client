@@ -30,9 +30,9 @@ const VoucherPrint = ({ compLogo, voucherData }) => {
         });
     }
 
-    useEffect(() => {
-        console.log(voucherData)
-    }, []);
+    // useEffect(() => {
+    //     console.log(voucherData)
+    // }, []);
 
     useEffect(() => {
         calculateTotal();

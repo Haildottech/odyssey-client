@@ -2,7 +2,8 @@ import React,{ useState } from 'react';
 import '/styles/globals.css';
 import '../styles/main.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
+import { ConfigProvider } from 'antd';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import MainLayout from '/Components/Shared/MainLayout';
@@ -32,10 +33,12 @@ function MyApp({ Component, pageProps:{ session, ...pageProps }, }) {
       { router.pathname !='/login' &&
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
+          <ConfigProvider theme={{ token:{colorPrimary:'orange',} }}>
             <MainLayout>
               { loading && <Loader/> }
               { !loading && <Component {...pageProps} /> }
             </MainLayout>
+          </ConfigProvider>
           </QueryClientProvider>
         </Provider>
       }

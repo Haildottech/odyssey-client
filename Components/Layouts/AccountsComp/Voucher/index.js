@@ -3,21 +3,28 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema, defaultValues } from "./state";
 import { useForm, useWatch } from "react-hook-form";
 import { Spinner } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Vouchers from "./Vouchers";
 import axios from "axios";
 import { delay } from "/functions/delay"
 import { useSelector, useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from "next/router";
+import { useQuery } from '@tanstack/react-query';
+import { getVoucherById } from "../../../../apis/vouchers";
 
-const Voucher = ({ id, voucherData }) => {
+const Voucher = ({ id }) => {
 
   const dispatch = useDispatch();
   const CompanyId = useSelector((state) => state.company.value);
   const [child, setChild] = useState([]);
   const [settlement, setSettlement] = useState([]);
   const [load, setLoad] = useState(false);
+  const [voucherData, setVoucherData] = useState({})
+
+  const { data:newData, isSuccess, refetch } = useQuery({
+    queryKey:["voucherData", {id}], queryFn: () => getVoucherById({id}),
+  })
 
   const { register, handleSubmit, control, reset, formState: { errors } } = useForm({
     resolver: yupResolver(validationSchema),
@@ -26,7 +33,6 @@ const Voucher = ({ id, voucherData }) => {
 
   const onSubmit = async (data) => {
     setLoad(true)
-    console.log(data)
     let settlementAmmount = 0.00;
     let debit = 0.00, credit = 0.00;
     let voucher = { ...data }
@@ -83,13 +89,18 @@ const Voucher = ({ id, voucherData }) => {
     setLoad(false)
   };
 
+  // useEffect(() => {
+  //   isSuccess?console.log(newData):null
+  // }, [isSuccess])
+  
   return (
     <div className="base-page-layout fs-11">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Vouchers register={register} control={control}
-          child={child} voucherData={voucherData} setChild={setChild} id={id}
+        {isSuccess && <Vouchers register={register} control={control}
+          child={child} voucherData={newData} setChild={setChild} id={id}
           reset={reset} setSettlement={setSettlement} errors={errors} settlement={settlement} CompanyId={CompanyId}
-        />
+        />}
+        { !isSuccess && <Spinner size="sm" className="mx-3" /> }
         <button className="btn-custom" disabled={load ? true : false} type="submit"
         >{load ? <Spinner size="sm" className="mx-3" /> : "Save"}
         </button>
