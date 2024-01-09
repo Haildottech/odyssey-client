@@ -79,10 +79,12 @@ const VoucherList = ({ voucherData }) => {
       <Row>
         <Col md="6"><h5>Voucher Details</h5></Col>
         <Col md="4">
-          <input type="text" className='searchInput' placeholder="Enter Voucher No" size='sm' onChange={e => setQuery(e.target.value)} />
+          <div className='d-flex justify-content-end'>
+            <input type="text" className='searchInput' placeholder="Enter Voucher No" size='sm' onChange={e => setQuery(e.target.value)} />
+          </div>
         </Col>
         <Col md="2">
-          <button className='btn-custom right'
+          <button className='btn-custom left'
             onClick={async () => {
               await Router.push(`/accounts/vouchers/new`)
               dispatch(incrementTab({ "label": "Voucher", "key": "3-5", "id": "new" }))
