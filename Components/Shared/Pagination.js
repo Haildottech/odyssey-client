@@ -22,8 +22,10 @@ const Pagination = ({ noOfPages, currentPage, setCurrentPage }) => {
         const lastPage = Math.min(noOfPages, firstPage + totalPages - 1);
 
         return Array.from({ length: lastPage - firstPage + 1 }, (_, index) => firstPage + index).map((pageNo) => (
-            <li key={pageNo} className={`${currentPage === pageNo ? "active bg-dark mx-1 rounded text-white" : "text-dark mx-1 bg-light rounded"}`}>
-                <button onClick={() => setCurrentPage(pageNo)}>{pageNo}</button>
+            <li key={pageNo}>
+                <button 
+                 className={`${currentPage === pageNo ? "active bg-dark mx-1 rounded text-white" : "text-dark mx-1 bg-light rounded"}`}
+                onClick={() => setCurrentPage(pageNo)}>{pageNo}</button>
             </li>
         ));
     };

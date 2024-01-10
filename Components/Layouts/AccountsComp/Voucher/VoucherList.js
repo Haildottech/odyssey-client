@@ -2,12 +2,13 @@ import React, { useState,useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import { Row, Col,Table } from 'react-bootstrap';
 import { incrementTab } from '/redux/tabs/tabSlice';
+import { RiDeleteBin2Fill, RiEdit2Fill } from "react-icons/ri";
 import Router from 'next/router';
 import moment from 'moment';
 import axios from 'axios';
 import PopConfirm from '../../../Shared/PopConfirm';
-import { RiDeleteBin2Fill, RiEdit2Fill } from "react-icons/ri";
 import Pagination from '../../../Shared/Pagination';
+import { Input } from 'antd';
 
 const commas = (a) => a == 0 ? '0' : parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")
 
@@ -80,7 +81,7 @@ const VoucherList = ({ voucherData }) => {
         <Col md="6"><h5>Voucher Details</h5></Col>
         <Col md="4">
           <div className='d-flex justify-content-end'>
-            <input type="text" className='searchInput' placeholder="Enter Voucher No" size='sm' onChange={e => setQuery(e.target.value)} />
+            <Input type="text" placeholder="Enter Voucher No" size='sm' onChange={e => setQuery(e.target.value)} />
           </div>
         </Col>
         <Col md="2">

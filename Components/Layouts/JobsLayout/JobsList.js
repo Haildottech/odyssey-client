@@ -6,6 +6,7 @@ import { Row, Col, Table } from 'react-bootstrap';
 import Router from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
 import Pagination from '../../Shared/Pagination';
+import { Input } from 'antd';
 
 const SEJobList = ({ jobsData, sessionData, type }) => {
   const queryClient = useQueryClient();
@@ -47,23 +48,23 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
       {companyId != '' &&
         <div className='base-page-layout'>
           <Row>
-            <Col md={8}>
+            <Col md={6}>
               <h5>
                 {type == "SE" ? "SEA Export" : type == "SI" ? "SEA Import" : type == "AE" ? "AIR Export" : type == "AI" ? "AIR Import" : ""} Job List
               </h5>
             </Col>
-            <Col md="2">
-              <input type="text" className='searchInput' placeholder="Enter Voucher no" size='sm' onChange={e => setQuery(e.target.value)} />
+            <Col md={4}>
+              <Input type="text" placeholder="Enter Voucher no" size='sm' onChange={e => setQuery(e.target.value)} />
             </Col>
             <Col md={1}>
-              <button className='btn-custom right'
+              <button className='btn-custom left px-4'
                 onClick={() => {
                   Router.push(`/seaJobs/jobList`)
                 }}
               >List</button>
             </Col>
             <Col md={1}>
-              <button className='btn-custom right'
+              <button className='btn-custom left'
                 onClick={() => {
                   queryClient.removeQueries({ queryKey: ['jobData', { type }] })
                   let obj = { ...changedValues.value }
