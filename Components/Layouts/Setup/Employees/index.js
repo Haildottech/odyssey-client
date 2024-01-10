@@ -4,7 +4,7 @@ import { Table, Row, Col, Spinner } from 'react-bootstrap';
 import MediumModal from '/Components/Shared/Modals/MediumModal';
 import CreateOrEdit from './CreateOrEdit';
 import { useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
+import { Input } from 'antd';
 
 const Employees = ({}) => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -76,9 +76,9 @@ const Employees = ({}) => {
         <Row>
         <Col md="6"><h5>Employees</h5></Col>
         <Col md="4">
-            <Form.Control type="text" placeholder="Search..." size='sm' onChange={e => setQuery(e.target.value)} />
+            <Input type="text" placeholder="Enter Name" size='sm' onChange={e => setQuery(e.target.value)} />
         </Col>
-        <Col md="2"><button className='btn-custom' onClick={()=>setVisible(true)} style={{float:'right'}}>Create</button></Col>
+        <Col md="2"><button className='btn-custom' onClick={()=>setVisible(true)} style={{float:'left'}}>Create</button></Col>
         </Row>
         <div className='my-2' style={{backgroundColor:'silver', height:1}}></div>
         <MediumModal visible={visible} setVisible={setVisible} setEdit={setEdit} width={800}>

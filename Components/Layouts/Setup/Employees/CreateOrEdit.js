@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Spinner } from 'react-bootstrap';
 import { UnlockOutlined } from '@ant-design/icons';
 import { Formik, useFormikContext } from 'formik';
-import "antd/dist/antd.css";
 import * as Yup from 'yup';
 import axios from 'axios';
 import Cookies from 'js-cookie'
