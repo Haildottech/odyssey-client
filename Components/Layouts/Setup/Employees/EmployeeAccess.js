@@ -2,7 +2,6 @@ import { Form, Input, DatePicker, Select  } from "formik-antd";
 import { Formik, useField, useFormikContext } from 'formik';
 import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Spinner } from 'react-bootstrap';
-import "antd/dist/antd.css";
 import * as Yup from 'yup';
 import axios from 'axios';
 

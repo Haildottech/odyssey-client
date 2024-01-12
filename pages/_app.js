@@ -2,7 +2,6 @@ import React,{ useState } from 'react';
 import '/styles/globals.css';
 import '../styles/main.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'antd/dist/antd.css';
 import { ConfigProvider } from 'antd';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
@@ -11,7 +10,7 @@ import Loader from '/Components/Shared/Loader';
 import Router, { useRouter  } from 'next/router';
 import { store } from '/redux/store';
 import { Provider } from 'react-redux';
-import { QueryClient, QueryClientProvider, QueryCache } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { 
