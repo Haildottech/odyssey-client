@@ -32,7 +32,6 @@ function MyApp({ Component, pageProps:{ session, ...pageProps }, }) {
       { router.pathname !='/login' &&
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
-          <ConfigProvider theme={{ token:{colorPrimary:'orange',} }}>
             <MainLayout>
               { loading && <Loader/> }
               { !loading && <Component {...pageProps} /> }
