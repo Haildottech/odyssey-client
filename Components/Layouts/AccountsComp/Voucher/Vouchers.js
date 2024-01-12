@@ -17,11 +17,14 @@ import moment from "moment";
 import axios from "axios";
 import Router from "next/router";
 import { useQueryClient } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
+import { incrementTab } from '/redux/tabs/tabSlice';
 
 const Vouchers = ({ register, control, errors, CompanyId, child, settlement, reset, voucherData, setSettlement, setChild, id }) => {
 
   let inputRef = useRef(null);
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
 
   const { fields, append, remove } = useFieldArray({
     name: "Voucher_Heads",
@@ -267,7 +270,11 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
       </Col>
       <Col md={4}>
         <button type="button" className="btn-custom mb-3 fs-11" style={{ width: "100px", float: 'left' }}
-          onClick={() => Router.push("/accounts/vouchers/new")}
+          onClick={async () => {
+            queryClient.removeQueries(['voucherData', { id: 'new' }]);
+            await Router.push("/accounts/vouchers/new")
+            dispatch(incrementTab({ "label": "Voucher", "key": "3-5", "id": "new" }))
+          } }
         >
           New
         </button>
