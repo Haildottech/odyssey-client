@@ -99,70 +99,70 @@ const JobBalancingReport = ({ result, query }) => {
 
     const TableComponent = ({overflow}) => {
         return (
-            <>
-                {!load &&
-                    <>
-                        {records.length > 0 &&
-                            <>
-                                <PrintTopHeader company={query.company} />
-                                <hr className='mb-2' />
-                                <div className='table-sm-1' style={{ maxHeight: overflow ? 600 : "100%", overflowY: 'auto' }}>
-                                    <Table className='tableFixHead' bordered style={{ fontSize: 12 }}>
-                                        <thead>
-                                            <tr>
-                                                <th className='text-center'>#</th>
-                                                <th className='text-center'>Inv. No</th>
-                                                <th className='text-center'>Date</th>
-                                                <th className='text-center'>HBL/HAWB</th>
-                                                <th className='text-center'>Name</th>
-                                                <th className='text-center'>F. Dest</th>
-                                                <th className='text-center'>F/Tp</th>
-                                                <th className='text-center'>Curr</th>
-                                                <th className='text-center'>Debit</th>
-                                                <th className='text-center'>Credit</th>
-                                                <th className='text-center'>Paid/Rcvd</th>
-                                                <th className='text-center'>Balance</th>
-                                                <th className='text-center'>Age</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {records.map((x, i) => {
-                                                return (
-                                                    <tr key={i}>
-                                                        <td style={{ maxWidth: 30 }}>{i + 1}</td>
-                                                        <td style={{ maxWidth: 90, paddingLeft: 3, paddingRight: 3 }}>{x.invoice_No}</td>
-                                                        <td style={{}}>{x.createdAt}</td>
-                                                        <td style={{}}>{x.hbl}</td>
-                                                        <td style={{}}>{x.party_Name}</td>
-                                                        <td style={{ maxWidth: 90 }}>{x.fd}</td>
-                                                        <td style={{}}>{x.freightType}</td>
-                                                        <td style={{}}>{x.currency}</td>
-                                                        <td style={{ textAlign: 'right' }} >{x.payType == "Recievable" ? x.total : "-"}</td>
-                                                        <td style={{ textAlign: 'right' }} >{x.payType != "Recievable" ? x.total : "-"}</td>
-                                                        <td style={{ textAlign: 'right' }} >{x.payType == "Recievable" ? x.recieved : x.paid}</td>
-                                                        <td style={{ textAlign: 'right' }} >{x.payType != "Recievable" ? `(${x.balance})` : x.balance}</td>
-                                                        <td style={{ textAlign: 'center' }}>{x.age}</td>
-                                                    </tr>
-                                                )
-                                            })}
-                                            <tr>
-                                                <td colSpan={8} style={{ textAlign: 'right' }}><b>Total</b></td>
-                                                <td style={{ textAlign: 'right' }}>{getTotal("Recievable", records)}</td>
-                                                <td style={{ textAlign: 'right' }}>{getTotal("Payble", records)}</td>
-                                                <td style={{ textAlign: 'right' }}>{paidReceivedTotal(records)}</td>
-                                                <td style={{ textAlign: 'right' }}>{balanceTotal(records)}</td>
-                                                <td style={{ textAlign: 'center' }}>-</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
-                                </div>
-                            </>
-                        }
-                        {records.length == 0 && <>No Similar Record</>}
-                    </>
-                }
-                {load && <div className='text-center py-5 my-5'> <Spinner /> </div>}
-            </>
+        <>
+        {!load &&
+        <>
+            {records.length > 0 &&
+                <>
+                    <PrintTopHeader company={query.company} />
+                    <hr className='mb-2' />
+                    <div className='table-sm-1' style={{ maxHeight: overflow ? 600 : "100%", overflowY: 'auto' }}>
+                        <Table className='tableFixHead' bordered style={{ fontSize: 12 }}>
+                            <thead>
+                                <tr>
+                                    <th className='text-center'>#</th>
+                                    <th className='text-center'>Inv. No</th>
+                                    <th className='text-center'>Date</th>
+                                    <th className='text-center'>HBL/HAWB</th>
+                                    <th className='text-center'>Name</th>
+                                    <th className='text-center'>F. Dest</th>
+                                    <th className='text-center'>F/Tp</th>
+                                    <th className='text-center'>Curr</th>
+                                    <th className='text-center'>Debit</th>
+                                    <th className='text-center'>Credit</th>
+                                    <th className='text-center'>Paid/Rcvd</th>
+                                    <th className='text-center'>Balance</th>
+                                    <th className='text-center'>Age</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {records.map((x, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td style={{ maxWidth: 30 }}>{i + 1}</td>
+                                            <td style={{ maxWidth: 90, paddingLeft: 3, paddingRight: 3 }}>{x.invoice_No}</td>
+                                            <td style={{}}>{x.createdAt}</td>
+                                            <td style={{}}>{x.hbl}</td>
+                                            <td style={{}}>{x.party_Name}</td>
+                                            <td style={{ maxWidth: 90 }}>{x.fd}</td>
+                                            <td style={{}}>{x.freightType}</td>
+                                            <td style={{}}>{x.currency}</td>
+                                            <td style={{ textAlign: 'right' }} >{x.payType == "Recievable" ? x.total : "-"}</td>
+                                            <td style={{ textAlign: 'right' }} >{x.payType != "Recievable" ? x.total : "-"}</td>
+                                            <td style={{ textAlign: 'right' }} >{x.payType == "Recievable" ? x.recieved : x.paid}</td>
+                                            <td style={{ textAlign: 'right' }} >{x.payType != "Recievable" ? `(${x.balance})` : x.balance}</td>
+                                            <td style={{ textAlign: 'center' }}>{x.age}</td>
+                                        </tr>
+                                    )
+                                })}
+                                <tr>
+                                    <td colSpan={8} style={{ textAlign: 'right' }}><b>Total</b></td>
+                                    <td style={{ textAlign: 'right' }}>{getTotal("Recievable", records)}</td>
+                                    <td style={{ textAlign: 'right' }}>{getTotal("Payble", records)}</td>
+                                    <td style={{ textAlign: 'right' }}>{paidReceivedTotal(records)}</td>
+                                    <td style={{ textAlign: 'right' }}>{balanceTotal(records)}</td>
+                                    <td style={{ textAlign: 'center' }}>-</td>
+                                </tr>
+                            </tbody>
+                        </Table>
+                    </div>
+                </>
+            }
+            {records.length == 0 && <>No Similar Record</>}
+        </>
+        }
+        {load && <div className='text-center py-5 my-5'> <Spinner /> </div>}
+        </>
         )
     }
 
