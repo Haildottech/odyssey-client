@@ -19,12 +19,15 @@ import Router from "next/router";
 import { useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { incrementTab } from '/redux/tabs/tabSlice';
+import VoucherHistory from "./history"
 
 const Vouchers = ({ register, control, errors, CompanyId, child, settlement, reset, voucherData, setSettlement, setChild, id }) => {
 
   let inputRef = useRef(null);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  //toggle state for opening and closing voucher History modal
+  const [isOpen,setIsOpen] = useState(false)
 
   const { fields, append, remove } = useFieldArray({
     name: "Voucher_Heads",
@@ -269,7 +272,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
         <div style={{ color: 'grey', paddingTop: 3, paddingRight: 6, border: '1px solid grey', fontSize: 16, textAlign: 'right' }}>{commas(totalCredit)}</div>
       </Col>
       <Col md={4}>
-        <button type="button" className="btn-custom mb-3 fs-11" style={{ width: "100px", float: 'left' }}
+        <button type="button" className="btn-custom fs-11 px-4" 
           onClick={async () => {
             queryClient.removeQueries(['voucherData', { id: 'new' }]);
             await Router.push("/accounts/vouchers/new")
@@ -278,7 +281,7 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
         >
           New
         </button>
-        {id !== "new" && <button type="button" className="btn-red mb-3 fs-11 mx-2" style={{ width: "100px", float: 'left' }}
+        {id !== "new" && <button type="button" className="btn-red mb-3 fs-11 mx-2" 
           onClick={() => {handleDelete()}}
         >
           Delete
@@ -292,7 +295,11 @@ const Vouchers = ({ register, control, errors, CompanyId, child, settlement, res
             )}
           />
         </button>}
+        {/* voucher history modal toggle states  */}
+        {id !== "new" && <button type="button" className="btn-custom-blue fs-11 px-4" onClick={()=>setIsOpen(true)}>History</button>}
+        {isOpen && <VoucherHistory id={id} isOpen={isOpen} onClose={()=>setIsOpen(false)}/>}
       </Col>
+
     </Row>
     <button type="button" className="btn-custom mb-3" style={{ width: "110px", float: 'right' }}
       onClick={() => append({

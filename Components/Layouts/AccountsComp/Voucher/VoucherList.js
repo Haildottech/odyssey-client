@@ -95,7 +95,7 @@ const VoucherList = ({ voucherData }) => {
       </Row>
       <hr />
       <div className='mt-3' style={{ maxHeight: "65vh", overflowY: 'auto', overflowX: "scroll" }}>
-        <Table className='tableFixHead'>
+        <Table className='c'>
           <thead>
             <tr>
               <th >Voucher No.</th>

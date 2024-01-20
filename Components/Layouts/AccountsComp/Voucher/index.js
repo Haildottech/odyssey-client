@@ -12,6 +12,8 @@ import { incrementTab } from '/redux/tabs/tabSlice';
 import Router from "next/router";
 import { useQuery } from '@tanstack/react-query';
 import { getVoucherById } from "../../../../apis/vouchers";
+import Cookies from 'js-cookie'
+
 
 const Voucher = ({ id }) => {
 
@@ -21,6 +23,9 @@ const Voucher = ({ id }) => {
   const [settlement, setSettlement] = useState([]);
   const [load, setLoad] = useState(false);
   const [voucherData, setVoucherData] = useState({})
+  //getting employeeid and name from cookies
+  const employeeId = Cookies.get("loginId");
+  const employeeName = Cookies.get("username");
 
   const { data:newData, isSuccess, refetch } = useQuery({
     queryKey:["voucherData", {id}], queryFn: () => getVoucherById({id}),
@@ -30,6 +35,27 @@ const Voucher = ({ id }) => {
     resolver: yupResolver(validationSchema),
     defaultValues: defaultValues
   });
+
+  //funtion responsible for creating and updating voucher history
+  async function createHistory (id,mode){
+      const data = {
+        html:mode == "Create" ? `Created by ${employeeName}` : `Updated by ${employeeName}`,
+        updateDate:new Date().toISOString(),
+        type:mode == "Create" ? "Create" : "Update"
+      }
+      try {
+          const result = await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER_HISTORY,data,{
+            headers:{
+                recordId:id,
+                EmployeeId:employeeId
+            }
+        }) 
+          return result
+      } catch (error) {
+          console.log(error)
+      }
+  }
+   
 
   const onSubmit = async (data) => {
     setLoad(true)
@@ -67,6 +93,9 @@ const Voucher = ({ id }) => {
       delete voucher.id;
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_CREATE_VOUCHER, voucher).then((x) => {
         if (x.data.status == "success") {
+          //passing id and mode to create history funtion when create method triggers
+          createHistory(x.data.result.id,"Create")
+
           openNotification("Success", `Voucher Created Successfully!`, "green");
           setLoad(false);
           dispatch(incrementTab({ "label": "Voucher", "key": "3-5", "id": `${x.data.result.id}` }));
@@ -81,8 +110,10 @@ const Voucher = ({ id }) => {
     else {
       await axios.post(process.env.NEXT_PUBLIC_CLIMAX_UPDATE_VOUCEHR, { ...voucher, id: id }).then((x) => {
         x.data.status == "success"
-          ? openNotification("Success", `Voucher Updated Successfully!`, "green")
-          : openNotification("Error", `An Error occured Please Try Again!`, "red");
+        ? openNotification("Success", `Voucher Updated Successfully!`, "green")
+        : openNotification("Error", `An Error occured Please Try Again!`, "red");
+        //passing id and mode to history funtion when the update method triggers
+        createHistory(id,"Update");
       });
     }
     await delay(1000);
