@@ -328,7 +328,7 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         <td className='text-center p-0'>{x.amount}</td>
         <td className='text-center p-0'>{x.discount}</td>
         <td className='text-center p-0'>{x.tax_amount}</td>
-        <td className='text-center p-0'>{(x.local_amount/invoice.ex_rate).toFixed(2)}</td>
+        <td className='text-center p-0'>{x.local_amount}</td>
     </tr>
     )})}
     </tbody>
@@ -346,7 +346,7 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         <div>
             <b className='fw-8'>Total Amount </b>
             <span style={{float:'right'}}>
-                { commas(((parseFloat(invoice.total) + parseFloat(invoice.roundOff))/invoice.ex_rate).toFixed(2)) }
+                { commas(((parseFloat(invoice.total) + parseFloat(invoice.roundOff))).toFixed(2)) }
             </span>
         </div>
     </Col>
