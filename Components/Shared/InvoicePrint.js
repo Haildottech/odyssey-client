@@ -339,14 +339,15 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
     <Col md={4} style={{fontSize:10}}>
         <div><b className='fw-8'>Invoice Total {"("}PKR{")"}</b>
             <span style={{float:'right'}}>
-                {commas((calculateTotal(records)/invoice.ex_rate).toFixed(2))}
+                {commas((calculateTotal(records)))} 
+                {/* invoice.ex_rate */}
             </span>
         </div>
         <div><b className='fw-8'>Round Off </b> <span style={{float:'right'}} >{invoice.roundOff}</span></div>
         <div>
             <b className='fw-8'>Total Amount </b>
             <span style={{float:'right'}}>
-                { commas(((parseFloat(invoice.total) + parseFloat(invoice.roundOff))).toFixed(2)) }
+                { commas(parseFloat(calculateTotal(records)) + parseFloat(invoice.roundOff)) }
             </span>
         </div>
     </Col>
@@ -362,7 +363,10 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
         </Col>
         <Col md={6} className='p-1' style={{borderRight:border, borderBottom:border, fontSize:12}}>
             <b className='fw-8'>In-Words</b>
-            <p>{invoice.type=="Job Invoice"?"PKR":invoice.type=="Job Bill"?"PKR":"USD"} {inWords(parseFloat(calculateTotal(records)/invoice.ex_rate))}</p>
+            <p>
+                {invoice.type=="Job Invoice"?"PKR":invoice.type=="Job Bill"?"PKR":"USD"} {" "}
+                {inWords(parseFloat(calculateTotal(records)) + parseFloat(invoice.roundOff))}
+            </p>
         </Col>
     </Row>
     <Row className='mx-0'>
