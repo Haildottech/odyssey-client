@@ -48,7 +48,6 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
     });
   };
   
-
   useEffect(() => {
     const filteredData = search(jobsData.result);
     setRecords(filteredData)

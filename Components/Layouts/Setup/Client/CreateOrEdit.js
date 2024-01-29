@@ -49,6 +49,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
         resolver: yupResolver(SignupSchema),
         defaultValues:state.values
     });
+    console.log(clientData)
     const { oldRecord, Representatives } = state;
     const { refetch } = useQuery({
         queryKey:['values'],
@@ -58,12 +59,13 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
     //const values = useWatch({control})
 
     useEffect(() => {
+    //Edit
     if(id!="new") {
         let tempState = {...clientData};
         let tempCompanyList = [...state.editCompanyList];
         tempState.operations = tempState.operations.split(', ');
         tempState.types = tempState.types.split(', ');
-        tempState.registerDate = moment(tempState.registerDate);
+        tempState.registerDate = tempState.registerDate ? moment(tempState.registerDate) : "";
         tempState.bankAuthorizeDate = moment(tempState.bankAuthorizeDate);
         tempState.companies = [];
         clientData.Client_Associations.forEach((x)=>{ tempState.companies.push(x.CompanyId) })
@@ -90,6 +92,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
     }
     }, [state.parentAccount])
     
+    //Create
     const onSubmit = async(data) => {
         let Username = Cookies.get('username')
         data.createdBy = Username;
@@ -115,7 +118,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             })
         }, 3000);
     };
-
+    //Edit funtion
     const onEdit = async(data) => {
         let history = "";
         let pAccountName = ''
@@ -158,6 +161,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
     <div className='client-styles' style={{maxHeight:720, overflowY:'auto', overflowX:'hidden'}}>
       <form onSubmit={handleSubmit(id!="new"?onEdit:onSubmit, onError)}>
       <Tabs defaultActiveKey="1">
+        {/* Basic info tab */}
         <Tabs.TabPane tab="Basic Info" key="1">
         <Row>
             <Col md={12} className='py-1'>
@@ -245,7 +249,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             </Col>
         </Row>
         </Tabs.TabPane>
-
+        {/* Bank info tab */}
         <Tabs.TabPane tab="Bank Info" key="2">
         <Row>
             <Col md={3} className='py-1'>
@@ -285,7 +289,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             <div style={{height:185}}></div>
         </Row>
         </Tabs.TabPane>
-
+        {/* Account info tab  */}
         <Tabs.TabPane tab="Account Info" key="3">
         <Row>
             <Col md={6}>
@@ -333,7 +337,7 @@ const CreateOrEdit = ({state, dispatch, baseValues, clientData, id}) => {
             <div style={{height:186}}></div>
         </Row>
         </Tabs.TabPane>
-
+        {/* company info tab  */}
         <Tabs.TabPane tab="Company Info" key="4">
         <Row>
             <Col md={12} className='py-1'>     
