@@ -33,10 +33,10 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
     }
     const commas = (a) =>  { return parseFloat(a).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ")}
 
-    useEffect(() => {
-        console.log(invoice.SE_Job)
-        console.log(invoice.operation)
-    }, [invoice])
+    // useEffect(() => {
+    //     console.log(invoice.SE_Job)
+    //     console.log(invoice.operation)
+    // }, [invoice])
     
     const paraStyles = { lineHeight:1.2, fontSize:11 }
     const heading = { lineHeight:1, fontSize:11, fontWeight:'800', paddingBottom:5 };
@@ -161,8 +161,8 @@ const InvoicePrint = ({logo, compLogo, records, bank, bankDetails, invoice, calc
                     <div style={paraStyles}>
                         {
                             (invoice.operation=="SE"||invoice.operation=="SI") ?
-                            moment(invoice.SE_Job?.Voyage?.importArrivalDate).format("DD-MMM-YYYY"):
-                            moment(invoice.SE_Job?.departureDate).format("DD-MMM-YYYY")
+                            moment(invoice.SE_Job?.eta).format("DD-MMM-YYYY"):
+                            moment(invoice.SE_Job?.etd).format("DD-MMM-YYYY")
                         }
                     </div>
                 </Col>
