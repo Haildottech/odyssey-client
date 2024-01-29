@@ -7,6 +7,7 @@ import Router from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
 import Pagination from '../../Shared/Pagination';
 import { Input } from 'antd';
+import moment from 'moment';
 
 const SEJobList = ({ jobsData, sessionData, type }) => {
   const queryClient = useQueryClient();
@@ -16,10 +17,11 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
   const dispatch = useDispatch();
   //search state
   const [query, setQuery] = useState("");
-  const keys = ["jobNo"]
+  const keys = ["jobNo","weight","Client","name"]
   //pagination states
   const [currentPage,setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(20);
+  console.log(jobsData);
 
   const indexOfLast = currentPage * recordsPerPage;
   const indexOfFirst = indexOfLast - recordsPerPage;
@@ -34,10 +36,18 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
 
   const search = (data) => {
     return data.filter(item => {
-      return keys.some(key => item[key].toLowerCase().includes(query.toLowerCase()));
+      return keys.some(key => {
+        if (key === "Client" && item[key] && item[key].name) {
+          return item[key].name.toLowerCase().includes(query.toLowerCase());
+        } else if (item[key]) {
+          return item[key].toLowerCase().includes(query.toLowerCase());
+        } else {
+          return false;
+        }
+      });
     });
   };
-
+  
   useEffect(() => {
     const filteredData = search(jobsData.result);
     setRecords(filteredData)
@@ -54,7 +64,7 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
               </h5>
             </Col>
             <Col md={4}>
-              <Input type="text" placeholder="Enter Voucher no" size='sm' onChange={e => setQuery(e.target.value)} />
+              <Input type="text" placeholder="Enter client,wieght or voucher no" size='sm' onChange={e => setQuery(e.target.value)} />
             </Col>
             <Col md={1}>
               <button className='btn-custom left px-4'
@@ -127,7 +137,9 @@ const SEJobList = ({ jobsData, sessionData, type }) => {
                           <span className='blue-txt fw-7'>{x.jobNo}</span>
                           <br />Nomination: <span className='grey-txt'>{x.nomination}</span>
                           <br />Freight Type: <span className='grey-txt'>{x.freightType}</span>
-                          {/* <br />Sub Type: <span className='grey-txt '>{x.subType}</span><br /> */}
+                          <br />Created at: <span className='grey-txt '>{
+                           x.createdAt ? moment(x.createdAt).format("DD-MM-YYYY") : "-"}
+                          </span><br />
                         </td>
                         <td>
                           POL: <span className='grey-txt'>{x.pol}</span><br />

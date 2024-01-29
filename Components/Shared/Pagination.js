@@ -1,7 +1,7 @@
 import { LeftOutlined, RightOutlined, DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons";
 
 const Pagination = ({ noOfPages, currentPage, setCurrentPage }) => {
-    const maxVisiblePages = 10;
+    const maxVisiblePages = 5;
 
     const incrementPage = (incrementBy) => {
         if (currentPage + incrementBy <= noOfPages) {
@@ -23,7 +23,7 @@ const Pagination = ({ noOfPages, currentPage, setCurrentPage }) => {
 
         return Array.from({ length: lastPage - firstPage + 1 }, (_, index) => firstPage + index).map((pageNo) => (
             <li key={pageNo}>
-                <button 
+                <button
                  className={`${currentPage === pageNo ? "active bg-dark mx-1 rounded text-white" : "text-dark mx-1 bg-light rounded"}`}
                 onClick={() => setCurrentPage(pageNo)}>{pageNo}</button>
             </li>

@@ -115,7 +115,7 @@ const VoucherList = ({ voucherData }) => {
                   <tr key={index}>
                     <td className='blue-txt fw-6 fs-12'>{x.voucher_Id}</td>
                     <td>{x.type}</td>
-                    <td>{moment(x.chequedate).format("YYYY-MM-DD")}</td>
+                    <td>{x.chequedate ? moment(x.chequedate).format("YYYY-MM-DD") : "-"}</td>
                     <td>{x.payTo}</td>
                     <td>
                       <span style={{ color: 'grey' }}>Rs. </span>
