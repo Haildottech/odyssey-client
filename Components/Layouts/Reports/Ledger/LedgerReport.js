@@ -55,7 +55,6 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
         }
       });
       setOpening(openingBalance);
-      // setClosing(closingBalance);
       setClosing(finalClosing);
       setLedger(tempArray);
     }
