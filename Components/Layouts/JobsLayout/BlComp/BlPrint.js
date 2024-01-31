@@ -21,8 +21,11 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
               {borders?<>BILL OF LADING FOR COMBINED TRANSPORT SHIPMENT OR PORT TO PORT</>:<span style={{color:'white'}}>asd</span>}
             </div>
           </Col>
+          {/* Bill of loading */}
           <Col md={12} style={{ borderTop: border }} className="fs-11">
+            {/* 1st row  */}
             <Row>
+              {/* 1st row left side block  */}
               <Col md={6} className="px-0 ">
                 <div style={{ borderBottom: border, height: 107 }}>
                   <div className={`fw-5 ${heading}`} style={{ lineHeight:1.3 }}>
@@ -44,6 +47,7 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
                   <div className="bl-print" style={{marginTop:15}}>{parse(state.notifyOneContent)}</div>
                 </div>
               </Col>
+              {/*1st row right side block  */}
               <Col md={6} style={{ borderLeft: border }} className="px-0">
                 <div style={{ borderBottom: border }} className="pb-3 px-2">
                   <span>
@@ -74,6 +78,8 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
                 </div>
               </Col>
             </Row>
+            {/* 1st row ends*/}
+            {/* 2nd row starts  */}
             <Row style={{ borderTop: border }}>
               <Col style={{ borderRight: border }} className="px-0">
                 <div style={{ height: 37 }}>
@@ -94,6 +100,7 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
                 </div>
               </Col>
             </Row>
+            {/* 3rt row starts  */}
             <Row style={{ borderTop: border }}>
               <Col style={{ borderRight: border }} className="px-0">
                 <div style={{ height: 42 }}>
@@ -118,6 +125,7 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
                 </div>
               </Col>
             </Row>
+            {/* 4th row starts  */}
             <Row style={{ borderTop: border, minHeight: 10 }}>
               <Col style={{ borderRight: border, maxHeight: 5, minWidth: 170, maxWidth: 170 }} className="px-0">
                 <div style={{ height: 42 }}>
@@ -148,6 +156,7 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
                 </div>
               </Col>
             </Row>
+            {/* 5th row  */}
             <Col>
               <Col style={{ display: "flex", color:"black", fontWeight:"600", marginTop:20 }}>
                 <Col md={2}>
@@ -213,7 +222,9 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
               </Col>
             </Col>
           </Col>
+          {/* Bill of loading ends here */}
         </Row>
+            {/* PARTICULARS blocks start here  */}
         <div style={{ position: "relative", top: 10, marginTop:55 }}>
           <Row style={{ fontFamily: "serif" }}>
             <Col md={3}></Col>
@@ -225,6 +236,7 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
             </Col>
           </Row>
         </div>
+        {/* 1st row starts */}
         <Row style={{ paddingLeft: 37, paddingRight: 37, fontFamily: "serif" }}>
           <Col style={{ margin: 0, border: border, padding: 0, maxWidth: "46%" }}>
             <Row style={{ position: "relative", left: 10 }}>
@@ -254,10 +266,11 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
             {borders && <img src={"/disclaimer.PNG"} width={"100%"} />}
           </Col>
         </Row>
+        {/* second row  */}
         <Row style={{ paddingLeft: 37, paddingRight: 37, fontFamily:"serif"}}>
           <Col style={{ margin: 0, borderBottom: border, borderLeft: border, borderRight: border, maxWidth: "46%"}}>
             <div className={`${heading} fs-12`}>For Delivery Please Apply to: </div>
-            <div style={{fontSize:12, lineHeight:0.1}}><b>{parse(state.deliveryContent)}</b></div>
+            <div style={{fontSize:10, lineHeight:1}}><b>{parse(state.deliveryContent)}</b></div>
           </Col>
           <Col style={{ margin:0, borderRight: border, borderBottom: border, borderLeft: "none", maxWidth: "54%", paddingLeft: 1, paddingRight: 1, paddingTop: 0, paddingBottom: 5}}>
             <Row style={{ position:"relative", left:10 }}>
@@ -289,7 +302,9 @@ const BlPrint = ({allValues, state, borders, heading, border, inputRef, stamps, 
             </Row>
           </Col>
         </Row>
-        {(state.marksContentTwo?.length>35 || state.descOfGoodsContentTwo?.length>35 || state?.Container_Infos?.length>4) &&
+        {/* attach sheets part  */}
+        {(state.marksContentTwo?.length>35 || state.descOfGoodsContentTwo?.length>35 || state?.Container_Infos?.length>4) 
+        &&
         <div className='mt-5'>
         <Row style={{ fontFamily: "serif", paddingTop: 53 }} className='px-4'>
           <Col md={6}><div className='fs-45 stretch-y'><b>ATTACH SHEET</b></div></Col>
