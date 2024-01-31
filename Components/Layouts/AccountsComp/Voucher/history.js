@@ -18,6 +18,7 @@ const VoucherHistory = ({ id, isOpen, onClose }) => {
                 }
             })
             setData(result.data.result)
+            console.log(result)
             setIsLoading(false)
             return result
         } catch (error) {
@@ -31,7 +32,6 @@ const VoucherHistory = ({ id, isOpen, onClose }) => {
             handleFetch()
         }
     }, [])
-
 
     return (
         <>
@@ -70,7 +70,7 @@ const VoucherHistory = ({ id, isOpen, onClose }) => {
                                                             <div key={updateIndex}>
                                                                 {moment(updateEntry.updateDate).format("DD-MM-YYYY")}
                                                             </div>
-                                                    ))} 
+                                                        ))}
                                                 </td>
                                             </tr>
                                         ))}

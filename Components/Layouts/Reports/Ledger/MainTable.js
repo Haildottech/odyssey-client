@@ -11,7 +11,7 @@ import PrintTopHeader from "/Components/Shared/PrintTopHeader";
 import { CSVLink } from "react-csv";
 
 const MainTable = ({ ledger, closing, opening, name, company, currency, from, to }) => {
-
+  
   let inputRef = useRef(null);
   const [isPrinting, setIsPrinting] = useState(false);
   const dispatch = useDispatch();
