@@ -58,7 +58,7 @@ const Ledger = () => {
   return (
     <div className='base-page-layout'>
       <Row>
-        <Col md={12}><h4 className="fw-7"> Ledger</h4></Col>
+        <Col md={12}><h4 className="fw-7">Ledger</h4></Col>
         <Col md={12}><hr /></Col>
         <Col md={3} className="mt-3">
           <b>From</b>

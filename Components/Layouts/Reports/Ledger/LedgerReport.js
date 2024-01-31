@@ -9,48 +9,48 @@ const LedgerReport = ({ voucherData, from, to, name, company, currency }) => {
 
   useEffect(() => {
     if (voucherData.status == "success") {
-      let openingBalance = 0.0, closingBalance = 0.0, tempArray = [];
+      let openingBalance = 0.0, closingBalance = 0.0, tempArray = [], prevBalance = 0, isDone = false, finalClosing = 0;
 
       voucherData.result.forEach((y) => {
-        // console.log("Transaction:", y);
         let exRate = parseFloat(y["Voucher.exRate"])>0?parseFloat(y["Voucher.exRate"]):1;
         const createdAtDate = moment(y.createdAt);
         if (
           createdAtDate.isBetween(moment(from), moment(to), "day", "[]") ||
           createdAtDate.isSame(moment(to), "day")
         ) {
-          closingBalance =
-            y.type === "debit"
-              ? closingBalance +
-                parseFloat(y.amount) / exRate
-              : closingBalance -
-                parseFloat(y.amount) / exRate
+          closingBalance = 
+            y.type === "debit" ? 
+              closingBalance + parseFloat(y.amount) / exRate :
+              closingBalance - parseFloat(y.amount) / exRate
 
           if (y["Voucher.vType"] === "OP") {
             openingBalance =
-              y.type === "debit"
-                ? openingBalance +
-                  parseFloat(y.amount) / exRate
-                : openingBalance -
-                  parseFloat(y.amount) / exRate
+              y.type === "debit" ?
+                openingBalance + parseFloat(y.amount) / exRate :
+                openingBalance - parseFloat(y.amount) / exRate
           } else {
+            let tempalance = parseFloat(closingBalance) + parseFloat(prevBalance)
             tempArray.push({
               date: y.createdAt,
               voucherType: y["Voucher.type"],
               voucherId: y["Voucher.id"],
               amount: parseFloat(y.amount) / exRate,
-              balance: closingBalance,
+              balance: tempalance,
               voucher: y["Voucher.voucher_Id"],
               type: y.type,
               narration: y.narration,
             });
+            finalClosing = tempalance
+            isDone = true;
           }
+          
         } else {
           openingBalance = y.type === "debit" ? openingBalance + parseFloat(y.amount) / exRate : openingBalance - parseFloat(y.amount) / exRate;
+          prevBalance = isDone?prevBalance:openingBalance;
         }
       });
       setOpening(openingBalance);
-      setClosing(closingBalance);
+      setClosing(finalClosing);
       setLedger(tempArray);
     }
   }, []);

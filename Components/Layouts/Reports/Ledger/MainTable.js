@@ -21,7 +21,7 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
   const TableComponent = ({overFlow}) => {
     return (
       <div className="">
-        <PrintTopHeader company={company} />
+        <PrintTopHeader company={company} from={from} to={to} />
         <div className="d-flex justify-content-between mt-4">
           <h6 className="blue-txt"><b>{name}</b></h6>
           <span>
@@ -46,7 +46,8 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
             <Table className="tableFixHead" bordered>
               <thead>
                 <tr className="custom-width">
-                  <th className="text-center class-1">No.</th>
+                  <th className="text-center class-1">#</th>
+                  <th className="text-center class-1">Voucher #</th>
                   <th className="text-center class-1">Date</th>
                   <th className="text-center class-2" style={{ minWidth: 300 }}>Particular</th>
                   <th className="text-center class-1" style={{ width: 100 }}>Debit</th>
@@ -58,6 +59,7 @@ const MainTable = ({ ledger, closing, opening, name, company, currency, from, to
                 {ledger.map((x, i) => {
                   return (
                     <tr key={i}>
+                      <td>{i+1}</td>
                       <td className="row-hov blue-txt text-center fs-12"
                         onClick={async () => {
                           if (x.voucherType == 'Job Reciept' || x.voucherType == 'Job Payment') {
