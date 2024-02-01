@@ -12,6 +12,7 @@ import logout from '/functions/logout';
 import { setTab } from '/redux/tabs/tabSlice';
 import { SlLogout } from "react-icons/sl";
 import { FaRegBell } from "react-icons/fa";
+import { incrementTab } from '/redux/tabs/tabSlice';
 
 const { Header, Content, Sider } = Layout;
 
@@ -330,6 +331,7 @@ const MainLayout = ({children}) => {
     else if(x.key=='1-2'){ Router.push('/dashboard/requests') }
     else if(x.key=='2-1'){ Router.push('/employees') }
     else if(x.key=='2-2'){ Router.push('/setup/clientList') }
+    else if(x.key=='2-10'){ Router.push('/setup/ports') }
     else if(x.key=='2-7'){ Router.push(`/setup/client/${setKey(x)}`) } //these routes are also settled in 2nd useEffect
     else if(x.key=='2-3'){ Router.push('/commodity') }
     else if(x.key=='2-4'){ Router.push('/setup/voyage') }
@@ -452,12 +454,16 @@ const MainLayout = ({children}) => {
     {collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)}><AiOutlineRight /></span>}
     {!collapsed && <span className="menu-toggler" onClick={() => setCollapsed(!collapsed)} ><AiOutlineLeft /></span>}
     <Select style={{width: 155, opacity:0.9}} onChange={handleChange} options={companies} value={company} />
+    {/* //admin links  */}
     {username=="Saad" &&<>
       <span className='mx-3'></span>
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/seaJobs/seJobList")}>SE</span>
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/seaJobs/siJobList")}>SI</span>
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aeJobList")}>AE</span>
       <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>Router.push("/airJobs/aiJobList")}>AI</span>
+      <span className='mx-1 my-3 cur p-2' style={{border:'1px solid grey'}} onClick={()=>{
+        dispatch(incrementTab({ "label": "Ports of Discharge", "key": "2-10" }))
+        }}>Ports</span>
     </>}
       <span style={{color:'black'}} className='mx-3' ><b>Welcome, </b> {username} </span>
       <span style={{float:'right', color:'black'}} className='mx-5 cur' onClick={()=>logout()}> 

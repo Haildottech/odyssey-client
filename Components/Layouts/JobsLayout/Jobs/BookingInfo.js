@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Popover, Tag, Modal } from "antd";
 import SelectComp from '/Components/Shared/Form/SelectComp';
 import SelectSearchComp from '/Components/Shared/Form/SelectSearchComp';
@@ -20,9 +20,10 @@ import Weights from './WeightComp';
 import BLInfo from './BLInfo';
 import airports from "/jsonData/airports";
 import Carrier from './Carrier';
+import AddPort from './AddPort';
+import { FaPlus } from "react-icons/fa6";
 
 const BookingInfo = ({ handleSubmit, onEdit, companyId, register, control, errors, state, useWatch, dispatch, reset, id, type }) => {
-
   const tabs = useSelector((state) => state.tabs.tabs)
   //const companyId = useSelector((state) => state.company.value);
   const dispatchNew = useDispatch();
@@ -42,6 +43,7 @@ const BookingInfo = ({ handleSubmit, onEdit, companyId, register, control, error
   const localVendorId = useWatch({ control, name: "localVendorId" });
   const approved = useWatch({ control, name: "approved" });
   let allValues = useWatch({ control });
+  const [isOpen, setIsOpen] = useState(false);
   const Space = () => <div className='mt-2' />
 
   useEffect(() => {
@@ -94,29 +96,29 @@ const BookingInfo = ({ handleSubmit, onEdit, companyId, register, control, error
         };
       }
     } else if (pageType === "vendor") {
-          // Checking if id is defined and not null
-        if(value !== undefined && value !== null && value !== ""){
-            route = `/setup/vendor/${value !== "" && value !== null ? value : "new"}`;
-            obj = {
-              label: "Vendor",
-              key: "2-8",
-              id: value !== "" && value !== null ? value : "new",
-            };
-        }else{
-          // Navigating to a default/new page if id is undefined or null
-          route = "/setup/vendor/new";
-          obj = {
-            label:"Vendor",
-            key:"2-8",
-            id:"new"
-          }
-        }        
-    } else if (pageType === "vessel") {
-        route = "/setup/voyage/";
+      // Checking if id is defined and not null
+      if (value !== undefined && value !== null && value !== "") {
+        route = `/setup/vendor/${value !== "" && value !== null ? value : "new"}`;
         obj = {
-          label: "Voyages",
-          key: "2-4",
+          label: "Vendor",
+          key: "2-8",
+          id: value !== "" && value !== null ? value : "new",
         };
+      } else {
+        // Navigating to a default/new page if id is undefined or null
+        route = "/setup/vendor/new";
+        obj = {
+          label: "Vendor",
+          key: "2-8",
+          id: "new"
+        }
+      }
+    } else if (pageType === "vessel") {
+      route = "/setup/voyage/";
+      obj = {
+        label: "Voyages",
+        key: "2-4",
+      };
     }
     dispatchNew(incrementTab(obj));
     Router.push(route);
@@ -268,7 +270,10 @@ const BookingInfo = ({ handleSubmit, onEdit, companyId, register, control, error
             <SelectSearchComp register={register} name='pol' control={control} label='Port Of Loading' disabled={getStatus(approved)} width={"100%"}
               options={ports.ports} /><Space />
             <SelectSearchComp register={register} name='pod' control={control} label='Port Of Discharge *' disabled={getStatus(approved)} width={"100%"}
-              options={ports.ports} /><Space />
+              options={ports.ports} />
+            <FaPlus onClick={() => setIsOpen(true)} style={{ cursor: "pointer" }} />
+            <Space />
+            {isOpen && <AddPort isOpen={isOpen} onClose={() => setIsOpen(false)} />}
           </>
           }
           {(type == "AE" || type == "AI") && <>
@@ -276,7 +281,11 @@ const BookingInfo = ({ handleSubmit, onEdit, companyId, register, control, error
               <SelectSearchComp register={register} name='pol' control={control} label='Air Port Of Loading' disabled={getStatus(approved)} width={"100%"}
                 options={airports} /><Space />
               <SelectSearchComp register={register} name='pod' control={control} label='Air Port Of Discharge *' disabled={getStatus(approved)} width={"100%"}
-                options={airports} /><Space />
+                options={airports} />
+                
+              <FaPlus onClick={() => setIsOpen(true)} style={{ cursor: "pointer" }} />
+              <Space />
+              {isOpen && <AddPort isOpen={isOpen} onClose={() => setIsOpen(false)} />}
             </>}
           </>}
           <SelectSearchComp register={register} name='fd' control={control} label='Final Destination *' disabled={getStatus(approved)} width={"100%"}
